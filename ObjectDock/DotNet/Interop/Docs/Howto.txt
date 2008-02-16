@@ -1,0 +1,16 @@
+HOWTO CREATE A NEW .NET DOCKLET
+-------------------------------
+
+
+1. Create a new .Net Project
+2. Add a reference to NetDockletHelper.dll
+3. Create a new class implementing IDockletInterface
+4. Create a new GUID for you docklet (using guidgen.exe)
+5. Create a new ini file for your docklet
+
+(See Dummy Docklet in Docklets/Samples/Dummy)
+
+**** IMPORTANT ****
+The NetDockletHelper.dll file in SDK/ is a debug build, do not distribute it with your docklet.
+
+

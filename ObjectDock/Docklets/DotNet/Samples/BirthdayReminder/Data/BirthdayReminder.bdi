@@ -1,0 +1,15 @@
+;	Birthday INI File
+; --------------------------------------
+;
+;	This file contains the list of the birthdays
+;	
+;	[<Unique Section Name>]
+;	Name=<name>
+;   Date=<date>
+;
+;	Example:
+;
+;		[JulienTemplier]
+;		Name=Julien Templier
+;		Date=22/05/1981
+
