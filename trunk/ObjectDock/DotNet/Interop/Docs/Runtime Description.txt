@@ -1,0 +1,10 @@
+The .NET Interop docklet allows you to use .NET docklets with ObjectDock.
+
+This runtime is needed to use docklets written with the .Net SDK for ObjectDock.
+
+You will also need to have the .Net Framework from Microsoft installed on you computer for this docklet to work.
+You can download it from here: http://www.microsoft.com/downloads/details.aspx?FamilyID=262d25e3-f589-4842-8157-034d1e7cf3a3&displaylang=en
+
+The SDK is available here: http://www.wincustomize.com/ViewSkin.aspx?SkinID=5807&LibID=29
+
+If you have an older version installed, you will need to quit ObjectDock before copying the new files.

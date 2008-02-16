@@ -1,0 +1,970 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ObjectDockSDK</name>
+    </assembly>
+    <members>
+        <member name="T:ObjectDockSDK.AssemblyData">
+            <summary>
+            Gets the information about this docklet from the Assembly Info
+            </summary>
+        </member>
+        <member name="M:ObjectDockSDK.AssemblyData.GetInformation(System.String@,System.String@,System.Int32@,System.String@)">
+            <summary>
+            Gets the information about this docklet
+            </summary>
+            <param name="name">Name of the docklet</param>
+            <param name="author">Author of the docklet</param>
+            <param name="version">Version  of the docklet</param>
+            <param name="notes">Notes about this docklet</param>
+        </member>
+        <member name="T:ObjectDockSDK.Docklet">
+            <summary>
+            	The docklet class encapsulates the native ObjectDock SDK calls
+            </summary>
+        </member>
+        <member name="M:ObjectDockSDK.Docklet.#ctor(ObjectDockSDK.DOCKLET_STATIC_DATA)">
+            <summary>
+            	Create a new instance of the docklet class
+            </summary>
+            <param name="data">The static data for this docklet</param>
+        </member>
+        <member name="M:ObjectDockSDK.Docklet.BrowseForImage(System.String,System.String)">
+            <summary>
+            	Shows the standard ObjectDock "Choose Image" dialog template,
+            	and allows you to select an image file.
+            </summary>
+            <param name="image">
+            	Specifies the current image and is filled with the image
+            	that the user selects from the "Choose Image" dialog.
+            </param>
+            <param name="alternativeRelativeRoot">
+            	If you would only like to show images from a
+            	specific subfolder of ObjectDock's folder, for example
+            	if you only want the user to pick an image from your
+            	docklet's folder, you can pass a string with a relative
+            	path with the folder you want to start browsing from,
+            	for example, a folder obtained by using the
+            	DockletGetRelativeFolder function.<br />
+            	Pass "" if you want the default folder to be used
+            </param>
+            <returns>
+            	true if the image was changed.<br />
+                false if the image was not changed
+            </returns>
+        </member>
+        <member name="M:ObjectDockSDK.Docklet.DefaultConfigDialog">
+            <summary>
+            	Opens up the default configuration dialog for a given dock item,
+            	thus providing a simple way for the user to adjust a docklet's 
+            	title and image.
+            </summary>
+            <remarks>
+            	The default configuration dialog configures a plugin's text and image
+            	only, but can be useful as a method of configuring for simple Docklets
+             </remarks>
+        </member>
+        <member name="M:ObjectDockSDK.Docklet.LockMouseEffect(System.Boolean)">
+            <summary>
+            	Allows a Docklet to lock the mouse effect (e.g. zooming, etc) of its owning dock.
+            </summary>
+            <param name="locked">
+            	true to lock the mouse-over effect (zooming, etc) of the dock<br />
+            	false to unlock the mouse-over effect (zooming, etc) of the dock
+            </param>
+            <remarks>
+            	The mouse-over effect lock is done via a counter, so that if multiple
+            	Docklets are locking at the same time the effect will stay locked until
+            	the last Docklet unlocks. The counter does not check to make sure one Docklet
+            	is not continually unlocking however, so do not do this as it will interfere
+            	with other docklets<br />																							is not continually unlocking however, so do not do this as it will interfere with other docklets.
+            	Only lock and unlock the mouse effect when needed.
+            </remarks>
+        </member>
+        <member name="M:ObjectDockSDK.Docklet.DoAttentionAnimation">
+            <summary>
+            	Causes the specified Docklet to animate in the dock to try to get the user's attention.
+            </summary>
+        </member>
+        <member name="M:ObjectDockSDK.Docklet.ShowContextMenu(System.Drawing.Point)">
+            <summary>
+            Shows the context menu associated to this docklet
+            </summary>
+            <param name="point">The position where to show the context menu</param> 
+            <remarks>The menu is shown at the location of point + an offset (-5,-25)</remarks>
+        </member>
+        <member name="M:ObjectDockSDK.Docklet.GetCoordinates(System.IntPtr)">
+            <summary>
+            	Get the coordinates where the file(s) were dropped.
+            </summary>
+            <param name="hDrop">Pointer passed to the docklet by OnDropFiles</param>
+            <returns>
+            	The coordinates where the file(s) were dropped.
+            </returns>
+        </member>
+        <member name="M:ObjectDockSDK.Docklet.GetFiles(System.IntPtr)">
+            <summary>
+            	Get the names of the dropped file(s).
+            </summary>
+            <param name="hDrop">Pointer passed to the docklet by OnDropFiles</param>
+            <returns>
+            	An array of strings containing the names of the dropped file(s).
+            </returns>
+        </member>
+        <member name="P:ObjectDockSDK.Docklet.Window">
+            <summary>
+            Gets the docklet Window (to pass at dialog/messagebox creation).
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:ObjectDockSDK.Docklet.ContextMenu">
+            <summary>
+            Gets or sets the context menu.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:ObjectDockSDK.Docklet.IsVisible">
+            <summary>
+            Gets a value indicating whether or not this docklet is currently visible
+            </summary>
+            <value>
+            	<c>true</c> if the docklet is visible; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:ObjectDockSDK.Docklet.Rect">
+            <summary>
+            Retrieves the bounding rectangle of this docklet in screen coordinates.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:ObjectDockSDK.Docklet.Label">
+            <summary>
+            Gets or sets the current label of this docklet.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:ObjectDockSDK.Docklet.Image">
+            <summary>
+            Sets the image for this docklet.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:ObjectDockSDK.Docklet.Overlay">
+            <summary>
+            Sets the image overlay for this docklet.
+            </summary>
+            <value></value>
+            <remarks>
+            	In ObjectDock, instead of dealing with Paint messages,
+            	ObjectDock allows you to set 'overlay' image over
+            	the top of the docklet base image. This allows for such things
+            	as a base background image to be constantly loaded, and
+            	then for details to be added on top of this image, for
+            	example a CPU meter on top of a holder, or a mail
+            	notification icon with a number on top of a mail icon
+            	loaded from a file, which will not have to be reloaded
+            	when mail arrives and the overlay image needs to be
+            	changed.
+            </remarks>
+        </member>
+        <member name="P:ObjectDockSDK.Docklet.ImageFile">
+            <summary>
+            Sets the file to use as an image for this docklet
+            </summary>
+            <value></value>
+            <remarks>
+            	Use a relative (or absolute) path of an image file to set as the
+            	image for the specified docklet
+            </remarks>
+        </member>
+        <member name="P:ObjectDockSDK.Docklet.RelativeFolder">
+            <summary>
+            Gets the relative path of the folder that contains this Docklet's DLL.
+            </summary>
+            <value></value>
+            <remarks>The relative folder returned is the .Net Docklet folder, not the Interop.dll folder</remarks>
+        </member>
+        <member name="P:ObjectDockSDK.Docklet.InteropFolder">
+            <summary>
+            Gets the relative path of the folder that contains the Interop DLL.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:ObjectDockSDK.Docklet.RootFolder">
+            <summary>
+            Gets the root folder.
+            </summary>
+            <value>The absolute location of the ObjectDock root folder</value>
+            <remarks>
+            	The path returned includes a final backslash.<br />
+            	To turn any relative path given anywhere into an absolute path,
+            	simply copy the relative path you want to make absolute onto
+            	the end of the the path returned by this function.
+            </remarks>
+        </member>
+        <member name="P:ObjectDockSDK.Docklet.DockEdge">
+            <summary>
+            Gets or sets the edge of the screen the dock with this docklet is located on
+            </summary>
+            <value></value>
+            <remarks>Only applicable to a normal dock (always BOTTOM for a tabbed dock)</remarks>
+        </member>
+        <member name="P:ObjectDockSDK.Docklet.DockAlign">
+            <summary>
+            Gets or sets the alignment of the dock with this docklet.
+            </summary>
+            <value></value>
+            <remarks>Only applicable to a normal dock (always MIDDLE for a tabbed dock)</remarks>	
+        </member>
+        <member name="T:ObjectDockSDK.Docklet.Edge">
+            <summary>
+            	The Edge of the screen the dock is located on
+            </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Docklet.Edge.BOTTOM">
+            <summary>Bottom Edge</summary>
+        </member>
+        <member name="F:ObjectDockSDK.Docklet.Edge.TOP">
+            <summary>Top Edge</summary>
+        </member>
+        <member name="F:ObjectDockSDK.Docklet.Edge.LEFT">
+            <summary>Left Edge</summary>
+        </member>
+        <member name="F:ObjectDockSDK.Docklet.Edge.RIGHT">
+            <summary>Right Edge</summary>
+        </member>
+        <member name="T:ObjectDockSDK.Docklet.Align">
+            <summary>
+            	The alignment of the dock
+            </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Docklet.Align.LEFT">
+            <summary>Left or Top, if dock is vertical</summary>
+        </member>
+        <member name="F:ObjectDockSDK.Docklet.Align.MIDDLE">
+            <summary>Middle</summary>
+        </member>
+        <member name="F:ObjectDockSDK.Docklet.Align.RIGHT">
+            <summary>Right or Bottom, if dock is vertical</summary>
+        </member>
+        <member name="T:ObjectDockSDK.DockletWindowWrapper">
+            <summary>
+            Encapsulates the handle of the unmanaged docklet window
+            </summary>
+        </member>
+        <member name="M:ObjectDockSDK.DockletWindowWrapper.#ctor(System.IntPtr)">
+            <summary>
+            Creates a new <see cref="T:ObjectDockSDK.DockletWindowWrapper"/> instance.
+            </summary>
+            <param name="handle">Handle of the unmanaged docklet window</param>
+        </member>
+        <member name="P:ObjectDockSDK.DockletWindowWrapper.Handle">
+            <summary>
+            Gets the handle of the unmanaged docklet window
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:ObjectDockSDK.DOCKLET_STATIC_DATA">
+            <summary>
+            	Contains static docklet data
+            </summary>
+            <remarks>Do not use directly.</remarks>
+            <exclude />
+        </member>
+        <member name="F:ObjectDockSDK.DOCKLET_STATIC_DATA.hwndDocklet">
+            <summary>
+            Handle to the window that owns this docklet and therefore identifies the docklet to the host.
+            </summary>
+        </member>
+        <member name="F:ObjectDockSDK.DOCKLET_STATIC_DATA.hInstance">
+            <summary>
+            Handle to the instance of this docklet DLL.
+            </summary>
+        </member>
+        <member name="F:ObjectDockSDK.DOCKLET_STATIC_DATA.rootFolder">
+            <summary>
+            Absolute location of the ObjectDock root folder
+            </summary>
+        </member>
+        <member name="F:ObjectDockSDK.DOCKLET_STATIC_DATA.interopFolder">
+            <summary>
+            Relative path of the folder that contains the Interop DLL.
+            </summary>
+        </member>
+        <member name="F:ObjectDockSDK.DOCKLET_STATIC_DATA.relativeFolder">
+            <summary>
+            Relative path of the folder that contains this Docklet's DLL
+            </summary>
+        </member>
+        <member name="T:ObjectDockSDK.IDockletInterface">
+            <summary>
+            	.Net Docklets should implement this interface
+            </summary>
+        </member>
+        <member name="M:ObjectDockSDK.IDockletInterface.OnGetInformation(System.String@,System.String@,System.Int32@,System.String@)">
+            <summary>
+            	This function is called when host is looking through a folder of Docklet DLLs
+            	and wants to retrieve information about this specific Docklet DLL.
+            </summary>
+            <param name="name">Name of the Docklet</param>
+            <param name="author">Author of the Docklet</param>
+            <param name="version">
+            	Version of the Docklet<br />
+            	The version of the Docklet is determined by taking the value placed into
+            	version and dividing by 100. Thus, version = 150; says that this is v1.5
+            	of a Docklet
+            </param>
+            <param name="notes">
+            	More detailed description (including any side notes) of the Docklet
+            </param>
+        </member>
+        <member name="M:ObjectDockSDK.IDockletInterface.OnCreate(ObjectDockSDK.DOCKLET_STATIC_DATA,System.String,System.String)">
+            <summary>
+            	This function is called every time a docklet from this dll is created.
+            	Provides the handle of the window the docklet will be represented by,
+                along with the instance of the docklet's dll. If the plugin is being
+                loaded for the first time, szIni and szIniGroup will be NULL, however
+                otherwise they will specify the ini file and ini section the docklet
+                should load its individual options from.	   
+            </summary>
+            <param name="data">
+            	The data structure containing info about the docklet
+            </param>
+            <param name="ini">
+            	Absolute path of an INI file which the plugin should use to load options from.<br />
+            	Can be 0. If 0, then the plugin is a new plugin and default options should be loaded
+            </param>
+            <param name="iniGroup">
+            	The INI Section of an INI file which the plugin should use to load options from.<br />
+            	Can be 0. If 0, then the plugin is a new plugin and default options should be loaded.
+            </param>
+        </member>
+        <member name="M:ObjectDockSDK.IDockletInterface.OnSave(System.String,System.String,System.Boolean)">
+            <summary>
+            	 Sent to a plugin when it needs to save its individual properties.
+            	 Since multiple of the same plugins can be in existence	at any given
+            	 time, the plugin should save options that are specific to this instance
+            	 of the plugin to the INI file and section given in szIni and szIniGroup
+            	 and not elsewhere.
+            </summary>
+            <param name="ini">
+            	Absolute path of an INI file which the plugin should use to save its
+            	options to for this specific plugin instance.
+            </param>
+            <param name="iniGroup">
+            	 The INI Section of an INI file which the plugin should use to save options to.
+            </param>
+            <param name="isForExport">
+            	 Specifies whether or not this call to OnSave is the result of the docklet
+            	 being packaged for distribution. While insignificant for most plugins, if
+            	 true plugins storing passwords and other such personal should not save this data.
+            </param>
+        </member>
+        <member name="M:ObjectDockSDK.IDockletInterface.OnDestroy">
+            <summary>
+            	Sent right before a plugin is finished being destroyed. The plugin should take
+            	this opportunity to do cleaning up operations it requires.
+            </summary>
+        </member>
+        <member name="M:ObjectDockSDK.IDockletInterface.OnExportFiles">
+            <summary>
+            	Sent to the docklet when the docklet is to be packaged up as part of a theme
+            	to redistribute.
+            </summary>
+            <returns>
+            	The relative paths of the files which this docklet depends upon,
+            	and which should be included if the plugin is packaged up for redistribution.
+            </returns>
+            <remarks>Paths are relative to the .Net Docklet directory</remarks>
+        </member>
+        <member name="M:ObjectDockSDK.IDockletInterface.OnLeftButtonClick(System.Drawing.Point@,System.Drawing.Size@)">
+            <summary>
+            	Called by the host when the dock item that represents this docklet is clicked.
+            	If you choose to implement this function, you should return True to indicate
+            	you processed the message.
+            </summary>
+            <param name="ptCursor">
+            	The position of the cursor at the time of the event, in coordinates relative
+            	to the top-left of the docklet image.
+            </param>
+            <param name="sizeDocklet">The size of the docklet image at the time of the event.</param>
+            <returns>
+            	Return true to signify that this event was acted upon.<br />
+            	Return false or do not implement to signify that this event was NOT acted upon.<br />
+            	In this case, for OnLeftButtonClick, no default action will be taken
+            </returns>
+        </member>
+        <member name="M:ObjectDockSDK.IDockletInterface.OnDoubleClick(System.Drawing.Point@,System.Drawing.Size@)">
+            <summary>
+            	Called by the host when the dock item that represents this docklet is double
+            	left-clicked. If you choose to implement this function, you should return
+            	true to indicate you processed the message.
+            </summary>
+            <param name="ptCursor">
+            	The position of the cursor at the time of the event, in coordinates relative
+            	to the top-left of the docklet image
+            </param>
+            <param name="sizeDocklet">The size of the docklet image at the time of the event.</param>
+            <returns>
+            	Return true to signify that this event was acted upon.<br />
+            	Return false or do not implement to signify that this event was NOT acted upon.<br />
+            	In this case, for OnDoubleClick, no default action will be taken.<br />
+            </returns>
+        </member>
+        <member name="M:ObjectDockSDK.IDockletInterface.OnLeftButtonHeld(System.Drawing.Point@,System.Drawing.Size@)">
+            <summary>
+            	Called by the host when the dock item that represents this docklet was either
+            	control+clicked, or had the mouse button held down on it. Typically a plugin
+            	will use this message to display an extended/advanced menu if applicable..
+                If you choose to implement this function, you should return true to indicate
+                you processed the message
+            </summary>
+            <param name="ptCursor">
+            	The position of the cursor at the time of the event, in coordinates relative
+            	to the top-left of the docklet image
+            </param>
+            <param name="sizeDocklet">The size of the docklet image at the time of the event.</param>
+            <returns>
+            	Return true to signify that this event was acted upon.<br />
+            	Return false or do not implement to signify that this event was NOT acted upon.<br />
+                In this case, for OnLeftButtonHeld, no default action will be taken.<br />
+            </returns>
+        </member>
+        <member name="M:ObjectDockSDK.IDockletInterface.OnRightButtonClick(System.Drawing.Point@,System.Drawing.Size@)">
+            <summary>
+            	Called by the host when the dock item that represents this docklet is
+            	right-clicked. If you choose to implement this function, you should return
+            	true to indicate you processed the message.<br />
+            	If you do not implement this function or return FALSE, ObjectDock will, as
+            	a default handler, display a menu allowing the user to configure the dock item.
+            </summary>
+            <param name="ptCursor">
+            	The position of the cursor at the time of the event, in coordinates relative
+            	to the top-left of the docklet image.
+            </param>
+            <param name="sizeDocklet">The size of the docklet image at the time of the event.</param>
+            <returns>
+            	Return true to signify that this event was acted upon.<br />
+            	Return false or do not implement to signify that this event was NOT acted upon.<br />
+            	In this case, for OnRightButtonClick, the default action will be to display
+            	a simple menu giving the user the opportunity to bring up an options dialog
+            	for the dock item. (This menu item will invoke OnCommand if selected by the user)
+            </returns>
+        </member>
+        <member name="M:ObjectDockSDK.IDockletInterface.OnConfigure">
+            <summary>
+            	Called by the host in the event OnRightButtonClick returned FALSE or was not
+            	implemented, and it was selected to configure the dock item. If you do not
+            	implement this function or return false, ObjectDock will, as a default handler,
+            	will open a basic configuration dialog allowing the dock item's text and image
+            	to be changed. To override this functionality, implement it and return true.
+            </summary>
+            <returns>
+                Return true to signify that this event was acted upon.<br />
+                Return false or do not implement to signify that this event was NOT acted upon.<br />
+                In this case, for OnConfigure, a default configuration dialog will be shown,
+                which will allow the user to change the docklet's caption and image.
+            </returns>
+        </member>
+        <member name="M:ObjectDockSDK.IDockletInterface.OnAcceptDropFiles">
+            <summary>
+            	Gives the opportunity to a docklet to express its ability to accept dropped
+            	files. Implementing this function and returning TRUE will allow for the
+            	possibility for files to be dropped onto this dock item, and thus a call
+            	to OnDropFiles.
+            </summary>
+            <returns>
+            	Return true to signify that this docklet can accept files dropped onto it<br />
+            	Return false or do not implement to signify that this docklet does not accept
+            	dropped files. (Default)
+            </returns>
+            <remarks>Only works for normal docks (not tabbed).</remarks>
+        </member>
+        <member name="M:ObjectDockSDK.IDockletInterface.OnDropFiles(System.IntPtr)">
+            <summary>
+            	Called by the host when a file has been dropped onto this docklet. The files
+            	being dropped are listed in the HDROP object passed.
+            </summary>
+            <param name="hDrop">
+            	 An HDROP object that represents the file(s) dropped onto the docklet item.
+            </param>
+            <remarks>
+            	The HDROP structure is freed by the Interop (no need to call DragFinish).<br /><br />
+            	Only works for normal docks (not tabbed).
+            </remarks>
+        </member>
+        <member name="M:ObjectDockSDK.IDockletInterface.OnProcessMessage(System.IntPtr,System.UInt32,System.IntPtr,System.IntPtr)">
+            <summary>
+            	 The window passed on OnCreate which represents and owns the docklet is the
+            	 same window that is visible and displaying the image. While it is
+            	 recommended that you do not try to manually change the appearance or
+            	 position of this window due to this, you can watch this window's messages
+            	 and trap any that are important to you, such as timer messages that you can
+            	 set on the window. If implemented, all messages that are processed by the
+            	 window are passed to this function.
+            </summary>
+            <param name="hwnd">
+            	The handle to the window that owns this docklet and therefore identifies
+            	the docklet to the host. (Handle to the window that received the message)
+            </param>
+            <param name="uMsg">Specifies the received message</param>
+            <param name="wParam">
+            	Specifies additional message information.<br />
+            	The content of this parameter depends on the value of the uMsg parameter.
+            </param>
+            <param name="lParam">
+            	Specifies additional message information.<br />
+            	The content of this parameter depends on the value of the uMsg parameter.
+            </param>
+        </member>
+        <member name="T:ObjectDockSDK.Utils.IniReader">
+            <summary>
+            The INIReader class can read keys from and write keys to an INI file.
+            </summary>
+            <remarks>
+            This class uses several Win32 API functions to read from and write to INI files. It will not work on Linux or FreeBSD.
+            </remarks>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.IniReader.MAX_ENTRY">
+            <summary>
+            The maximum number of bytes in a section buffer.
+            </summary>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.GetPrivateProfileInt(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            The GetPrivateProfileInt function retrieves an integer associated with a key in the specified section of an initialization file.
+            </summary>
+            <param name="lpApplicationName">Pointer to a null-terminated string specifying the name of the section in the initialization file.</param>
+            <param name="lpKeyName">Pointer to the null-terminated string specifying the name of the key whose value is to be retrieved. This value is in the form of a string; the GetPrivateProfileInt function converts the string into an integer and returns the integer.</param>
+            <param name="nDefault">Specifies the default value to return if the key name cannot be found in the initialization file.</param>
+            <param name="lpFileName">Pointer to a null-terminated string that specifies the name of the initialization file. If this parameter does not contain a full path to the file, the system searches for the file in the Windows directory.</param>
+            <returns>The return value is the integer equivalent of the string following the specified key name in the specified initialization file. If the key is not found, the return value is the specified default value. If the value of the key is less than zero, the return value is zero.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.WritePrivateProfileString(System.String,System.String,System.String,System.String)">
+            <summary>
+            The WritePrivateProfileString function copies a string into the specified section of an initialization file.
+            </summary>
+            <param name="lpApplicationName">Pointer to a null-terminated string containing the name of the section to which the string will be copied. If the section does not exist, it is created. The name of the section is case-independent; the string can be any combination of uppercase and lowercase letters.</param>
+            <param name="lpKeyName">Pointer to the null-terminated string containing the name of the key to be associated with a string. If the key does not exist in the specified section, it is created. If this parameter is NULL, the entire section, including all entries within the section, is deleted.</param>
+            <param name="lpString">Pointer to a null-terminated string to be written to the file. If this parameter is NULL, the key pointed to by the lpKeyName parameter is deleted.</param>
+            <param name="lpFileName">Pointer to a null-terminated string that specifies the name of the initialization file.</param>
+            <returns>If the function successfully copies the string to the initialization file, the return value is nonzero; if the function fails, or if it flushes the cached version of the most recently accessed initialization file, the return value is zero.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.GetPrivateProfileString(System.String,System.String,System.String,System.Text.StringBuilder,System.Int32,System.String)">
+            <summary>
+            The GetPrivateProfileString function retrieves a string from the specified section in an initialization file.
+            </summary>
+            <param name="lpApplicationName">Pointer to a null-terminated string that specifies the name of the section containing the key name. If this parameter is NULL, the GetPrivateProfileString function copies all section names in the file to the supplied buffer.</param>
+            <param name="lpKeyName">Pointer to the null-terminated string specifying the name of the key whose associated string is to be retrieved. If this parameter is NULL, all key names in the section specified by the lpAppName parameter are copied to the buffer specified by the lpReturnedString parameter.</param>
+            <param name="lpDefault">Pointer to a null-terminated default string. If the lpKeyName key cannot be found in the initialization file, GetPrivateProfileString copies the default string to the lpReturnedString buffer. This parameter cannot be NULL. <br>Avoid specifying a default string with trailing blank characters. The function inserts a null character in the lpReturnedString buffer to strip any trailing blanks.</br></param>
+            <param name="lpReturnedString">Pointer to the buffer that receives the retrieved string.</param>
+            <param name="nSize">Specifies the size, in TCHARs, of the buffer pointed to by the lpReturnedString parameter.</param>
+            <param name="lpFileName">Pointer to a null-terminated string that specifies the name of the initialization file. If this parameter does not contain a full path to the file, the system searches for the file in the Windows directory.</param>
+            <returns>The return value is the number of characters copied to the buffer, not including the terminating null character.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.GetPrivateProfileSectionNames(System.Byte[],System.Int32,System.String)">
+            <summary>
+            The GetPrivateProfileSectionNames function retrieves the names of all sections in an initialization file.
+            </summary>
+            <param name="lpszReturnBuffer">Pointer to a buffer that receives the section names associated with the named file. The buffer is filled with one or more null-terminated strings; the last string is followed by a second null character.</param>
+            <param name="nSize">Specifies the size, in TCHARs, of the buffer pointed to by the lpszReturnBuffer parameter.</param>
+            <param name="lpFileName">Pointer to a null-terminated string that specifies the name of the initialization file. If this parameter is NULL, the function searches the Win.ini file. If this parameter does not contain a full path to the file, the system searches for the file in the Windows directory.</param>
+            <returns>The return value specifies the number of characters copied to the specified buffer, not including the terminating null character. If the buffer is not large enough to contain all the section names associated with the specified initialization file, the return value is equal to the length specified by nSize minus two.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.GetPrivateProfileSection(System.String,System.Text.StringBuilder,System.UInt32,System.String)">
+            <summary>
+            The GetPrivateProfileSection function retrieves the content of a section in an initialization file.
+            </summary>
+            <param name="lpAppName">Pointer to a null-terminated string specifying the name of the section in which data is read. This section name is typically the name of the calling application.</param>
+            <param name="lpReturnedString">Pointer to the buffer that receives the retrieved string.</param>
+            <param name="nSize">Specifies the size, in TCHARs, of the buffer pointed to by the lpszReturnBuffer parameter.</param>
+            <param name="lpFileName">Pointer to a null-terminated string that specifies the name of the initialization file. If this parameter is NULL, the function searches the Win.ini file. If this parameter does not contain a full path to the file, the system searches for the file in the Windows directory.</param>
+            <returns>The return value specifies the number of characters copied to the specified buffer, not including the terminating null character. If the buffer is not large enough to contain all the section names associated with the specified initialization file, the return value is equal to the length specified by nSize minus two.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.WritePrivateProfileSection(System.String,System.String,System.String)">
+            <summary>
+            The WritePrivateProfileSection function replaces the keys and values for the specified section in an initialization file.
+            </summary>
+            <param name="lpAppName">Pointer to a null-terminated string specifying the name of the section in which data is written. This section name is typically the name of the calling application.</param>
+            <param name="lpString">Pointer to a buffer containing the new key names and associated values that are to be written to the named section.</param>
+            <param name="lpFileName">Pointer to a null-terminated string containing the name of the initialization file. If this parameter does not contain a full path for the file, the function searches the Windows directory for the file. If the file does not exist and lpFileName does not contain a full path, the function creates the file in the Windows directory. The function does not create a file if lpFileName contains the full path and file name of a file that does not exist.</param>
+            <returns>If the function succeeds, the return value is nonzero.<br>If the function fails, the return value is zero.</br></returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.#ctor(System.String)">
+            <summary>Constructs a new IniReader instance.</summary>
+            <param name="file">Specifies the full path to the INI file (the file doesn't have to exist).</param>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.ReadInteger(System.String,System.String,System.Int32)">
+            <summary>Reads an Integer from the specified key of the specified section.</summary>
+            <param name="section">The section to search in.</param>
+            <param name="key">The key from which to return the value.</param>
+            <param name="defVal">The value to return if the specified key isn't found.</param>
+            <returns>Returns the value of the specified section/key pair, or returns the default value if the specified section/key pair isn't found in the INI file.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.ReadInteger(System.String,System.String)">
+            <summary>Reads an Integer from the specified key of the specified section.</summary>
+            <param name="section">The section to search in.</param>
+            <param name="key">The key from which to return the value.</param>
+            <returns>Returns the value of the specified section/key pair, or returns 0 if the specified section/key pair isn't found in the INI file.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.ReadInteger(System.String,System.Int32)">
+            <summary>Reads an Integer from the specified key of the active section.</summary>
+            <param name="key">The key from which to return the value.</param>
+            <param name="defVal">The section to search in.</param>
+            <returns>Returns the value of the specified Key, or returns the default value if the specified Key isn't found in the active section of the INI file.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.ReadInteger(System.String)">
+            <summary>Reads an Integer from the specified key of the active section.</summary>
+            <param name="key">The key from which to return the value.</param>
+            <returns>Returns the value of the specified key, or returns 0 if the specified key isn't found in the active section of the INI file.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.ReadString(System.String,System.String,System.String)">
+            <summary>Reads a String from the specified key of the specified section.</summary>
+            <param name="section">The section to search in.</param>
+            <param name="key">The key from which to return the value.</param>
+            <param name="defaultValue">The value to return if the specified key isn't found.</param>
+            <returns>Returns the value of the specified section/key pair, or returns the default value if the specified section/key pair isn't found in the INI file.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.ReadString(System.String,System.String)">
+            <summary>Reads a String from the specified key of the specified section.</summary>
+            <param name="section">The section to search in.</param>
+            <param name="key">The key from which to return the value.</param>
+            <returns>Returns the value of the specified section/key pair, or returns an empty String if the specified section/key pair isn't found in the INI file.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.ReadString(System.String)">
+            <summary>Reads a String from the specified key of the active section.</summary>
+            <param name="key">The key from which to return the value.</param>
+            <returns>Returns the value of the specified key, or returns an empty String if the specified key isn't found in the active section of the INI file.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.ReadLong(System.String,System.String,System.Int64)">
+            <summary>Reads a Long from the specified key of the specified section.</summary>
+            <param name="section">The section to search in.</param>
+            <param name="key">The key from which to return the value.</param>
+            <param name="defVal">The value to return if the specified key isn't found.</param>
+            <returns>Returns the value of the specified section/key pair, or returns the default value if the specified section/key pair isn't found in the INI file.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.ReadLong(System.String,System.String)">
+            <summary>Reads a Long from the specified key of the specified section.</summary>
+            <param name="section">The section to search in.</param>
+            <param name="key">The key from which to return the value.</param>
+            <returns>Returns the value of the specified section/key pair, or returns 0 if the specified section/key pair isn't found in the INI file.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.ReadLong(System.String,System.Int64)">
+            <summary>Reads a Long from the specified key of the active section.</summary>
+            <param name="key">The key from which to return the value.</param>
+            <param name="defVal">The section to search in.</param>
+            <returns>Returns the value of the specified key, or returns the default value if the specified key isn't found in the active section of the INI file.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.ReadLong(System.String)">
+            <summary>Reads a Long from the specified key of the active section.</summary>
+            <param name="key">The key from which to return the value.</param>
+            <returns>Returns the value of the specified Key, or returns 0 if the specified Key isn't found in the active section of the INI file.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.ReadByteArray(System.String,System.String)">
+            <summary>Reads a Byte array from the specified key of the specified section.</summary>
+            <param name="section">The section to search in.</param>
+            <param name="key">The key from which to return the value.</param>
+            <returns>Returns the value of the specified section/key pair, or returns null (Nothing in VB.NET) if the specified section/key pair isn't found in the INI file.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.ReadByteArray(System.String)">
+            <summary>Reads a Byte array from the specified key of the active section.</summary>
+            <param name="key">The key from which to return the value.</param>
+            <returns>Returns the value of the specified key, or returns null (Nothing in VB.NET) if the specified key pair isn't found in the active section of the INI file.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.ReadBoolean(System.String,System.String,System.Boolean)">
+            <summary>Reads a Boolean from the specified key of the specified section.</summary>
+            <param name="section">The section to search in.</param>
+            <param name="key">The key from which to return the value.</param>
+            <param name="defVal">The value to return if the specified key isn't found.</param>
+            <returns>Returns the value of the specified section/key pair, or returns the default value if the specified section/key pair isn't found in the INI file.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.ReadBoolean(System.String,System.String)">
+            <summary>Reads a Boolean from the specified key of the specified section.</summary>
+            <param name="section">The section to search in.</param>
+            <param name="key">The key from which to return the value.</param>
+            <returns>Returns the value of the specified section/key pair, or returns false if the specified section/key pair isn't found in the INI file.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.ReadBoolean(System.String,System.Boolean)">
+            <summary>Reads a Boolean from the specified key of the specified section.</summary>
+            <param name="key">The key from which to return the value.</param>
+            <param name="defVal">The value to return if the specified key isn't found.</param>
+            <returns>Returns the value of the specified key pair, or returns the default value if the specified key isn't found in the active section of the INI file.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.ReadBoolean(System.String)">
+            <summary>Reads a Boolean from the specified key of the specified section.</summary>
+            <param name="key">The key from which to return the value.</param>
+            <returns>Returns the value of the specified key, or returns false if the specified key isn't found in the active section of the INI file.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.Write(System.String,System.String,System.Int32)">
+            <summary>Writes an Integer to the specified key in the specified section.</summary>
+            <param name="section">The section to write in.</param>
+            <param name="key">The key to write to.</param>
+            <param name="value">The value to write.</param>
+            <returns>Returns true if the function succeeds, false otherwise.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.Write(System.String,System.Int32)">
+            <summary>Writes an Integer to the specified key in the active section.</summary>
+            <param name="key">The key to write to.</param>
+            <param name="value">The value to write.</param>
+            <returns>Returns true if the function succeeds, false otherwise.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.Write(System.String,System.String,System.String)">
+            <summary>Writes a String to the specified key in the specified section.</summary>
+            <param name="section">Specifies the section to write in.</param>
+            <param name="key">Specifies the key to write to.</param>
+            <param name="value">Specifies the value to write.</param>
+            <returns>Returns true if the function succeeds, false otherwise.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.Write(System.String,System.String)">
+            <summary>Writes a String to the specified key in the active section.</summary>
+            <param name="key">The key to write to.</param>
+            <param name="value">The value to write.</param>
+            <returns>Returns true if the function succeeds, false otherwise.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.Write(System.String,System.String,System.Int64)">
+            <summary>Writes a Long to the specified key in the specified section.</summary>
+            <param name="section">The section to write in.</param>
+            <param name="key">The key to write to.</param>
+            <param name="value">The value to write.</param>
+            <returns>Returns true if the function succeeds, false otherwise.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.Write(System.String,System.Int64)">
+            <summary>Writes a Long to the specified key in the active section.</summary>
+            <param name="key">The key to write to.</param>
+            <param name="value">The value to write.</param>
+            <returns>Returns true if the function succeeds, false otherwise.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.Write(System.String,System.String,System.Byte[])">
+            <summary>Writes a Byte array to the specified key in the specified section.</summary>
+            <param name="section">The section to write in.</param>
+            <param name="key">The key to write to.</param>
+            <param name="value">The value to write.</param>
+            <returns>Returns true if the function succeeds, false otherwise.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.Write(System.String,System.Byte[])">
+            <summary>Writes a Byte array to the specified key in the active section.</summary>
+            <param name="key">The key to write to.</param>
+            <param name="value">The value to write.</param>
+            <returns>Returns true if the function succeeds, false otherwise.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.Write(System.String,System.String,System.Byte[],System.Int32,System.Int32)">
+            <summary>Writes a Byte array to the specified key in the specified section.</summary>
+            <param name="section">The section to write in.</param>
+            <param name="key">The key to write to.</param>
+            <param name="value">The value to write.</param>
+            <param name="offset">An offset in <i>value</i>.</param>
+            <param name="length">The number of elements of <i>value</i> to convert.</param>
+            <returns>Returns true if the function succeeds, false otherwise.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.Write(System.String,System.String,System.Boolean)">
+            <summary>Writes a Boolean to the specified key in the specified section.</summary>
+            <param name="section">The section to write in.</param>
+            <param name="key">The key to write to.</param>
+            <param name="value">The value to write.</param>
+            <returns>Returns true if the function succeeds, false otherwise.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.Write(System.String,System.Boolean)">
+            <summary>Writes a Boolean to the specified key in the active section.</summary>
+            <param name="key">The key to write to.</param>
+            <param name="value">The value to write.</param>
+            <returns>Returns true if the function succeeds, false otherwise.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.DeleteKey(System.String,System.String)">
+            <summary>Deletes a key from the specified section.</summary>
+            <param name="section">The section to delete from.</param>
+            <param name="key">The key to delete.</param>
+            <returns>Returns true if the function succeeds, false otherwise.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.DeleteKey(System.String)">
+            <summary>Deletes a key from the active section.</summary>
+            <param name="key">The key to delete.</param>
+            <returns>Returns true if the function succeeds, false otherwise.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.DeleteSection(System.String)">
+            <summary>Deletes a section from an INI file.</summary>
+            <param name="section">The section to delete.</param>
+            <returns>Returns true if the function succeeds, false otherwise.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.GetSectionNames">
+            <summary>Retrieves a list of all available sections in the INI file.</summary>
+            <returns>Returns an ArrayList with all available sections.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.GetSectionKeys">
+            <summary>Retrieves a list of all available keys in the section of the INI file.</summary>
+            <returns>Returns an ArrayList with all available keys.</returns>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.IniReader.GetSectionKeys(System.String)">
+            <summary>Retrieves a list of all available keys in the section of the INI file.</summary>
+            <returns>Returns an ArrayList with all available keys.</returns>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.IniReader.m_Filename">
+            <summary>
+            Holds the full path to the INI file.
+            </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.IniReader.m_Section">
+            <summary>
+            Holds the active section name
+            </summary>
+        </member>
+        <member name="P:ObjectDockSDK.Utils.IniReader.Filename">
+            <summary>Gets or sets the full path to the INI file.</summary>
+            <value>A String representing the full path to the INI file.</value>
+        </member>
+        <member name="P:ObjectDockSDK.Utils.IniReader.Section">
+            <summary>Gets or sets the section you're working in. (aka 'the active section')</summary>
+            <value>A String representing the section you're working in.</value>
+        </member>
+        <member name="T:ObjectDockSDK.Utils.Notepad">
+            <summary>
+            Notepad log
+            </summary>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.Notepad.LOG(System.Object)">
+            <summary>
+            	Send a message to the notepad window
+            </summary>
+            <param name="obj">obj.ToString() will be sent to the opened notepad window</param>
+        </member>
+        <member name="T:ObjectDockSDK.Utils.ODConsole">
+            <summary>
+            Extended console for both Windows and Console Applications.
+            </summary>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.ODConsole.Initialize">
+            <summary>
+            Initializes ODConsole -- should be called at the start of the program using it
+            </summary>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.ODConsole.Beep">
+            <summary>
+            Produces a simple beep.
+            </summary>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.ODConsole.Flash(System.Boolean)">
+            <summary>
+            Flashes the console window
+            </summary>
+            <param name="once">if off, flashes repeated until the user makes the console foreground</param>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.ODConsole.Clear">
+            <summary>
+            Clear the console window
+            </summary>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.ODConsole.RedirectDebugOutput(System.Boolean,ObjectDockSDK.Utils.ODConsole.ConsoleColor,System.Boolean)">
+            <summary>
+            Redirects debug output to the console
+            </summary>
+            <param name="clear">clear all other listeners first</param>
+            <param name="color">color to use for display debug output</param>
+            <param name="beep">beep on write</param>
+        </member>
+        <member name="M:ObjectDockSDK.Utils.ODConsole.RedirectTraceOutput(System.Boolean,ObjectDockSDK.Utils.ODConsole.ConsoleColor)">
+            <summary>
+            Redirects trace output to the console
+            </summary>
+            <param name="clear">clear all other listeners first</param>
+            <param name="color">color to use for display trace output</param>
+        </member>
+        <member name="P:ObjectDockSDK.Utils.ODConsole.Visible">
+            <summary>
+            Specifies whether the console window should be visible or hidden
+            </summary>
+        </member>
+        <member name="P:ObjectDockSDK.Utils.ODConsole.Title">
+            <summary>
+            Gets or sets the title of the console window
+            </summary>
+        </member>
+        <member name="P:ObjectDockSDK.Utils.ODConsole.Buffer">
+            <summary>
+            Get the current Win32 buffer handle
+            </summary>
+        </member>
+        <member name="P:ObjectDockSDK.Utils.ODConsole.CursorPosition">
+            <summary>
+            Get the current position of the cursor
+            </summary>
+            
+        </member>
+        <member name="P:ObjectDockSDK.Utils.ODConsole.Info">
+            <summary>
+            Returns various information about the screen buffer
+            </summary>
+        </member>
+        <member name="P:ObjectDockSDK.Utils.ODConsole.Color">
+            <summary>
+            Gets or sets the current color and attributes of text 
+            </summary>
+        </member>
+        <member name="T:ObjectDockSDK.Utils.ODConsole.ConsoleColor">
+            <summary>
+            Console Color
+            </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.Black">
+            <summary> Black </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.Blue">
+            <summary> Blue </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.Green">
+            <summary> Green </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.Cyan">
+            <summary> Cyan </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.Red">
+            <summary> Red </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.Violet">
+            <summary> Violet </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.Yellow">
+            <summary> Yellow </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.White">
+            <summary> White </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.Intensified">
+            <summary> Intensified </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.Normal">
+            <summary> Normal (White) </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.BlackBG">
+            <summary> Black Background </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.BlueBG">
+            <summary> Blue Background </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.GreenBG">
+            <summary> Green Background </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.CyanBG">
+            <summary> Cyan Background </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.RedBG">
+            <summary> Ted Background </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.VioletBG">
+            <summary> Violet Background </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.YellowBG">
+            <summary> Yellow Background </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.WhiteBG">
+            <summary> White Background </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.IntensifiedBG">
+            <summary> Intensified Background </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.Underline">
+            <summary> Underline </summary>
+        </member>
+        <member name="F:ObjectDockSDK.Utils.ODConsole.ConsoleColor.ReverseVideo">
+            <summary> Reverse Video </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,8 @@
+The .NET Interop docklet allows you to use .NET docklets with ObjectDock.
+
+This is the SDK part. It contains three samples. See the Documentation and the Howto to get started.
+
+The NetDockletHelper.dll file in SDK/ is a debug build, do not distribute it with your docklet.
+
+The runtime part is available here: http://julien.wincustomize.com/viewskin.aspx?skinid=6013&libid=29
+

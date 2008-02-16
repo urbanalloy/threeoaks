@@ -1,0 +1,30 @@
+EXPORTS
+	OnGetInformation=InteropOnGetInformation
+	OnCreate=InteropOnCreate
+	OnSave=InteropOnSave
+	OnDestroy=InteropOnDestroy
+	OnExportFiles=InteropOnExportFiles
+	OnLeftButtonClick=InteropOnLeftButtonClick
+	OnDoubleClick=InteropOnDoubleClick
+	OnLeftButtonHeld=InteropOnLeftButtonHeld
+	OnRightButtonClick=InteropOnRightButtonClick
+	OnConfigure=InteropOnConfigure
+	OnAcceptDropFiles=InteropOnAcceptDropFiles
+	OnDropFiles=InteropOnDropFiles
+	OnProcessMessage=InteropOnProcessMessage
+	
+	DockletIsVisible
+	DockletGetRect
+	DockletGetLabel
+	DockletSetLabel
+	DockletSetImageFile
+	DockletBrowseForImage
+	DockletLockMouseEffect
+	DockletDoAttentionAnimation
+	DockletDefaultConfigDialog
+	DockletQueryDockEdge
+	DockletQueryDockAlign
+	DockletSetDockEdge
+	DockletSetDockAlign
+
+	DockletSetImageManaged
