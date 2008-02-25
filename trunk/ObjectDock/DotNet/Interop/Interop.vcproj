@@ -293,7 +293,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="echo &quot;c:/Program Files/TortoiseSVN/bin/SubWCRev.exe&quot; $(SolutionDir) $(InputPath) $(InputDir)/version.h&#x0D;&#x0A;"
+						CommandLine="&quot;c:/Program Files/TortoiseSVN/bin/SubWCRev.exe&quot; $(SolutionDir) $(InputPath) $(InputDir)/version.h&#x0D;&#x0A;"
 						Outputs="version.h"
 					/>
 				</FileConfiguration>
