@@ -52,8 +52,9 @@
 
 #define ADDVALUE(name, value)\
 	err = RegSetValueEx(hKey, name, NULL,	REG_SZ, (const BYTE*)value, sizeof(value));\
-	if (err != ERROR_SUCCESS)\
-		return false;	
+	if (err != ERROR_SUCCESS) { \
+		CLOSEKEY(); \
+		return false; }
 
 #define CLOSEKEY()\
 	RegCloseKey(hKey);
@@ -120,26 +121,20 @@ BOOL RegisterHelperDll(char* interop_path)
 BOOL RegisterDocklet(char* path, char* interop_path) {
 
 	IRegisterInterface *cpi = NULL;
+	HRESULT hr;
+	
+	// Try creating a Register instance
 	CoInitialize(NULL);
-
-	// FIXME put that in a macro
-	HRESULT hr = CoCreateInstance(CLSID_Register,
-								  NULL,	
-								  CLSCTX_INPROC_SERVER,
-								  IID_IRegisterInterface,
-								  reinterpret_cast<void**>(&cpi));
+	hr = CREATE_INSTANCE(CLSID_Register, IID_IRegisterInterface, &cpi);
 
 	if (FAILED(hr)) {
 		// Try Registering the helper dll
 		if (RegisterHelperDll(interop_path))
-			hr = CoCreateInstance(CLSID_Register,
-								  NULL,	
-								  CLSCTX_INPROC_SERVER,
-								  IID_IRegisterInterface,
-								  reinterpret_cast<void**>(&cpi));
+			hr = CREATE_INSTANCE(CLSID_Register, IID_IRegisterInterface, &cpi);
 	}
 
 	if (SUCCEEDED(hr)) {
+		// FIXME: only do that once!
 		// Register the ObjectDockSDK dll
 		char codebase[MAX_PATH];
 		sprintf_s(codebase, MAX_PATH, "%s%s", interop_path, DOCKLET_HELPER_DLL);

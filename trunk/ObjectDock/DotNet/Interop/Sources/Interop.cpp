@@ -124,11 +124,7 @@ DOCKLET_DATA *CALLBACK InteropOnCreate(HWND hwndDocklet, HINSTANCE hInstance, ch
 		// Initialize COM and create an instance of the DockletImplementation class
 		LOG("Creating an Instance of DockletImplementation...\n");
 		CoInitialize(NULL);
-		HRESULT hr = CoCreateInstance(data->docklets[data->index].CLSID_Docklet,
-									  NULL,	
-									  CLSCTX_INPROC_SERVER,
-									  IID_IDockletInterface,
-									  reinterpret_cast<void**>(&data->cpi));
+		HRESULT hr = CREATE_INSTANCE(data->docklets[data->index].CLSID_Docklet, IID_IDockletInterface, &data->cpi);
 
 		if (FAILED(hr)) {
 			// Try to register the docklet
@@ -146,11 +142,7 @@ DOCKLET_DATA *CALLBACK InteropOnCreate(HWND hwndDocklet, HINSTANCE hInstance, ch
 			sprintf(docklet_ini, "%s%s", data->static_data.rootFolder, data->static_data.interopFolder);
 			if (RegisterDocklet(dll, docklet_ini)) {
 				// Try creating instance of the docklet
-				hr = CoCreateInstance(data->docklets[data->index].CLSID_Docklet,
-										NULL,	
-										CLSCTX_INPROC_SERVER,
-										IID_IDockletInterface,
-										reinterpret_cast<void**>(&data->cpi));
+				hr = CREATE_INSTANCE(data->docklets[data->index].CLSID_Docklet, IID_IDockletInterface, &data->cpi);
 			}
 		}
 
@@ -207,25 +199,17 @@ void CALLBACK InteropOnSave(DOCKLET_DATA *data, char *szIni, char *szIniGroup, B
 ///////////////////////////////////////////////////////////////////////////////////////////////
 void CALLBACK InteropOnDestroy(DOCKLET_DATA *data, HWND hwndDocklet)
 {
-	if (!data->autoload) {
-		// allocated from PopulateStaticData
-		free(data->static_data.interopFolder);
-		free(data->static_data.relativeFolder);
-		free(data->static_data.rootFolder);
-       
-		delete data;
-		return;
+	if (data->autoload) {
+		data->cpi->OnDestroy();
+
+		data->cpi->Release();
+		data->cpi = NULL;
+
+		// clean up COM:
+		CoUninitialize();
+		CoFreeUnusedLibraries();
+		LOG("Releasing the Instance\n\n");
 	}
-
-	data->cpi->OnDestroy();
-
-	data->cpi->Release();
-	data->cpi = NULL;
-
-	// clean up COM:
-	CoUninitialize();
-	CoFreeUnusedLibraries();
-	LOG("Releasing the Instance\n\n");
 
 	// allocated from PopulateStaticData
 	free(data->static_data.interopFolder);
@@ -307,18 +291,13 @@ BOOL CALLBACK InteropOnConfigure(DOCKLET_DATA *data)
 
 		if (data->autoload)
 		{
-			// FIXME Code duplication
-
 			// Finish populating DOCKLET_STATIC_DATA
 			PopulateStaticData_Relative(data);
 
 			LOG("Creating instance of selected Docklet...\n");
 			CoInitialize(NULL);
-			HRESULT hr = CoCreateInstance(data->docklets[data->index].CLSID_Docklet,
-										  NULL,	
-										  CLSCTX_INPROC_SERVER,
-										  IID_IDockletInterface,
-										  reinterpret_cast<void**>(&data->cpi));
+			HRESULT hr = CREATE_INSTANCE(data->docklets[data->index].CLSID_Docklet, IID_IDockletInterface, &data->cpi);
+			
 			if (FAILED(hr)) {
 				data->autoload = false;
 				CoUninitialize();
@@ -419,11 +398,8 @@ BOOL CALLBACK InteropOnRightButtonClick(DOCKLET_DATA *data, POINT *ptCursor, SIZ
 				// Load the selected docklet
 				LOG("Creating instance of "); LOG((char *)data->docklets[data->index].name); LOG("\n");
 				CoInitialize(NULL);
-				HRESULT hr = CoCreateInstance(data->docklets[data->index].CLSID_Docklet,
-											  NULL,	
-											  CLSCTX_INPROC_SERVER,
-											  IID_IDockletInterface,
-											  reinterpret_cast<void**>(&data->cpi));
+				HRESULT hr = CREATE_INSTANCE(data->docklets[data->index].CLSID_Docklet, IID_IDockletInterface, &data->cpi);
+				
 				if (SUCCEEDED(hr)) {
 					data->autoload = true;
 					data->cpi->OnCreate(data->static_data, "", "");
@@ -439,11 +415,8 @@ BOOL CALLBACK InteropOnRightButtonClick(DOCKLET_DATA *data, POINT *ptCursor, SIZ
 		return true;
 	}
 
-	if (data->cpi->OnRightButtonClick((System_Drawing::Point *)ptCursor,
-		(System_Drawing::Size *)sizeDocklet) == VARIANT_TRUE)
-		return true;
-	else
-		return false;
+	return (data->cpi->OnRightButtonClick((System_Drawing::Point *)ptCursor,
+										   (System_Drawing::Size *)sizeDocklet) == VARIANT_TRUE) ? TRUE : FALSE;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -479,6 +452,9 @@ void CALLBACK InteropOnProcessMessage(DOCKLET_DATA *data,
 		return;
 
 	if (!data->autoload)
+		return;
+
+	if (data->cpi == NULL)
 		return;
 
 	data->cpi->OnProcessMessage((long)hwnd, uMsg, wParam, lParam);
