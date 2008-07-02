@@ -25,8 +25,8 @@ modified by Julien Templier, littleboy22 at gmail dot com
 ** Changelog
 ***************************************************************************
 
-Release 1.2.1: 07/02/08, build 1.2.1.6
- - Changed font to SegoeUI
+Release 1.2.1: 07/02/08, build 1.2.1.8
+ - Use ScrnSave.Lib from VS2005 as the latest version has a dependency on the Vista version of user32.dll
  - Added dialog icon
  - Corrected version & build info retrieval
  - Added theme manifest

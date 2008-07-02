@@ -80,7 +80,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib comctl32.lib scrnsave.lib version.lib winmm.lib $(OutDir)/../FlurryCore/FlurryCore.lib"
+				AdditionalDependencies="opengl32.lib glu32.lib comctl32.lib $(SolutionDir)\Libs\scrnsave.lib version.lib winmm.lib $(OutDir)/../FlurryCore/FlurryCore.lib"
 				OutputFile="$(OutDir)/Flurry.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -186,7 +186,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib comctl32.lib scrnsave.lib version.lib winmm.lib $(OutDir)/../FlurryCore/FlurryCore.lib"
+				AdditionalDependencies="opengl32.lib glu32.lib comctl32.lib $(SolutionDir)\Libs\scrnsave.lib version.lib winmm.lib $(OutDir)/../FlurryCore/FlurryCore.lib"
 				OutputFile="$(OutDir)/Flurry.scr"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
