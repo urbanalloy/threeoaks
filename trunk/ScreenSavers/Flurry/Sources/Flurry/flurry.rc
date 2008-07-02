@@ -98,10 +98,10 @@ FONT 8, "Segoe UI", 400, 0, 0x0
 BEGIN
     DEFPUSHBUTTON   "O&K",IDOK,153,133,50,14
     LTEXT           "Brian Wade wrote Seraphim for Windows. I never saw it, but it must have been cool.",IDC_STATIC,7,7,196,17
-    LTEXT           "Calum Robinson turned Seraphim into Flurry for Mac OS X, which I have seen and can vouch for: it's cool.",IDC_STATIC,7,30,196,17
+    LTEXT           "Calum Robinson turned Seraphim into Flurry for Mac OS X, which I have seen and can vouch for: it's cool.",IDC_STATIC,7,29,196,17
     LTEXT           "Matt Ginzton turned that into Flurry for Windows. You're about to run it; you decide for yourself if it's cool.",IDC_STATIC,7,53,196,17
     LTEXT           "Flurry uses OpenGL. Thanks to OpenGL, the same core Flurry code runs on OS X, Windows, and the X Window System. OpenGL is definitely cool.",IDC_STATIC,7,104,196,28
-    LTEXT           "Julien Templier corrected registry reading bugs, got rid of deprecated function calls and added a new about dialog.",IDC_STATIC,7,77,196,27
+    LTEXT           "Julien Templier corrected registry reading bugs, got rid of deprecated function calls and added a new about dialog.",IDC_STATIC,7,75,196,27
 END
 
 IDD_ABOUTBOX DIALOGEX 0, 0, 200, 238
