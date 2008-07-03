@@ -1,0 +1,15 @@
+EXPORTS
+	OnLeftButtonClick
+	OnRightButtonClick
+
+	OnGetInformation
+
+	OnCreate
+	OnSave
+	OnDestroy
+
+	OnConfigure
+
+	OnExportFiles
+	
+
