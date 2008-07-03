@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<!-- Sitemap 1.0 -->
+</HEAD><BODY>
+<UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="ObjectDockSDK">
+		<param name="Local" value="ObjectDockSDK.html">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Exportable Functions">
+			<param name="Local" value="ObjectDockSDK.ExportableFunctions.html">
+			</OBJECT>
+		<UL>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="OnGetInformation Method">
+				<param name="Local" value="ObjectDockSDK.ExportableFunctions.OnGetInformation.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="OnCreate Method">
+				<param name="Local" value="ObjectDockSDK.ExportableFunctions.OnCreate.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="OnSave Method">
+				<param name="Local" value="ObjectDockSDK.ExportableFunctions.OnSave.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="OnDestroy Method">
+				<param name="Local" value="ObjectDockSDK.ExportableFunctions.OnDestroy.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="OnExportFiles Method">
+				<param name="Local" value="ObjectDockSDK.ExportableFunctions.OnExportFiles.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="OnLeftButtonClick Method">
+				<param name="Local" value="ObjectDockSDK.ExportableFunctions.OnLeftButtonClick.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="OnDoubleClick Method">
+				<param name="Local" value="ObjectDockSDK.ExportableFunctions.OnDoubleClick.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="OnLeftButtonHeld Method">
+				<param name="Local" value="ObjectDockSDK.ExportableFunctions.OnLeftButtonHeld.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="OnRightButtonClick Method">
+				<param name="Local" value="ObjectDockSDK.ExportableFunctions.OnRightButtonClick.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="OnConfigure Method">
+				<param name="Local" value="ObjectDockSDK.ExportableFunctions.OnConfigure.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="OnAcceptDropFiles Method">
+				<param name="Local" value="ObjectDockSDK.ExportableFunctions.OnAcceptDropFiles.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="OnDropFiles Method">
+				<param name="Local" value="ObjectDockSDK.ExportableFunctions.OnDropFiles.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="OnProcessMessage Method">
+				<param name="Local" value="ObjectDockSDK.ExportableFunctions.OnProcessMessage.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+		</UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Docklet SDK Functions">
+			<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.html">
+			</OBJECT>
+		<UL>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="IsVisible Method">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletIsVisible.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="GetRect Method">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletGetRect.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="GetLabel Method">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletGetLabel.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="SetLabel Method">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletSetLabel.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="DockletLoadGDIPlusImage">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletLoadGDIPlusImage.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="SetImage Method">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletSetImage.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="SetImageFile Method">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletSetImageFile.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="SetImageOverlay Method">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletSetImageOverlay.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="BrowseForImage Method">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletBrowseForImage.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="LockMouseEffect Method">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletLockMouseEffect.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="DoAttentionAnimation Method">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletDoAttentionAnimation.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="GetRelativeFolder Method">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletGetRelativeFolder.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="GetRootFolder Method">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletGetRootFolder.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="DefaultConfigDialog Method">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletDefaultConfigDialog.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="QueryDockEdge Method">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletQueryDockEdge.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="SetDockEdge Method">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletSetDockEdge.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="QueryDockAlign Method">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletQueryDockAlign.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="SetDockAlign Method">
+				<param name="Local" value="ObjectDockSDK.DockletSDKFunctions.DockletSetDockAlign.html">
+				<param name="ImageNumber" value="11">
+				</OBJECT>
+		</UL>
+	</UL>
+</UL>
+</BODY></HTML>

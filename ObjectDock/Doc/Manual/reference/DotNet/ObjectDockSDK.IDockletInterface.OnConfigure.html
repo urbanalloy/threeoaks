@@ -1,0 +1,44 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>IDockletInterface.OnConfigure Method</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">ObjectDock .Net SDK Reference</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">IDockletInterface.OnConfigure Method </h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> Called by the host in the event OnRightButtonClick returned FALSE or was not implemented, and it was selected to configure the dock item. If you do not implement this function or return false, ObjectDock will, as a default handler, will open a basic configuration dialog allowing the dock item's text and image to be changed. To override this functionality, implement it and return true. </p>
+      <div class="syntax">
+        <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemBooleanClassTopic.htm">bool</a> OnConfigure();</div>
+      <h4 class="dtH4">Return Value</h4>
+      <p> Return true to signify that this event was acted upon.<br /> Return false or do not implement to signify that this event was NOT acted upon.<br /> In this case, for OnConfigure, a default configuration dialog will be shown, which will allow the user to change the docklet's caption and image. </p>
+      <h4 class="dtH4">See Also</h4>
+      <p>
+        <a href="ObjectDockSDK.IDockletInterface.html">IDockletInterface Interface</a> | <a href="ObjectDockSDK.html">ObjectDockSDK Namespace</a></p>
+      <object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
+        <param name="Keyword" value="OnConfigure method">
+        </param>
+        <param name="Keyword" value="OnConfigure method, IDockletInterface interface">
+        </param>
+        <param name="Keyword" value="IDockletInterface.OnConfigure method">
+        </param>
+      </object>
+    </div>
+  </body>
+</html>

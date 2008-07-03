@@ -1,0 +1,56 @@
+[OPTIONS]
+Auto Index=Yes
+Binary TOC=Yes
+Compatibility=1.1 or later
+Compiled file=ObjectDockSDK(Native).chm
+Contents file=ObjectDockSDK(Native).hhc
+Default Window=MsdnHelp
+Default topic=ObjectDockSDK.html
+Display compile progress=No
+Full-text search=Yes
+Index file=ObjectDockSDK(Native).hhk
+Language=0x409 English (United States)
+Title=ObjectDock SDK Documentation
+
+[WINDOWS]
+MsdnHelp="ObjectDock SDK Documentation","ObjectDockSDK(Native).hhc","ObjectDockSDK(Native).hhk","ObjectDockSDK.html","ObjectDockSDK.html",,,,,0x62520,220,0x387e,[86,51,872,558],,,,,,,0
+
+
+[FILES]
+ObjectDockSDK.html
+ObjectDockSDK.DockletSDKFunctions.html
+ObjectDockSDK.DockletSDKFunctions.DockletBrowseForImage.html
+ObjectDockSDK.DockletSDKFunctions.DockletDefaultConfigDialog.html
+ObjectDockSDK.DockletSDKFunctions.DockletDoAttentionAnimation.html
+ObjectDockSDK.DockletSDKFunctions.DockletGetLabel.html
+ObjectDockSDK.DockletSDKFunctions.DockletGetRect.html
+ObjectDockSDK.DockletSDKFunctions.DockletGetRelativeFolder.html
+ObjectDockSDK.DockletSDKFunctions.DockletGetRootFolder.html
+ObjectDockSDK.DockletSDKFunctions.DockletLoadGDIPlusImage.html
+ObjectDockSDK.DockletSDKFunctions.DockletIsVisible.html
+ObjectDockSDK.DockletSDKFunctions.DockletLockMouseEffect.html
+ObjectDockSDK.DockletSDKFunctions.DockletQueryDockAlign.html
+ObjectDockSDK.DockletSDKFunctions.DockletQueryDockEdge.html
+ObjectDockSDK.DockletSDKFunctions.DockletSetDockAlign.html
+ObjectDockSDK.DockletSDKFunctions.DockletSetDockEdge.html
+ObjectDockSDK.DockletSDKFunctions.DockletSetImage.html
+ObjectDockSDK.DockletSDKFunctions.DockletSetImageFile.html
+ObjectDockSDK.DockletSDKFunctions.DockletSetImageOverlay.html
+ObjectDockSDK.DockletSDKFunctions.DockletSetLabel.html
+ObjectDockSDK.ExportableFunctions.html
+ObjectDockSDK.ExportableFunctions.OnAcceptDropFiles.html
+ObjectDockSDK.ExportableFunctions.OnConfigure.html
+ObjectDockSDK.ExportableFunctions.OnCreate.html
+ObjectDockSDK.ExportableFunctions.OnDestroy.html
+ObjectDockSDK.ExportableFunctions.OnDoubleClick.html
+ObjectDockSDK.ExportableFunctions.OnDropFiles.html
+ObjectDockSDK.ExportableFunctions.OnExportFiles.html
+ObjectDockSDK.ExportableFunctions.OnGetInformation.html
+ObjectDockSDK.ExportableFunctions.OnLeftButtonClick.html
+ObjectDockSDK.ExportableFunctions.OnLeftButtonHeld.html
+ObjectDockSDK.ExportableFunctions.OnProcessMessage.html
+ObjectDockSDK.ExportableFunctions.OnRightButtonClick.html
+ObjectDockSDK.ExportableFunctions.OnSave.html
+
+[INFOTYPES]
+

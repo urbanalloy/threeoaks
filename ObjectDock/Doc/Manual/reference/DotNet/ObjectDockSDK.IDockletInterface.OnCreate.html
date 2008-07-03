@@ -1,0 +1,57 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>IDockletInterface.OnCreate Method</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">ObjectDock .Net SDK Reference</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">IDockletInterface.OnCreate Method </h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> This function is called every time a docklet from this dll is created. Provides the handle of the window the docklet will be represented by, along with the instance of the docklet's dll. If the plugin is being loaded for the first time, szIni and szIniGroup will be NULL, however otherwise they will specify the ini file and ini section the docklet should load its individual options from. </p>
+      <div class="syntax">
+        <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemVoidClassTopic.htm">void</a> OnCreate(<br />   <a href="ObjectDockSDK.DOCKLET_STATIC_DATA.html">DOCKLET_STATIC_DATA</a> <i>data</i>,<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemStringClassTopic.htm">string</a> <i>ini</i>,<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemStringClassTopic.htm">string</a> <i>iniGroup</i><br />);</div>
+      <h4 class="dtH4">Parameters</h4>
+      <dl>
+        <dt>
+          <i>data</i>
+        </dt>
+        <dd> The data structure containing info about the docklet </dd>
+        <dt>
+          <i>ini</i>
+        </dt>
+        <dd> Absolute path of an INI file which the plugin should use to load options from.<br /> Can be 0. If 0, then the plugin is a new plugin and default options should be loaded </dd>
+        <dt>
+          <i>iniGroup</i>
+        </dt>
+        <dd> The INI Section of an INI file which the plugin should use to load options from.<br /> Can be 0. If 0, then the plugin is a new plugin and default options should be loaded. </dd>
+      </dl>
+      <h4 class="dtH4">See Also</h4>
+      <p>
+        <a href="ObjectDockSDK.IDockletInterface.html">IDockletInterface Interface</a> | <a href="ObjectDockSDK.html">ObjectDockSDK Namespace</a></p>
+      <object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
+        <param name="Keyword" value="OnCreate method">
+        </param>
+        <param name="Keyword" value="OnCreate method, IDockletInterface interface">
+        </param>
+        <param name="Keyword" value="IDockletInterface.OnCreate method">
+        </param>
+      </object>
+    </div>
+  </body>
+</html>

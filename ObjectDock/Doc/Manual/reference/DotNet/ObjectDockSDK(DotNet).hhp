@@ -1,0 +1,141 @@
+[FILES]
+ObjectDockSDK.html
+ObjectDockSDKHierarchy.html
+ObjectDockSDK.AssemblyData.html
+ObjectDockSDK.AssemblyDataMembers.html
+ObjectDockSDK.AssemblyDataConstructor.html
+ObjectDockSDK.AssemblyDataMethods.html
+ObjectDockSDK.AssemblyData.GetInformation.html
+ObjectDockSDK.Docklet.html
+ObjectDockSDK.DockletMembers.html
+ObjectDockSDK.DockletConstructor.html
+ObjectDockSDK.DockletProperties.html
+ObjectDockSDK.Docklet.ContextMenu.html
+ObjectDockSDK.Docklet.DockAlign.html
+ObjectDockSDK.Docklet.DockEdge.html
+ObjectDockSDK.Docklet.Image.html
+ObjectDockSDK.Docklet.ImageFile.html
+ObjectDockSDK.Docklet.InteropFolder.html
+ObjectDockSDK.Docklet.IsVisible.html
+ObjectDockSDK.Docklet.Label.html
+ObjectDockSDK.Docklet.Overlay.html
+ObjectDockSDK.Docklet.Rect.html
+ObjectDockSDK.Docklet.RelativeFolder.html
+ObjectDockSDK.Docklet.RootFolder.html
+ObjectDockSDK.Docklet.Window.html
+ObjectDockSDK.DockletMethods.html
+ObjectDockSDK.Docklet.BrowseForImage.html
+ObjectDockSDK.Docklet.DefaultConfigDialog.html
+ObjectDockSDK.Docklet.DoAttentionAnimation.html
+ObjectDockSDK.Docklet.GetCoordinates.html
+ObjectDockSDK.Docklet.GetFiles.html
+ObjectDockSDK.Docklet.LockMouseEffect.html
+ObjectDockSDK.Docklet.ShowContextMenu.html
+ObjectDockSDK.Docklet.Align.html
+ObjectDockSDK.Docklet.Edge.html
+ObjectDockSDK.DockletWindowWrapper.html
+ObjectDockSDK.DockletWindowWrapperMembers.html
+ObjectDockSDK.DockletWindowWrapperConstructor.html
+ObjectDockSDK.DockletWindowWrapperProperties.html
+ObjectDockSDK.DockletWindowWrapper.Handle.html
+ObjectDockSDK.IDockletInterface.html
+ObjectDockSDK.IDockletInterfaceMembers.html
+ObjectDockSDK.IDockletInterfaceMethods.html
+ObjectDockSDK.IDockletInterface.OnAcceptDropFiles.html
+ObjectDockSDK.IDockletInterface.OnConfigure.html
+ObjectDockSDK.IDockletInterface.OnCreate.html
+ObjectDockSDK.IDockletInterface.OnDestroy.html
+ObjectDockSDK.IDockletInterface.OnDoubleClick.html
+ObjectDockSDK.IDockletInterface.OnDropFiles.html
+ObjectDockSDK.IDockletInterface.OnExportFiles.html
+ObjectDockSDK.IDockletInterface.OnGetInformation.html
+ObjectDockSDK.IDockletInterface.OnLeftButtonClick.html
+ObjectDockSDK.IDockletInterface.OnLeftButtonHeld.html
+ObjectDockSDK.IDockletInterface.OnProcessMessage.html
+ObjectDockSDK.IDockletInterface.OnRightButtonClick.html
+ObjectDockSDK.IDockletInterface.OnSave.html
+ObjectDockSDK.Utils.html
+ObjectDockSDK.UtilsHierarchy.html
+ObjectDockSDK.Utils.IniReader.html
+ObjectDockSDK.Utils.IniReaderMembers.html
+ObjectDockSDK.Utils.IniReaderConstructor.html
+ObjectDockSDK.Utils.IniReaderProperties.html
+ObjectDockSDK.Utils.IniReader.Filename.html
+ObjectDockSDK.Utils.IniReader.Section.html
+ObjectDockSDK.Utils.IniReaderMethods.html
+ObjectDockSDK.Utils.IniReader.DeleteKey_overloads.html
+ObjectDockSDK.Utils.IniReader.DeleteKey_overload_2.html
+ObjectDockSDK.Utils.IniReader.DeleteKey_overload_1.html
+ObjectDockSDK.Utils.IniReader.DeleteSection.html
+ObjectDockSDK.Utils.IniReader.GetSectionNames.html
+ObjectDockSDK.Utils.IniReader.ReadBoolean_overloads.html
+ObjectDockSDK.Utils.IniReader.ReadBoolean_overload_4.html
+ObjectDockSDK.Utils.IniReader.ReadBoolean_overload_3.html
+ObjectDockSDK.Utils.IniReader.ReadBoolean_overload_2.html
+ObjectDockSDK.Utils.IniReader.ReadBoolean_overload_1.html
+ObjectDockSDK.Utils.IniReader.ReadByteArray_overloads.html
+ObjectDockSDK.Utils.IniReader.ReadByteArray_overload_2.html
+ObjectDockSDK.Utils.IniReader.ReadByteArray_overload_1.html
+ObjectDockSDK.Utils.IniReader.ReadInteger_overloads.html
+ObjectDockSDK.Utils.IniReader.ReadInteger_overload_4.html
+ObjectDockSDK.Utils.IniReader.ReadInteger_overload_3.html
+ObjectDockSDK.Utils.IniReader.ReadInteger_overload_2.html
+ObjectDockSDK.Utils.IniReader.ReadInteger_overload_1.html
+ObjectDockSDK.Utils.IniReader.ReadLong_overloads.html
+ObjectDockSDK.Utils.IniReader.ReadLong_overload_4.html
+ObjectDockSDK.Utils.IniReader.ReadLong_overload_3.html
+ObjectDockSDK.Utils.IniReader.ReadLong_overload_2.html
+ObjectDockSDK.Utils.IniReader.ReadLong_overload_1.html
+ObjectDockSDK.Utils.IniReader.ReadString_overloads.html
+ObjectDockSDK.Utils.IniReader.ReadString_overload_3.html
+ObjectDockSDK.Utils.IniReader.ReadString_overload_2.html
+ObjectDockSDK.Utils.IniReader.ReadString_overload_1.html
+ObjectDockSDK.Utils.IniReader.Write_overloads.html
+ObjectDockSDK.Utils.IniReader.Write_overload_11.html
+ObjectDockSDK.Utils.IniReader.Write_overload_8.html
+ObjectDockSDK.Utils.IniReader.Write_overload_2.html
+ObjectDockSDK.Utils.IniReader.Write_overload_6.html
+ObjectDockSDK.Utils.IniReader.Write_overload_4.html
+ObjectDockSDK.Utils.IniReader.Write_overload_10.html
+ObjectDockSDK.Utils.IniReader.Write_overload_7.html
+ObjectDockSDK.Utils.IniReader.Write_overload_9.html
+ObjectDockSDK.Utils.IniReader.Write_overload_1.html
+ObjectDockSDK.Utils.IniReader.Write_overload_5.html
+ObjectDockSDK.Utils.IniReader.Write_overload_3.html
+ObjectDockSDK.Utils.Notepad.html
+ObjectDockSDK.Utils.NotepadMembers.html
+ObjectDockSDK.Utils.NotepadMethods.html
+ObjectDockSDK.Utils.Notepad.LOG.html
+ObjectDockSDK.Utils.ODConsole.html
+ObjectDockSDK.Utils.ODConsoleMembers.html
+ObjectDockSDK.Utils.ODConsoleProperties.html
+ObjectDockSDK.Utils.ODConsole.Color.html
+ObjectDockSDK.Utils.ODConsole.Visible.html
+ObjectDockSDK.Utils.ODConsoleMethods.html
+ObjectDockSDK.Utils.ODConsole.Beep.html
+ObjectDockSDK.Utils.ODConsole.Clear.html
+ObjectDockSDK.Utils.ODConsole.Flash.html
+ObjectDockSDK.Utils.ODConsole.Initialize.html
+ObjectDockSDK.Utils.ODConsole.RedirectDebugOutput.html
+ObjectDockSDK.Utils.ODConsole.RedirectTraceOutput.html
+ObjectDockSDK.Utils.ODConsole.ConsoleColor.html
+
+[OPTIONS]
+Title=ObjectDockSDK(DotNet)
+Auto Index=Yes
+Binary TOC=Yes
+Compatibility=1.1 or later
+Compiled file=ObjectDockSDK(DotNet).chm
+Default Window=MsdnHelp
+Default topic=ObjectDockSDK.html
+Display compile progress=No
+Error log file=ObjectDockSDK(DotNet).log
+Full-text search=Yes
+Index file=ObjectDockSDK(DotNet).hhk
+Language=0x409 English (United States)
+Contents file=ObjectDockSDK(DotNet).hhc
+
+[WINDOWS]
+MsdnHelp="ObjectDockSDK(DotNet) Help","ObjectDockSDK(DotNet).hhc","ObjectDockSDK(DotNet).hhk","ObjectDockSDK.html","ObjectDockSDK.html",,,,,0x62520,220,0x387e,[86,51,872,558],,,,,,,0
+
+[INFOTYPES]

@@ -1,0 +1,50 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>OnDoubleClick</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">ObjectDock SDK Reference</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">OnDoubleClick</h1>
+      </div>
+    </div>
+    <div id="nstext">      
+      <p> Called by the host when the dock item that represents this docklet is double left-clicked. If you choose to implement this function, you should return true to indicate you processed the message. </p>
+      <div class="syntax">
+        BOOL CALLBACK OnDoubleClick(<br />   DOCKLET_DATA <i>*lpData</i>,<br />   POINT <i>*ptCursor</i>,<br />   SIZE <i>*sizeDocklet</i><br />);</div>
+      <h4 class="dtH4">Parameters</h4>
+      <dl>
+        <dt>
+          <i>lpData</i>
+        </dt>
+        <dd> Personal data for this plugin instance returned during OnCreate. Datatype is arbitrary. </dd>       
+        <dt>
+          <i>ptCursor</i>
+        </dt>
+        <dd> The position of the cursor at the time of the event, in coordinates relative to the top-left of the docklet image </dd>
+        <dt>
+          <i>sizeDocklet</i>
+        </dt>
+        <dd>The size of the docklet image at the time of the event.</dd>
+      </dl>
+      <h4 class="dtH4">Return Value</h4>
+      <p> Return TRUE to signify that this event was acted upon.<br /> Return FALSE or do not implement to signify that this event was NOT acted upon.<br /> In this case, for OnDoubleClick, no default action will be taken.</p>
+      <h4 class="dtH4">See Also</h4>
+      <p><a href="ObjectDockSDK.DockletSDKFunctions.html">Docklet SDK Functions</a> | <a href="ObjectDockSDK.html">ObjectDockSDK</a></p>
+    </div>
+  </body>
+</html>

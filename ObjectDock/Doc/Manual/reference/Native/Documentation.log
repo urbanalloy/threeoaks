@@ -1,0 +1,11 @@
+Microsoft HTML Help Compiler 4.74.8702
+
+Compiling d:\Sources\ObjectDock\DotNetDocklets\Doc\Manual\reference\Native\ObjectDockSDK.chm
+
+HHC5003: Error: Compilation failed while compiling Documentation.hhk.
+HHC5003: Error: Compilation failed while compiling Documentation.hhk.
+
+
+The following files were not compiled:
+Documentation.hhk
+Documentation.hhk

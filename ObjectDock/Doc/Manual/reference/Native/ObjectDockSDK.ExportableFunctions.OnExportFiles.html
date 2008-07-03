@@ -1,0 +1,50 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>OnExportFiles</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">ObjectDock SDK Reference</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">OnExportFiles</h1>
+      </div>
+    </div>
+    <div id="nstext">      
+      <p> Sent to the docklet when the docklet is to be packaged up as part of a theme to redistribute. The plugin will receive a first message with iteration equal to 0. If the plugin is dependent on any file, it should copy that file's relative filename into szFileRelativeOut and return TRUE. If TRUE is returned, the host will call this function of the docket's again, with the iteration advancing by 1. The docklet should continue listing the filenames of files (e.g. images, common ini files, etc) until the host has been notified of all the files that the docklet is dependent upon. </p>
+      <div class="syntax">
+        BOOL CALLBACK OnExportFiles(<br />   DOCKLET_DATA <i>*lpData</i>,<br />   char <i>*szFileRelativeOut</i>,<br />   int <i>iteration</i><br />);</div>
+      <h4 class="dtH4">Parameters</h4>
+      <dl>
+        <dt>
+          <i>lpData</i>
+        </dt>
+        <dd> Personal data for this plugin instance returned during OnCreate. Datatype is arbitrary. </dd>       
+        <dt>
+          <i>szFileRelativeOut</i>
+        </dt>
+        <dd>[in/out] This string should be filled with the relative OR absolute path of a file which this
+            docklet depends upon, and which should be included if the plugin is packaged up for redistribution. </dd>
+        <dt>
+          <i>iteration</i>
+        </dt>
+        <dd>index of the file</dd>             
+      <h4 class="dtH4">Return Value</h4>
+      <p> Return TRUE to indicate a filename was copied into szFileRelativeOut, and to continue querying for more files.<br /> Return FALSE (or don't implement at all) to indicate that no more files need to be accounted for and to stop iterating. </p>
+      <h4 class="dtH4">See Also</h4>
+      <p><a href="ObjectDockSDK.DockletSDKFunctions.html">Docklet SDK Functions</a> | <a href="ObjectDockSDK.html">ObjectDockSDK</a></p>
+    </div>
+  </body>
+</html>

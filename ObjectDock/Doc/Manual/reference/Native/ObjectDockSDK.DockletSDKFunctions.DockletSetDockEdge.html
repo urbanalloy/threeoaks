@@ -1,0 +1,54 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>DockletSetDockEdge</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">ObjectDock SDK Reference</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">DockletSetDockEdge</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      
+      <p> Changes which edge of the screen the dock with the given Docklet is located on. </p>
+      <div class="syntax">BOOL DockletSetDockEdge(<br />   HWND <i>hwndDocklet</i>,<br />   int <i>iNewEdge</i><br />);</div>
+      <h4 class="dtH4">Parameters</h4>
+      <dl>
+        <dt>
+          <i>hwndDocklet</i>
+        </dt>
+        <dd>The handle to the window passed during OnCreate that owns this docklet and therefore identifies the docklet to the host.</dd>         
+        <dt>
+          <i>iNewEdge</i>
+        </dt>
+        <dd>Defines the new edge of the screen the dock should be docked to.<br />    <br />       
+         Possible values are as follows:<br /><br />
+            0 = Bottom Edge of the screen<br />
+            1 = Top Edge of the screen<br />
+            2 = Left Edge of the screen<br />
+            3 = Right Edge of the screen
+         </dd>
+      </dl>
+      <h4 class="dtH4">Return Value</h4>
+      <p> TRUE is the function succeeded,<br /><br /> FALSE otherwise. </p>
+      <h4 class="dtH4">Remarks</h4>
+      <p>Only applicable to a normal dock</p>
+       <h4 class="dtH4">See Also</h4>
+       <p><a href="ObjectDockSDK.ExportablesFunctions.html">Exportables Functions</a> | <a href="ObjectDockSDK.html">ObjectDockSDK</a></p>  
+    </div>
+  </body>
+</html>

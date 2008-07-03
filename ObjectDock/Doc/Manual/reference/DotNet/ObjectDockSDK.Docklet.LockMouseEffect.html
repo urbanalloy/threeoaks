@@ -1,0 +1,50 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>Docklet.LockMouseEffect Method</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">ObjectDock .Net SDK Reference</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">Docklet.LockMouseEffect Method </h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> Allows a Docklet to lock the mouse effect (e.g. zooming, etc) of its owning dock. </p>
+      <div class="syntax">public <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemVoidClassTopic.htm">void</a> LockMouseEffect(<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemBooleanClassTopic.htm">bool</a> <i>locked</i><br />);</div>
+      <h4 class="dtH4">Parameters</h4>
+      <dl>
+        <dt>
+          <i>locked</i>
+        </dt>
+        <dd> true to lock the mouse-over effect (zooming, etc) of the dock<br /> false to unlock the mouse-over effect (zooming, etc) of the dock </dd>
+      </dl>
+      <h4 class="dtH4">Remarks</h4>
+      <p> The mouse-over effect lock is done via a counter, so that if multiple Docklets are locking at the same time the effect will stay locked until the last Docklet unlocks. The counter does not check to make sure one Docklet is not continually unlocking however, so do not do this as it will interfere with other docklets<br /> is not continually unlocking however, so do not do this as it will interfere with other docklets. Only lock and unlock the mouse effect when needed. </p>
+      <h4 class="dtH4">See Also</h4>
+      <p>
+        <a href="ObjectDockSDK.Docklet.html">Docklet Class</a> | <a href="ObjectDockSDK.html">ObjectDockSDK Namespace</a></p>
+      <object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
+        <param name="Keyword" value="LockMouseEffect method">
+        </param>
+        <param name="Keyword" value="LockMouseEffect method, Docklet class">
+        </param>
+        <param name="Keyword" value="Docklet.LockMouseEffect method">
+        </param>
+      </object>
+    </div>
+  </body>
+</html>

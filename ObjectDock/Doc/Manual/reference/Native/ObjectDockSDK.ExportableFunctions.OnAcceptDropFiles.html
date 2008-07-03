@@ -1,0 +1,41 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>OnAcceptDropFiles</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">ObjectDock SDK Reference</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">OnAcceptDropFiles</h1>
+      </div>
+    </div>
+    <div id="nstext">      
+      <p> Gives the opportunity to a docklet to express its ability to accept dropped files. Implementing this function and returning TRUE will allow for the possibility for files to be dropped onto this dock item, and thus a call to OnDropFiles. </p>
+      <div class="syntax">
+        BOOL CALLBACK OnAcceptDropFiles(<br />   DOCKLET_DATA <i>*lpData</i><br />);</div>
+      <dl>
+        <dt>
+          <i>lpData</i>
+        </dt>
+        <dd> Personal data for this plugin instance returned during OnCreate. Datatype is arbitrary. </dd>         
+      </dl>        
+      <h4 class="dtH4">Return Value</h4>
+      <p> Return TRUE to signify that this docklet can accept files dropped onto it<br /> Return FALSE or do not implement to signify that this docklet does not accept dropped files. (Default) </p>
+      <h4 class="dtH4">See Also</h4>
+      <p><a href="ObjectDockSDK.DockletSDKFunctions.html">Docklet SDK Functions</a> | <a href="ObjectDockSDK.html">ObjectDockSDK</a></p>
+    </div>
+  </body>
+</html>
