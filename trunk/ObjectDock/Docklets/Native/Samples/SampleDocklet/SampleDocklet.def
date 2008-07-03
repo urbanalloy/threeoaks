@@ -1,0 +1,12 @@
+EXPORTS
+	OnLeftButtonClick
+	OnLeftButtonHeld
+	OnDoubleClick
+	OnGetInformation
+	OnCreate
+	OnSave
+	OnDestroy
+	OnAcceptDropFiles
+	OnDropFiles
+	
+
