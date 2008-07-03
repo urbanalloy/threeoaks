@@ -120,8 +120,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>@echo off
-xcopy /Y /I "$(ProjectDir)\Data\$(TargetName).png" "$(TargetDir)"
+    <PostBuildEvent>xcopy /Y /I "$(ProjectDir)\Data\$(TargetName).png" "$(TargetDir)"
 xcopy /Y /I "$(ProjectDir)\Data\docklet.ini" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
