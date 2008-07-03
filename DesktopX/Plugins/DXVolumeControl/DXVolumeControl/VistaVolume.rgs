@@ -1,0 +1,26 @@
+HKCR
+{
+	DXVolumeControl.VistaVolume.1 = s 'VistaVolume Class'
+	{
+		CLSID = s '{F36B9A47-AF5B-4AE2-A039-48CC18FEEA4C}'
+	}
+	DXVolumeControl.VistaVolume = s 'VistaVolume Class'
+	{
+		CLSID = s '{F36B9A47-AF5B-4AE2-A039-48CC18FEEA4C}'
+		CurVer = s 'DXVolumeControl.VistaVolume.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {F36B9A47-AF5B-4AE2-A039-48CC18FEEA4C} = s 'VistaVolume Class'
+		{
+			ProgID = s 'DXVolumeControl.VistaVolume.1'
+			VersionIndependentProgID = s 'DXVolumeControl.VistaVolume'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{6444B45E-8B01-4F6C-88E0-C954A017C7C4}'
+		}
+	}
+}

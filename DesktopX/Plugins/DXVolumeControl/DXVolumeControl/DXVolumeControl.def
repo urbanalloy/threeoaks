@@ -1,0 +1,10 @@
+; DXVolumeControl.def : Declares the module parameters.
+
+LIBRARY      "DXVolumeControl.DLL"
+
+EXPORTS
+	DllCanUnloadNow		PRIVATE
+	DllGetClassObject	PRIVATE
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer	PRIVATE
+	SDMessage           @5
