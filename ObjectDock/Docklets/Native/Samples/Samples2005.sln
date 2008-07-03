@@ -1,0 +1,31 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnimationDocklet", "AnimationDocklet\AnimationDocklet2005.vcproj", "{80E700B2-1307-48D9-9712-055E446C48B5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleDocklet", "SampleDocklet\SampleDocklet2005.vcproj", "{B0EC1B09-AB79-44EF-9639-D79CBCC99253}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WeatherDocklet", "WeatherDocklet\WeatherDocklet2005.vcproj", "{B8485C02-5239-4572-A285-4C6AA74A30C6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80E700B2-1307-48D9-9712-055E446C48B5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{80E700B2-1307-48D9-9712-055E446C48B5}.Debug|Win32.Build.0 = Debug|Win32
+		{80E700B2-1307-48D9-9712-055E446C48B5}.Release|Win32.ActiveCfg = Release|Win32
+		{80E700B2-1307-48D9-9712-055E446C48B5}.Release|Win32.Build.0 = Release|Win32
+		{B0EC1B09-AB79-44EF-9639-D79CBCC99253}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B0EC1B09-AB79-44EF-9639-D79CBCC99253}.Debug|Win32.Build.0 = Debug|Win32
+		{B0EC1B09-AB79-44EF-9639-D79CBCC99253}.Release|Win32.ActiveCfg = Release|Win32
+		{B0EC1B09-AB79-44EF-9639-D79CBCC99253}.Release|Win32.Build.0 = Release|Win32
+		{B8485C02-5239-4572-A285-4C6AA74A30C6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B8485C02-5239-4572-A285-4C6AA74A30C6}.Debug|Win32.Build.0 = Debug|Win32
+		{B8485C02-5239-4572-A285-4C6AA74A30C6}.Release|Win32.ActiveCfg = Release|Win32
+		{B8485C02-5239-4572-A285-4C6AA74A30C6}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
