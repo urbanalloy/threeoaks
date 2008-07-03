@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dream>	
+	<name>Test Video Dream</name>	
+	<description>Test Description</description>	
+	<author>Test Author</author>	
+	<url>http://www.example.com</url>	
+	<copyright></copyright>	
+	<permissions></permissions>
+
+	<preview>preview.jpg</preview>
+
+	<data>		
+		<triggers type="time">
+			<trigger>
+				<time>01:12:33</time>
+				<path>video1.mpg</path>
+			</trigger>	
+			<trigger>
+				<time>12:24:00</time>
+				<path>video2.mpg</path>
+			</trigger>							  
+		</triggers>
+
+	</data>
+	 
+	
+</dream>

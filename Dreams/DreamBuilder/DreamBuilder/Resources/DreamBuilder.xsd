@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dreambuilder-schema" 
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   attributeFormDefault="unqualified"
+		   elementFormDefault="qualified">
+	
+	<xs:element name="dream">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="name" minOccurs="1">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="100"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="description" minOccurs="1">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="600"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="author" minOccurs="1">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="100"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="url" minOccurs="1">
+					<xs:simpleType>
+						<xs:restriction base="xs:anyURI">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="200"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="copyright" type="xs:string" minOccurs="1"/>
+				<xs:element name="permissions" type="xs:string" minOccurs="1"/>
+				<xs:element name="preview" minOccurs="1">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>							
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="data" minOccurs="1">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="video" minOccurs="0">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="1"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="triggers" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence minOccurs="2" maxOccurs="86400">
+										<xs:element name="trigger">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="time" type="xs:time" minOccurs="1"/>
+													<xs:element name="path" minOccurs="1">
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:minLength value="1"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="type" type="xs:string" fixed="time" use="required" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="dynamic" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="dll32" minOccurs="1">
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:minLength value="1"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="dll64" minOccurs="1">
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:minLength value="1"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="resources" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence minOccurs="1"  maxOccurs="150">
+													<xs:element name="resource">
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="file" minOccurs="1">
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:minLength value="1"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="path" type="xs:string" minOccurs="1"/>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>									
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>					
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>	   
+		
+	</xs:element>
+</xs:schema>

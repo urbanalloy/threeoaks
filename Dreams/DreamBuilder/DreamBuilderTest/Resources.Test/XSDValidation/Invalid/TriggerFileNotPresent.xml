@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dream>	
+	<name>Test Dream</name>	
+	<description>Test Description</description>	
+	<author>Test Author</author>	
+	<url>Test url</url>	
+	<copyright></copyright>	
+	<permissions></permissions>
+
+	<preview>preview</preview>
+
+	<data>
+		  
+		<triggers type="time">
+			<trigger>
+				<time>10:22:30</time>
+				<path></path>
+			</trigger>				  
+		</triggers>	
+		
+	</data>
+	 
+	
+</dream>

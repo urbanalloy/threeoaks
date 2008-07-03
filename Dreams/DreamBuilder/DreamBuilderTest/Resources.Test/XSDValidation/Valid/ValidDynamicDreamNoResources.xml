@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dream>	
+	<name>Test Video Dream</name>	
+	<description>Test Description</description>	
+	<author>Test Author</author>	
+	<url>http://www.example.com</url>	
+	<copyright></copyright>	
+	<permissions></permissions>
+
+	<preview>preview.jpg</preview>
+
+	<data>		
+		<dynamic>
+			<dll32>dll32.dll</dll32>
+			<dll64>dll64.dll</dll64>
+		</dynamic>			
+	</data>
+</dream>

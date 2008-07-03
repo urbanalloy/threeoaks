@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dream>	
+	<name>Test Dream</name>	
+	<description>Test Description</description>	
+	<author>Test Author</author>	
+	<url>123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890</url>	
+	<copyright></copyright>	
+	<permissions></permissions>
+
+	<preview></preview>
+
+	<data>
+		  
+		<video></video>
+		
+		<triggers type="time">
+			<trigger>
+				<time></time>
+				<path></path>
+			</trigger>				  
+		</triggers>
+		
+		<dynamic>
+			<dll32></dll32>
+			<dll64></dll64>
+			
+			<resources>
+				<resource>
+					<file></file>
+					<path></path>
+				</resource>
+			</resources>
+		</dynamic>
+		
+		
+	</data>
+	 
+	
+</dream>

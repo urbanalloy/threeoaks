@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="e7f6eb68-00ac-43a0-8988-49d0c1d9bcba"
+			 Name="DreamBuilder"
+			 Language="1033"
+			 Version="1.0.0.79"
+			 Manufacturer="Julien Templier"
+			 UpgradeCode="b7ab96f9-0a6d-4e38-90d8-99b2854c7e91">
+		<Package InstallerVersion="200" Compressed="yes" />
+
+		<Media Id="1" Cabinet="DreamBuilderMSI.cab" EmbedCab="yes" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id='ThreeOaksCrossing' Name='Three Oaks Crossing'>
+					<Directory Id="INSTALLDIR" Name="DreamBuilder">
+
+						<Component Id="MainExecutable" Guid="34ba093d-e92f-45e7-a1ae-15700bd67c70">
+							<File Id='DreamBuilderExe' Name='DreamBuilder.exe' DiskId='1' Source='DreamBuilder.exe' Vital='yes' />
+							<File Id='DreamBuilderHook' Name='DreamBuilderHook.dll' DiskId='1' Source='DreamBuilderHook.dll' Vital='yes' />
+							<File Id='Readme' Name='Readme.txt' DiskId='1' Source='Resources/Readme.txt' Vital='yes' />
+							<File Id='Example' Name='Example.xml' DiskId='1' Source='Resources/Example.xml' Vital='yes' />
+							<File Id='License' Name='License.rtf' DiskId='1' Source='Resources/License.rtf' Vital='yes' />
+
+							<Environment Id="Environment" Name="PATH" Part="last" System="yes" Value="[INSTALLDIR]" Action="set" />
+						</Component>
+						
+					</Directory>
+				</Directory>
+			</Directory>
+		</Directory>
+
+		<Feature Id="Complete" Title="Complete" Level="1">
+			<ComponentRef Id='MainExecutable' />						
+		</Feature>
+
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+		<UIRef Id="WixUI_InstallDir" />
+
+		<WixVariable Id="WixUILicenseRtf" Value="Resources/License.rtf" />
+		<!-- <WixVariable Id="WixUIBannerBmp" Value="Resources/UIBanner.bmp" /> -->
+		<!-- <WixVariable Id="WixUIDialogBmp" Value="Resources/UIDialog.bmp" /> -->
+
+	</Product>
+</Wix>
