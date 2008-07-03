@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dream>	
+	<name>Trigger-based Dream</name>	
+	<description>Trigger description</description>	
+	<author>Julien Templier</author>
+	<url>http://julien.wincustomize.com/</url>
+	<copyright>(C) 2007 Three Oaks Crossing, LLC</copyright>
+	<permissions></permissions>
+
+	<preview>../Preview.jpg</preview>
+
+	<data>
+		
+		<triggers type="time">
+			<trigger>
+				<time>01:01:01</time>
+				<path>../Videos/VideoFileSizeInvalid.mpg</path>
+			</trigger>	
+			<trigger>
+				<time>12:00:00</time>
+				<path>../Videos/TestVideo.avi</path>
+			</trigger>			  
+		</triggers>	
+		
+	</data>
+	 
+	
+</dream>

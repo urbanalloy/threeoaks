@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dream>	
+	<name>Test Dream</name>	
+	<description>Test Description</description>	
+	<author>Test Author</author>	
+	<url>Test url</url>	
+	<copyright></copyright>	
+	<permissions></permissions>
+
+	<preview></preview>	
+	
+	<data></data>
+</dream>

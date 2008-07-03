@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dreambuilder-trigger-schema"
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		   attributeFormDefault="unqualified"
+		   elementFormDefault="qualified">
+
+	<xs:element name="dream">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="version" type="xs:string" minOccurs="1" />
+				<xs:element name="triggerset" minOccurs="1">
+					<xs:complexType>
+						<xs:sequence minOccurs="2" maxOccurs="86400">
+							<xs:element name="trigger" >
+								<xs:complexType>
+									<xs:attribute name="id" type="xs:int" use="required" />
+									<xs:attribute name="video" type="xs:string" use="required" />
+									<xs:attribute name="hour" type="xs:int" use="required" />
+									<xs:attribute name="minute" type="xs:int" use="required" />
+									<xs:attribute name="second" type="xs:int" use="required" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="type" type="xs:string" fixed="time" use="required" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="version" type="xs:string" fixed="1.0" use="required" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

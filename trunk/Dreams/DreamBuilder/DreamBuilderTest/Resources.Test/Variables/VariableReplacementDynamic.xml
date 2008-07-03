@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dream>
+	<name>$name$</name>
+	<description>$description$</description>
+	<author>$author$</author>
+	<url>$url$/</url>
+	<copyright>$copyright$</copyright>
+	<permissions>$permissions$</permissions>
+	
+	<preview>$preview$</preview>
+
+	<data>		
+		<dynamic>
+			<dll32>$dll32$</dll32>
+			<dll64>$dll64$</dll64>
+			
+			<resources>
+				<resource>
+					<file>$file1$</file>
+					<path>$path_res1$</path>
+				</resource>
+			</resources>
+		</dynamic>
+	</data>
+	 
+	
+</dream>

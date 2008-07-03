@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dream>
+	<!-- Dream name - max size: 100 characters -->
+	<name></name>
+	<!-- Dream description - max size: 600 characters -->
+	<description></description>
+	<!-- Author name - max size: 100 characters -->
+	<author></author>
+	<!-- Author url - max size: 200 characters -->
+	<url></url>
+	<!-- Dream copyright information (optional) - max size: unknown -->
+	<copyright></copyright>
+	<!-- Dream permissions information (optional) - max size: unknown -->
+	<permissions></permissions>
+
+	<!-- full/relative path to preview file - max size: 256x256 - BMP, JPG, JPEG or PNG only -->
+	<preview></preview>
+
+	<!-- 3 possibilities: video / trigger / dynamic (if more than one is defined, the first one found is used, others are ignored) -->
+	<data>
+		  
+		<!-- Video dream - full/relative path to video file - max size: 150MB - AVI, MPG, MPEG or WMV only -->
+		<video></video>
+		
+		<!-- Triggered video dream - type: only "time" is allowed at the moment-->
+		<triggers type="time">
+			<!-- Trigger definition - at least two different triggers need to be defined -->
+			<trigger>
+				<!-- Time to trigger the video - in hh:mm:ss format  -->
+				<time></time>
+				<!-- full/relative path to the file - max size: 150MB - AVI, MPG or WMV only -->
+				<path></path>
+			</trigger>				  
+		</triggers>
+		
+		<!-- Dynamic Dream -->
+		<dynamic>
+			<!-- Path to 32-bit dynamic dream dll -->
+			<dll32></dll32>
+			<!-- Path to 64-bit dynamic dream dll -->
+			<dll64></dll64>			
+			<!-- Additional content (optional) - max number of files: 150 -->
+			<resources>
+				<resource>
+					<!-- full/relative path to the file -->
+					<file></file>
+					<!-- target path (relative to the root dream folder) -->
+					<path></path>
+				</resource>
+			</resources>
+		</dynamic>
+		
+	</data>
+	
+</dream>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dream>
+	<name>$name$</name>
+	<description>$description$</description>
+	<author>$author$</author>
+	<url>$url$/</url>
+	<copyright>$copyright$</copyright>
+	<permissions>$permissions$</permissions>
+	
+	<preview>$preview$</preview>
+
+	<data>		
+		<video>$video$</video>
+	</data>
+	 
+	
+</dream>

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dream>
+	<name>$name$</name>
+	<description>$description$</description>
+	<author>$author$</author>
+	<url>$url$/</url>
+	<copyright>$copyright$</copyright>
+	<permissions>$permissions$</permissions>
+	
+	<preview>$preview$</preview>
+
+	<data>		
+		<triggers type="time">
+			<trigger>
+				<time>$time1$</time>
+				<path>$path1$</path>
+			</trigger>	
+			<trigger>
+				<time>$time2$</time>
+				<path>$path2$</path>
+			</trigger>	
+		</triggers>
+	</data>
+	 
+	
+</dream>
