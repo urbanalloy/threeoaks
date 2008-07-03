@@ -1,0 +1,52 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>DockletSetImageOverlay</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">ObjectDock SDK Reference</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">DockletSetImageOverlay</h1>
+      </div>
+    </div>
+    <div id="nstext">      
+      <p>Set the image overlay. </p>
+      <div class="syntax">void DockletSetImageOverlay(<br />   HWND <i>hwndDocklet</i>,<br />   Image <i>*imageOverlay</i>,<br />   BOOL <i>bAutomaticallyDeleteImage</i> = TRUE<br/ >);</div>
+      <h4 class="dtH4">Parameters</h4>
+      <dl>
+        <dt>
+          <i>hwndDocklet</i>
+        </dt>
+        <dd>The handle to the window passed during OnCreate that owns this docklet and therefore identifies the docklet to the host.</dd>          
+        <dt>
+          <i>imageOverlay</i>
+        </dt>
+        <dd>[in] Specifies the new overlay image for the docklet, which will draw directly and seamlessly over any image set using DockletSetImage or DockletSetImageFile.</dd>
+        <dt>
+          <i>bAutomaticallyDeleteImage</i>
+        </dt>
+        <dd>Upon the next call to DockletSetImage, DockletSetImageFile, etc, ObjectDock would by default delete the image set to it by
+            this function. Set this flag to FALSE to prevent ObjectDock from deleting this image, thus allowing this image to be reused
+            after it is no longer being displayed. By default, set to TRUE - yes delete the image after no longer in use.
+        </dd>            
+      </dl>
+      <h4 class="dtH4">Remarks</h4>
+      <p> In ObjectDock, instead of dealing with Paint messages, ObjectDock allows you to set an image for your Docklet at any time, as well as setting an 'overlay' image over to top of this base image. This allows for such things as a base background image to be constantly loaded, and then for details to be added on top of this image, for example a CPU meter on top of a holder, or a mail notification icon with a number on top of a mail icon loaded from a file, which will not have to be reloaded when mail arrives and the overlay image needs to be changed. </p>
+       <h4 class="dtH4">See Also</h4>
+       <p><a href="ObjectDockSDK.ExportablesFunctions.html">Exportables Functions</a> | <a href="ObjectDockSDK.html">ObjectDockSDK</a></p>  
+    </div>
+  </body>
+</html>

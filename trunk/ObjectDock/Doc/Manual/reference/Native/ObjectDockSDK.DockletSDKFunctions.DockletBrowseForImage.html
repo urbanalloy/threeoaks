@@ -1,0 +1,63 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>DockletBrowseForImage</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">ObjectDock SDK Reference</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">DockletBrowseForImage</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> Allows a docklet to quickly and easily browse for a new image.<br />
+          Shows the standard ObjectDock "Choose Image" dialog template, and allows you to select an image file
+          for any purpose you wish, including choosing images for different states a docklet might have.
+      </p>
+      <div class="syntax">BOOL DockletBrowseForImage(<br />   HWND <i>hwndParent</i>,<br />   char <i>*szImage</i>,<br />   char <i>*szAlternativeRelativeRoot</i> = NULL<br />);</div>
+      <h4 class="dtH4">Parameters</h4>
+      <dl>
+        <dt>
+          <i>hwndParent</i>
+        </dt>
+        <dd>The handle to a window to be a parent window to the "Choose Image" that will be created.<br /> (e.g. a configuration dialog window)</dd>    
+        <dt>
+          <i>szimage</i>
+        </dt>
+        <dd> [in/out] Specifies the current image, and is filled with the image that the user selects from the
+            "Choose Image" dialog.
+        </dd>
+        <dt>
+          <i>szAlternativeRelativeRoot</i>
+        </dt>
+        <dd>[optional] If you would only like to show images from a specific subfolder of ObjectDock's folder,
+            for example if you only want the user to pick an image from your docklet's folder, you can pass
+            a string with a relative path with the folder you want to start browsing from, for example, a folder
+            obtained by using the <a href="ObjectDockSDK.DockletSDKFunctions.DockletGetRelativeFolder.html">DockletGetRelativeFolder</a> function.
+        </dd>
+      </dl>
+      <h4 class="dtH4">Return Value</h4>
+      <p> TRUE if the image was changed.<br /><br /> FALSE if the image was not changed </p>
+      <h4 class="dtH4">Remarks</h4>
+      <p>It is highly recommended you use all relative paths when dealing with images, as it saves a considerable
+      amount of work to changing absolute paths to relative paths and back again. Dealing with relative paths
+      just generally makes docklets be much more distributable and practical.
+      </p>
+       <h4 class="dtH4">See Also</h4>
+       <p><a href="ObjectDockSDK.ExportablesFunctions.html">Exportables Functions</a> | <a href="ObjectDockSDK.html">ObjectDockSDK</a></p>  
+    </div>
+  </body>
+</html>

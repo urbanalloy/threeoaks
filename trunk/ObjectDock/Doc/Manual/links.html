@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" >
+<head>
+	<title>ObjectDock SDK Documentation</title>
+   <link rel="stylesheet" type="text/css" href="images/style.css" media="screen" />
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta name="title" content="ObjectDock SDK Documentation" />
+	<meta name="Description" content="ObjectDock SDK Documentation" />
+   <meta name="Keywords" content="ObjectDock, SDK, Documentation, net, c#" />
+</head>
+<body>
+<div id="header">
+<h1>ObjectDock SDK Documentation</h1>
+<ul id="topnav">
+   <li><a id="a0" href="index.html">Home</a></li>
+   <li><a id="a1" href="howto/index.html">Howto</a></li>
+   <li><a id="a2" href="examples/index.html">Examples</a></li>
+   <li><a id="a3" href="reference/index.html">Reference</a></li>
+   <li><a id="a4" class="here">Links</a>
+      <ul id="subnav">
+         <li><a target="_blank" href="http://www.objectdock.com/">ObjectDock Homepage</a></li>
+         <li><a target="_blank" href="news://news.stardock.com/stardock.objectdock">ObjectDock Newsgroup</a></li>      
+         <li><a target="_blank" href="http://www.wincustomize.com/Forums.aspx?ForumID=165">Stardock Product Support Forum</a></li>
+         <li><a target="_blank" href="http://www.stardock.com">Stardock</a></li>
+      </ul>
+   </li>
+</ul>
+</div>
+<div id="contents">
+ObjectDock's Docklet format was designed with the ability in mind to have multiple of the same plugins existing peacefully side by side in a single dock. Ideally, each individual plugin would have its own place for its own settings in some spot rather than using global variables, global variables for settings being something which you will not see used at all in my samples. ObjectDock makes use of the practice of allowing a plugin to allocate space for a plugin's 'personal data' (e.g. all its options and other state data) and return a pointer to this data on its inital creation. This pointer will then be passed with every single call to the plugin thereafter, thus uniquely identifying the plugin and providing instant access to the data that it is composed of. Those wishing to utilize C++ classes benefit from this as well, as they can simply create an instance of their class on the plugin's creation and have instant access to that specific plugin's class whenever it is called upon. Along the same concept, a specific INI and INI group is given during initalization and saving from which it is recommended that a plugin's options be saved/loaded. This INI should be used whenever possible, as if used, continuity will be preserved and multiple of the same plugins will be able to be used at once, useful for instance in having checking multiple mail checkers running, or multiple system meters, weather checkers for different cities, etc, all running together in harmony. Each plugin gets its own window that it can set timers to, however that same window is the window in which its image is actually displayed to the screen in, so nothing too radical should be done with that window handle. 
+
+ObjectDock's Docklet format was also built around the idea of explicit setting of images rather than "OnPaint" message runarounds. When you want to set the image of your docklet, set it using the provided Docklet SDK functions, where you can either pass a GDI+ Image, or a relative path to a file for ObjectDock to automatically load. To add details on top of this base image, simply create a new GDI+ image of any size you want (128x128 or 192x192 recommended), draw the details in the correct areas of that image, and set it to be an "overlay" image. The image will then draw seamlessly right on top of the basic image already set, instantly allowing easy creation of things such as clocks, cpu meters, etc which do not need constant reloading of their backgrounds but can constantly be changing their detailing overlay image. 
+
+Have fun!! 
+</div>
+<div id="footer">
+©2004 Julien Templier.<br />
+©2003 Stardock Corporation, ©2003 Jeff Bargmann. All rights reserved
+</div>
+</body>
+</html>

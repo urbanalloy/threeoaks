@@ -1,0 +1,60 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>IDockletInterface Members</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">ObjectDock .Net SDK Reference</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">IDockletInterface Members
+					</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p>
+        <a href="ObjectDockSDK.IDockletInterface.html">IDockletInterface overview</a>
+      </p>
+      <h4 class="dtH4">Public Instance Methods</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.IDockletInterface.OnAcceptDropFiles.html">OnAcceptDropFiles</a></td><td width="50%"> Gives the opportunity to a docklet to express its ability to accept dropped files. Implementing this function and returning TRUE will allow for the possibility for files to be dropped onto this dock item, and thus a call to OnDropFiles. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.IDockletInterface.OnConfigure.html">OnConfigure</a></td><td width="50%"> Called by the host in the event OnRightButtonClick returned FALSE or was not implemented, and it was selected to configure the dock item. If you do not implement this function or return false, ObjectDock will, as a default handler, will open a basic configuration dialog allowing the dock item's text and image to be changed. To override this functionality, implement it and return true. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.IDockletInterface.OnCreate.html">OnCreate</a></td><td width="50%"> This function is called every time a docklet from this dll is created. Provides the handle of the window the docklet will be represented by, along with the instance of the docklet's dll. If the plugin is being loaded for the first time, szIni and szIniGroup will be NULL, however otherwise they will specify the ini file and ini section the docklet should load its individual options from. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.IDockletInterface.OnDestroy.html">OnDestroy</a></td><td width="50%"> Sent right before a plugin is finished being destroyed. The plugin should take this opportunity to do cleaning up operations it requires. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.IDockletInterface.OnDoubleClick.html">OnDoubleClick</a></td><td width="50%"> Called by the host when the dock item that represents this docklet is double left-clicked. If you choose to implement this function, you should return true to indicate you processed the message. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.IDockletInterface.OnDropFiles.html">OnDropFiles</a></td><td width="50%"> Called by the host when a file has been dropped onto this docklet. The files being dropped are listed in the HDROP object passed. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.IDockletInterface.OnExportFiles.html">OnExportFiles</a></td><td width="50%"> Sent to the docklet when the docklet is to be packaged up as part of a theme to redistribute. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.IDockletInterface.OnGetInformation.html">OnGetInformation</a></td><td width="50%"> This function is called when host is looking through a folder of Docklet DLLs and wants to retrieve information about this specific Docklet DLL. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.IDockletInterface.OnLeftButtonClick.html">OnLeftButtonClick</a></td><td width="50%"> Called by the host when the dock item that represents this docklet is clicked. If you choose to implement this function, you should return True to indicate you processed the message. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.IDockletInterface.OnLeftButtonHeld.html">OnLeftButtonHeld</a></td><td width="50%"> Called by the host when the dock item that represents this docklet was either control+clicked, or had the mouse button held down on it. Typically a plugin will use this message to display an extended/advanced menu if applicable.. If you choose to implement this function, you should return true to indicate you processed the message </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.IDockletInterface.OnProcessMessage.html">OnProcessMessage</a></td><td width="50%"> The window passed on OnCreate which represents and owns the docklet is the same window that is visible and displaying the image. While it is recommended that you do not try to manually change the appearance or position of this window due to this, you can watch this window's messages and trap any that are important to you, such as timer messages that you can set on the window. If implemented, all messages that are processed by the window are passed to this function. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.IDockletInterface.OnRightButtonClick.html">OnRightButtonClick</a></td><td width="50%"> Called by the host when the dock item that represents this docklet is right-clicked. If you choose to implement this function, you should return true to indicate you processed the message.<br /> If you do not implement this function or return FALSE, ObjectDock will, as a default handler, display a menu allowing the user to configure the dock item. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.IDockletInterface.OnSave.html">OnSave</a></td><td width="50%"> Sent to a plugin when it needs to save its individual properties. Since multiple of the same plugins can be in existence at any given time, the plugin should save options that are specific to this instance of the plugin to the INI file and section given in szIni and szIniGroup and not elsewhere. </td></tr></table>
+      </div>
+      <h4 class="dtH4">See Also</h4>
+      <p>
+        <a href="ObjectDockSDK.IDockletInterface.html">IDockletInterface Interface</a> | <a href="ObjectDockSDK.html">ObjectDockSDK Namespace</a></p>
+      <object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
+        <param name="Keyword" value="IDockletInterface interface">
+        </param>
+        <param name="Keyword" value="ObjectDockSDK.IDockletInterface interface">
+        </param>
+        <param name="Keyword" value="IDockletInterface interface, all members">
+        </param>
+      </object>
+    </div>
+  </body>
+</html>

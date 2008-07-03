@@ -1,0 +1,48 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>DockletQueryDockAlign</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">ObjectDock SDK Reference</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">DockletQueryDockAlign</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> Retrieves the alignment of the dock with the given Docklet. </p>
+      <div class="syntax">int DockletQueryDockAlign(<br />   HWND <i>hwndDocklet</i><br />);</div>
+      <h4 class="dtH4">Parameters</h4>
+      <dl>
+        <dt>
+          <i>hwndDocklet</i>
+        </dt>
+        <dd>The handle to the window passed during OnCreate that owns this docklet and therefore identifies the docklet to the host.</dd>          
+      </dl>         
+      <h4 class="dtH4">Return Value</h4>
+      <p>Returns the alignment of the dock containing the given docklet.<br /><br />
+      The return values for this function are as follows:<br /><br />
+		   0 = Align left (or top, if dock is vertical)<br />
+         1 = Align middle<br />
+         2 = Align right (or bottom, if dock is vertical)
+      </p>
+      <h4 class="dtH4">Remarks</h4>
+      <p>Only applicable to a normal dock (not tabbed)</p>
+       <h4 class="dtH4">See Also</h4>
+       <p><a href="ObjectDockSDK.ExportablesFunctions.html">Exportables Functions</a> | <a href="ObjectDockSDK.html">ObjectDockSDK</a></p>  
+    </div>
+  </body>
+</html>

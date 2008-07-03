@@ -1,0 +1,58 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>Docklet SDK Functions</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">ObjectDock SDK Reference</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">Docklet SDK Functions</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p>The included SDK functions allow the docklet to interact with the host, ObjectDock. To uniquely
+         identify the plugin, you should always remember to record the "hwndDocklet" parameter given in
+         "OnCreate", as it will be needed for the host to identify what dock item you are trying to reference
+         when making changes or querying for information. Remember to always pass the hwndDocklet when it is asked for!
+      </p>
+      <h4 class="dtH4">SDK Functions</h4>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletIsVisible.html">DockletIsVisible</a></td><td width="50%"> Query for whether or not the specified Docklet is currently visible. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletGetRect.html">DockletGetRect</a></td><td width="50%"> Retrieves the bounding rectangle of a given Docklet in screen coordinates. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletGetLabel.html">DockletGetLabel</a></td><td width="50%"> Retrieves the current label of the specified Docklet. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletSetLabel.html">DockletSetLabel</a></td><td width="50%"> Changes the current label of the specified Docklet. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletLoadGDIPlusImage.html">DockletLoadGDIPlusImage</a></td><td width="50%">Loads an GDI+ image based on a relative path given.</td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletSetImage.html">DockletSetImage</a></td><td width="50%"> Allows a docklet to manually set its image to a given GDI+ Image. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletSetImageFile.html">DockletSetImageFile</a></td><td width="50%"> Changes the specified docklet's image to that of the given file. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletSetImageOverlay.html">DockletSetImageOverlay</a></td><td width="50%"> Sets the image overlay. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletBrowseForImage.html">DockletBrowseForImage</a></td><td width="50%"> Shows the standard ObjectDock "Choose Image" dialog template, and allows you to select an image file. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletLockMouseEffect.html">DockletLockMouseEffect</a></td><td width="50%"> Allows a Docklet to lock the mouse effect (e.g. zooming, etc) of its owning dock. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletDoAttentionAnimation.html">DockletDoAttentionAnimation</a></td><td width="50%"> Causes the specified Docklet to animate in the dock to try to get the user's attention. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletGetRelativeFolder.html">DockletGetRelativeFolder</a></td><td width="50%"> Retrieves the relative path of the folder that contains this Docklet's DLL. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletGetRootFolder.html">DockletGetRootFolder</a></td><td width="50%"> Returns the absolute location of the ObjectDock root folder, from which all things are relative. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletDefaultConfigDialog.html">DockletDefaultConfigDialog</a></td><td width="50%"> Opens up the default configuration dialog for a given dock item, thus providing a simple way for the user to adjust a docklet's title and image. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletQueryDockEdge.html">DockletQueryDockEdge</a></td><td width="50%"> Retrieves which edge of the screen the dock with the given Docklet is located on. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletSetDockEdge.html">DockletSetDockEdge</a></td><td width="50%"> Changes which edge of the screen the dock with the given Docklet is located on. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletQueryDockAlign.html">DockletQueryDockAlign</a></td><td width="50%"> Retrieves the alignment of the dock with the given Docklet. </td></tr>
+<tr VALIGN="top"><td width="50%"><img src="pubmethod.gif"></img><a href="ObjectDockSDK.DockletSDKFunctions.DockletSetDockAlign.html">DockletSetDockAlign</a></td><td width="50%"> Changes the alignment of the dock with the given Docklet. </td></tr>
+</table>
+      </div>
+       <h4 class="dtH4">See Also</h4>
+       <p><a href="ObjectDockSDK.ExportablesFunctions.html">Exportables Functions</a> | <a href="ObjectDockSDK.html">ObjectDockSDK</a></p>
+      </div>
+  </body>
+</html>

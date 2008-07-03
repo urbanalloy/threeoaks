@@ -1,0 +1,145 @@
+/*
+   ObjectDock SDK Style Sheet
+*/
+      
+   body {
+      margin: 0;
+      background: White;
+      color: #333;
+      font: normal 80%;
+   }
+   
+   img {
+      border:0;
+   }
+   
+/*****************************************************************************************/
+/***                          Contents                                                 ***/
+/*****************************************************************************************/   
+   
+
+  
+/*****************************************************************************************/
+/***                          Header                                                   ***/
+/*****************************************************************************************/
+
+   #header {
+      padding: 0;
+      margin: 0;
+   }   
+   
+   #header h1{
+      margin: 5px 0 5px 10px;
+      padding: 10px 0 0 350px;
+      height: 65px;   
+      background: url("Logo.gif") no-repeat;
+   }
+   
+/*****************************************************************************************/
+/***                          Navigation Bar                                           ***/
+/*****************************************************************************************/
+
+   ul#topnav {
+   	margin:0 0 50px;
+   	padding: 0 0 0 12px;
+   	list-style: none;
+   	border: none;
+   } 
+   
+   #topnav li {
+   	display: block;
+   	margin: 0;
+   	padding: 0;
+   	float:left;
+   }
+   	
+   #topnav a {
+   	display:block;
+   	color:#444;
+   	text-decoration:none;
+   	background: url("navbar.gif") no-repeat;
+   	margin:0;
+   	padding: 0.2em 2.4em 0.2em 36px;
+   	border-right: 1px solid #aaa;
+   	position: relative;
+   	font: 12px bold;
+
+   }
+   #topnav a#a0 { left: 0px;}
+   #topnav a#a1 { left: -30px;}
+   #topnav a#a2 { left: -60px;}
+   #topnav a#a3 { left: -90px;}
+   #topnav a#a4 { left: -120px;}
+   #topnav a#a5 { left: -150px;}
+   #topnav a#a6 { left: -180px;}
+   	
+   #topnav a:hover {
+   	background: url("navbar_hover.gif") no-repeat;
+   }
+   
+   #topnav a.here {
+   	position:relative;
+   	z-index:102;
+   	background: url("navbar_hover.gif") no-repeat;
+   	border-right: 1px solid #777;
+   	padding: 0.2em 1em 0.2em 35px;
+   	margin: 0 4px 0 0;
+   }
+   	
+   ul#subnav {
+   	position:absolute;
+   	z-index:101;
+   	margin: -1px 0 0 -10px;
+   	left: 10px;
+   	padding: 1px 0 3px 30px;
+   	background: #bbb;
+   	border-top:1px solid #fff;
+   	border-bottom:1px solid #999;
+   	width: 720px;
+   }
+   	
+   #subnav li {
+   	position:relative;
+   	z-index:102;
+   	display: block;
+   	margin: 0;
+   	padding: 0;
+   	float:left;
+   }
+   	
+   #subnav a {
+   	color:#fff;
+   	display:block;
+   	text-decoration:none;
+   	margin:0;
+   	padding: 2px 12px 2px 10px;
+   	background: transparent;
+   	background-image: none;
+   	border: 0 none;
+   }
+   	
+   #subnav a:hover {
+   	color:#444;
+   	background: transparent;
+   	background-image: none;
+   	border: 0 none;
+   }
+   
+   #subnav a.here {
+   	color:#444;
+   	background: transparent;
+   	background-image: none;
+   	border: 0 none;
+   	margin:0;
+   	padding: 2px 12px 2px 10px;
+   }
+   
+/*****************************************************************************************/
+/***                          Footer                                                   ***/
+/*****************************************************************************************/
+
+   #footer {
+      border-top: 2px solid Black;
+      padding-top: 5px;
+      text-align: center;
+   }

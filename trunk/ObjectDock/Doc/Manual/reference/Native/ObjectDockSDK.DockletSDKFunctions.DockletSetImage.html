@@ -1,0 +1,50 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>DockletSetImage</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">ObjectDock SDK Reference</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">DockletSetImage</h1>
+      </div>
+    </div>
+    <div id="nstext">      
+      <p> Allows a docklet to manually set its image to a given GDI+ Image. </p>
+      <div class="syntax">void DockletSetImage(<br />   HWND <i>hwndDocklet</i>,<br />   Image <i>*lpImageNew</i>,<br />   BOOL <i>bAutomaticallyDeleteImage</i> = TRUE<br/ >);</div>
+      <h4 class="dtH4">Parameters</h4>
+      <dl>
+        <dt>
+          <i>hwndDocklet</i>
+        </dt>
+        <dd>The handle to the window passed during OnCreate that owns this docklet and therefore identifies the docklet to the host.</dd>          
+        <dt>
+          <i>lpImageNew</i>
+        </dt>
+        <dd>[in] Specifies the new base image for the docklet.</dd>
+        <dt>
+          <i>bAutomaticallyDeleteImage</i>
+        </dt>
+        <dd>Upon the next call to DockletSetImage, DockletSetImageFile, etc, ObjectDock would by default delete the image set to it by
+            this function. Set this flag to FALSE to prevent ObjectDock from deleting this image, thus allowing this image to be reused
+            after it is no longer being displayed. By default, set to TRUE - yes delete the image after no longer in use.
+        </dd>            
+      </dl>
+       <h4 class="dtH4">See Also</h4>
+       <p><a href="ObjectDockSDK.ExportablesFunctions.html">Exportables Functions</a> | <a href="ObjectDockSDK.html">ObjectDockSDK</a></p>  
+    </div>
+  </body>
+</html>

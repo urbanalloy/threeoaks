@@ -1,0 +1,124 @@
+[OPTIONS]
+Auto Index=Yes
+Binary TOC=Yes
+Compatibility=1.1 or later
+Compiled file=ObjectDockSDK.chm
+Contents file=D:\Sources\ObjectDock\DockletSDK\Doc\Manual\Manual.hhc
+Default Window=MsdnHelp
+Default topic=index.html
+Display compile progress=No
+Full-text search=Yes
+Index file=D:\Sources\ObjectDock\DockletSDK\Doc\Manual\Manual.hhk
+Language=0x409 English (United States)
+Title=ObjectDock SDK Documentation
+
+[WINDOWS]
+MsdnHelp="ObjectDock SDK Documentation","Manual.hhc","Manual.hhk","index.html","index.html",,,,,0x62520,220,0x387e,[86,51,872,558],,,,,,,0
+
+
+[FILES]
+index.html
+links.html
+images/Logo.gif
+images/howto/Architecture.png
+images/howto/NetDockletHelper.png
+howto/index.html
+howto/dotnetarch.html
+howto/innerworkings.html
+examples/index.html
+reference/index_chm.html
+reference\Native\ObjectDockSDK.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletBrowseForImage.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletDefaultConfigDialog.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletDoAttentionAnimation.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletGetLabel.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletGetRect.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletGetRelativeFolder.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletGetRootFolder.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletLoadGDIPlusImage.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletIsVisible.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletLockMouseEffect.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletQueryDockAlign.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletQueryDockEdge.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletSetDockAlign.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletSetDockEdge.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletSetImage.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletSetImageFile.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletSetImageOverlay.html
+reference\Native\ObjectDockSDK.DockletSDKFunctions.DockletSetLabel.html
+reference\Native\ObjectDockSDK.ExportableFunctions.html
+reference\Native\ObjectDockSDK.ExportableFunctions.OnAcceptDropFiles.html
+reference\Native\ObjectDockSDK.ExportableFunctions.OnConfigure.html
+reference\Native\ObjectDockSDK.ExportableFunctions.OnCreate.html
+reference\Native\ObjectDockSDK.ExportableFunctions.OnDestroy.html
+reference\Native\ObjectDockSDK.ExportableFunctions.OnDoubleClick.html
+reference\Native\ObjectDockSDK.ExportableFunctions.OnDropFiles.html
+reference\Native\ObjectDockSDK.ExportableFunctions.OnExportFiles.html
+reference\Native\ObjectDockSDK.ExportableFunctions.OnGetInformation.html
+reference\Native\ObjectDockSDK.ExportableFunctions.OnLeftButtonClick.html
+reference\Native\ObjectDockSDK.ExportableFunctions.OnLeftButtonHeld.html
+reference\Native\ObjectDockSDK.ExportableFunctions.OnProcessMessage.html
+reference\Native\ObjectDockSDK.ExportableFunctions.OnRightButtonClick.html
+reference\Native\ObjectDockSDK.ExportableFunctions.OnSave.html
+
+reference\DotNet\ObjectDockSDK.html
+reference\DotNet\ObjectDockSDKHierarchy.html
+reference\DotNet\ObjectDockSDK.AssemblyData.html
+reference\DotNet\ObjectDockSDK.AssemblyDataMembers.html
+reference\DotNet\ObjectDockSDK.AssemblyDataConstructor.html
+reference\DotNet\ObjectDockSDK.AssemblyDataMethods.html
+reference\DotNet\ObjectDockSDK.AssemblyData.GetInformation.html
+reference\DotNet\ObjectDockSDK.Docklet.html
+reference\DotNet\ObjectDockSDK.DockletMembers.html
+reference\DotNet\ObjectDockSDK.DockletConstructor.html
+reference\DotNet\ObjectDockSDK.DockletProperties.html
+reference\DotNet\ObjectDockSDK.Docklet.ContextMenu.html
+reference\DotNet\ObjectDockSDK.Docklet.DockAlign.html
+reference\DotNet\ObjectDockSDK.Docklet.DockEdge.html
+reference\DotNet\ObjectDockSDK.Docklet.Image.html
+reference\DotNet\ObjectDockSDK.Docklet.ImageFile.html
+reference\DotNet\ObjectDockSDK.Docklet.InteropFolder.html
+reference\DotNet\ObjectDockSDK.Docklet.IsVisible.html
+reference\DotNet\ObjectDockSDK.Docklet.Label.html
+reference\DotNet\ObjectDockSDK.Docklet.Overlay.html
+reference\DotNet\ObjectDockSDK.Docklet.Rect.html
+reference\DotNet\ObjectDockSDK.Docklet.RelativeFolder.html
+reference\DotNet\ObjectDockSDK.Docklet.RootFolder.html
+reference\DotNet\ObjectDockSDK.Docklet.Window.html
+reference\DotNet\ObjectDockSDK.DockletMethods.html
+reference\DotNet\ObjectDockSDK.Docklet.BrowseForImage.html
+reference\DotNet\ObjectDockSDK.Docklet.DefaultConfigDialog.html
+reference\DotNet\ObjectDockSDK.Docklet.DoAttentionAnimation.html
+reference\DotNet\ObjectDockSDK.Docklet.LockMouseEffect.html
+reference\DotNet\ObjectDockSDK.Docklet.ShowContextMenu.html
+reference\DotNet\ObjectDockSDK.Docklet.Align.html
+reference\DotNet\ObjectDockSDK.Docklet.Edge.html
+reference\DotNet\ObjectDockSDK.DockletWindowWrapper.html
+reference\DotNet\ObjectDockSDK.DockletWindowWrapperMembers.html
+reference\DotNet\ObjectDockSDK.DockletWindowWrapperConstructor.html
+reference\DotNet\ObjectDockSDK.DockletWindowWrapperProperties.html
+reference\DotNet\ObjectDockSDK.DockletWindowWrapper.Handle.html
+reference\DotNet\ObjectDockSDK.IDockletInterface.html
+reference\DotNet\ObjectDockSDK.IDockletInterfaceMembers.html
+reference\DotNet\ObjectDockSDK.IDockletInterfaceMethods.html
+reference\DotNet\ObjectDockSDK.IDockletInterface.OnAcceptDropFiles.html
+reference\DotNet\ObjectDockSDK.IDockletInterface.OnConfigure.html
+reference\DotNet\ObjectDockSDK.IDockletInterface.OnCreate.html
+reference\DotNet\ObjectDockSDK.IDockletInterface.OnDestroy.html
+reference\DotNet\ObjectDockSDK.IDockletInterface.OnDoubleClick.html
+reference\DotNet\ObjectDockSDK.IDockletInterface.OnDropFiles.html
+reference\DotNet\ObjectDockSDK.IDockletInterface.OnExportFiles.html
+reference\DotNet\ObjectDockSDK.IDockletInterface.OnGetInformation.html
+reference\DotNet\ObjectDockSDK.IDockletInterface.OnLeftButtonClick.html
+reference\DotNet\ObjectDockSDK.IDockletInterface.OnLeftButtonHeld.html
+reference\DotNet\ObjectDockSDK.IDockletInterface.OnProcessMessage.html
+reference\DotNet\ObjectDockSDK.IDockletInterface.OnRightButtonClick.html
+reference\DotNet\ObjectDockSDK.IDockletInterface.OnSave.html
+reference\DotNet\ObjectDockSDK.Util.html
+reference\DotNet\ObjectDockSDK.UtilMembers.html
+reference\DotNet\ObjectDockSDK.UtilMethods.html
+reference\DotNet\ObjectDockSDK.Util.LOG.html
+
+[INFOTYPES]
+

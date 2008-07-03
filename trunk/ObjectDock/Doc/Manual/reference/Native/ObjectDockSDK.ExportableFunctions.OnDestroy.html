@@ -1,0 +1,43 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>OnDestroy</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">ObjectDock SDK Reference</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">OnDestroy</h1>
+      </div>
+    </div>
+    <div id="nstext">      
+      <p> Sent right before a plugin is finished being destroyed. The plugin should take this opportunity to do cleaning up operations it requires. </p>
+      <div class="syntax">
+        void CALLBACK OnDestroy(<br />   DOCKLET_DATA <i>*lpData</i><br />   HWND <i>hwndDocklet</i><br />);</div>
+      <dl>      
+        <dt>
+          <i>lpData</i>
+        </dt>
+        <dd> Personal data for this plugin instance returned during OnCreate. Datatype is arbitrary. </dd>      
+        <dt>
+          <i>hwndDocklet</i>
+        </dt>
+        <dd>The handle to the window passed during OnCreate that owns this docklet and therefore identifies the docklet to the host.</dd>    
+      </dl>        
+      <h4 class="dtH4">See Also</h4>
+      <p><a href="ObjectDockSDK.DockletSDKFunctions.html">Docklet SDK Functions</a> | <a href="ObjectDockSDK.html">ObjectDockSDK</a></p>
+    </div>
+  </body>
+</html>
