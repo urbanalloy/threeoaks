@@ -1,0 +1,42 @@
+// DXVistaAeroColor.idl : IDL source for DXVistaAeroColor
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (DXVistaAeroColor.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(4C71753A-327C-4D17-8DD8-445DA9A6901D),
+	dual,
+	nonextensible,
+	helpstring("IAeroColor Interface"),
+	pointer_default(unique)
+]
+interface IAeroColor : IDispatch{
+
+	[id(1), helpstring("Set the color intensity and color of glass.")] HRESULT SetColorization([in] int alpha, [in] int red, [in] int green, [in] int blue, [in] BOOL transparencyEnabled);
+	[id(2), helpstring("Get the color intensity and color of glass")] HRESULT GetColorization([out] VARIANT* alpha, [out] VARIANT* red, [out] VARIANT* green, [out] VARIANT* blue, [out] VARIANT* transparencyEnabled);
+	[id(3), helpstring("Set the default color")] HRESULT SetDefaultColor([in] int id);
+	[id(4), helpstring("Get the default color for the passed id")] HRESULT GetDefaultColor([in] int id, [out] VARIANT* alpha, [out] VARIANT* red, [out] VARIANT* green, [out] VARIANT* blue);
+};
+
+[
+	uuid(0DFF1531-6394-4E04-A09D-8AD69EA4B03A),
+	version(1.0),
+	helpstring("DXVistaAeroColor 1.0 Type Library")
+]
+library DXVistaAeroColorLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(AA8B06F5-8188-40BB-B7AE-535827030384),
+		helpstring("AeroColor Class")
+	]
+	coclass AeroColor
+	{
+		[default] interface IAeroColor;
+	};
+};

@@ -1,0 +1,26 @@
+HKCR
+{
+	DXVistaAeroColor.AeroColor.1 = s 'AeroColor Class'
+	{
+		CLSID = s '{AA8B06F5-8188-40BB-B7AE-535827030384}'
+	}
+	DXVistaAeroColor.AeroColor = s 'AeroColor Class'
+	{
+		CLSID = s '{AA8B06F5-8188-40BB-B7AE-535827030384}'
+		CurVer = s 'DXVistaAeroColor.AeroColor.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {AA8B06F5-8188-40BB-B7AE-535827030384} = s 'AeroColor Class'
+		{
+			ProgID = s 'DXVistaAeroColor.AeroColor.1'
+			VersionIndependentProgID = s 'DXVistaAeroColor.AeroColor'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{0DFF1531-6394-4E04-A09D-8AD69EA4B03A}'
+		}
+	}
+}

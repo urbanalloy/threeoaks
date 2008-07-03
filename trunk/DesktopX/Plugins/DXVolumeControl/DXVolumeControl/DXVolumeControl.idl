@@ -1,0 +1,56 @@
+// DXVolumeControl.idl : IDL source for DXVolumeControl
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (DXVolumeControl.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(972CCBF6-9B3A-4019-974E-2C47ED4CF7B3),
+	dual,
+	nonextensible,
+	helpstring("IVistaVolume Interface"),
+	pointer_default(unique)
+]
+interface IVistaVolume : IDispatch{
+	[propput, id(1), helpstring("Set Master Volume. Pass volume between 0 and 100. You can get volume change notification with the VistaVolume_OnVolumeEvent event.")] HRESULT Volume([in] int volume);
+	[propget, id(1), helpstring("Get Master Volume. Return an number between 0 and 100.")] HRESULT Volume([out, retval] int* volume);
+	[propput, id(2), helpstring("Set the muting state of the audio stream. You can get muting state change notification with the VistaVolume_OnMuteEvent event.")] HRESULT Mute([in] BOOL isMuted);
+	[propget, id(2), helpstring("Get the muting state of the audio stream. True is the sound is muted, False otherwise.")] HRESULT Mute([out, retval] VARIANT* isMuted);
+	[propget, id(3), helpstring("Get the peak value. Value is between 0 and 100.")] HRESULT PeakValue([out, retval] int* value);
+};
+
+[
+	uuid(6444B45E-8B01-4F6C-88E0-C954A017C7C4),
+	version(1.0),
+	helpstring("DXVolumeControl 1.0 Type Library")
+]
+library DXVolumeControlLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+	[
+		uuid(C4DAD7A8-7750-4FE9-BFA8-293364E98134),
+		helpstring("_IVolumeEvents Interface")
+	]
+	dispinterface _IVolumeEvents
+	{
+		properties:
+		methods:
+		[id(1), helpstring("Fired as a result of a volume change. volume is the master volume (between 0 and 100).")] HRESULT OnVolumeEvent(int volume);
+		[id(2), helpstring("Fired as a result of a muting state change. isMuted is True is the volume is muted, False otherwise.")] HRESULT OnMuteEvent(BOOL isMuted);
+	};
+
+	[
+		uuid(F36B9A47-AF5B-4AE2-A039-48CC18FEEA4C),
+		helpstring("VistaVolume Class")
+	]
+	coclass VistaVolume
+	{
+		[default] interface IVistaVolume;
+		[default, source] dispinterface _IVolumeEvents;
+	};
+};
