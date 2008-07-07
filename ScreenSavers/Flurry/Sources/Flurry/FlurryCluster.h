@@ -18,6 +18,7 @@
 #pragma once
 
 #include "FlurryPreset.h"
+#include "FlurrySettings.h"
 
 typedef struct global_info_t CoreData;
 
@@ -32,8 +33,10 @@ namespace Flurry {
 			CoreData *data;
 			double oldFrameTime;
 
+			Settings *settings;
+
 		public:
-			Cluster(const ClusterSpec& spec);
+			Cluster(const ClusterSpec& spec, Settings *settings);
 			~Cluster();
 
 			void SetSize(int width, int height);

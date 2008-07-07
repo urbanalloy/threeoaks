@@ -15,20 +15,54 @@
 
 #pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <atlbase.h>
 
-extern void Settings_Read();
-extern void Settings_Write();
+namespace Flurry {
 
-#define DECLARE_SETTINGS_VAR(type, name, regName, defVal)	\
-	extern type name;
+	class Settings 
+	{
 
-#include "FlurrySettingsTable.h"
+	private:
 
-#undef DECLARE_SETTINGS_VAR
+		void ReadMonitors(CRegKey& reg);
+		void WriteMonitors(CRegKey& reg);
 
-#ifdef __cplusplus
+		void ReadVisuals(CRegKey& reg);
+		void WriteVisuals(CRegKey& reg);
+
+	public:
+
+		// Double Buffering support
+		enum { 
+			BUFFER_MODE_SINGLE,
+			BUFFER_MODE_FAST_DOUBLE,
+			BUFFER_MODE_SAFE_DOUBLE 
+		};
+
+		// Multi monitor support
+		enum {
+			MULTIMON_ALLMONITORS,
+			MULTIMON_PRIMARY,
+			MULTIMON_PERMONITOR
+		};
+
+		// Parameters
+		DWORD iSettingBufferMode;				// "Buffering mode"
+		DWORD iMultiMonPosition;				// "Multimon behavior"
+		DWORD iShowFPSIndicator;				// "FPS display"
+		DWORD iBugBlockMode;					// "Freakshow: Block mode"
+		DWORD iBugWhiteout;						// "Freakshow: Whiteout double buffer"
+		DWORD iFlurryPreset;					// "Preset"
+		DWORD iFlurryShrinkPercentage;			// "Shrink by %"
+		DWORD iMaxFrameProgressInMs;			// "Max frame progress"
+
+		// Constructor/Destructor
+		Settings();
+		~Settings();
+
+		// Functions
+		void Read();
+		void Write();
+	};
+
 }
-#endif

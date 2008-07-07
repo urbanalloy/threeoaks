@@ -158,7 +158,7 @@
 				EnableFiberSafeOptimizations="true"
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="../"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -416,10 +416,6 @@
 			</File>
 			<File
 				RelativePath="FlurrySettings.h"
-				>
-			</File>
-			<File
-				RelativePath="FlurrySettingsTable.h"
 				>
 			</File>
 			<File

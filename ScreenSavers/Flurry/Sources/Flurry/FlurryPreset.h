@@ -45,22 +45,12 @@ namespace Flurry {
 
 			bool WriteToString(char *format, int formatLen);	
 	};
+
 }
 
 using namespace Flurry;
-
 /*
 * Exported globals from this module
 */
 extern vector<int> g_multiMonPreset;
 extern vector<Spec *> g_visuals;
-
-/*
- * Exported functions
- */
-
-void Visuals_Read(CRegKey& reg);
-void Visuals_Write(CRegKey& reg);
-
-void Monitors_Read(CRegKey& reg);
-void Monitors_Write(CRegKey& reg);

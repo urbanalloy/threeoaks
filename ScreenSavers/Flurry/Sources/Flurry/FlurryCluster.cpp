@@ -45,9 +45,11 @@ using namespace Flurry;
  * Obviously, not thread safe.
  */
 
-Cluster::Cluster(const ClusterSpec& spec)
+Cluster::Cluster(const ClusterSpec& spec, Settings* settings)
 {
 	oldFrameTime = TimeInSecondsSinceStart();
+
+	this->settings = settings;
 
 	data = Alloc();
 
@@ -103,8 +105,8 @@ void Cluster::AnimateOneFrame()
 	// the adjusted value.
 	double newFrameTime = TimeInSecondsSinceStart();
 	double deltaFrameTime = newFrameTime - oldFrameTime;
-	if (iMaxFrameProgressInMs > 0) {
-		double maxFrameTime = iMaxFrameProgressInMs / 1000.0;
+	if (settings->iMaxFrameProgressInMs > 0) {
+		double maxFrameTime = settings->iMaxFrameProgressInMs / 1000.0;
 		double overtime = deltaFrameTime - maxFrameTime;
 
 		if (overtime > 0) {
