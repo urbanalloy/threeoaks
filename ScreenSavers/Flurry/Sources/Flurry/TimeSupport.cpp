@@ -1,11 +1,18 @@
-/*
- * Flurry for Windows.
- *
- * Handle time-related things in a way that lets the existing Flurry code
- * be happy without modifications.  Includes a rate limiter.
- *
- * Created 8/10/2003 by Matt Ginzton, magi@cs.stanford.edu
- */
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Flurry : TimeSupport class
+//
+// Handle time-related things in a way that lets the existing Flurry code
+// be happy without modifications.  Includes a rate limiter.
+//
+// (c) 2003 Matt Ginzton (magi@cs.stanford.edu)
+// (c) 2006-2008 Julien Templier
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// * $LastChangedRevision$
+// * $LastChangedDate$
+// * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <windows.h>
 #include <crtdbg.h>
@@ -17,16 +24,13 @@ extern "C" {
 
 static double g_delay = 0.0;
 
-
 /*
  *
  * TimeSupport_Init():
  *
  * Zero the running timer that the Flurry core code maintains.
  */
-
-void
-TimeSupport_Init(void)
+void TimeSupport_Init(void)
 {
 	OTSetup();
 	g_delay = 0.0;
@@ -59,9 +63,7 @@ TimeSupport_HideHostDelay(double delay)
  * the return value of TimeInSecondsSinceStart(), which depends on
  * CurrentTime().
  */
-
-extern "C" double
-CurrentTime(void)
+extern "C" double CurrentTime(void)
 {
 	return (timeGetTime() / 1000.0) - g_delay;
 }

@@ -1,10 +1,17 @@
-/*
- * Flurry for Windows.
- *
- * Screen saver host code, specific to Windows platform.
- *
- * Created 2/23/2003 by Matt Ginzton, magi@cs.stanford.edu
- */
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Flurry : Flurry for Windows
+//
+// Screen saver host code, specific to Windows platform.
+//
+// (c) 2003 Matt Ginzton (magi@cs.stanford.edu)
+// (c) 2006-2008 Julien Templier
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// * $LastChangedRevision$
+// * $LastChangedDate$
+// * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <windows.h>
 #include <windowsx.h>
@@ -22,6 +29,8 @@
 #include "TimeSupport.h"
 #include "AboutBox.h"
 #include "resource.h"
+
+using namespace Flurry;
 
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"") 
 
@@ -86,7 +95,7 @@ typedef struct {
 	HGLRC hglrc;		// handle to OpenGL rendering context for this window
 	HDC hdc;			// handle to DC used by hglrc
 	FPS fps;			// frames per second info
-	FlurryGroup *flurry;// the data structure with info on the flurry clusters
+	Group *flurry;// the data structure with info on the flurry clusters
 } FlurryAnimateChildInfo;
 
 ///////////////////////////////////////////////////////////////////////////
@@ -332,7 +341,7 @@ LRESULT WINAPI FlurryAnimateChildWindowProc(HWND hWnd, UINT message, WPARAM wPar
 			// initialize flurry struct
 			int preset = child->id < (signed)g_multiMonPreset.size() ?
 						g_multiMonPreset[child->id] : iFlurryPreset;
-			child->flurry = new FlurryGroup(preset);
+			child->flurry = new Group(preset);
 			// prepare OpenGL context
 			AttachGLToWindow(child);
 			// prepare Flurry code --  must come after OpenGL initialization

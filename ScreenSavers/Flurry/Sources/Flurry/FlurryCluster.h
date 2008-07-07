@@ -1,39 +1,44 @@
-/*
- * Flurry for Windows.
- *
- * Encapsulate the Flurry code away from the non-Flurry-specific screensaver
- * code.  Glue clode around the single flurry cluster that's what the core
- * code knows how to render.
- *
- * Created 2/23/2003 by Matt Ginzton, magi@cs.stanford.edu
- */
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Flurry : Settings class
+//
+// Encapsulate the Flurry code away from the non-Flurry-specific screensaver
+// code.  Glue clode around the single flurry cluster that's what the core
+// code knows how to render.
+//
+// (c) 2003 Matt Ginzton (magi@cs.stanford.edu)
+// (c) 2006-2008 Julien Templier
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// * $LastChangedRevision$
+// * $LastChangedDate$
+// * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __FLURRYCLUSTER_H_
-#define __FLURRYCLUSTER_H_
+#pragma once
 
-#include <vector>
-using std::vector;
 #include "FlurryPreset.h"
 
+typedef struct global_info_t CoreData;
 
-typedef struct global_info_t FlurryCoreData;
+namespace Flurry {
 
-class FlurryCluster {
-	public:
-		FlurryCluster(const FlurryClusterSpec& spec);
-		~FlurryCluster();
+	class Cluster {
 
-		void SetSize(int width, int height);
-		void PrepareToAnimate(void);
-		void AnimateOneFrame(void);
+		private:
+			CoreData *Alloc(void);
+			void BecomeCurrent(void);
 
-	private:
-		FlurryCoreData *FlurryAlloc(void);
-		void BecomeCurrent(void);
+			CoreData *data;
+			double oldFrameTime;
 
-		FlurryCoreData *flurryData;
-		double oldFrameTime;
-};
+		public:
+			Cluster(const ClusterSpec& spec);
+			~Cluster();
 
+			void SetSize(int width, int height);
+			void PrepareToAnimate(void);
+			void AnimateOneFrame(void);
+	};
 
-#endif // __FLURRYCLUSTER_H_
+}

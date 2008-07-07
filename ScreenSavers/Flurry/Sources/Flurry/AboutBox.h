@@ -1,49 +1,57 @@
+///////////////////////////////////////////////////////////////////////////////////////////////
 //
-// AboutBox.h : Declaration of CAboutBox
+// Flurry : CAboutBox Class
 //
+// Declaration of CAboutBox
+//
+// (C) 2003 Matt Ginzton (magi@cs.stanford.edu)
+// (C) 2006-2008 Julien Templier
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// * $LastChangedRevision$
+// * $LastChangedDate$
+// * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ABOUTBOX_H_
-#define __ABOUTBOX_H_
+#pragma once
 
 #include "resource.h"       // main symbols
 #include <atlhost.h>
 #include <vector>
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutBox
-class CAboutBox : 
-	public CDialogImpl<CAboutBox>
-{
-	public:
-		// "factory"
-		static void AutomaticDoModal (void)
-		{
-			CAboutBox* pAboutBox = new CAboutBox;
-			pAboutBox->DoModal();
-			delete pAboutBox;
-		}
+namespace Flurry {
 
-		// constructors
-		CAboutBox() {};
-		~CAboutBox() {};
+	class CAboutBox : public CDialogImpl<CAboutBox>
+	{
+		public:
+			// "factory"
+			static void AutomaticDoModal (void)
+			{
+				CAboutBox* pAboutBox = new CAboutBox;
+				pAboutBox->DoModal();
+				delete pAboutBox;
+			}
 
-		enum { IDD = IDD_ABOUTBOX };
+			// constructors
+			CAboutBox() {};
+			~CAboutBox() {};
 
-	protected:
-		BEGIN_MSG_MAP(CAboutBox)
-			MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
-			COMMAND_ID_HANDLER(IDCANCEL, OnDismiss)			// bind both IDOK and IDCANCEL to the dismiss function, as well as WM_CLOSE
-			COMMAND_ID_HANDLER(IDOK, OnDismiss)				// of OK and CANCEL, CANCEL is preferred because then Esc works as well as Enter
-		END_MSG_MAP()
+			enum { IDD = IDD_ABOUTBOX };
 
-		// Handler prototypes:
+		protected:
+			BEGIN_MSG_MAP(CAboutBox)
+				MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
+				COMMAND_ID_HANDLER(IDCANCEL, OnDismiss)			// bind both IDOK and IDCANCEL to the dismiss function, as well as WM_CLOSE
+				COMMAND_ID_HANDLER(IDOK, OnDismiss)				// of OK and CANCEL, CANCEL is preferred because then Esc works as well as Enter
+			END_MSG_MAP()
 
-		LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-		LRESULT OnDismiss(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
+			// Handler prototypes:
 
-	private:
-		void GetModuleVersionInfo (char* pszVersion);
-};
+			LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+			LRESULT OnDismiss(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
+		private:
+			void GetModuleVersionInfo (char* pszVersion);
+	};
 
-#endif //__ABOUTBOX_H_
+}

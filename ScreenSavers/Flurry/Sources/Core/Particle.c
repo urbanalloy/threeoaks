@@ -5,9 +5,8 @@
 #include "Std.h"
 #include "Particle.h"
 
-
-__private_extern__ void
-DrawParticle(Particle *p) // the math was easier in 2D - so 2D it is
+// the math was easier in 2D - so 2D it is
+__private_extern__ void DrawParticle(Particle *p) 
 {
 	int i;
     float screenx = (p->x * info->sys_glWidth / p->z) + info->sys_glWidth * 0.5f;
@@ -88,8 +87,7 @@ DrawParticle(Particle *p) // the math was easier in 2D - so 2D it is
 }
 
 
-__private_extern__ void
-UpdateParticle(Particle *p)
+__private_extern__ void UpdateParticle(Particle *p)
 {
 	p->oldx = p->x;
 	p->oldy = p->y;
@@ -101,8 +99,7 @@ UpdateParticle(Particle *p)
 }
 
 
-__private_extern__ void
-InitParticle(Particle *p)
+__private_extern__ void InitParticle(Particle *p)
 {
 	int r1, r2;
 	p->oldz = RandFlt(2500.0f,22500.0f);

@@ -1,11 +1,19 @@
-/*
- * Flurry for Windows.
- *
- * Encapsulate the Flurry code away from the non-Flurry-specific screensaver
- * code.  Knows how to create and draw a single flurry cluster.
- *
- * Created 2/23/2003 by Matt Ginzton, magi@cs.stanford.edu
- */
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Flurry : Settings class
+//
+// Encapsulate the Flurry code away from the non-Flurry-specific screensaver
+// code.  Glue clode around the single flurry cluster that's what the core
+// code knows how to render.
+//
+// (c) 2003 - Matt Ginzton (magi@cs.stanford.edu)
+// (c) 2006-2008 Julien Templier
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// * $LastChangedRevision$
+// * $LastChangedDate$
+// * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "FlurryCluster.h"
 #include "FlurryPreset.h"
@@ -16,6 +24,8 @@
 extern "C" {
 	#include "Core/gl_saver.h"
 }
+
+using namespace Flurry;
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -35,36 +45,35 @@ extern "C" {
  * Obviously, not thread safe.
  */
 
-FlurryCluster::FlurryCluster(const FlurryClusterSpec& spec)
+Cluster::Cluster(const ClusterSpec& spec)
 {
 	oldFrameTime = TimeInSecondsSinceStart();
 
-	flurryData = FlurryAlloc();
+	data = Alloc();
 
 	// specialize
-	flurryData->numStreams = spec.nStreams;
-	flurryData->currentColorMode = (ColorModes)spec.color;
-	flurryData->streamExpansion = spec.thickness;
-	flurryData->star->rotSpeed = spec.speed;
+	data->numStreams = spec.nStreams;
+	data->currentColorMode = (ColorModes)spec.color;
+	data->streamExpansion = spec.thickness;
+	data->star->rotSpeed = spec.speed;
 }
 
 
-FlurryCluster::~FlurryCluster()
+Cluster::~Cluster()
 {
-	int i;
-	for (i = 0; i < MAXNUMPARTICLES; i++) {
-		free(flurryData->p[i]);
+	for (int i = 0; i < MAXNUMPARTICLES; i++) {
+		free(data->p[i]);
 	}
-	free(flurryData->s);
-	free(flurryData->star);
-	for (i = 0; i < 64; i++) {
-		free(flurryData->spark[i]);
+	free(data->s);
+	free(data->star);
+	for (int i = 0; i < 64; i++) {
+		free(data->spark[i]);
 	}
-	free(flurryData);
+	free(data);
 }
 
 
-void FlurryCluster::SetSize(int width, int height)
+void Cluster::SetSize(int width, int height)
 {
 	// make this flurry cluster current
 	BecomeCurrent();
@@ -73,7 +82,7 @@ void FlurryCluster::SetSize(int width, int height)
 }
 
 
-void FlurryCluster::PrepareToAnimate()
+void Cluster::PrepareToAnimate()
 {
 	// make this flurry cluster current
 	BecomeCurrent();
@@ -82,7 +91,7 @@ void FlurryCluster::PrepareToAnimate()
 }
 
 
-void FlurryCluster::AnimateOneFrame()
+void Cluster::AnimateOneFrame()
 {
 	// make this flurry cluster current
 	BecomeCurrent();
@@ -119,17 +128,17 @@ void FlurryCluster::AnimateOneFrame()
 }
 
 
-FlurryCoreData *FlurryCluster::FlurryAlloc()
+CoreData *Cluster::Alloc()
 {
-	int i;
-	FlurryCoreData *flurry = (FlurryCoreData *)malloc(sizeof *flurry);
+
+	CoreData *flurry = (CoreData *)malloc(sizeof *flurry);
+
 	flurry->flurryRandomSeed = RandFlt(0.0f, 300.0f);
-	
 	flurry->numStreams = 5;
 	flurry->streamExpansion = 100;
 	flurry->currentColorMode = tiedyeColorMode;
 	
-	for (i = 0; i < MAXNUMPARTICLES; i++) {
+	for (int i = 0; i < MAXNUMPARTICLES; i++) {
 		flurry->p[i] = (struct Particle *)malloc(sizeof(Particle));
 	}
 	
@@ -140,7 +149,7 @@ FlurryCoreData *FlurryCluster::FlurryAlloc()
 	InitStar(flurry->star);
 	flurry->star->rotSpeed = 1.0;
 	
-	for (i = 0; i < 64; i++) {
+	for (int i = 0; i < 64; i++) {
 		flurry->spark[i] = (struct Spark *)malloc(sizeof(Spark));
 		InitSpark(flurry->spark[i]);
 	}
@@ -149,7 +158,7 @@ FlurryCoreData *FlurryCluster::FlurryAlloc()
 }
 
 
-void FlurryCluster::BecomeCurrent()
+void Cluster::BecomeCurrent()
 {
-	info = flurryData;
+	info = data;
 }
