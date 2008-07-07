@@ -43,8 +43,10 @@ using namespace Flurry;
  * Obviously, not thread safe.
  */
 
-Group::Group(int preset)
+Group::Group(int preset, Settings *settings)
 {
+	this->settings = settings;
+
 	if (preset > (signed)g_visuals.size()) {
 		_RPT2(_CRT_WARN, "Invalid preset %d (max %d); using default\n",
 			  preset, g_visuals.size());
@@ -53,7 +55,7 @@ Group::Group(int preset)
 	Spec *visual = g_visuals[preset];
 
 	for (int i = 0; i < (signed)visual->clusters.size(); i++) {
-		clusters.push_back(new Cluster(visual->clusters[i]));
+		clusters.push_back(new Cluster(visual->clusters[i], settings));
 	}
 }
 
@@ -76,7 +78,7 @@ void Group::SetSize(int width, int height)
 
 void Group::PrepareToAnimate(void)
 {
-	if (!iBugBlockMode) {
+	if (!settings->iBugBlockMode) {
 		// Found this by accident; looks cool.  Freakshow option #2.
 		MakeTexture();
 	}

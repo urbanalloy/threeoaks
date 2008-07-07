@@ -18,6 +18,7 @@
 #include <vector>
 using std::vector;
 #include "FlurryCluster.h"
+#include "FlurrySettings.h"
 
 namespace Flurry {
 
@@ -25,14 +26,16 @@ class Group {
 		
 		private:
 			vector<Cluster*> clusters;
+			Settings *settings;
 
 		public:
-			Group(int preset);
+			Group(int preset, Settings *settings);
 			~Group();
 
 			void SetSize(int width, int height);
 			void PrepareToAnimate(void);
 			void AnimateOneFrame(void);
+
 	};
 
 }

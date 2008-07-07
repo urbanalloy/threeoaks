@@ -51,6 +51,7 @@ using namespace Flurry;
 //
 
 CComModule _Module;
+Settings* settings;
 HINSTANCE hInstance;
 
 
@@ -145,7 +146,6 @@ ScreensaverCommonInit(void)
  *
  * Init code used only when running as screensaver, not during configuration
  */
-
 static void ScreensaverRuntimeInit(HWND hWnd)
 {
 	// we're going to use rand(), so...
@@ -164,7 +164,7 @@ static void ScreensaverRuntimeInit(HWND hWnd)
 	_RPT4(_CRT_WARN, "Init in window 0x%08x, parent 0x%08x: %d, %d\n",
 		  hWnd, GetParent(hWnd), rc.left, rc.top);
 	if (GetParent(hWnd)) {
-		iMultiMonPosition = MULTIMON_ALLMONITORS;
+		settings->iMultiMonPosition = settings->MULTIMON_ALLMONITORS;
 		g_bThumbnailMode = true;
 	}
 
@@ -193,10 +193,12 @@ LRESULT WINAPI ScreenSaverProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 {
 	switch (message) {
 		case WM_CREATE:
+			settings = new Settings();
+
 			if (!g_bPreviewMode) {
 				// initialization, since this is the first chunk of our code to run
 				ScreensaverCommonInit();
-				Settings_Read();
+				settings->Read();
 			} else {
 				// we've already done the common init via the configuration dialog,
 				// but we need to set a timer to disable the ignore-input code.
@@ -210,7 +212,7 @@ LRESULT WINAPI ScreenSaverProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 
 		case WM_KEYDOWN:
 			if (wParam == 'F') {
-				iShowFPSIndicator = !iShowFPSIndicator;
+				settings->iShowFPSIndicator = !settings->iShowFPSIndicator;
 			}
 			break;
 
@@ -241,19 +243,19 @@ static void ScreenSaverCreateChildren(HWND hWndParent)
 	RECT rc;
 	g_iMonitor = 0;
 
-	switch (iMultiMonPosition) {
-		case MULTIMON_PERMONITOR:
+	switch (settings->iMultiMonPosition) {
+		case settings->MULTIMON_PERMONITOR:
 			EnumDisplayMonitors(NULL, NULL, ScreenSaverCreateChildrenCb,
 								(LPARAM)hWndParent);
 			return;
 
-		case MULTIMON_PRIMARY:
+		case settings->MULTIMON_PRIMARY:
 			SetRect(&rc, 0, 0,
 					GetSystemMetrics(SM_CXSCREEN),
 					GetSystemMetrics(SM_CYSCREEN));
 			break;
 
-		case MULTIMON_ALLMONITORS:
+		case settings->MULTIMON_ALLMONITORS:
 		default:
 			GetClientRect(hWndParent, &rc);
 			break;
@@ -304,8 +306,8 @@ static void ScreenSaverCreateChild(HWND hWndParent, RECT *rc, int iMonitor, char
 
 	// 200: n% / 100, and it counts on each size, so / 2 more
 	InflateRect(&child->rc,
-		        -(int)(iFlurryShrinkPercentage * RECTWIDTH(child->rc) / 200),
-		        -(int)(iFlurryShrinkPercentage * RECTHEIGHT(child->rc) / 200));
+		        -(int)(settings->iFlurryShrinkPercentage * RECTWIDTH(child->rc) / 200),
+		        -(int)(settings->iFlurryShrinkPercentage * RECTHEIGHT(child->rc) / 200));
 
 	_RPT4(_CRT_WARN, "  position %d, %d, %d, %d\n", child->rc.left, child->rc.top, RECTWIDTH(child->rc), RECTHEIGHT(child->rc));
 
@@ -340,8 +342,8 @@ LRESULT WINAPI FlurryAnimateChildWindowProc(HWND hWnd, UINT message, WPARAM wPar
 			SetWindowLong(hWnd, GWL_USERDATA, (LONG)child);
 			// initialize flurry struct
 			int preset = child->id < (signed)g_multiMonPreset.size() ?
-						g_multiMonPreset[child->id] : iFlurryPreset;
-			child->flurry = new Group(preset);
+						g_multiMonPreset[child->id] : settings->iFlurryPreset;
+			child->flurry = new Group(preset, settings);
 			// prepare OpenGL context
 			AttachGLToWindow(child);
 			// prepare Flurry code --  must come after OpenGL initialization
@@ -367,7 +369,7 @@ LRESULT WINAPI FlurryAnimateChildWindowProc(HWND hWnd, UINT message, WPARAM wPar
 				BeginPaint(hWnd, &ps);
 				CopyFrontBufferToBack(hWnd);	// always call; may do nothing
 				child->flurry->AnimateOneFrame();
-				if (iSettingBufferMode > BUFFER_MODE_SINGLE) {
+				if (settings->iSettingBufferMode > settings->BUFFER_MODE_SINGLE) {
 					// ATI Radeon 9700s seem to get really upset if we call
 					// SwapBuffers in a single-buffered context when invoked
 					// with /p.  So be careful not to!
@@ -440,7 +442,8 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 	switch (message) {
 		case WM_INITDIALOG:
 			ScreensaverCommonInit();
-			Settings_Read();
+			settings = new Settings();
+			settings->Read();
 			SettingsDialogInit(hWnd);
 			SettingsDialogEnableControls(hWnd);
 			SettingsToDialog(hWnd);
@@ -452,7 +455,7 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 				// command buttons:
 				case IDOK:
 					SettingsFromDialog(hWnd);
-					Settings_Write();
+					settings->Write();
 					EndDialog(hWnd, 1);
 					return TRUE;
 				case IDCANCEL:
@@ -529,43 +532,43 @@ static void SettingsDialogInit(HWND hWnd)
 static void SettingsToDialog(HWND hWnd)
 {
 	// visual preset
-	ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_VISUAL), iFlurryPreset);
+	ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_VISUAL), settings->iFlurryPreset);
 
 	// multimon options
 	if (g_nMonitors <= 1) {
-		iMultiMonPosition = MULTIMON_ALLMONITORS;
+		settings->iMultiMonPosition = settings->MULTIMON_ALLMONITORS;
 	}
 
 	CheckRadioButton(hWnd, IDC_POSITION_DESKTOP, IDC_POSITION_PER,
-					 IDC_POSITION_DESKTOP + iMultiMonPosition);
+					 IDC_POSITION_DESKTOP + settings->iMultiMonPosition);
 
 	// buffering mode
 	CheckRadioButton(hWnd, IDC_DOUBLE_BUFFER_NONE, IDC_DOUBLE_BUFFER_PARANOID,
-					 IDC_DOUBLE_BUFFER_NONE + iSettingBufferMode);
+					 IDC_DOUBLE_BUFFER_NONE + settings->iSettingBufferMode);
 }
 
 
 static void SettingsFromDialog(HWND hWnd)
 {
 	// visual preset
-	iFlurryPreset = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_VISUAL));
+	settings->iFlurryPreset = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_VISUAL));
 
 	// multimon options
 	if (IsDlgButtonChecked(hWnd, IDC_POSITION_DESKTOP)) {
-		iMultiMonPosition = MULTIMON_ALLMONITORS;
+		settings->iMultiMonPosition = settings->MULTIMON_ALLMONITORS;
 	} else if (IsDlgButtonChecked(hWnd, IDC_POSITION_PRIMARY)) {
-		iMultiMonPosition = MULTIMON_PRIMARY;
+		settings->iMultiMonPosition = settings->MULTIMON_PRIMARY;
 	} else if (IsDlgButtonChecked(hWnd, IDC_POSITION_PER)) {
-		iMultiMonPosition = MULTIMON_PERMONITOR;
+		settings->iMultiMonPosition = settings->MULTIMON_PERMONITOR;
 	}
 
 	// buffering mode
 	if (IsDlgButtonChecked(hWnd, IDC_DOUBLE_BUFFER_NONE)) {
-		iSettingBufferMode = BUFFER_MODE_SINGLE;
+		settings->iSettingBufferMode = settings->BUFFER_MODE_SINGLE;
 	} else if (IsDlgButtonChecked(hWnd, IDC_DOUBLE_BUFFER_OPTIMISTIC)) {
-		iSettingBufferMode = BUFFER_MODE_FAST_DOUBLE;
+		settings->iSettingBufferMode = settings->BUFFER_MODE_FAST_DOUBLE;
 	} else if (IsDlgButtonChecked(hWnd, IDC_DOUBLE_BUFFER_PARANOID)) {
-		iSettingBufferMode = BUFFER_MODE_SAFE_DOUBLE;
+		settings->iSettingBufferMode = settings->BUFFER_MODE_SAFE_DOUBLE;
 	}
 }
 
@@ -605,7 +608,7 @@ static void AttachGLToWindow(FlurryAnimateChildInfo *child)
 		0, 0, 0                           // layer masks ignored
 	};
 
-	if (iSettingBufferMode > BUFFER_MODE_SINGLE) {
+	if (settings->iSettingBufferMode > settings->BUFFER_MODE_SINGLE) {
 		pfd.dwFlags |= PFD_DOUBLEBUFFER;
 	}
 
@@ -659,13 +662,13 @@ static void CopyFrontBufferToBack(HWND hWnd)
 	// after each swap, but on both my ATI Radeon 8500 and NVidia GF4Ti4200
 	// it works almost fine to just copy front to back once like this.
 
-	if ((iSettingBufferMode == BUFFER_MODE_SAFE_DOUBLE) ||
-		(iSettingBufferMode == BUFFER_MODE_FAST_DOUBLE && bFirstTime)) {
+	if ((settings->iSettingBufferMode == settings->BUFFER_MODE_SAFE_DOUBLE) ||
+		(settings->iSettingBufferMode == settings->BUFFER_MODE_FAST_DOUBLE && bFirstTime)) {
 		RECT rc;
 		GetClientRect(hWnd, &rc);
 
 		glDisable(GL_ALPHA_TEST);
-		if (!iBugWhiteout) {
+		if (!settings->iBugWhiteout) {
 			// Found this by accident; Adam likes it.  Freakshow option #1.
 			glDisable(GL_BLEND);
 		}
@@ -673,7 +676,7 @@ static void CopyFrontBufferToBack(HWND hWnd)
 		glDrawBuffer(GL_BACK);
 		glRasterPos2i(0, 0);
 		glCopyPixels(0, 0, rc.right, rc.bottom, GL_COLOR);
-		if (!iBugWhiteout) {
+		if (!settings->iBugWhiteout) {
 			glEnable(GL_BLEND);
 		}
 		glEnable(GL_ALPHA_TEST);
@@ -720,7 +723,7 @@ static void ScreenSaverUpdateFpsIndicator(FlurryAnimateChildInfo *child)
 					 child->id, now - prevSample, child->updateInterval);
 
 	// but the rest of the work is only necessary if they want to see it
-	if (!iShowFPSIndicator) {
+	if (!settings->iShowFPSIndicator) {
 		return;
 	}
 
