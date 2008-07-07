@@ -1,31 +1,38 @@
-/*
- * Flurry for Windows.
- *
- * One flurry group is a list of clusters.
- *
- * Created 2/23/2003 by Matt Ginzton, magi@cs.stanford.edu
- */
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Flurry : Group class
+//
+// One flurry group is a list of clusters.
+//
+// (c) 2003 Matt Ginzton (magi@cs.stanford.edu)
+// (c) 2006-2008 Julien Templier
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// * $LastChangedRevision$
+// * $LastChangedDate$
+// * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __FLURRYGROUP_H_
-#define __FLURRYGROUP_H_
+#pragma once
 
 #include <vector>
 using std::vector;
 #include "FlurryCluster.h"
 
+namespace Flurry {
 
-class FlurryGroup {
-	public:
-		FlurryGroup(int preset);
-		~FlurryGroup();
+class Group {
+		
+		private:
+			vector<Cluster*> clusters;
 
-		void SetSize(int width, int height);
-		void PrepareToAnimate(void);
-		void AnimateOneFrame(void);
+		public:
+			Group(int preset);
+			~Group();
 
-	private:
-		vector<FlurryCluster *> clusters;
-};
+			void SetSize(int width, int height);
+			void PrepareToAnimate(void);
+			void AnimateOneFrame(void);
+	};
 
-
-#endif // __FLURRYGROUP_H_
+}

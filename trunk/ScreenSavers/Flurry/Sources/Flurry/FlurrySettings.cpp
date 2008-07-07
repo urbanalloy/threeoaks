@@ -1,10 +1,17 @@
-/*
- * Flurry for Windows.
- *
- * Screen saver settings code, specific to Windows platform.
- *
- * Created 4/17/2003 by Matt Ginzton, magi@cs.stanford.edu
- */
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Flurry : Settings class
+//
+// Screen saver settings code, specific to Windows platform
+//
+// (c) 2003 Matt Ginzton (magi@cs.stanford.edu)
+// (c) 2006-2008 Julien Templier 
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// * $LastChangedRevision$
+// * $LastChangedDate$
+// * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <windows.h>
 #include <atlbase.h>

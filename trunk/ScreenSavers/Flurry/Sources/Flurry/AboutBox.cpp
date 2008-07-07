@@ -1,13 +1,25 @@
+///////////////////////////////////////////////////////////////////////////////////////////////
 //
-// AboutBox.cpp : Implementation of CAboutBox
+// Flurry : CAboutBox Class
 //
+// Declaration of CAboutBox
+//
+// (C) 2003 Matt Ginzton (magi@cs.stanford.edu)
+// (C) 2006-2008 Julien Templier
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// * $LastChangedRevision$
+// * $LastChangedDate$
+// * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
 
-//#include "stdafx.h"
 #include <atlbase.h>
 #include <atlcom.h>
 #include "AboutBox.h"
 #include "resource.h"
 #include "VersionNo.h"
+
+using namespace Flurry;
 
 #pragma warning(disable:4100)
 

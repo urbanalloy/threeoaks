@@ -1,10 +1,17 @@
-/*
- * Flurry for Windows.
- *
- * Flurry preset specification
- *
- * Created 5/31/2003 by Matt Ginzton, magi@cs.stanford.edu
- */
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Flurry : Preset class
+//
+// Flurry preset specification
+//
+// (c) 2003 Matt Ginzton (magi@cs.stanford.edu)
+// (c) 2006-2008 Julien Templier
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// * $LastChangedRevision$
+// * $LastChangedDate$
+// * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
 
@@ -12,36 +19,41 @@
 #include <vector>
 using std::vector;
 
-class FlurryClusterSpec {
-	public:
-		int nStreams;
-		int color;
-		float thickness;
-		float speed;
-};
+namespace Flurry {
 
-class FlurrySpec {
-	public:
-		FlurrySpec(char *format);
-		~FlurrySpec();
+	class ClusterSpec {
 
-		bool valid;
-		char *name;
-		vector<FlurryClusterSpec> clusters;
+		public:
+			int nStreams;
+			int color;
+			float thickness;
+			float speed;
+	};
 
-		bool WriteToString(char *format, int formatLen);
+	class Spec {
 
-	private:
-		bool ParseFromString(char *format);
-};
+			private:
+				bool ParseFromString(char *format);
+
+		public:
+			Spec(char *format);
+			~Spec();
+
+			bool valid;
+			char *name;
+			vector<ClusterSpec> clusters;
+
+			bool WriteToString(char *format, int formatLen);	
+	};
+}
+
+using namespace Flurry;
 
 /*
- * Exported globals from this module
- */
-
+* Exported globals from this module
+*/
 extern vector<int> g_multiMonPreset;
-extern vector<FlurrySpec *> g_visuals;
-
+extern vector<Spec *> g_visuals;
 
 /*
  * Exported functions

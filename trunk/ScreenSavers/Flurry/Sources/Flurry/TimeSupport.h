@@ -1,18 +1,20 @@
-/*
- * Flurry for Windows.
- *
- * Handle time-related things in a way that lets the existing Flurry code
- * be happy without modifications.  Includes a rate limiter.
- *
- * Created 8/10/2003 by Matt Ginzton, magi@cs.stanford.edu
- */
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Flurry : TimeSupport class
+//
+// Handle time-related things in a way that lets the existing Flurry code
+// be happy without modifications.  Includes a rate limiter.
+//
+// (c) 2003 Matt Ginzton (magi@cs.stanford.edu)
+// (c) 2006-2008 Julien Templier
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// * $LastChangedRevision$
+// * $LastChangedDate$
+// * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef _TIMESUPPORT_H_
-#define _TIMESUPPORT_H_
-
+#pragma once
 
 extern void TimeSupport_Init(void);
 extern void TimeSupport_HideHostDelay(double delay);
-
-
-#endif // _TIMESUPPORT_H_

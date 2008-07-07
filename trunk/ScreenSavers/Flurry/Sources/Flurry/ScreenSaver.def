@@ -1,6 +1,6 @@
 NAME	Flurry.SCR
 
-;DESCRIPTION	'Matt's stab at porting Flurry'
+;DESCRIPTION	'Flurry Screensaver for Windows'
 
 EXPORTS
 	ScreenSaverProc

@@ -1,10 +1,17 @@
-/*
- * Flurry for Windows.
- *
- * One flurry group is a list of flurry clusters.
- *
- * Created 2/23/2003 by Matt Ginzton, magi@cs.stanford.edu
- */
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Flurry : Group class
+//
+// One flurry group is a list of clusters.
+//
+// (c) 2003 Matt Ginzton (magi@cs.stanford.edu)
+// (c) 2006-2008 Julien Templier
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// * $LastChangedRevision$
+// * $LastChangedDate$
+// * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "FlurryGroup.h"
 #include "FlurryPreset.h"
@@ -15,6 +22,8 @@ extern "C" {
 	#include "Core/gl_saver.h"
 	#include "Core/Texture.h"
 }
+
+using namespace Flurry;
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -34,22 +43,22 @@ extern "C" {
  * Obviously, not thread safe.
  */
 
-FlurryGroup::FlurryGroup(int preset)
+Group::Group(int preset)
 {
 	if (preset > (signed)g_visuals.size()) {
 		_RPT2(_CRT_WARN, "Invalid preset %d (max %d); using default\n",
 			  preset, g_visuals.size());
 		preset = 0;
 	}
-	FlurrySpec *visual = g_visuals[preset];
+	Spec *visual = g_visuals[preset];
 
 	for (int i = 0; i < (signed)visual->clusters.size(); i++) {
-		clusters.push_back(new FlurryCluster(visual->clusters[i]));
+		clusters.push_back(new Cluster(visual->clusters[i]));
 	}
 }
 
 
-FlurryGroup::~FlurryGroup(void)
+Group::~Group(void)
 {
 	for (int i = 0; i < (signed)clusters.size(); i++) {
 		delete clusters[i];
@@ -57,8 +66,7 @@ FlurryGroup::~FlurryGroup(void)
 }
 
 
-void
-FlurryGroup::SetSize(int width, int height)
+void Group::SetSize(int width, int height)
 {
 	for (int i = 0; i < (signed)clusters.size(); i++) {
 		clusters[i]->SetSize(width, height);
@@ -66,8 +74,7 @@ FlurryGroup::SetSize(int width, int height)
 }
 
 
-void
-FlurryGroup::PrepareToAnimate(void)
+void Group::PrepareToAnimate(void)
 {
 	if (!iBugBlockMode) {
 		// Found this by accident; looks cool.  Freakshow option #2.
@@ -80,8 +87,7 @@ FlurryGroup::PrepareToAnimate(void)
 }
 
 
-void
-FlurryGroup::AnimateOneFrame(void)
+void Group::AnimateOneFrame(void)
 {
 	for (int i = 0; i < (signed)clusters.size(); i++) {
 		clusters[i]->AnimateOneFrame();

@@ -13,12 +13,14 @@
 #include "FlurryPreset.h"
 #include "FlurrySettings.h"
 
+using namespace Flurry;
+
 /*
  * Module globals
  */
 
 vector<int> g_multiMonPreset;
-vector<FlurrySpec *> g_visuals;
+vector<Spec*> g_visuals;
 
 
 /*
@@ -33,21 +35,21 @@ static const char *FlurryColorModeToName(int colorMode);
  * Implementation
  */
 
-FlurrySpec::FlurrySpec(char *format)
+Spec::Spec(char *format)
 {
 	name = NULL;
 	valid = ParseFromString(format);
 }
 
 
-FlurrySpec::~FlurrySpec(void)
+Spec::~Spec(void)
 {
 	free(name);
 }
 
 
 bool
-FlurrySpec::ParseFromString(char *format)
+Spec::ParseFromString(char *format)
 {
 	// format is: name:{streams,color,thickness,speed}(;stream)+
 	// try to parse this out; if at any time we fail, exit leaving valid == false
@@ -66,7 +68,7 @@ FlurrySpec::ParseFromString(char *format)
 	name[len] = 0;
 
 	// find streams
-	FlurryClusterSpec cluster;
+	ClusterSpec cluster;
 	format = psz + 1; // just past the colon
 	
 	while (true) {
@@ -105,7 +107,7 @@ FlurrySpec::ParseFromString(char *format)
 
 
 bool
-FlurrySpec::WriteToString(char *format, int formatLen)
+Spec::WriteToString(char *format, int formatLen)
 {
 	_snprintf(format, formatLen, "%s:", name);
 	format += strlen(format);
@@ -148,7 +150,7 @@ Visuals_Read(CRegKey& reg)
 
 	int i = 0;
 	for (i = 0; i < nPresets; i++) {
-		FlurrySpec *preset = new FlurrySpec(PresetVisuals[i]);
+		Spec *preset = new Spec(PresetVisuals[i]);
 		if (preset->valid) {
 			g_visuals.push_back(preset);
 		} else {
@@ -179,7 +181,7 @@ Visuals_Read(CRegKey& reg)
 			break;
 		}
 
-		FlurrySpec *preset = new FlurrySpec(customFormat);
+		Spec *preset = new Spec(customFormat);
 		if (preset->valid) {
 			g_visuals.push_back(preset);
 		} else {
