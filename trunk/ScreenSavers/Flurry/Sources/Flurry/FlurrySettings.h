@@ -17,6 +17,10 @@
 
 #include <atlbase.h>
 
+#define SHRINK_MIN 0
+#define SHRINK_MAX 50
+#define SHRINK_FREQ 5
+
 namespace Flurry {
 
 	class Settings 

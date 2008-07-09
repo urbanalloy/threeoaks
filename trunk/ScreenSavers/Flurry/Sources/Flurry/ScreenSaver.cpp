@@ -23,27 +23,13 @@
 #define COMPILE_MULTIMON_STUBS
 #include <multimon.h>
 
-#include "FlurryGroup.h"
-#include "FlurrySettings.h"
-#include "FlurryPreset.h"
-#include "TimeSupport.h"
-#include "AboutBox.h"
+#include "ScreenSaver.h"
 #include "resource.h"
 
 using namespace Flurry;
 
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"") 
-
-
 #pragma warning(disable:4100)
-
-/*
- * Still to do:
- * 2) visual configuration / customization
- * 3) separate support for multiple monitors
- *    XXX: double-buffered flip() without blocking the other monitor
- */
-
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -68,61 +54,6 @@ static bool g_bThumbnailMode = false;
 
 ///////////////////////////////////////////////////////////////////////////
 //
-// data types
-//
-
-/*
- * frames-per-second calculation
- */
-#define FPS_SAMPLES 20
-typedef struct {
-	DWORD startTime;			// in ticks
-	DWORD samples[FPS_SAMPLES];	// in ticks
-	int nextSample;				// we use samples array as ring buffer
-	int nSamples;				// to tell if early/late, and running average
-} FPS;
-
-/*
- * Per-monitor flurry info.  In multimon mode, we have one of these for
- * each monitor; in single-mon mode, we just have one (which might represent
- * the entire desktop, and might represent just the primary monitor).
- */
-typedef struct {
-	int id;				// ordinal just for debugging convenience
-	char *device;		// name of display device, or NULL in single-mon mode
-	int updateInterval;	// time between refreshes
-	HWND hWnd;			// handle to child window for this monitor
-	RECT rc;			// child window rectangle in screen coordinates
-	HGLRC hglrc;		// handle to OpenGL rendering context for this window
-	HDC hdc;			// handle to DC used by hglrc
-	FPS fps;			// frames per second info
-	Group *flurry;// the data structure with info on the flurry clusters
-} FlurryAnimateChildInfo;
-
-///////////////////////////////////////////////////////////////////////////
-//
-// local function prototypes
-
-static void ScreensaverCommonInit(void);
-static void ScreensaverRuntimeInit(HWND hWnd);
-static void AttachGLToWindow(FlurryAnimateChildInfo *child);
-static void DetachGLFromWindow(FlurryAnimateChildInfo *child);
-static void CopyFrontBufferToBack(HWND hWnd);
-static BOOL WINAPI CreditsDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
-static LRESULT WINAPI FlurryAnimateChildWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-static void SettingsDialogInit(HWND hWnd);
-static void SettingsDialogEnableControls(HWND hWnd);
-static void SettingsToDialog(HWND hWnd);
-static void SettingsFromDialog(HWND hWnd);
-static void ScreenSaverCreateChildren(HWND hWndParent);
-static BOOL CALLBACK ScreenSaverCreateChildrenCb(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData);
-static void ScreenSaverCreateChild(HWND hWndParent, RECT *rc, int iMonitor, char *device);
-static void ScreenSaverUpdateFpsIndicator(FlurryAnimateChildInfo *child);
-static void DoTestScreenSaver(void);
-
-
-///////////////////////////////////////////////////////////////////////////
-//
 // public functions
 
 
@@ -132,9 +63,7 @@ static void DoTestScreenSaver(void);
  * Init code used by both personalities (configuration and screensaver)
  * when invoked with /s.
  */
-
-static void
-ScreensaverCommonInit(void)
+static void ScreensaverCommonInit()
 {
 	// count monitors
 	g_nMonitors = GetSystemMetrics(SM_CMONITORS);
@@ -161,8 +90,8 @@ static void ScreensaverRuntimeInit(HWND hWnd)
 	// if so, use the window we're given (disable per-monitor behavior)
 	RECT rc;
 	GetWindowRect(hWnd, &rc);
-	_RPT4(_CRT_WARN, "Init in window 0x%08x, parent 0x%08x: %d, %d\n",
-		  hWnd, GetParent(hWnd), rc.left, rc.top);
+	_RPT4(_CRT_WARN, "Init in window 0x%08x, parent 0x%08x: %d, %d\n", hWnd, GetParent(hWnd), rc.left, rc.top);
+
 	if (GetParent(hWnd)) {
 		settings->iMultiMonPosition = settings->MULTIMON_ALLMONITORS;
 		g_bThumbnailMode = true;
@@ -172,7 +101,7 @@ static void ScreensaverRuntimeInit(HWND hWnd)
 	TimeSupport_Init();
 
 #ifdef _DEBUG
-	// debugging behind toplevel windows is a pain :P
+	// debugging behind top-level windows is a pain :P
 	SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 #endif
 }
@@ -188,12 +117,12 @@ static void ScreensaverRuntimeInit(HWND hWnd)
  * which has 1 or more children (typically one for each monitor), each
  * of which renders a FlurryGroup.
  */
-
 LRESULT WINAPI ScreenSaverProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
 		case WM_CREATE:
-			settings = new Settings();
+			if (settings == NULL)
+				settings = new Settings();
 
 			if (!g_bPreviewMode) {
 				// initialization, since this is the first chunk of our code to run
@@ -238,6 +167,9 @@ LRESULT WINAPI ScreenSaverProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 }
 
 
+/*
+ * Prepare child windows for rendering
+ */
 static void ScreenSaverCreateChildren(HWND hWndParent)
 {
 	RECT rc;
@@ -265,8 +197,10 @@ static void ScreenSaverCreateChildren(HWND hWndParent)
 }
 
 
-static BOOL CALLBACK ScreenSaverCreateChildrenCb(HMONITOR hMonitor, HDC hdcMonitor,
-							LPRECT lprcMonitor, LPARAM dwData)
+/*
+ * Create in each Monitor
+ */
+static BOOL CALLBACK ScreenSaverCreateChildrenCb(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData)
 {
 	HWND hWndParent = (HWND)dwData;
 	RECT rcMonitorChild;
@@ -301,9 +235,6 @@ static void ScreenSaverCreateChild(HWND hWndParent, RECT *rc, int iMonitor, char
 	child->device = device ? _strdup(device) : NULL;
 	child->fps.startTime = timeGetTime();
 
-#define RECTWIDTH(rc)  ((rc).right - (rc).left)
-#define RECTHEIGHT(rc) ((rc).bottom - (rc).top)
-
 	// 200: n% / 100, and it counts on each size, so / 2 more
 	InflateRect(&child->rc,
 		        -(int)(settings->iFlurryShrinkPercentage * RECTWIDTH(child->rc) / 200),
@@ -324,7 +255,6 @@ static void ScreenSaverCreateChild(HWND hWndParent, RECT *rc, int iMonitor, char
  * We handle WM_CREATE (setup), various painting and timer messages for
  * animation, and forward mouse and keyboard messages to our parent.
  */
-
 LRESULT WINAPI FlurryAnimateChildWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	FlurryAnimateChildInfo *child = (FlurryAnimateChildInfo *) GetWindowLong(hWnd, GWL_USERDATA);
@@ -341,8 +271,7 @@ LRESULT WINAPI FlurryAnimateChildWindowProc(HWND hWnd, UINT message, WPARAM wPar
 			child->hWnd = hWnd;
 			SetWindowLong(hWnd, GWL_USERDATA, (LONG)child);
 			// initialize flurry struct
-			int preset = child->id < (signed)g_multiMonPreset.size() ?
-						g_multiMonPreset[child->id] : settings->iFlurryPreset;
+			int preset = (signed)g_multiMonPreset.size() == 1 ? settings->iFlurryPreset : g_multiMonPreset[child->id];
 			child->flurry = new Group(preset, settings);
 			// prepare OpenGL context
 			AttachGLToWindow(child);
@@ -364,7 +293,8 @@ LRESULT WINAPI FlurryAnimateChildWindowProc(HWND hWnd, UINT message, WPARAM wPar
 
 		case WM_PAINT:
 			_RPT1(_CRT_WARN, "Start render frame %d\n", iFrameCounter);
-			if (wglMakeCurrent(child->hdc, child->hglrc)) {
+			if (wglMakeCurrent(child->hdc, child->hglrc))
+			{
 				PAINTSTRUCT ps;
 				BeginPaint(hWnd, &ps);
 				CopyFrontBufferToBack(hWnd);	// always call; may do nothing
@@ -422,7 +352,6 @@ LRESULT WINAPI FlurryAnimateChildWindowProc(HWND hWnd, UINT message, WPARAM wPar
  * Scrnsave.lib entry point: called before ScreenSaverConfigureDialog when
  * invoked with /c.
  */
-
 BOOL WINAPI RegisterDialogClasses(HANDLE hInst)
 {
 	_Module.Init(NULL, (HINSTANCE)hInst);
@@ -436,7 +365,6 @@ BOOL WINAPI RegisterDialogClasses(HANDLE hInst)
  *
  * Scrnsave.lib entry point: called when invoked with /c.
  */
-
 BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
@@ -461,9 +389,6 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 				case IDCANCEL:
 					EndDialog(hWnd, 0);
 					return TRUE;
-				case IDC_CREDITS:
-					DialogBoxParam(NULL, MAKEINTRESOURCE(DLG_CREDITS), hWnd, CreditsDialog, 0);
-					return TRUE;
 				case IDC_ABOUT:
 					CAboutBox::AutomaticDoModal();
 					return TRUE;
@@ -476,6 +401,12 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 				case IDC_POSITION_DESKTOP:
 				case IDC_POSITION_PRIMARY:
 				case IDC_POSITION_PER:
+					SettingsDialogEnableControls(hWnd);
+					break;
+
+				case IDC_DOUBLE_BUFFER_NONE:
+				case IDC_DOUBLE_BUFFER_PARANOID:
+				case IDC_DOUBLE_BUFFER_OPTIMISTIC:
 					SettingsDialogEnableControls(hWnd);
 					break;
 			}
@@ -492,10 +423,9 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 static void SettingsDialogEnableControls(HWND hWnd)
 {
 	// Configure button enabled only when relevant
-	EnableWindow(GetDlgItem(hWnd, IDC_POSITION_PER_CONFIGURE),
-				 IsDlgButtonChecked(hWnd, IDC_POSITION_PER));
+	EnableWindow(GetDlgItem(hWnd, IDC_POSITION_PER_CONFIGURE), IsDlgButtonChecked(hWnd, IDC_POSITION_PER));
 
-	// but all multimon stuff enabled only on multimon system
+	// but all multi-monitor stuff enabled only on multi-monitor system
 	if (g_nMonitors <= 1) {
 		EnableWindow(GetDlgItem(hWnd, IDC_POSITION_PRIMARY), FALSE);
 		EnableWindow(GetDlgItem(hWnd, IDC_POSITION_PER), FALSE);
@@ -505,6 +435,9 @@ static void SettingsDialogEnableControls(HWND hWnd)
 	// XXX and per-monitor flurry assignment isn't implemented yet anyway
 	EnableWindow(GetDlgItem(hWnd, IDC_POSITION_PER_CONFIGURE), FALSE);
 	EnableWindow(GetDlgItem(hWnd, IDC_POSITION_PER), FALSE);
+
+	// Enable FPS only in single-buffer mode
+	EnableWindow(GetDlgItem(hWnd, IDC_FPS_INDICATOR), IsDlgButtonChecked(hWnd, IDC_DOUBLE_BUFFER_NONE));
 }
 
 
@@ -514,6 +447,10 @@ static void SettingsDialogInit(HWND hWnd)
 	for (int i = 0; i < (signed)g_visuals.size(); i++) {
 		ComboBox_AddString(hPresetList, g_visuals[i]->name);
 	}
+
+	// Init the slider control (Shrink percentage)
+	SendDlgItemMessage(hWnd, IDC_SHRINK, TBM_SETRANGE, FALSE, MAKELONG(SHRINK_MIN, SHRINK_MAX));			
+	SendDlgItemMessage(hWnd, IDC_SHRINK, TBM_SETTICFREQ, SHRINK_FREQ, NULL);
 
 	// Load icon and add to dialog
 	HANDLE hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(ID_APP));
@@ -525,7 +462,6 @@ static void SettingsDialogInit(HWND hWnd)
 	SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
 
 	DestroyIcon((HICON)hIcon);
-
 }
 
 
@@ -534,7 +470,7 @@ static void SettingsToDialog(HWND hWnd)
 	// visual preset
 	ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_VISUAL), settings->iFlurryPreset);
 
-	// multimon options
+	// multi-monitor options
 	if (g_nMonitors <= 1) {
 		settings->iMultiMonPosition = settings->MULTIMON_ALLMONITORS;
 	}
@@ -545,6 +481,14 @@ static void SettingsToDialog(HWND hWnd)
 	// buffering mode
 	CheckRadioButton(hWnd, IDC_DOUBLE_BUFFER_NONE, IDC_DOUBLE_BUFFER_PARANOID,
 					 IDC_DOUBLE_BUFFER_NONE + settings->iSettingBufferMode);
+
+	
+	// Shrink percentage
+	SendDlgItemMessage(hWnd, IDC_SHRINK, TBM_SETPOS, TRUE, (LONG)settings->iFlurryShrinkPercentage);
+
+	// FPS Indicator
+	EnableWindow(GetDlgItem(hWnd, IDC_FPS_INDICATOR), settings->iSettingBufferMode == settings->BUFFER_MODE_SINGLE);
+	CheckDlgButton(hWnd, IDC_FPS_INDICATOR, settings->iShowFPSIndicator);
 }
 
 
@@ -553,7 +497,7 @@ static void SettingsFromDialog(HWND hWnd)
 	// visual preset
 	settings->iFlurryPreset = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_VISUAL));
 
-	// multimon options
+	// multi-monitor options
 	if (IsDlgButtonChecked(hWnd, IDC_POSITION_DESKTOP)) {
 		settings->iMultiMonPosition = settings->MULTIMON_ALLMONITORS;
 	} else if (IsDlgButtonChecked(hWnd, IDC_POSITION_PRIMARY)) {
@@ -570,11 +514,16 @@ static void SettingsFromDialog(HWND hWnd)
 	} else if (IsDlgButtonChecked(hWnd, IDC_DOUBLE_BUFFER_PARANOID)) {
 		settings->iSettingBufferMode = settings->BUFFER_MODE_SAFE_DOUBLE;
 	}
+
+	// Shrink percentage
+	settings->iFlurryShrinkPercentage = (int)SendDlgItemMessage(hWnd, IDC_SHRINK, TBM_GETPOS, NULL, NULL);
+
+	// FPS indicator
+	settings->iShowFPSIndicator = IsDlgButtonChecked(hWnd, IDC_FPS_INDICATOR);
 }
 
 
 // WGL attach/detach code
-
 static void AttachGLToWindow(FlurryAnimateChildInfo *child)
 {
 	// find current display settings on this monitor
@@ -661,7 +610,6 @@ static void CopyFrontBufferToBack(HWND hWnd)
 	// reserves the right to leave the back buffer completely undefined
 	// after each swap, but on both my ATI Radeon 8500 and NVidia GF4Ti4200
 	// it works almost fine to just copy front to back once like this.
-
 	if ((settings->iSettingBufferMode == settings->BUFFER_MODE_SAFE_DOUBLE) ||
 		(settings->iSettingBufferMode == settings->BUFFER_MODE_FAST_DOUBLE && bFirstTime)) {
 		RECT rc;
@@ -685,20 +633,7 @@ static void CopyFrontBufferToBack(HWND hWnd)
 	}
 }
 
-static BOOL WINAPI CreditsDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	switch (message) {
-		case WM_INITDIALOG:
-			return TRUE;
-			break;
 
-		case WM_COMMAND:
-			EndDialog(hDlg, 1);
-			break;
-	}
-
-	return FALSE;
-}
 
 
 static void ScreenSaverUpdateFpsIndicator(FlurryAnimateChildInfo *child)
@@ -746,8 +681,7 @@ static void ScreenSaverUpdateFpsIndicator(FlurryAnimateChildInfo *child)
 		recent = 1000.0 / (now - prevRingSample) * FPS_SAMPLES;
 	}
 
-	sprintf(buf, "FPS: Overall %.1f / Recent %.1f / Last %.1f   ",
-				 overall, recent, last);
+	sprintf(buf, "FPS: Overall %.1f / Recent %.1f / Last %.1f   ", overall, recent, last);
 	TextOut(child->hdc, 5, 5, buf, lstrlen(buf));
 }
 

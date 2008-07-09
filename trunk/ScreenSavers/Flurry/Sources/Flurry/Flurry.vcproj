@@ -81,7 +81,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="opengl32.lib glu32.lib comctl32.lib $(SolutionDir)\Libs\scrnsave.lib version.lib winmm.lib $(OutDir)/../FlurryCore/FlurryCore.lib"
-				OutputFile="$(OutDir)/Flurry.exe"
+				OutputFile="$(OutDir)/Flurry.scr"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				ModuleDefinitionFile="ScreenSaver.def"
@@ -423,6 +423,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ScreenSaver.h"
+				>
+			</File>
+			<File
 				RelativePath="TimeSupport.h"
 				>
 			</File>
@@ -453,6 +457,18 @@
 			</File>
 			<File
 				RelativePath=".\VersionNo.tpl"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Docs"
+			>
+			<File
+				RelativePath="..\..\Doc\Description.txt"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Doc\ReadMe.txt"
 				>
 			</File>
 		</Filter>
