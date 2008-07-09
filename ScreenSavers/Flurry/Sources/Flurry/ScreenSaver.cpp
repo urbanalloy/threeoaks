@@ -93,7 +93,7 @@ static void ScreensaverRuntimeInit(HWND hWnd)
 	_RPT4(_CRT_WARN, "Init in window 0x%08x, parent 0x%08x: %d, %d\n", hWnd, GetParent(hWnd), rc.left, rc.top);
 
 	if (GetParent(hWnd)) {
-		settings->iMultiMonPosition = settings->MULTIMON_ALLMONITORS;
+		settings->multiMonPosition = settings->MULTIMON_ALLMONITORS;
 		g_bThumbnailMode = true;
 	}
 
@@ -141,7 +141,7 @@ LRESULT WINAPI ScreenSaverProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 
 		case WM_KEYDOWN:
 			if (wParam == 'F') {
-				settings->iShowFPSIndicator = !settings->iShowFPSIndicator;
+				settings->showFPSIndicator = !settings->showFPSIndicator;
 			}
 			break;
 
@@ -175,7 +175,7 @@ static void ScreenSaverCreateChildren(HWND hWndParent)
 	RECT rc;
 	g_iMonitor = 0;
 
-	switch (settings->iMultiMonPosition) {
+	switch (settings->multiMonPosition) {
 		case settings->MULTIMON_PERMONITOR:
 			EnumDisplayMonitors(NULL, NULL, ScreenSaverCreateChildrenCb,
 								(LPARAM)hWndParent);
@@ -237,14 +237,14 @@ static void ScreenSaverCreateChild(HWND hWndParent, RECT *rc, int iMonitor, char
 
 	// 200: n% / 100, and it counts on each size, so / 2 more
 	InflateRect(&child->rc,
-		        -(int)(settings->iFlurryShrinkPercentage * RECTWIDTH(child->rc) / 200),
-		        -(int)(settings->iFlurryShrinkPercentage * RECTHEIGHT(child->rc) / 200));
+		-(int)(settings->shrinkPercentage * RECTWIDTH(child->rc) / 200),
+		-(int)(settings->shrinkPercentage * RECTHEIGHT(child->rc) / 200));
 
 	_RPT4(_CRT_WARN, "  position %d, %d, %d, %d\n", child->rc.left, child->rc.top, RECTWIDTH(child->rc), RECTHEIGHT(child->rc));
 
 	CreateWindow("FlurryAnimateChild", szName, WS_VISIBLE | WS_CHILD,
-                 child->rc.left, child->rc.top, RECTWIDTH(child->rc), RECTHEIGHT(child->rc),
-                 hWndParent, NULL, NULL, child);
+		child->rc.left, child->rc.top, RECTWIDTH(child->rc), RECTHEIGHT(child->rc),
+		hWndParent, NULL, NULL, child);
 }
 
 
@@ -271,7 +271,7 @@ LRESULT WINAPI FlurryAnimateChildWindowProc(HWND hWnd, UINT message, WPARAM wPar
 			child->hWnd = hWnd;
 			SetWindowLong(hWnd, GWL_USERDATA, (LONG)child);
 			// initialize flurry struct
-			int preset = (signed)g_multiMonPreset.size() == 1 ? settings->iFlurryPreset : g_multiMonPreset[child->id];
+			int preset = (signed)settings->multiMonPreset.size() == 1 ? settings->globalPreset : settings->multiMonPreset[child->id];
 			child->flurry = new Group(preset, settings);
 			// prepare OpenGL context
 			AttachGLToWindow(child);
@@ -299,7 +299,7 @@ LRESULT WINAPI FlurryAnimateChildWindowProc(HWND hWnd, UINT message, WPARAM wPar
 				BeginPaint(hWnd, &ps);
 				CopyFrontBufferToBack(hWnd);	// always call; may do nothing
 				child->flurry->AnimateOneFrame();
-				if (settings->iSettingBufferMode > settings->BUFFER_MODE_SINGLE) {
+				if (settings->settingBufferMode > settings->BUFFER_MODE_SINGLE) {
 					// ATI Radeon 9700s seem to get really upset if we call
 					// SwapBuffers in a single-buffered context when invoked
 					// with /p.  So be careful not to!
@@ -312,7 +312,8 @@ LRESULT WINAPI FlurryAnimateChildWindowProc(HWND hWnd, UINT message, WPARAM wPar
 			}
 			ScreenSaverUpdateFpsIndicator(child);
 			_RPT1(_CRT_WARN, "End render frame %d\n", iFrameCounter++);
-			return 0;
+
+			return 0;			
 
 		case WM_TIMER:
 			InvalidateRect(hWnd, NULL, FALSE);
@@ -412,14 +413,17 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 			}
 			break; // from WM_COMMAND
 		case WM_DESTROY:
-			_Module.Term();
+			_Module.Term();			
 			break;
 	}
 
 	return FALSE;
 }
 
-
+//////////////////////////////////////////////////////////////////////////
+// Update controls on settings dialog
+//  - enable/disable multi-monitor options
+//  - enable/disable fps indicator option
 static void SettingsDialogEnableControls(HWND hWnd)
 {
 	// Configure button enabled only when relevant
@@ -440,12 +444,13 @@ static void SettingsDialogEnableControls(HWND hWnd)
 	EnableWindow(GetDlgItem(hWnd, IDC_FPS_INDICATOR), IsDlgButtonChecked(hWnd, IDC_DOUBLE_BUFFER_NONE));
 }
 
-
+//////////////////////////////////////////////////////////////////////////
+// Init settings dialog
 static void SettingsDialogInit(HWND hWnd)
 {
 	HWND hPresetList = GetDlgItem(hWnd, IDC_VISUAL);
-	for (int i = 0; i < (signed)g_visuals.size(); i++) {
-		ComboBox_AddString(hPresetList, g_visuals[i]->name);
+	for (int i = 0; i < (signed)settings->visuals.size(); i++) {
+		ComboBox_AddString(hPresetList, settings->visuals[i]->name);
 	}
 
 	// Init the slider control (Shrink percentage)
@@ -464,62 +469,68 @@ static void SettingsDialogInit(HWND hWnd)
 	DestroyIcon((HICON)hIcon);
 }
 
-
+//////////////////////////////////////////////////////////////////////////
+// Load settings into the dialog
 static void SettingsToDialog(HWND hWnd)
 {
 	// visual preset
-	ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_VISUAL), settings->iFlurryPreset);
+	ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_VISUAL), settings->globalPreset);
 
 	// multi-monitor options
 	if (g_nMonitors <= 1) {
-		settings->iMultiMonPosition = settings->MULTIMON_ALLMONITORS;
+		settings->multiMonPosition = settings->MULTIMON_ALLMONITORS;
 	}
 
 	CheckRadioButton(hWnd, IDC_POSITION_DESKTOP, IDC_POSITION_PER,
-					 IDC_POSITION_DESKTOP + settings->iMultiMonPosition);
+					 IDC_POSITION_DESKTOP + settings->multiMonPosition);
 
 	// buffering mode
 	CheckRadioButton(hWnd, IDC_DOUBLE_BUFFER_NONE, IDC_DOUBLE_BUFFER_PARANOID,
-					 IDC_DOUBLE_BUFFER_NONE + settings->iSettingBufferMode);
+					 IDC_DOUBLE_BUFFER_NONE + settings->settingBufferMode);
 
 	
 	// Shrink percentage
-	SendDlgItemMessage(hWnd, IDC_SHRINK, TBM_SETPOS, TRUE, (LONG)settings->iFlurryShrinkPercentage);
+	SendDlgItemMessage(hWnd, IDC_SHRINK, TBM_SETPOS, TRUE, (LONG)settings->shrinkPercentage);
 
 	// FPS Indicator
-	EnableWindow(GetDlgItem(hWnd, IDC_FPS_INDICATOR), settings->iSettingBufferMode == settings->BUFFER_MODE_SINGLE);
-	CheckDlgButton(hWnd, IDC_FPS_INDICATOR, settings->iShowFPSIndicator);
+	EnableWindow(GetDlgItem(hWnd, IDC_FPS_INDICATOR), settings->settingBufferMode == settings->BUFFER_MODE_SINGLE);
+	CheckDlgButton(hWnd, IDC_FPS_INDICATOR, settings->showFPSIndicator);
 }
 
-
+//////////////////////////////////////////////////////////////////////////
+// Save settings from the dialog
 static void SettingsFromDialog(HWND hWnd)
 {
 	// visual preset
-	settings->iFlurryPreset = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_VISUAL));
+	settings->globalPreset = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_VISUAL));
+
+	// Update per-monitor presets
+	// FIXME: should work through ASSIGN option
+
 
 	// multi-monitor options
 	if (IsDlgButtonChecked(hWnd, IDC_POSITION_DESKTOP)) {
-		settings->iMultiMonPosition = settings->MULTIMON_ALLMONITORS;
+		settings->multiMonPosition = settings->MULTIMON_ALLMONITORS;
 	} else if (IsDlgButtonChecked(hWnd, IDC_POSITION_PRIMARY)) {
-		settings->iMultiMonPosition = settings->MULTIMON_PRIMARY;
+		settings->multiMonPosition = settings->MULTIMON_PRIMARY;
 	} else if (IsDlgButtonChecked(hWnd, IDC_POSITION_PER)) {
-		settings->iMultiMonPosition = settings->MULTIMON_PERMONITOR;
+		settings->multiMonPosition = settings->MULTIMON_PERMONITOR;
 	}
 
 	// buffering mode
 	if (IsDlgButtonChecked(hWnd, IDC_DOUBLE_BUFFER_NONE)) {
-		settings->iSettingBufferMode = settings->BUFFER_MODE_SINGLE;
+		settings->settingBufferMode = settings->BUFFER_MODE_SINGLE;
 	} else if (IsDlgButtonChecked(hWnd, IDC_DOUBLE_BUFFER_OPTIMISTIC)) {
-		settings->iSettingBufferMode = settings->BUFFER_MODE_FAST_DOUBLE;
+		settings->settingBufferMode = settings->BUFFER_MODE_FAST_DOUBLE;
 	} else if (IsDlgButtonChecked(hWnd, IDC_DOUBLE_BUFFER_PARANOID)) {
-		settings->iSettingBufferMode = settings->BUFFER_MODE_SAFE_DOUBLE;
+		settings->settingBufferMode = settings->BUFFER_MODE_SAFE_DOUBLE;
 	}
 
 	// Shrink percentage
-	settings->iFlurryShrinkPercentage = (int)SendDlgItemMessage(hWnd, IDC_SHRINK, TBM_GETPOS, NULL, NULL);
+	settings->shrinkPercentage = (int)SendDlgItemMessage(hWnd, IDC_SHRINK, TBM_GETPOS, NULL, NULL);
 
 	// FPS indicator
-	settings->iShowFPSIndicator = IsDlgButtonChecked(hWnd, IDC_FPS_INDICATOR);
+	settings->showFPSIndicator = IsDlgButtonChecked(hWnd, IDC_FPS_INDICATOR);
 }
 
 
@@ -557,7 +568,7 @@ static void AttachGLToWindow(FlurryAnimateChildInfo *child)
 		0, 0, 0                           // layer masks ignored
 	};
 
-	if (settings->iSettingBufferMode > settings->BUFFER_MODE_SINGLE) {
+	if (settings->settingBufferMode > settings->BUFFER_MODE_SINGLE) {
 		pfd.dwFlags |= PFD_DOUBLEBUFFER;
 	}
 
@@ -610,13 +621,13 @@ static void CopyFrontBufferToBack(HWND hWnd)
 	// reserves the right to leave the back buffer completely undefined
 	// after each swap, but on both my ATI Radeon 8500 and NVidia GF4Ti4200
 	// it works almost fine to just copy front to back once like this.
-	if ((settings->iSettingBufferMode == settings->BUFFER_MODE_SAFE_DOUBLE) ||
-		(settings->iSettingBufferMode == settings->BUFFER_MODE_FAST_DOUBLE && bFirstTime)) {
+	if ((settings->settingBufferMode == settings->BUFFER_MODE_SAFE_DOUBLE) ||
+		(settings->settingBufferMode == settings->BUFFER_MODE_FAST_DOUBLE && bFirstTime)) {
 		RECT rc;
 		GetClientRect(hWnd, &rc);
 
 		glDisable(GL_ALPHA_TEST);
-		if (!settings->iBugWhiteout) {
+		if (!settings->bugWhiteout) {
 			// Found this by accident; Adam likes it.  Freakshow option #1.
 			glDisable(GL_BLEND);
 		}
@@ -624,7 +635,7 @@ static void CopyFrontBufferToBack(HWND hWnd)
 		glDrawBuffer(GL_BACK);
 		glRasterPos2i(0, 0);
 		glCopyPixels(0, 0, rc.right, rc.bottom, GL_COLOR);
-		if (!settings->iBugWhiteout) {
+		if (!settings->bugWhiteout) {
 			glEnable(GL_BLEND);
 		}
 		glEnable(GL_ALPHA_TEST);
@@ -658,7 +669,7 @@ static void ScreenSaverUpdateFpsIndicator(FlurryAnimateChildInfo *child)
 					 child->id, now - prevSample, child->updateInterval);
 
 	// but the rest of the work is only necessary if they want to see it
-	if (!settings->iShowFPSIndicator) {
+	if (!settings->showFPSIndicator) {
 		return;
 	}
 

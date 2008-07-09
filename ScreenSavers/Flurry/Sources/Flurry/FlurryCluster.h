@@ -33,7 +33,7 @@ namespace Flurry {
 			CoreData *data;
 			double oldFrameTime;
 
-			Settings *settings;
+			DWORD maxFrameProgressInMs;
 
 		public:
 			Cluster(const ClusterSpec& spec, Settings *settings);

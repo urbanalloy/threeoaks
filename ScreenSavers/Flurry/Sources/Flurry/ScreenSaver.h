@@ -15,9 +15,8 @@
 
 #pragma once
 
-#include "FlurryGroup.h"
 #include "FlurrySettings.h"
-#include "FlurryPreset.h"
+#include "FlurryGroup.h"
 #include "TimeSupport.h"
 #include "AboutBox.h"
 
@@ -33,7 +32,7 @@
 * frames-per-second calculation
 */
 #define FPS_SAMPLES 20
-typedef struct {
+typedef struct FPS{
 	DWORD startTime;			// in ticks
 	DWORD samples[FPS_SAMPLES];	// in ticks
 	int nextSample;				// we use samples array as ring buffer
@@ -45,7 +44,7 @@ typedef struct {
 * each monitor; in single-mon mode, we just have one (which might represent
 * the entire desktop, and might represent just the primary monitor).
 */
-typedef struct {
+typedef struct FlurryAnimateChildInfo {
 	int id;				// ordinal just for debugging convenience
 	char *device;		// name of display device, or NULL in single-monitor mode
 	int updateInterval;	// time between refreshes
@@ -54,7 +53,7 @@ typedef struct {
 	HGLRC hglrc;		// handle to OpenGL rendering context for this window
 	HDC hdc;			// handle to DC used by hglrc
 	FPS fps;			// frames per second info
-	Group *flurry;		// the data structure with info on the flurry clusters
+	Flurry::Group *flurry;		// the data structure with info on the flurry clusters
 } FlurryAnimateChildInfo;
 
 ///////////////////////////////////////////////////////////////////////////

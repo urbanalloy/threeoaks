@@ -27,12 +27,6 @@ extern "C" {
 
 using namespace Flurry;
 
-
-///////////////////////////////////////////////////////////////////////////
-//
-// private functions
-
-
 ///////////////////////////////////////////////////////////////////////////
 //
 // public functions
@@ -49,7 +43,7 @@ Cluster::Cluster(const ClusterSpec& spec, Settings* settings)
 {
 	oldFrameTime = TimeInSecondsSinceStart();
 
-	this->settings = settings;
+	maxFrameProgressInMs = settings->maxFrameProgressInMs;
 
 	data = Alloc();
 
@@ -105,8 +99,8 @@ void Cluster::AnimateOneFrame()
 	// the adjusted value.
 	double newFrameTime = TimeInSecondsSinceStart();
 	double deltaFrameTime = newFrameTime - oldFrameTime;
-	if (settings->iMaxFrameProgressInMs > 0) {
-		double maxFrameTime = settings->iMaxFrameProgressInMs / 1000.0;
+	if (maxFrameProgressInMs > 0) {
+		double maxFrameTime = maxFrameProgressInMs / 1000.0;
 		double overtime = deltaFrameTime - maxFrameTime;
 
 		if (overtime > 0) {
