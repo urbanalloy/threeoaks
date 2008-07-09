@@ -24,15 +24,16 @@ using namespace Flurry;
 static const char flurryRegistryKey[] = "Software\\Flurry";
 
 ////////////////////////////////////////////////////////////////////////////////////////
-Settings::Settings() : iSettingBufferMode(BUFFER_MODE_SINGLE),
-					   iMultiMonPosition(MULTIMON_ALLMONITORS),
-					   iShowFPSIndicator(0),
-					   iBugBlockMode(0),
-					   iBugWhiteout(0),
-					   iFlurryPreset(0),
-					   iFlurryShrinkPercentage(0),
-					   iMaxFrameProgressInMs(30)
+Settings::Settings() : settingBufferMode(BUFFER_MODE_SINGLE),
+					   multiMonPosition(MULTIMON_ALLMONITORS),
+					   showFPSIndicator(0),
+					   bugBlockMode(0),
+					   bugWhiteout(0),
+					   globalPreset(0),
+					   shrinkPercentage(0),
+					   maxFrameProgressInMs(30)
 {}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 void Settings::Read()
@@ -47,14 +48,14 @@ void Settings::Read()
 		return;
 	}
 	
-	reg.QueryValue("Buffering mode", NULL, &iSettingBufferMode, &formatLen);
-	reg.QueryValue("Multimon behavior", NULL, &iMultiMonPosition, &formatLen);
-	reg.QueryValue("FPS display", NULL, &iShowFPSIndicator, &formatLen);
-	reg.QueryValue("Freakshow: Block mode", NULL, &iBugBlockMode, &formatLen);
-	reg.QueryValue("Freakshow: Whiteout doublebuffer", NULL, &iBugWhiteout, &formatLen);
-	reg.QueryValue("Preset", NULL, &iFlurryPreset, &formatLen);
-	reg.QueryValue("Shrink by %", NULL, &iFlurryShrinkPercentage, &formatLen);
-	reg.QueryValue("Max frame progress", NULL, &iMaxFrameProgressInMs, &formatLen);
+	reg.QueryValue("Buffering mode", NULL, &settingBufferMode, &formatLen);
+	reg.QueryValue("Multimon behavior", NULL, &multiMonPosition, &formatLen);
+	reg.QueryValue("FPS display", NULL, &showFPSIndicator, &formatLen);
+	reg.QueryValue("Freakshow: Block mode", NULL, &bugBlockMode, &formatLen);
+	reg.QueryValue("Freakshow: Whiteout doublebuffer", NULL, &bugWhiteout, &formatLen);
+	reg.QueryValue("Preset", NULL, &globalPreset, &formatLen);
+	reg.QueryValue("Shrink by %", NULL, &shrinkPercentage, &formatLen);
+	reg.QueryValue("Max frame progress", NULL, &maxFrameProgressInMs, &formatLen);
 
 	// read per-monitor and per-preset settings
 	ReadVisuals(reg);
@@ -71,14 +72,14 @@ void Settings::Write()
 		return;
 	}
 
-	reg.SetValue("Buffering mode", REG_DWORD, &iSettingBufferMode, sizeof(DWORD));
-	reg.SetValue("Multimon behavior", REG_DWORD, &iMultiMonPosition, sizeof(DWORD));
-	reg.SetValue("FPS display", REG_DWORD, &iShowFPSIndicator, sizeof(DWORD));
-	reg.SetValue("Freakshow: Block mode", REG_DWORD, &iBugBlockMode, sizeof(DWORD));
-	reg.SetValue("Freakshow: Whiteout doublebuffer", REG_DWORD, &iBugWhiteout, sizeof(DWORD));
-	reg.SetValue("Preset", REG_DWORD, &iFlurryPreset, sizeof(DWORD));
-	reg.SetValue("Shrink by %", REG_DWORD, &iFlurryShrinkPercentage, sizeof(DWORD));
-	reg.SetValue("Max frame progress", REG_DWORD, &iMaxFrameProgressInMs, sizeof(DWORD));
+	reg.SetValue("Buffering mode", REG_DWORD, &settingBufferMode, sizeof(DWORD));
+	reg.SetValue("Multimon behavior", REG_DWORD, &multiMonPosition, sizeof(DWORD));
+	reg.SetValue("FPS display", REG_DWORD, &showFPSIndicator, sizeof(DWORD));
+	reg.SetValue("Freakshow: Block mode", REG_DWORD, &bugBlockMode, sizeof(DWORD));
+	reg.SetValue("Freakshow: Whiteout doublebuffer", REG_DWORD, &bugWhiteout, sizeof(DWORD));
+	reg.SetValue("Preset", REG_DWORD, &globalPreset, sizeof(DWORD));
+	reg.SetValue("Shrink by %", REG_DWORD, &shrinkPercentage, sizeof(DWORD));
+	reg.SetValue("Max frame progress", REG_DWORD, &maxFrameProgressInMs, sizeof(DWORD));
 
 	// write per-monitor and per-preset settings
 	WriteVisuals(reg);
@@ -105,13 +106,13 @@ void Settings::ReadVisuals(CRegKey& reg)
 	for (i = 0; i < nPresets; i++) {
 		Spec *preset = new Spec(PresetVisuals[i]);
 		if (preset->valid) {
-			g_visuals.push_back(preset);
+			visuals.push_back(preset);
 		} else {
 			_RPT0(_CRT_WARN, "Things are really messed up... preset doesn't match!\n");
 			delete preset;
 		}
 	}
-	assert(g_visuals.size() > 0);
+	assert(visuals.size() > 0);
 
 	// read the rest from the registry
 	if (reg == NULL)
@@ -136,7 +137,7 @@ void Settings::ReadVisuals(CRegKey& reg)
 
 		Spec *preset = new Spec(customFormat);
 		if (preset->valid) {
-			g_visuals.push_back(preset);
+			visuals.push_back(preset);
 		} else {
 			_RPT0(_CRT_WARN, "ReadVisuals: preset not parseable; WARNING will be removed on ok\n");
 			_RPT1(_CRT_WARN, "  '%s'\n", customFormat);
@@ -154,8 +155,8 @@ void Settings::WriteVisuals(CRegKey& reg)
 	CRegKey presets;
 	presets.Create(reg, "Presets");
 
-	for (int i = 0; i < (signed)g_visuals.size(); i++) {
-		if (g_visuals[i]->WriteToString(format, sizeof format)) {
+	for (int i = 0; i < (signed)visuals.size(); i++) {
+		if (visuals[i]->WriteToString(format, sizeof format)) {
 			char nextValue[20];
 			_snprintf(nextValue, sizeof nextValue, "preset%02d", i);
 			//presets.SetValue(format, nextValue);
@@ -171,7 +172,7 @@ void Settings::WriteVisuals(CRegKey& reg)
 void Settings::ReadMonitors(CRegKey& reg)
 {
 	// first monitor = already known
-	g_multiMonPreset.push_back(iFlurryPreset);
+	multiMonPreset.push_back(globalPreset);
 	int iMonitor = 1;
 
 	// other monitors, read from registry
@@ -194,13 +195,13 @@ void Settings::ReadMonitors(CRegKey& reg)
 			break;
 		}
 
-		if (presetForMonitor >= g_visuals.size()) {
-			presetForMonitor = iFlurryPreset;
+		if (presetForMonitor >= visuals.size()) {
+			presetForMonitor = globalPreset;
 		}
 
 		_RPT2(_CRT_WARN, "ReadMonitors: monitor %d using visual %d\n",
-			  g_multiMonPreset.size(), presetForMonitor);
-		g_multiMonPreset.push_back(presetForMonitor);
+			  multiMonPreset.size(), presetForMonitor);
+		multiMonPreset.push_back(presetForMonitor);
 	}
 }
 
@@ -211,11 +212,11 @@ void Settings::WriteMonitors(CRegKey& reg)
 	CRegKey monitors;
 	monitors.Create(reg, "Monitors");
 
-	for (int iMonitor = 0; iMonitor < (signed)g_multiMonPreset.size(); iMonitor++) {
+	for (int iMonitor = 0; iMonitor < (signed)multiMonPreset.size(); iMonitor++) {
 		char nextValue[20];
 		_snprintf_s(nextValue, sizeof nextValue, "monitor%02dPreset", iMonitor, 20*sizeof(char));
 		//monitors.SetValue(g_multiMonPreset[iMonitor], nextValue);
-		monitors.SetValue(nextValue, REG_DWORD, &g_multiMonPreset[iMonitor], sizeof(int) );
+		monitors.SetValue(nextValue, REG_DWORD, &multiMonPreset[iMonitor], sizeof(int) );
 	}
 }
 

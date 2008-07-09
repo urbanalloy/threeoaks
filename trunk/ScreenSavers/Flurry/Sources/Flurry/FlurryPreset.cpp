@@ -1,35 +1,26 @@
-/*
- * Flurry for Windows.
- *
- * Flurry preset specification
- *
- * Created 5/31/2003 by Matt Ginzton, magi@cs.stanford.edu
- */
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Flurry : Preset class
+//
+// Flurry preset specification
+//
+// (c) 2003 Matt Ginzton (magi@cs.stanford.edu)
+// (c) 2006-2008 Julien Templier
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// * $LastChangedRevision$
+// * $LastChangedDate$
+// * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <windows.h>
 #include <string.h>
 #include <crtdbg.h>
 #include <assert.h>
+
 #include "FlurryPreset.h"
-#include "FlurrySettings.h"
 
 using namespace Flurry;
-
-/*
- * Module globals
- */
-
-vector<int> g_multiMonPreset;
-vector<Spec*> g_visuals;
-
-
-/*
- * Local functions
- */
-
-static int FlurryColorModeFromName(char *colorName);
-static const char *FlurryColorModeToName(int colorMode);
-
 
 /*
  * Implementation
@@ -81,7 +72,7 @@ bool Spec::ParseFromString(char *format)
 				  parsed, format);
 			return false;
 		}
-		cluster.color = FlurryColorModeFromName(color);
+		cluster.color = ColorModeFromName(color);
 		if (cluster.color < 0) {
 			_RPT1(_CRT_WARN, "PresetParse: bad color name '%s'\n", color);
 			return false;
@@ -113,7 +104,7 @@ bool Spec::WriteToString(char *format, int formatLen)
 
 	for (int i = 0; i < (signed)clusters.size(); i++) {
 		bool more = (i + 1 < (signed)clusters.size());
-		const char *color = FlurryColorModeToName(clusters[i].color);
+		const char *color = ColorModeToName(clusters[i].color);
 
 		_snprintf(format, formatLen, "{%d,%s,%g,%g}%s",
 				  clusters[i].nStreams, color, clusters[i].thickness, clusters[i].speed,
@@ -133,7 +124,7 @@ bool Spec::WriteToString(char *format, int formatLen)
 
 
 // keep parallel with typedef enum _ColorModes in GL_saver.h
-const char *colorTable[] = {
+const char* Spec::colorTable[] = {
 	"red",
 	"magenta",
 	"blue",
@@ -150,7 +141,7 @@ const char *colorTable[] = {
 };
 #define nColors (sizeof colorTable / sizeof colorTable[0])
 
-static int FlurryColorModeFromName(char *colorName)
+int Spec::ColorModeFromName(char *colorName)
 {
 
 	for (int iColor = 0; iColor < nColors; iColor++) {
@@ -163,7 +154,7 @@ static int FlurryColorModeFromName(char *colorName)
 }
 
 
-static const char * FlurryColorModeToName(int colorMode)
+const char* Spec::ColorModeToName(int colorMode)
 {
 	if (colorMode >= nColors) {
 		colorMode = 0;

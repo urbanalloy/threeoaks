@@ -14,8 +14,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "FlurryGroup.h"
-#include "FlurryPreset.h"
-#include "FlurrySettings.h"
 
 #include <math.h> // unconfuse cpp, which will see it inside extern "C" with __cplusplus defined
 extern "C" {
@@ -25,37 +23,28 @@ extern "C" {
 
 using namespace Flurry;
 
-
-///////////////////////////////////////////////////////////////////////////
-//
-// private functions
-
-
 ///////////////////////////////////////////////////////////////////////////
 //
 // public functions
 
 /*
  * Note: the Flurry base code keeps everything in a global variable named
- * info.  We want to instance it, for multimon support (several separate
+ * info.  We want to instance it, for multi-monitor support (several separate
  * Flurries), so we allocate several such structures, but to avoid changing
  * the base code, we set info = current->globals before calling into it.
  * Obviously, not thread safe.
  */
-
 Group::Group(int preset, Settings *settings)
 {
-	this->settings = settings;
+	bugBlockMode = settings->bugBlockMode;
 
-	if (preset > (signed)g_visuals.size()) {
-		_RPT2(_CRT_WARN, "Invalid preset %d (max %d); using default\n",
-			  preset, g_visuals.size());
+	if (preset > (signed)settings->visuals.size()) {
+		_RPT2(_CRT_WARN, "Invalid preset %d (max %d); using default\n", preset, settings->visuals.size());
 		preset = 0;
 	}
-	Spec *visual = g_visuals[preset];
 
-	for (int i = 0; i < (signed)visual->clusters.size(); i++) {
-		clusters.push_back(new Cluster(visual->clusters[i], settings));
+	for (int i = 0; i < (signed)settings->visuals[preset]->clusters.size(); i++) {
+		clusters.push_back(new Cluster(settings->visuals[preset]->clusters[i], settings));
 	}
 }
 
@@ -78,7 +67,7 @@ void Group::SetSize(int width, int height)
 
 void Group::PrepareToAnimate(void)
 {
-	if (!settings->iBugBlockMode) {
+	if (!bugBlockMode) {
 		// Found this by accident; looks cool.  Freakshow option #2.
 		MakeTexture();
 	}

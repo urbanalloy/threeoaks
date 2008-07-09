@@ -15,18 +15,18 @@
 
 #pragma once
 
-#include <vector>
-using std::vector;
 #include "FlurryCluster.h"
 #include "FlurrySettings.h"
+#include <vector>
+using std::vector;
 
 namespace Flurry {
 
-class Group {
+	class Group {
 		
 		private:
 			vector<Cluster*> clusters;
-			Settings *settings;
+			DWORD bugBlockMode;
 
 		public:
 			Group(int preset, Settings *settings);

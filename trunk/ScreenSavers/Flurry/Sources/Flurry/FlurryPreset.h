@@ -32,8 +32,13 @@ namespace Flurry {
 
 	class Spec {
 
-			private:
-				bool ParseFromString(char *format);
+		private:
+			bool ParseFromString(char *format);
+
+			int ColorModeFromName(char *colorName);
+			const char* ColorModeToName(int colorMode);
+
+			const static char *colorTable[];
 
 		public:
 			Spec(char *format);
@@ -47,10 +52,3 @@ namespace Flurry {
 	};
 
 }
-
-using namespace Flurry;
-/*
-* Exported globals from this module
-*/
-extern vector<int> g_multiMonPreset;
-extern vector<Spec *> g_visuals;
