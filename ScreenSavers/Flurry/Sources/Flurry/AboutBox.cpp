@@ -25,6 +25,7 @@ using namespace Flurry;
 
 static char szCompileTime[] = __TIME__ " on " __DATE__;
 
+static BOOL WINAPI CreditsDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 /////////////////////////////////////////////////////////////////////////////
 // CAboutBox
@@ -42,4 +43,26 @@ LRESULT CAboutBox::OnDismiss(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHa
 {
 	EndDialog(wID);
 	return 0;
+}
+
+LRESULT CAboutBox::OnCredits(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
+{
+	DialogBoxParam(NULL, MAKEINTRESOURCE(DLG_CREDITS), hWndCtl, CreditsDialog, 0);
+	return 0;
+}
+
+
+static BOOL WINAPI CreditsDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	switch (message) {
+		case WM_INITDIALOG:
+			return TRUE;
+			break;
+
+		case WM_COMMAND:
+			EndDialog(hDlg, 1);
+			break;
+	}
+
+	return FALSE;
 }

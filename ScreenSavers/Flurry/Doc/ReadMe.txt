@@ -33,10 +33,16 @@ You might try to rename the file to Flurry.sCr as a workaround.
 
 ==== Release 1.3 ====
 
-Version 1.3.0.xx (07/xx/08)
+Version 1.3.0.xx (08/xx/08)    
+	- UI Changes
+	  * Moved credits to About window
+	  * Added UI for shrink percentage & FPS indicator (only in single-buffer mode)
+	  * Added custom resolution option	
 	- Refactoring of code
 	  * separated settings in a class (preparing for per-monitor flurries)
 	  * cleanup/rename: all classes are now in the Flurry namespace
+	- Bug fixed
+	  * Preview was not showing the selected preset correctly
 
 ==== Release 1.2 ====
 

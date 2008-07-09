@@ -24,6 +24,13 @@
 #define IDC_TEST                        1018
 #define IDC_ABOUTPIC                    1019
 #define IDC_COMINGSOON                  1020
+#define IDC_ADVANCED                    1022
+#define IDC_RESOLUTION                  1024
+#define IDC_SHRINK                      1025
+#define IDC_RESOLUTIONTEXT              1026
+#define IDC_SHRINKTEXT                  1027
+#define IDC_CHECK1                      1028
+#define IDC_FPS_INDICATOR                1028
 
 // Next default values for new objects
 // 
@@ -31,7 +38,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        105
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1021
+#define _APS_NEXT_CONTROL_VALUE         1029
 #define _APS_NEXT_SYMED_VALUE           100
 #endif
 #endif
