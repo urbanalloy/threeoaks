@@ -87,6 +87,51 @@ void Settings::Write()
 }
 
 //////////////////////////////////////////////////////////////////////////
+// Clear the current visuals and reload the list from registry
+void Settings::ReloadVisuals()
+{	
+	CRegKey reg;
+
+	// create the registry key
+	if (ERROR_SUCCESS != reg.Create(HKEY_CURRENT_USER, flurryRegistryKey)) {
+		return;
+	}
+
+	visuals.clear();
+	ReadVisuals(reg);
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Remove a preset
+void Settings::DeleteVisual(int index)
+{
+	CRegKey reg;
+
+	// Do not touch read-only presets
+	if (index < PRESETS_READONLY || index >= (signed)visuals.size())
+		return;
+
+	// create the registry key
+	if (ERROR_SUCCESS != reg.Create(HKEY_CURRENT_USER, flurryRegistryKey)) {
+		return;
+	}
+
+	CRegKey presets;
+	presets.Create(reg, "Presets");
+
+	char presetName[20];
+	_snprintf(presetName, sizeof presetName, "preset%02d", index);
+	LONG err = presets.DeleteValue(presetName);
+
+	if (err != ERROR_SUCCESS) {
+		_RPT1(_CRT_WARN, "Cannot remove preset: error %d\n", GetLastError());
+		return;
+	}
+
+	ResetPresetSettings(reg, index);
+}
+
+//////////////////////////////////////////////////////////////////////////
 void Settings::ReadVisuals(CRegKey& reg)
 {
 	// the first N are hardcoded; we put them in the registry so the user can
@@ -102,10 +147,13 @@ void Settings::ReadVisuals(CRegKey& reg)
 	};
 	static const int nPresets = sizeof PresetVisuals / sizeof PresetVisuals[0];
 
+	// cleanup visuals
+
+
 	int i = 0;
 	for (i = 0; i < nPresets; i++) {
 		Spec *preset = new Spec(PresetVisuals[i]);
-		if (preset->valid) {
+		if (preset->isValid) {
 			visuals.push_back(preset);
 		} else {
 			_RPT0(_CRT_WARN, "Things are really messed up... preset doesn't match!\n");
@@ -136,7 +184,7 @@ void Settings::ReadVisuals(CRegKey& reg)
 		}
 
 		Spec *preset = new Spec(customFormat);
-		if (preset->valid) {
+		if (preset->isValid) {
 			visuals.push_back(preset);
 		} else {
 			_RPT0(_CRT_WARN, "ReadVisuals: preset not parseable; WARNING will be removed on ok\n");
@@ -164,7 +212,7 @@ void Settings::WriteVisuals(CRegKey& reg)
 		} else {
 			_RPT1(_CRT_WARN, "WriteVisuals: Can't write preset %d!\n", i);
 		}
-	}
+	}	
 }
 
 
@@ -188,7 +236,7 @@ void Settings::ReadMonitors(CRegKey& reg)
 		
 		DWORD presetForMonitor;
 		DWORD formatLen = sizeof(presetForMonitor);
-		//LONG result = monitors.QueryValue(presetForMonitor, nextValue);
+		
 		LONG result = monitors.QueryValue(nextValue, NULL, &presetForMonitor, &formatLen);
 		if (result != ERROR_SUCCESS) {
 			_RPT2(_CRT_WARN, "ReadMonitors: failed to read %s: %d\n", nextValue, result);
@@ -215,8 +263,35 @@ void Settings::WriteMonitors(CRegKey& reg)
 	for (int iMonitor = 0; iMonitor < (signed)multiMonPreset.size(); iMonitor++) {
 		char nextValue[20];
 		_snprintf_s(nextValue, sizeof nextValue, "monitor%02dPreset", iMonitor, 20*sizeof(char));
-		//monitors.SetValue(g_multiMonPreset[iMonitor], nextValue);
+
 		monitors.SetValue(nextValue, REG_DWORD, &multiMonPreset[iMonitor], sizeof(int) );
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+// if the current preset is the deleted one, reset to default preset
+void Settings::ResetPresetSettings(CRegKey& reg, int index)
+{
+	// Global preset
+	if (globalPreset == index)
+		reg.SetValue("Preset", REG_DWORD, 0, sizeof(DWORD));
+
+	// Per-monitor presets
+	CRegKey monitors;
+	monitors.Create(reg, "Monitors");
+
+	for (int i = 0; i < (signed)multiMonPreset.size(); i++) {
+
+		if (multiMonPreset[i] != index)
+			break;
+
+		multiMonPreset[i] = 0;
+
+		char nextValue[20];
+		_snprintf_s(nextValue, sizeof nextValue, "monitor%02dPreset", i, 20*sizeof(char));
+
+		monitors.SetValue(nextValue, REG_DWORD, 0, sizeof(int) );
+	}
+
 }
 

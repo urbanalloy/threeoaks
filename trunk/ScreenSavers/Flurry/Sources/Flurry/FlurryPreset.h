@@ -17,6 +17,9 @@
 
 #include <atlbase.h>
 #include <vector>
+#include <string>
+
+using std::string;
 using std::vector;
 
 namespace Flurry {
@@ -33,19 +36,22 @@ namespace Flurry {
 	class Spec {
 
 		private:
-			bool ParseFromString(char *format);
+			void ParseTemplate();
 
 			int ColorModeFromName(char *colorName);
 			const char* ColorModeToName(int colorMode);
 
-			const static char *colorTable[];
-
+			const static char *colorTable[];			
+		
 		public:
 			Spec(char *format);
+			Spec(Spec& arg);
 			~Spec();
 
-			bool valid;
-			char *name;
+			bool isValid;
+			string name;
+			string specTemplate;
+
 			vector<ClusterSpec> clusters;
 
 			bool WriteToString(char *format, int formatLen);	

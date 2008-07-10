@@ -256,6 +256,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\Editor.cpp"
+				>
+			</File>
+			<File
 				RelativePath="FlurryCluster.cpp"
 				>
 				<FileConfiguration
@@ -400,6 +404,10 @@
 			>
 			<File
 				RelativePath="AboutBox.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Editor.h"
 				>
 			</File>
 			<File

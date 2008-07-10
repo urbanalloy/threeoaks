@@ -25,6 +25,8 @@ using std::vector;
 #define SHRINK_MAX 50
 #define SHRINK_FREQ 5
 
+#define PRESETS_READONLY 5 // the first 5 presets are read-only
+
 namespace Flurry {
 
 	class Settings 
@@ -37,6 +39,8 @@ namespace Flurry {
 
 			void ReadVisuals(CRegKey& reg);
 			void WriteVisuals(CRegKey& reg);
+
+			void ResetPresetSettings(CRegKey& reg, int index);
 
 		public:
 
@@ -77,6 +81,9 @@ namespace Flurry {
 			// Functions
 			void Read();
 			void Write();
+
+			void ReloadVisuals();
+			void DeleteVisual(int index);
 	};
 
 }

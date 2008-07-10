@@ -26,36 +26,38 @@ using namespace Flurry;
  * Implementation
  */
 
-Spec::Spec(char *format)
+Spec::Spec(char *format) : specTemplate(string(format))						  
 {
-	name = NULL;
-	valid = ParseFromString(format);
+	ParseTemplate();
+}
+
+Spec::Spec(Spec& arg) :  specTemplate(arg.specTemplate)					 
+{
+	ParseTemplate();
 }
 
 
 Spec::~Spec(void)
-{
-	free(name);
+{	
 }
 
 
-bool Spec::ParseFromString(char *format)
+void Spec::ParseTemplate()
 {
 	// format is: name:{streams,color,thickness,speed}(;stream)+
 	// try to parse this out; if at any time we fail, exit leaving valid == false
+	const char *format = specTemplate.c_str();
 
 	// find name
-	char *psz = strchr(format, ':');
+	const char *psz = strchr(format, ':');
 	if (!psz) {
 		_RPT1(_CRT_WARN, "PresetParse: no name in '%s'\n", format);
-		return false;
+		isValid = false;
+		return;
 	}
 
 	// copy name from format
-	int len = psz - format;
-	name = (char *)malloc(len + 1);
-	strncpy(name, format, len);
-	name[len] = 0;
+	name = string(format).substr(0, psz - format);	
 
 	// find streams
 	ClusterSpec cluster;
@@ -70,12 +72,14 @@ bool Spec::ParseFromString(char *format)
 		if (parsed != 4) {
 			_RPT2(_CRT_WARN, "PresetParse: no stream match (%d of 4) @ '%s'\n",
 				  parsed, format);
-			return false;
+			isValid = false;
+			return;
 		}
 		cluster.color = ColorModeFromName(color);
 		if (cluster.color < 0) {
 			_RPT1(_CRT_WARN, "PresetParse: bad color name '%s'\n", color);
-			return false;
+			isValid = false;
+			return;
 		}
 
 		// if it looks good, add it
@@ -92,7 +96,7 @@ bool Spec::ParseFromString(char *format)
 
 	// hooray, we win!
 	_RPT2(_CRT_WARN, "Read preset '%s': %d clusters\n", name, clusters.size());
-	return true;
+	isValid = true;	
 }
 
 

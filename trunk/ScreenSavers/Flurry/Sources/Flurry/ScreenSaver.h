@@ -18,7 +18,6 @@
 #include "FlurrySettings.h"
 #include "FlurryGroup.h"
 #include "TimeSupport.h"
-#include "AboutBox.h"
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -60,7 +59,7 @@ typedef struct FlurryAnimateChildInfo {
 //
 // local function prototypes
 
-static void ScreensaverCommonInit(void);
+static void ScreensaverCommonInit();
 static void ScreensaverRuntimeInit(HWND hWnd);
 static void AttachGLToWindow(FlurryAnimateChildInfo *child);
 static void DetachGLFromWindow(FlurryAnimateChildInfo *child);
@@ -74,4 +73,6 @@ static void ScreenSaverCreateChildren(HWND hWndParent);
 static BOOL CALLBACK ScreenSaverCreateChildrenCb(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData);
 static void ScreenSaverCreateChild(HWND hWndParent, RECT *rc, int iMonitor, char *device);
 static void ScreenSaverUpdateFpsIndicator(FlurryAnimateChildInfo *child);
-static void DoTestScreenSaver(void);
+static void DoTestScreenSaver();
+static void LoadDialogPresets(HWND hWnd);
+static void UpdateEditButtons(HWND hWnd);
