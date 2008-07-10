@@ -1,6 +1,6 @@
 Flurry for Windows
-Ported by Matt Ginzton, matt@maddogsw.com
-Updated by Julien Templier, littleboy22 at gmail dot com
+Ported by Matt Ginzton
+Updated by Julien Templier
 ---------------------------------------------------------------------------
 
 ***************************************************************************
@@ -33,17 +33,21 @@ You might try to rename the file to Flurry.sCr as a workaround.
 
 ==== Release 1.3 ====
 
-Version 1.3.0 Build xx (08/xx/08)    
+Version 1.3.0 Build 26 (08/10/08)    
 	- UI Changes
 	  * Moved credits to About window
 	  * Added UI for shrink percentage & FPS indicator (only in single-buffer mode)
-	  * Added custom resolution option	
+	  * Added UI for Block & Whiteout modes	
+	- Editor
+	  * Added new/edit/delete buttons
+	  * Added Editor dialog (not yet functional)
 	- Refactoring of code
 	  * separated settings in a class (preparing for per-monitor flurries)
 	  * Removed some global variables
 	  * cleanup/rename: all classes are now in the Flurry namespace
+	  * Updated Spec class (copy constructor, misc updates) in preparation for editor
 	- Bug fixed
-	  * Preview was not showing the selected preset correctly
+	  * Preview was not showing the selected preset correctly	  
 
 ==== Release 1.2 ====
 
@@ -119,13 +123,16 @@ Version 1.0.0.4 (5/20/2003)
 - Check out julien.wincustomize.com for updates
 - Updates may be available at http://www.maddogsw.com/flurry/
 
+Source code is available in the subversion repository here: 
+http://code.google.com/p/threeoaks/
+
 ***************************************************************************
 ** License
 ***************************************************************************
 
 Copyright (c) 2003, Matt Ginzton
 Portions copyright (c) 2002, Calum Robinson
-Portions copyright (c) 2005,2008, Julien Templier
+Portions copyright (c) 2005-2008, Julien Templier
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -154,6 +161,3 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Enjoy!
-
-- matt@maddogsw.com
-- littleboy22 at gmail.com
