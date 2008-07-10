@@ -728,7 +728,9 @@ static void UpdateEditButtons(HWND hWnd)
 	int index = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_FLURRY));
 
 	// Disable edit/delete for read-only presets
-	BOOL enabled = (index < PRESETS_READONLY ? FALSE : TRUE);
+	//BOOL enabled = (index < PRESETS_READONLY ? FALSE : TRUE);
+	BOOL enabled = FALSE;
+	EnableWindow(GetDlgItem(hWnd, IDC_FLURRY_EDIT), enabled);
 	
 	EnableWindow(GetDlgItem(hWnd, IDC_FLURRY_EDIT), enabled);
 	EnableWindow(GetDlgItem(hWnd, IDC_FLURRY_DELETE), enabled);

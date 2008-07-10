@@ -65,8 +65,8 @@ FONT 9, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
     GROUPBOX        "Flurry appearance",IDC_STATIC,7,7,194,57
     LTEXT           "Choose your flurry:",IDC_STATIC,16,18,111,8
-    COMBOBOX        IDC_FLURRY,16,29,170,95,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "Edit",IDC_FLURRY_EDIT,101,46,40,14,WS_DISABLED
+    COMBOBOX        IDC_FLURRY,16,29,179,95,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Edit",IDC_FLURRY_EDIT,110,46,40,14,WS_DISABLED
     GROUPBOX        "Multi-monitor options",IDC_STATIC,7,70,194,53
     CONTROL         "One flurry, covering entire desktop",IDC_POSITION_DESKTOP,
                     "Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,16,81,151,10
@@ -92,8 +92,9 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,233,182,10
     CONTROL         "Block Mode",IDC_BLOCK_MODE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,218,51,10
     CONTROL         "Whiteout Mode",IDC_WHITEOUT_MODE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,113,218,65,10
-    PUSHBUTTON      "Delete",IDC_FLURRY_DELETE,146,46,40,14,WS_DISABLED
-    PUSHBUTTON      "New",IDC_FLURRY_NEW,56,46,40,14
+    PUSHBUTTON      "Delete",IDC_FLURRY_DELETE,155,46,40,14,WS_DISABLED
+    PUSHBUTTON      "New",IDC_FLURRY_NEW,66,46,40,14,WS_DISABLED
+    LTEXT           "Coming Soon™",IDC_SOON,13,50,48,8
 END
 
 DLG_CREDITS DIALOGEX 0, 0, 210, 154
@@ -104,10 +105,10 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
     DEFPUSHBUTTON   "O&K",IDOK,153,133,50,14
     LTEXT           "Brian Wade wrote Seraphim for Windows. I never saw it, but it must have been cool.",IDC_STATIC,7,7,196,17
-    LTEXT           "Calum Robinson turned Seraphim into Flurry for Mac OS X, which I have seen and can vouch for: it's cool.",IDC_STATIC,7,29,196,17
-    LTEXT           "Matt Ginzton turned that into Flurry for Windows. You're about to run it; you decide for yourself if it's cool.",IDC_STATIC,7,53,196,17
-    LTEXT           "Flurry uses OpenGL. Thanks to OpenGL, the same core Flurry code runs on OS X, Windows, and the X Window System. OpenGL is definitely cool.",IDC_STATIC,7,102,196,28
-    LTEXT           "Julien Templier corrected registry reading bugs, got rid of deprecated function calls and added a new about dialog.",IDC_STATIC,7,76,196,27
+    LTEXT           "Calum Robinson turned Seraphim into Flurry for Mac OS X, which I have seen and can vouch for: it's cool.",IDC_STATIC,7,28,196,17
+    LTEXT           "Matt Ginzton turned that into Flurry for Windows. You're about to run it; you decide for yourself if it's cool.",IDC_STATIC,7,52,196,17
+    LTEXT           "Flurry uses OpenGL. Thanks to OpenGL, the same core Flurry code runs on OS X, Windows, and the X Window System. OpenGL is definitely cool.",IDC_STATIC,7,105,196,28
+    LTEXT           "Julien Templier corrected registry reading bugs, got rid of deprecated function calls and added a new about dialog. He also updated the configuration UI and added a flurry editor.",IDC_STATIC,7,75,196,27
 END
 
 IDD_ABOUTBOX DIALOGEX 0, 0, 200, 254
@@ -210,8 +211,8 @@ ID_APP                  ICON                    "flurry.ico"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,2,1,0
- PRODUCTVERSION 1,2,1,0
+ FILEVERSION 1,3,0,0
+ PRODUCTVERSION 1,3,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x29L
@@ -228,12 +229,12 @@ BEGIN
         BEGIN
             VALUE "Comments", "Flurry, everyone's favorite ScreenSaver, now for Windows..."
             VALUE "FileDescription", "Flurry ScreenSaver for Windows"
-            VALUE "FileVersion", "1.2.1"
+            VALUE "FileVersion", "1.3.0"
             VALUE "InternalName", "Flurry"
-            VALUE "LegalCopyright", "©2003 Matt Ginzton, ©2005,2008 Julien Templier"
+            VALUE "LegalCopyright", "©2003 Matt Ginzton, ©2005-2008 Julien Templier"
             VALUE "OriginalFilename", "Flurry.scr"
             VALUE "ProductName", "Flurry for Windows"
-            VALUE "ProductVersion", "1.2.1"
+            VALUE "ProductVersion", "1.3.0"
         END
     END
     BLOCK "VarFileInfo"

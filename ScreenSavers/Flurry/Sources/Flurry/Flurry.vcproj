@@ -129,7 +129,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="&quot;C:\Program Files\TortoiseSVN\bin\SubWCRev.exe&quot; $(ProjectDir) &quot;$(ProjectDir)/VersionNo.tpl&quot; &quot;$(ProjectDir)/VersionNo.h&quot;"
+				CommandLine="&quot;C:\Program Files\TortoiseSVN\bin\SubWCRev.exe&quot; &quot;$(ProjectDir)/..&quot; &quot;$(ProjectDir)/VersionNo.tpl&quot; &quot;$(ProjectDir)/VersionNo.h&quot;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
