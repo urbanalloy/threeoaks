@@ -24,6 +24,8 @@
 #include <multimon.h>
 
 #include "ScreenSaver.h"
+#include "Editor.h"
+#include "AboutBox.h"
 #include "resource.h"
 
 using namespace Flurry;
@@ -271,7 +273,9 @@ LRESULT WINAPI FlurryAnimateChildWindowProc(HWND hWnd, UINT message, WPARAM wPar
 			child->hWnd = hWnd;
 			SetWindowLong(hWnd, GWL_USERDATA, (LONG)child);
 			// initialize flurry struct
-			int preset = (signed)settings->multiMonPreset.size() == 1 ? settings->globalPreset : settings->multiMonPreset[child->id];
+			int preset = (settings->multiMonPosition == Settings.MULTIMON_PERMONITOR ?
+						  settings->multiMonPreset[child->id] :
+						  settings->globalPreset);
 			child->flurry = new Group(preset, settings);
 			// prepare OpenGL context
 			AttachGLToWindow(child);
@@ -360,6 +364,196 @@ BOOL WINAPI RegisterDialogClasses(HANDLE hInst)
 	return TRUE;
 }
 
+// WGL attach/detach code
+static void AttachGLToWindow(FlurryAnimateChildInfo *child)
+{
+	// find current display settings on this monitor
+	DEVMODE mode;
+	EnumDisplaySettings(child->device, ENUM_CURRENT_SETTINGS, &mode);
+	_RPT4(_CRT_WARN, "  current display settings %dx%dx%dbpp@%dHz\n",
+		mode.dmPelsWidth, mode.dmPelsHeight, mode.dmBitsPerPel, mode.dmDisplayFrequency);
+	if (mode.dmDisplayFrequency == 0) {	// query failed
+		mode.dmDisplayFrequency = 60;	// default to sane value
+	}
+	_RPT1(_CRT_WARN, "  refresh time = %d ms\n", 1000 / mode.dmDisplayFrequency);
+	child->updateInterval = 1000 / mode.dmDisplayFrequency;
+
+	// build a pixel format
+	int iPixelFormat;
+	RECT rc;
+	PIXELFORMATDESCRIPTOR pfd = {
+		sizeof(PIXELFORMATDESCRIPTOR),    // structure size
+		1,                                // version number
+		PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL, // flags: support OpenGL rendering to visible window
+		PFD_TYPE_RGBA,                    // pixel format: RGBA
+		(BYTE)mode.dmBitsPerPel,          // color depth, excluding alpha -- use whatever it's doing now
+		0, 0, 0, 0, 0, 0, 8, 0,           // color bits ignored?
+		0,                                // no accumulation buffer
+		0, 0, 0, 0,                       // accum bits ignored
+		16,                               // 16-bit z-buffer
+		0,                                // no stencil buffer
+		0,                                // no auxiliary buffer
+		PFD_MAIN_PLANE,                   // main layer
+		0,                                // reserved
+		0, 0, 0                           // layer masks ignored
+	};
+
+	if (settings->settingBufferMode > settings->BUFFER_MODE_SINGLE) {
+		pfd.dwFlags |= PFD_DOUBLEBUFFER;
+	}
+
+	// need a DC for the pixel format
+	child->hdc = GetDC(child->hWnd);
+
+	// apply pixel format to DC
+	iPixelFormat = ChoosePixelFormat(child->hdc, &pfd);
+	SetPixelFormat(child->hdc, iPixelFormat, &pfd);
+
+	// then use this to create a rendering context
+	child->hglrc = wglCreateContext(child->hdc);
+	wglMakeCurrent(child->hdc, child->hglrc);
+
+	// tell Flurry to use the whole window as viewport
+	GetClientRect(child->hWnd, &rc);
+	child->flurry->SetSize(rc.right - rc.left, rc.bottom - rc.top);
+
+	// some nice debug output
+	_RPT4(_CRT_WARN, "  child 0x%08x: hWnd 0x%08x, hdc 0x%08x, hglrc 0x%08x\n",
+		child, child->hWnd, child->hdc, child->hglrc);
+	_RPT1(_CRT_WARN, "  GL vendor:     %s\n", glGetString(GL_VENDOR));
+	_RPT1(_CRT_WARN, "  GL renderer:   %s\n", glGetString(GL_RENDERER));
+	_RPT1(_CRT_WARN, "  GL version:    %s\n", glGetString(GL_VERSION));
+	_RPT1(_CRT_WARN, "  GL extensions: %s\n", glGetString(GL_EXTENSIONS));
+	_RPT0(_CRT_WARN, "\n");
+}
+
+
+static void DetachGLFromWindow(FlurryAnimateChildInfo *child)
+{
+	if (child->hglrc == wglGetCurrentContext()) {
+		_RPT1(_CRT_WARN, "Evicting context %d\n", child->id);
+		wglMakeCurrent(NULL, NULL);
+	}
+	if (!wglDeleteContext(child->hglrc)) {
+		_RPT2(_CRT_WARN, "Failed to delete context for %d: %d\n",
+			child->id, GetLastError());
+	}
+	ReleaseDC(child->hWnd, child->hdc);
+}
+
+
+static void CopyFrontBufferToBack(HWND hWnd)
+{
+	static BOOL bFirstTime = TRUE;
+
+	// copy front buffer to back buffer, to compensate for Windows'
+	// possibly weird implementation of SwapBuffers().  As documented, it
+	// reserves the right to leave the back buffer completely undefined
+	// after each swap, but on both my ATI Radeon 8500 and NVidia GF4Ti4200
+	// it works almost fine to just copy front to back once like this.
+	if ((settings->settingBufferMode == settings->BUFFER_MODE_SAFE_DOUBLE) ||
+		(settings->settingBufferMode == settings->BUFFER_MODE_FAST_DOUBLE && bFirstTime)) {
+			RECT rc;
+			GetClientRect(hWnd, &rc);
+
+			glDisable(GL_ALPHA_TEST);
+			if (!settings->bugWhiteout) {
+				// Found this by accident; Adam likes it.  Freakshow option #1.
+				glDisable(GL_BLEND);
+			}
+			glReadBuffer(GL_FRONT);
+			glDrawBuffer(GL_BACK);
+			glRasterPos2i(0, 0);
+			glCopyPixels(0, 0, rc.right, rc.bottom, GL_COLOR);
+			if (!settings->bugWhiteout) {
+				glEnable(GL_BLEND);
+			}
+			glEnable(GL_ALPHA_TEST);
+
+			bFirstTime = FALSE;
+	}
+}
+
+
+
+
+static void ScreenSaverUpdateFpsIndicator(FlurryAnimateChildInfo *child)
+{
+	DWORD now = timeGetTime();
+	FPS *fps = &child->fps;
+	DWORD prevSample, prevRingSample = fps->samples[fps->nextSample];
+	char buf[100];
+	double last, recent, overall;
+
+	// always gather data in case they turn on FPS later
+	prevRingSample = fps->samples[fps->nextSample];
+	prevSample = (fps->nSamples == 0) ? fps->startTime :
+		((fps->nextSample == 0) ? fps->samples[FPS_SAMPLES - 1] :
+		fps->samples[fps->nextSample - 1]);
+
+	fps->samples[fps->nextSample] = now;
+	fps->nextSample = (fps->nextSample + 1) % FPS_SAMPLES;
+	fps->nSamples++;
+
+	_RPT3(_CRT_WARN, "Child %d: last render %d ms (target %d ms)\n",
+		child->id, now - prevSample, child->updateInterval);
+
+	// but the rest of the work is only necessary if they want to see it
+	if (!settings->showFPSIndicator) {
+		return;
+	}
+
+	// calculate overall, simple average
+	overall = 1000.0 * fps->nSamples / (now - fps->startTime);
+
+	// calculate last frame; in ring buffer if more than one, else same
+	if (fps->nSamples == 1) {
+		last = overall;
+	} else {
+		last = 1000.0 / (now - prevSample);
+	}
+
+	// calculate last 20; in ring buffer if more than 20, else same
+	if (fps->nSamples < FPS_SAMPLES) {
+		// ring buffer not full yet; just use from front till now
+		recent = overall;
+	} else {
+		// ring buffer has full set of samples; use most recent set
+		recent = 1000.0 / (now - prevRingSample) * FPS_SAMPLES;
+	}
+
+	sprintf(buf, "FPS: Overall %.1f / Recent %.1f / Last %.1f   ", overall, recent, last);
+	TextOut(child->hdc, 5, 5, buf, lstrlen(buf));
+}
+
+
+static void DoTestScreenSaver(void)
+{
+	// calculate desktop rect
+	int screenX = GetSystemMetrics(SM_XVIRTUALSCREEN);
+	int screenY = GetSystemMetrics(SM_YVIRTUALSCREEN);
+	int screenW = GetSystemMetrics(SM_CXVIRTUALSCREEN);
+	int screenH = GetSystemMetrics(SM_CYVIRTUALSCREEN);
+
+	// create fullscreen window
+	WNDCLASS wc = { 0 };
+	wc.lpszClassName = "FlurryTestWindow";
+	wc.lpfnWndProc = ScreenSaverProc;
+	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+	RegisterClass(&wc);
+
+	g_bPreviewMode = true;
+	CreateWindowEx(WS_EX_TOPMOST, wc.lpszClassName, wc.lpszClassName, WS_VISIBLE | WS_POPUP,
+		screenX, screenY, screenW, screenH, NULL, NULL, _Module.m_hInst, NULL);
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+//
+//  CONFIGURATION
+//
+//////////////////////////////////////////////////////////////////////////
+
 
 /*
  * ScreenSaverConfigureDialog
@@ -376,11 +570,13 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 			SettingsDialogInit(hWnd);
 			SettingsDialogEnableControls(hWnd);
 			SettingsToDialog(hWnd);
+			UpdateEditButtons(hWnd);
 			return TRUE;
 			break;
 
 		case WM_COMMAND:
 			switch (LOWORD(wParam)) {
+
 				// command buttons:
 				case IDOK:
 					SettingsFromDialog(hWnd);
@@ -396,6 +592,46 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 				case IDC_TEST:
 					SettingsFromDialog(hWnd);
 					DoTestScreenSaver();
+					return TRUE;
+
+				case IDC_FLURRY:
+					if (HIWORD(wParam) == CBN_SELCHANGE)
+						UpdateEditButtons(hWnd);			
+					break;
+
+				case IDC_FLURRY_NEW:
+					{
+						int size = settings->visuals.size();
+						int index = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_FLURRY));
+
+						CEditor::AutomaticDoModal(NULL);
+						settings->ReloadVisuals();	
+						LoadDialogPresets(hWnd);
+
+						// check if a new preset has been added and select it
+						int newIndex = (size < (signed)settings->visuals.size() ? settings->visuals.size() - 1 : index);
+						ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_FLURRY), newIndex);
+					}					
+					return TRUE;
+
+				case IDC_FLURRY_EDIT:
+					{
+						int index = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_FLURRY));
+						CEditor::AutomaticDoModal(settings->visuals[index]);
+						settings->ReloadVisuals();	
+						LoadDialogPresets(hWnd);
+
+						ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_FLURRY), index);
+					}					
+					return TRUE;
+
+				case IDC_FLURRY_DELETE:
+					settings->DeleteVisual(ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_FLURRY)));
+					settings->ReloadVisuals();					
+					LoadDialogPresets(hWnd);
+
+					// Select the first preset
+					ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_FLURRY), settings->globalPreset);
 					return TRUE;
 
 					// radio buttons:
@@ -445,13 +681,36 @@ static void SettingsDialogEnableControls(HWND hWnd)
 }
 
 //////////////////////////////////////////////////////////////////////////
+// Load the list of presets
+static void LoadDialogPresets(HWND hWnd)
+{
+	HWND hPresetList = GetDlgItem(hWnd, IDC_FLURRY);
+
+	ComboBox_ResetContent(hPresetList);
+
+	for (int i = 0; i < (signed)settings->visuals.size(); i++) {
+		ComboBox_AddString(hPresetList, settings->visuals[i]->name.c_str());
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Enable/Disable edit buttons for read-only presets
+static void UpdateEditButtons(HWND hWnd)
+{
+	int index = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_FLURRY));
+
+	// Disable edit/delete for read-only presets
+	BOOL enabled = (index < PRESETS_READONLY ? FALSE : TRUE);
+	
+	EnableWindow(GetDlgItem(hWnd, IDC_FLURRY_EDIT), enabled);
+	EnableWindow(GetDlgItem(hWnd, IDC_FLURRY_DELETE), enabled);
+}
+
+//////////////////////////////////////////////////////////////////////////
 // Init settings dialog
 static void SettingsDialogInit(HWND hWnd)
 {
-	HWND hPresetList = GetDlgItem(hWnd, IDC_VISUAL);
-	for (int i = 0; i < (signed)settings->visuals.size(); i++) {
-		ComboBox_AddString(hPresetList, settings->visuals[i]->name);
-	}
+	LoadDialogPresets(hWnd);
 
 	// Init the slider control (Shrink percentage)
 	SendDlgItemMessage(hWnd, IDC_SHRINK, TBM_SETRANGE, FALSE, MAKELONG(SHRINK_MIN, SHRINK_MAX));			
@@ -469,12 +728,13 @@ static void SettingsDialogInit(HWND hWnd)
 	DestroyIcon((HICON)hIcon);
 }
 
+
 //////////////////////////////////////////////////////////////////////////
 // Load settings into the dialog
 static void SettingsToDialog(HWND hWnd)
 {
 	// visual preset
-	ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_VISUAL), settings->globalPreset);
+	ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_FLURRY), settings->globalPreset);
 
 	// multi-monitor options
 	if (g_nMonitors <= 1) {
@@ -492,6 +752,10 @@ static void SettingsToDialog(HWND hWnd)
 	// Shrink percentage
 	SendDlgItemMessage(hWnd, IDC_SHRINK, TBM_SETPOS, TRUE, (LONG)settings->shrinkPercentage);
 
+	// Block & Whiteout mode
+	CheckDlgButton(hWnd, IDC_BLOCK_MODE, settings->bugBlockMode);
+	CheckDlgButton(hWnd, IDC_WHITEOUT_MODE, settings->bugWhiteout);
+
 	// FPS Indicator
 	EnableWindow(GetDlgItem(hWnd, IDC_FPS_INDICATOR), settings->settingBufferMode == settings->BUFFER_MODE_SINGLE);
 	CheckDlgButton(hWnd, IDC_FPS_INDICATOR, settings->showFPSIndicator);
@@ -502,7 +766,7 @@ static void SettingsToDialog(HWND hWnd)
 static void SettingsFromDialog(HWND hWnd)
 {
 	// visual preset
-	settings->globalPreset = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_VISUAL));
+	settings->globalPreset = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_FLURRY));
 
 	// Update per-monitor presets
 	// FIXME: should work through ASSIGN option
@@ -531,188 +795,10 @@ static void SettingsFromDialog(HWND hWnd)
 
 	// FPS indicator
 	settings->showFPSIndicator = IsDlgButtonChecked(hWnd, IDC_FPS_INDICATOR);
+
+	// Block & Whiteout mode
+	settings->bugBlockMode = IsDlgButtonChecked(hWnd, IDC_BLOCK_MODE);
+	settings->bugWhiteout = IsDlgButtonChecked(hWnd, IDC_WHITEOUT_MODE);
 }
 
 
-// WGL attach/detach code
-static void AttachGLToWindow(FlurryAnimateChildInfo *child)
-{
-	// find current display settings on this monitor
-	DEVMODE mode;
-	EnumDisplaySettings(child->device, ENUM_CURRENT_SETTINGS, &mode);
-	_RPT4(_CRT_WARN, "  current display settings %dx%dx%dbpp@%dHz\n",
-	      mode.dmPelsWidth, mode.dmPelsHeight, mode.dmBitsPerPel, mode.dmDisplayFrequency);
-	if (mode.dmDisplayFrequency == 0) {	// query failed
-		 mode.dmDisplayFrequency = 60;	// default to sane value
-	}
-	_RPT1(_CRT_WARN, "  refresh time = %d ms\n", 1000 / mode.dmDisplayFrequency);
-	child->updateInterval = 1000 / mode.dmDisplayFrequency;
-
-	// build a pixel format
-	int iPixelFormat;
-	RECT rc;
-	PIXELFORMATDESCRIPTOR pfd = {
-		sizeof(PIXELFORMATDESCRIPTOR),    // structure size
-		1,                                // version number
-		PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL, // flags: support OpenGL rendering to visible window
-		PFD_TYPE_RGBA,                    // pixel format: RGBA
-		(BYTE)mode.dmBitsPerPel,          // color depth, excluding alpha -- use whatever it's doing now
-		0, 0, 0, 0, 0, 0, 8, 0,           // color bits ignored?
-		0,                                // no accumulation buffer
-		0, 0, 0, 0,                       // accum bits ignored
-		16,                               // 16-bit z-buffer
-		0,                                // no stencil buffer
-		0,                                // no auxiliary buffer
-		PFD_MAIN_PLANE,                   // main layer
-		0,                                // reserved
-		0, 0, 0                           // layer masks ignored
-	};
-
-	if (settings->settingBufferMode > settings->BUFFER_MODE_SINGLE) {
-		pfd.dwFlags |= PFD_DOUBLEBUFFER;
-	}
-
-	// need a DC for the pixel format
-	child->hdc = GetDC(child->hWnd);
-
-	// apply pixel format to DC
-	iPixelFormat = ChoosePixelFormat(child->hdc, &pfd);
-	SetPixelFormat(child->hdc, iPixelFormat, &pfd);
-	
-	// then use this to create a rendering context
-	child->hglrc = wglCreateContext(child->hdc);
-	wglMakeCurrent(child->hdc, child->hglrc);
-
-	// tell Flurry to use the whole window as viewport
-	GetClientRect(child->hWnd, &rc);
-	child->flurry->SetSize(rc.right - rc.left, rc.bottom - rc.top);
-
-	// some nice debug output
-	_RPT4(_CRT_WARN, "  child 0x%08x: hWnd 0x%08x, hdc 0x%08x, hglrc 0x%08x\n",
-		  child, child->hWnd, child->hdc, child->hglrc);
-	_RPT1(_CRT_WARN, "  GL vendor:     %s\n", glGetString(GL_VENDOR));
-	_RPT1(_CRT_WARN, "  GL renderer:   %s\n", glGetString(GL_RENDERER));
-	_RPT1(_CRT_WARN, "  GL version:    %s\n", glGetString(GL_VERSION));
-	_RPT1(_CRT_WARN, "  GL extensions: %s\n", glGetString(GL_EXTENSIONS));
-	_RPT0(_CRT_WARN, "\n");
-}
-
-
-static void DetachGLFromWindow(FlurryAnimateChildInfo *child)
-{
-	if (child->hglrc == wglGetCurrentContext()) {
-		_RPT1(_CRT_WARN, "Evicting context %d\n", child->id);
-		wglMakeCurrent(NULL, NULL);
-	}
-	if (!wglDeleteContext(child->hglrc)) {
-		_RPT2(_CRT_WARN, "Failed to delete context for %d: %d\n",
-			  child->id, GetLastError());
-	}
-	ReleaseDC(child->hWnd, child->hdc);
-}
-
-
-static void CopyFrontBufferToBack(HWND hWnd)
-{
-	static BOOL bFirstTime = TRUE;
-
-	// copy front buffer to back buffer, to compensate for Windows'
-	// possibly weird implementation of SwapBuffers().  As documented, it
-	// reserves the right to leave the back buffer completely undefined
-	// after each swap, but on both my ATI Radeon 8500 and NVidia GF4Ti4200
-	// it works almost fine to just copy front to back once like this.
-	if ((settings->settingBufferMode == settings->BUFFER_MODE_SAFE_DOUBLE) ||
-		(settings->settingBufferMode == settings->BUFFER_MODE_FAST_DOUBLE && bFirstTime)) {
-		RECT rc;
-		GetClientRect(hWnd, &rc);
-
-		glDisable(GL_ALPHA_TEST);
-		if (!settings->bugWhiteout) {
-			// Found this by accident; Adam likes it.  Freakshow option #1.
-			glDisable(GL_BLEND);
-		}
-		glReadBuffer(GL_FRONT);
-		glDrawBuffer(GL_BACK);
-		glRasterPos2i(0, 0);
-		glCopyPixels(0, 0, rc.right, rc.bottom, GL_COLOR);
-		if (!settings->bugWhiteout) {
-			glEnable(GL_BLEND);
-		}
-		glEnable(GL_ALPHA_TEST);
-
-		bFirstTime = FALSE;
-	}
-}
-
-
-
-
-static void ScreenSaverUpdateFpsIndicator(FlurryAnimateChildInfo *child)
-{
-	DWORD now = timeGetTime();
-	FPS *fps = &child->fps;
-	DWORD prevSample, prevRingSample = fps->samples[fps->nextSample];
-	char buf[100];
-	double last, recent, overall;
-
-	// always gather data in case they turn on FPS later
-	prevRingSample = fps->samples[fps->nextSample];
-	prevSample = (fps->nSamples == 0) ? fps->startTime :
-				((fps->nextSample == 0) ? fps->samples[FPS_SAMPLES - 1] :
-				fps->samples[fps->nextSample - 1]);
-
-	fps->samples[fps->nextSample] = now;
-	fps->nextSample = (fps->nextSample + 1) % FPS_SAMPLES;
-	fps->nSamples++;
-
-	_RPT3(_CRT_WARN, "Child %d: last render %d ms (target %d ms)\n",
-					 child->id, now - prevSample, child->updateInterval);
-
-	// but the rest of the work is only necessary if they want to see it
-	if (!settings->showFPSIndicator) {
-		return;
-	}
-
-	// calculate overall, simple average
-	overall = 1000.0 * fps->nSamples / (now - fps->startTime);
-
-	// calculate last frame; in ring buffer if more than one, else same
-	if (fps->nSamples == 1) {
-		last = overall;
-	} else {
-		last = 1000.0 / (now - prevSample);
-	}
-
-	// calculate last 20; in ring buffer if more than 20, else same
-	if (fps->nSamples < FPS_SAMPLES) {
-		// ring buffer not full yet; just use from front till now
-		recent = overall;
-	} else {
-		// ring buffer has full set of samples; use most recent set
-		recent = 1000.0 / (now - prevRingSample) * FPS_SAMPLES;
-	}
-
-	sprintf(buf, "FPS: Overall %.1f / Recent %.1f / Last %.1f   ", overall, recent, last);
-	TextOut(child->hdc, 5, 5, buf, lstrlen(buf));
-}
-
-
-static void DoTestScreenSaver(void)
-{
-	// calculate desktop rect
-	int screenX = GetSystemMetrics(SM_XVIRTUALSCREEN);
-	int screenY = GetSystemMetrics(SM_YVIRTUALSCREEN);
-	int screenW = GetSystemMetrics(SM_CXVIRTUALSCREEN);
-	int screenH = GetSystemMetrics(SM_CYVIRTUALSCREEN);
-
-	// create fullscreen window
-	WNDCLASS wc = { 0 };
-	wc.lpszClassName = "FlurryTestWindow";
-	wc.lpfnWndProc = ScreenSaverProc;
-	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-	RegisterClass(&wc);
-
-	g_bPreviewMode = true;
-	CreateWindowEx(WS_EX_TOPMOST, wc.lpszClassName, wc.lpszClassName, WS_VISIBLE | WS_POPUP,
-				   screenX, screenY, screenW, screenH, NULL, NULL, _Module.m_hInst, NULL);
-}
