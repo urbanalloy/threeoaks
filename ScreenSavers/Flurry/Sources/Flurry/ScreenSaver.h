@@ -104,3 +104,4 @@ static void ScreenSaverUpdateFpsIndicator(FlurryAnimateChildInfo *child);
 static void DoTestScreenSaver();
 static void LoadDialogPresets(HWND hWnd);
 static void UpdateEditButtons(HWND hWnd);
+static BOOL WINAPI AssignDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);

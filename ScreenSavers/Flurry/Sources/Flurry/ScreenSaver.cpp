@@ -302,7 +302,7 @@ LRESULT WINAPI FlurryAnimateChildWindowProc(HWND hWnd, UINT message, WPARAM wPar
 			SetWindowLong(hWnd, GWL_USERDATA, (LONG)child);
 			// initialize flurry struct
 			int preset = (settings->multiMonPosition == Settings::MULTIMON_PERMONITOR ?
-						  settings->multiMonPreset[child->id] :
+						  settings->GetPresetForMonitor(child->id) :
 						  settings->globalPreset);
 			child->flurry = new Group(preset, settings);
 			// prepare OpenGL context
@@ -627,6 +627,12 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 						UpdateEditButtons(hWnd);			
 					break;
 
+				case IDC_POSITION_PER_CONFIGURE:
+					{																	
+						DialogBoxParam(NULL, MAKEINTRESOURCE(DLG_ASSIGN), hWnd, AssignDialog, 0);
+					}					
+					return TRUE;
+
 				case IDC_FLURRY_NEW:
 					{
 						int size = settings->visuals.size();
@@ -654,12 +660,19 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 					return TRUE;
 
 				case IDC_FLURRY_DELETE:
-					settings->DeleteVisual(ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_FLURRY)));
-					settings->ReloadVisuals();					
-					LoadDialogPresets(hWnd);
+					{
+						int index = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_FLURRY));
 
-					// Select the first preset
-					ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_FLURRY), settings->globalPreset);
+						if (index == -1)
+							return TRUE;
+
+						settings->DeleteVisual(index);
+						settings->ReloadVisuals();					
+						LoadDialogPresets(hWnd);
+
+						// Reselect a preset
+						ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_FLURRY), settings->globalPreset);						
+					}				
 					return TRUE;
 
 					// radio buttons:
@@ -684,6 +697,22 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 	return FALSE;
 }
 
+// Assign Dialog
+static BOOL WINAPI AssignDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	switch (message) {
+		case WM_INITDIALOG:
+			return TRUE;
+			break;
+
+		case WM_COMMAND:
+			EndDialog(hDlg, 1);
+			break;
+	}
+
+	return FALSE;
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Update controls on settings dialog
 //  - enable/disable multi-monitor options
@@ -699,10 +728,6 @@ static void SettingsDialogEnableControls(HWND hWnd)
 		EnableWindow(GetDlgItem(hWnd, IDC_POSITION_PER), FALSE);
 		EnableWindow(GetDlgItem(hWnd, IDC_POSITION_PER_CONFIGURE), FALSE);
 	}
-
-	// XXX and per-monitor flurry assignment isn't implemented yet anyway
-	EnableWindow(GetDlgItem(hWnd, IDC_POSITION_PER_CONFIGURE), FALSE);
-	EnableWindow(GetDlgItem(hWnd, IDC_POSITION_PER), FALSE);
 
 	// Enable FPS only in single-buffer mode
 	EnableWindow(GetDlgItem(hWnd, IDC_FPS_INDICATOR), IsDlgButtonChecked(hWnd, IDC_DOUBLE_BUFFER_NONE));
@@ -722,18 +747,20 @@ static void LoadDialogPresets(HWND hWnd)
 }
 
 //////////////////////////////////////////////////////////////////////////
-// Enable/Disable edit buttons for read-only presets
+// Enable/Disable edit buttons for read-only presets and multi-monitor
 static void UpdateEditButtons(HWND hWnd)
 {
 	int index = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_FLURRY));
 
 	// Disable edit/delete for read-only presets
-	//BOOL enabled = (index < PRESETS_READONLY ? FALSE : TRUE);
-	BOOL enabled = FALSE;
-	EnableWindow(GetDlgItem(hWnd, IDC_FLURRY_EDIT), enabled);
+	BOOL enabled = (index < PRESETS_READONLY ? FALSE : TRUE);
 	
 	EnableWindow(GetDlgItem(hWnd, IDC_FLURRY_EDIT), enabled);
 	EnableWindow(GetDlgItem(hWnd, IDC_FLURRY_DELETE), enabled);
+
+	if (IsWindowEnabled(GetDlgItem(hWnd, IDC_POSITION_PER)) && IsDlgButtonChecked(hWnd, IDC_POSITION_PER))
+		EnableWindow(GetDlgItem(hWnd, IDC_POSITION_PER_CONFIGURE), TRUE);
+
 }
 
 //////////////////////////////////////////////////////////////////////////

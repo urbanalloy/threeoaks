@@ -72,8 +72,8 @@ BEGIN
                     "Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,16,81,151,10
     CONTROL         "One flurry, on the primary monitor only",IDC_POSITION_PRIMARY,
                     "Button",BS_AUTORADIOBUTTON,16,94,160,10
-    CONTROL         "A new flurry on each monitor",IDC_POSITION_PER,"Button",BS_AUTORADIOBUTTON | WS_DISABLED,16,108,122,10
-    PUSHBUTTON      "Assign...",IDC_POSITION_PER_CONFIGURE,150,104,41,13,NOT WS_VISIBLE
+    CONTROL         "A new flurry on each monitor",IDC_POSITION_PER,"Button",BS_AUTORADIOBUTTON,16,108,122,10
+    PUSHBUTTON      "Assign...",IDC_POSITION_PER_CONFIGURE,153,106,41,13,WS_DISABLED
     GROUPBOX        "Rendering options",IDC_STATIC,7,129,194,53
     CONTROL         "&Single buffered (fast, may tear)",IDC_DOUBLE_BUFFER_NONE,
                     "Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,16,142,175,10
@@ -93,7 +93,7 @@ BEGIN
     CONTROL         "Block Mode",IDC_BLOCK_MODE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,218,51,10
     CONTROL         "Whiteout Mode",IDC_WHITEOUT_MODE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,113,218,65,10
     PUSHBUTTON      "Delete",IDC_FLURRY_DELETE,155,46,40,14,WS_DISABLED
-    PUSHBUTTON      "New",IDC_FLURRY_NEW,66,46,40,14,WS_DISABLED
+    PUSHBUTTON      "New",IDC_FLURRY_NEW,66,46,40,14
     LTEXT           "Coming Soon™",IDC_SOON,13,50,48,8
 END
 
@@ -152,6 +152,20 @@ BEGIN
     EDITTEXT        IDC_STREAMS,42,110,32,13,ES_AUTOHSCROLL | ES_NUMBER
 END
 
+DLG_ASSIGN DIALOGEX 0, 0, 191, 73
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_TOOLWINDOW
+CAPTION "Assign..."
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,80,52,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,134,52,50,14
+    COMBOBOX        IDC_MONITOR_LIST,46,7,138,39,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Monitor",IDC_TEXT_MONITOR,7,9,25,8
+    LTEXT           "Flurry",IDC_TEXT_FLURRY,7,31,20,8
+    COMBOBOX        IDC_FLURRY_LIST,46,28,138,41,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -192,6 +206,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 199
     END
+
+    DLG_ASSIGN, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 184
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 66
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -211,8 +233,8 @@ ID_APP                  ICON                    "flurry.ico"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,3,0,0
- PRODUCTVERSION 1,3,0,0
+ FILEVERSION 1,3,1,0
+ PRODUCTVERSION 1,3,1,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x29L
@@ -229,12 +251,12 @@ BEGIN
         BEGIN
             VALUE "Comments", "Flurry, everyone's favorite ScreenSaver, now for Windows..."
             VALUE "FileDescription", "Flurry ScreenSaver for Windows"
-            VALUE "FileVersion", "1.3.0"
+            VALUE "FileVersion", "1.3"
             VALUE "InternalName", "Flurry"
             VALUE "LegalCopyright", "©2003 Matt Ginzton, ©2005-2008 Julien Templier"
             VALUE "OriginalFilename", "Flurry.scr"
             VALUE "ProductName", "Flurry for Windows"
-            VALUE "ProductVersion", "1.3.0"
+            VALUE "ProductVersion", "1.3"
         END
     END
     BLOCK "VarFileInfo"
