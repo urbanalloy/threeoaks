@@ -204,6 +204,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Std.c"
+				>
+			</File>
+			<File
 				RelativePath=".\Texture.c"
 				>
 			</File>
