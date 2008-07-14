@@ -700,14 +700,82 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 // Assign Dialog
 static BOOL WINAPI AssignDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	// Local settings
+	vector<int> *multiMonPresets = (vector<int> *) GetProp(hDlg, "multiMonPresets");;
+
 	switch (message) {
 		case WM_INITDIALOG:
+			{
+				// Set local data
+				SetProp(hDlg, "multiMonPresets", new vector<int>());
+				multiMonPresets = (vector<int> *) GetProp(hDlg, "multiMonPresets");;
+
+				// List of monitors
+				HWND hMonitorList = GetDlgItem(hDlg, IDC_MONITOR_LIST);
+				ComboBox_ResetContent(hMonitorList);
+
+				for (int i = 0; i < g_nMonitors; i++) {
+					char monitor[20];
+					_snprintf_s(monitor, sizeof monitor, "Monitor %d", i+1);
+
+					ComboBox_AddString(hMonitorList, monitor);
+
+					multiMonPresets->push_back(settings->GetPresetForMonitor(i));
+				}
+			
+				// List of flurries
+				HWND hPresetList = GetDlgItem(hDlg, IDC_FLURRY_LIST);
+				ComboBox_ResetContent(hPresetList);
+
+				for (int i = 0; i < (signed)settings->visuals.size(); i++) {
+					ComboBox_AddString(hPresetList, settings->visuals[i]->name.c_str());
+				}
+
+				// Set the flurry for the monitor
+				ComboBox_SetCurSel(hMonitorList, 0);
+				ComboBox_SetCurSel(hPresetList, multiMonPresets->at(0));				
+			}
 			return TRUE;
 			break;
 
 		case WM_COMMAND:
-			EndDialog(hDlg, 1);
+			switch (LOWORD(wParam)) {
+
+				case IDOK:
+					// Save new settings
+					for (int i = 0; i < g_nMonitors; i++)
+						settings->multiMonPreset[i] = multiMonPresets->at(i);					
+
+					EndDialog(hDlg, 1);
+					return TRUE;
+
+				case IDCANCEL:
+					EndDialog(hDlg, 0);
+					return TRUE;
+
+				case IDC_MONITOR_LIST:
+					// Update the flurry preset for the monitor
+					if (HIWORD(wParam) == CBN_SELCHANGE)
+						ComboBox_SetCurSel(GetDlgItem(hDlg, IDC_FLURRY_LIST), multiMonPresets->at(ComboBox_GetCurSel(GetDlgItem(hDlg, IDC_MONITOR_LIST))));
+					break;
+
+				case IDC_FLURRY_LIST:
+					// Save the new preset
+					if (HIWORD(wParam) == CBN_SELCHANGE)
+						multiMonPresets->at(ComboBox_GetCurSel(GetDlgItem(hDlg, IDC_MONITOR_LIST))) = ComboBox_GetCurSel(GetDlgItem(hDlg, IDC_FLURRY_LIST));
+					break;
+
+				
+			}
+			break; // from WM_COMMAND
+
+		case WM_DESTROY:
+			RemoveProp(hDlg, "multiMonPresets");
 			break;
+
+		case WM_CLOSE:
+			EndDialog(hDlg, 0);
+			return TRUE;
 	}
 
 	return FALSE;
