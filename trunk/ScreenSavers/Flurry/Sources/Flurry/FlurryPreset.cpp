@@ -123,14 +123,14 @@ void Spec::ParseTemplate()
 	}
 
 	// hooray, we win!
-	_RPT2(_CRT_WARN, "Read preset '%s': %d clusters\n", name, clusters.size());
+	_RPT2(_CRT_WARN, "Read preset '%s': %d clusters\n", name.c_str(), clusters.size());
 	isValid = true;	
 }
 
 
 bool Spec::WriteToString(char *format, int formatLen)
 {
-	_snprintf(format, formatLen, "%s:", name);
+	_snprintf(format, formatLen, "%s:", name.c_str());
 	format += strlen(format);
 	formatLen -= strlen(format);
 

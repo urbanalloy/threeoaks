@@ -89,8 +89,22 @@ LRESULT CEditor::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
 
 
 //////////////////////////////////////////////////////////////////////////
-BOOL CEditor::IsPresetValid() { return FALSE;}
-void CEditor::SavePreset() {}
+BOOL CEditor::IsPresetValid() 
+{ 
+	return FALSE;
+}
 
-void CEditor::UpdateStreams() {}
-void CEditor::UpdateTemplate() {}
+void CEditor::SavePreset() 
+{
+
+}
+
+void CEditor::UpdateStreams()
+{
+
+}
+
+void CEditor::UpdateTemplate()
+{
+
+}

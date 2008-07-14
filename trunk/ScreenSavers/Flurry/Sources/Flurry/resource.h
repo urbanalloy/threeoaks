@@ -6,6 +6,7 @@
 #define IDD_ABOUTBOX                    101
 #define IDB_BITMAP1                     104
 #define DLG_EDITOR                      105
+#define DLG_ASSIGN                      106
 #define IDC_CREDITS                     1001
 #define IDC_DOUBLE_BUFFER_NONE          1002
 #define IDC_DOUBLE_BUFFER_OPTIMISTIC    1003
@@ -51,14 +52,19 @@
 #define IDC_SPEED                       1049
 #define IDC_STREAMS                     1050
 #define IDC_SOON                        1051
+#define IDC_MONITOR_LIST                1052
+#define IDC_TEXT_MONITOR                1053
+#define IDC_TEXT_FLURRY                 1054
+#define IDC_MONITOR_LIST2               1055
+#define IDC_FLURRY_LIST                 1055
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        106
+#define _APS_NEXT_RESOURCE_VALUE        107
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1052
+#define _APS_NEXT_CONTROL_VALUE         1054
 #define _APS_NEXT_SYMED_VALUE           107
 #endif
 #endif

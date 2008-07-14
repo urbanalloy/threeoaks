@@ -147,7 +147,7 @@ void Settings::DeleteVisual(int index)
 	presets.Create(reg, "Presets");
 
 	char presetName[20];
-	_snprintf(presetName, sizeof presetName, "preset%02d", index);
+	_snprintf_s(presetName, sizeof presetName, "preset%02d", index);
 	LONG err = presets.DeleteValue(presetName);
 
 	if (err != ERROR_SUCCESS) {
@@ -201,7 +201,7 @@ void Settings::ReadVisuals(CRegKey& reg)
 		DWORD formatLen = sizeof customFormat;
 
 		char nextValue[20];
-		_snprintf(nextValue, sizeof nextValue, "preset%02d", i++);
+		_snprintf_s(nextValue, sizeof nextValue, "preset%02d", i++);
 		
 		//LONG result = presets.QueryValue(customFormat, nextValue, &formatLen);
 		LONG result = presets.QueryValue(nextValue, NULL, customFormat, &formatLen);
@@ -233,7 +233,7 @@ void Settings::WriteVisuals(CRegKey& reg)
 	for (int i = 0; i < (signed)visuals.size(); i++) {
 		if (visuals[i]->WriteToString(format, sizeof format)) {
 			char nextValue[20];
-			_snprintf(nextValue, sizeof nextValue, "preset%02d", i);
+			_snprintf_s(nextValue, sizeof nextValue, "preset%02d", i);
 			//presets.SetValue(format, nextValue);
 			presets.SetValue(nextValue, REG_SZ, format, sizeof(format) );
 		} else {
@@ -246,11 +246,8 @@ void Settings::WriteVisuals(CRegKey& reg)
 ////////////////////////////////////////////////////////////////////////////////////////
 void Settings::ReadMonitors(CRegKey& reg)
 {
-	// first monitor = already known
-	multiMonPreset.push_back(globalPreset);
-	int iMonitor = 1;
+	int iMonitor = 0;
 
-	// other monitors, read from registry
 	if (reg == NULL)
 		return;
 
@@ -295,13 +292,29 @@ void Settings::WriteMonitors(CRegKey& reg)
 	}
 }
 
+int Settings::GetPresetForMonitor(int monitor)
+{
+	// return 0 (default preset), if we are passed a wrong parameter
+	if (monitor < 0)
+		return 0;
+
+	//  if there is no preset for that monitor, create a default one
+	if (monitor >= (signed)multiMonPreset.size())	
+		multiMonPreset.push_back(0);
+	
+	return multiMonPreset[monitor];
+}
+
+
 //////////////////////////////////////////////////////////////////////////
 // if the current preset is the deleted one, reset to default preset
 void Settings::ResetPresetSettings(CRegKey& reg, int index)
 {
 	// Global preset
-	if ((signed)globalPreset == index)
-		reg.SetValue("Preset", REG_DWORD, 0, sizeof(DWORD));
+	if ((signed)globalPreset == index) {
+		globalPreset = 0;
+		reg.SetValue("Preset", REG_DWORD, &globalPreset , sizeof(DWORD));	
+	}
 
 	// Per-monitor presets
 	CRegKey monitors;
@@ -317,7 +330,7 @@ void Settings::ResetPresetSettings(CRegKey& reg, int index)
 		char nextValue[20];
 		_snprintf_s(nextValue, sizeof nextValue, "monitor%02dPreset", i, 20*sizeof(char));
 
-		monitors.SetValue(nextValue, REG_DWORD, 0, sizeof(int) );
+		monitors.SetValue(nextValue, REG_DWORD, &multiMonPreset[i], sizeof(int) );
 	}
 
 }
