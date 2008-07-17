@@ -71,18 +71,17 @@ void Settings::Read()
 	// open the registry key
 	BOOL opened = (ERROR_SUCCESS == reg.Open(HKEY_CURRENT_USER, flurryRegistryKey, KEY_READ));
 
-	if (!opened) {
-		return;
+	// Read settings - we have to read visuals and monitors still, as they are initialized theres
+	if (opened) {
+		reg.QueryValue("Buffering mode", NULL, &settingBufferMode, &formatLen);
+		reg.QueryValue("Multimon behavior", NULL, &multiMonPosition, &formatLen);
+		reg.QueryValue("FPS display", NULL, &showFPSIndicator, &formatLen);
+		reg.QueryValue("Freakshow: Block mode", NULL, &bugBlockMode, &formatLen);
+		reg.QueryValue("Freakshow: Whiteout doublebuffer", NULL, &bugWhiteout, &formatLen);
+		reg.QueryValue("Preset", NULL, &globalPreset, &formatLen);
+		reg.QueryValue("Shrink by %", NULL, &shrinkPercentage, &formatLen);
+		reg.QueryValue("Max frame progress", NULL, &maxFrameProgressInMs, &formatLen);
 	}
-	
-	reg.QueryValue("Buffering mode", NULL, &settingBufferMode, &formatLen);
-	reg.QueryValue("Multimon behavior", NULL, &multiMonPosition, &formatLen);
-	reg.QueryValue("FPS display", NULL, &showFPSIndicator, &formatLen);
-	reg.QueryValue("Freakshow: Block mode", NULL, &bugBlockMode, &formatLen);
-	reg.QueryValue("Freakshow: Whiteout doublebuffer", NULL, &bugWhiteout, &formatLen);
-	reg.QueryValue("Preset", NULL, &globalPreset, &formatLen);
-	reg.QueryValue("Shrink by %", NULL, &shrinkPercentage, &formatLen);
-	reg.QueryValue("Max frame progress", NULL, &maxFrameProgressInMs, &formatLen);
 
 	// read per-monitor and per-preset settings
 	ReadVisuals(reg);
@@ -120,7 +119,7 @@ void Settings::ReloadVisuals()
 	CRegKey reg;
 
 	// create the registry key
-	if (ERROR_SUCCESS != reg.Create(HKEY_CURRENT_USER, flurryRegistryKey)) {
+	if (ERROR_SUCCESS != reg.Open(HKEY_CURRENT_USER, flurryRegistryKey)) {
 		return;
 	}
 
