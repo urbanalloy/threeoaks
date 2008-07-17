@@ -47,8 +47,10 @@
 #include <vector>
 #include <string>
 
-using std::string;
-using std::vector;
+using namespace std;
+
+#define TEMPLATE_MAX_SIZE 2000
+#define TEMPLATE_MAX_SIZE_NAME 50
 
 namespace Flurry {
 
@@ -68,21 +70,26 @@ namespace Flurry {
 
 			int ColorModeFromName(char *colorName);
 			
-
 			const static char *colorTable[];			
+
+			bool isValid;
+			string name;
+			string specTemplate;
+			void UpdateTemplate();
 		
 		public:
 			Spec(char *format);
 			Spec(const Spec& arg);
 			~Spec();
 
-			bool isValid;
-			string name;
-			string specTemplate;
-
 			vector<ClusterSpec> clusters;
 
-			bool WriteToString(char *format, int formatLen);	
+			void SetName(string name);
+			string GetName() { return name; }
+			bool IsValid() { return isValid; };
+
+			string GetTemplate() { return specTemplate; }
+			void SetTemplate(string format);
 
 			const char* ColorModeToName(int colorMode);
 	};

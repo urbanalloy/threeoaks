@@ -43,7 +43,7 @@
 #pragma once
 
 #include "resource.h"
-#include "FlurryPreset.h"
+#include "FlurrySettings.h"
 #include <atlhost.h>
 
 
@@ -53,26 +53,37 @@ namespace Flurry {
 	class CEditor : public CDialogImpl<CEditor>
 	{
 		private:
+			Settings* settings;
+			int index;
+
+			HBRUSH hBrushBackground;
+
+			int currentCluster;
+
+			// Copy of spec to edit
 			Spec* spec;
 
 			BOOL IsPresetValid();
 			void SavePreset();
 
-			void UpdateStreams();
+			void UpdateClusters();
 			void UpdateTemplate();
+			void UpdateOKButton();
+
+			void InsertCluster(ClusterSpec cluster, int line = 0);
 
 		public:
 			// "factory"
-			static void AutomaticDoModal (Spec* preset)
+			static void AutomaticDoModal(int index, Settings* settings)
 			{
-				CEditor* pEditor = new CEditor(preset);
+				CEditor* pEditor = new CEditor(index, settings);
 				pEditor->DoModal();
 				delete pEditor;
 			}
 
 			// constructors			
-			CEditor(Spec* preset) : spec(preset) {};
-			~CEditor() {};
+			CEditor(int index, Settings* settings);
+			~CEditor();
 
 			enum { IDD = DLG_EDITOR };
 
@@ -80,22 +91,30 @@ namespace Flurry {
 
 			BEGIN_MSG_MAP(CEditor)
 				MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
+				COMMAND_ID_HANDLER(IDC_NAME, OnName)
+				COMMAND_ID_HANDLER(IDC_STREAM_LIST, OnListView)
+				COMMAND_ID_HANDLER(IDC_BUTTON_ADD_EDIT, OnClusterAdd)	
+				COMMAND_ID_HANDLER(IDC_BUTTON_REMOVE_CANCEL, OnClusterRemove)			
+				COMMAND_ID_HANDLER(IDC_TEMPLATE, OnTemplate)
+				MESSAGE_HANDLER(WM_CTLCOLOREDIT, OnTemplateColor)
 				COMMAND_ID_HANDLER(IDOK, OnOK)
 				COMMAND_ID_HANDLER(IDCANCEL, OnCancel)	
-				COMMAND_ID_HANDLER(IDC_BUTTON_ADD, OnAdd)	
-				COMMAND_ID_HANDLER(IDC_BUTTON_REMOVE, OnRemove)	
-				COMMAND_ID_HANDLER(IDC_BUTTON_PREVIEW, OnPreview)					
 			END_MSG_MAP()
 
 			// Handler prototypes:
-			LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+			LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);			
+
+			LRESULT OnName(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
+			LRESULT OnListView(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
+
+			LRESULT OnClusterAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
+			LRESULT OnClusterRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
+
+			LRESULT OnTemplate(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
+			LRESULT OnTemplateColor(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+
 			LRESULT OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 			LRESULT OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-
-			LRESULT OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-			LRESULT OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-			LRESULT OnPreview(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-		
 	};
 
 }

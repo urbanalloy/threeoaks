@@ -550,7 +550,7 @@ static void ScreenSaverUpdateFpsIndicator(FlurryAnimateChildInfo *child)
 		recent = 1000.0 / (now - prevRingSample) * FPS_SAMPLES;
 	}
 
-	sprintf(buf, "FPS: Overall %.1f / Recent %.1f / Last %.1f   ", overall, recent, last);
+	sprintf_s(buf, sizeof(buf), "FPS: Overall %.1f / Recent %.1f / Last %.1f   ", overall, recent, last);
 	TextOut(child->hdc, 5, 5, buf, lstrlen(buf));
 }
 
@@ -638,8 +638,7 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 						int size = settings->visuals.size();
 						int index = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_FLURRY));
 
-						CEditor::AutomaticDoModal(NULL);
-						settings->ReloadVisuals();	
+						CEditor::AutomaticDoModal(-1, settings);						
 						LoadDialogPresets(hWnd);
 
 						// check if a new preset has been added and select it
@@ -651,8 +650,7 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 				case IDC_FLURRY_EDIT:
 					{
 						int index = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_FLURRY));
-						CEditor::AutomaticDoModal(settings->visuals[index]);
-						settings->ReloadVisuals();	
+						CEditor::AutomaticDoModal(index, settings);						
 						LoadDialogPresets(hWnd);
 
 						ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_FLURRY), index);
@@ -666,8 +664,8 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 						if (index == -1)
 							return TRUE;
 
-						settings->DeleteVisual(index);
-						settings->ReloadVisuals();					
+						// Only removed from visuals, not written to registry until the user press OK
+						settings->DeleteVisual(index);										
 						LoadDialogPresets(hWnd);
 
 						// Reselect a preset
@@ -728,7 +726,7 @@ static BOOL WINAPI AssignDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 				ComboBox_ResetContent(hPresetList);
 
 				for (int i = 0; i < (signed)settings->visuals.size(); i++) {
-					ComboBox_AddString(hPresetList, settings->visuals[i]->name.c_str());
+					ComboBox_AddString(hPresetList, settings->visuals[i]->GetName().c_str());
 				}
 
 				// Set the flurry for the monitor
@@ -810,7 +808,7 @@ static void LoadDialogPresets(HWND hWnd)
 	ComboBox_ResetContent(hPresetList);
 
 	for (int i = 0; i < (signed)settings->visuals.size(); i++) {
-		ComboBox_AddString(hPresetList, settings->visuals[i]->name.c_str());
+		ComboBox_AddString(hPresetList, settings->visuals[i]->GetName().c_str());
 	}
 }
 
