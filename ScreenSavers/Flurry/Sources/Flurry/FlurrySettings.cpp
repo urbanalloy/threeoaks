@@ -180,12 +180,14 @@ void Settings::ReadVisuals(CRegKey& reg)
 ////////////////////////////////////////////////////////////////////////////////////////
 void Settings::WriteVisuals(CRegKey& reg)
 {
+	// Cleanup Presets key
+	reg.DeleteSubKey("Presets");
+
 	CRegKey presets;
 	presets.Create(reg, "Presets");
 
 	for (int i = 0; i < (signed)visuals.size(); i++) {
 		
-
 		if (visuals[i]->IsValid()) {
 			
 			string format = visuals[i]->GetTemplate();
