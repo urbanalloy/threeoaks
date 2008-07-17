@@ -45,7 +45,9 @@
 #define IDC_NAME2                       1039
 #define IDC_TEMPLATE                    1039
 #define IDC_BUTTON_REMOVE               1041
+#define IDC_BUTTON_REMOVE_CANCEL        1041
 #define IDC_BUTTON_ADD                  1042
+#define IDC_BUTTON_ADD_EDIT             1042
 #define IDC_BUTTON_PREVIEW              1043
 #define IDC_COLOR                       1044
 #define IDC_THICKNESS                   1048

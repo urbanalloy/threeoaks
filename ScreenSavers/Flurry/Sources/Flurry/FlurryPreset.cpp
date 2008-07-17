@@ -69,9 +69,30 @@ Spec::~Spec(void)
 {	
 }
 
+void Spec::SetTemplate(string format)						  
+{
+	specTemplate = format;
+	ParseTemplate();
+}
+
+void Spec::SetName(string name)						  
+{
+	this->name = name;
+
+	UpdateTemplate();
+
+	if (name.empty())
+		isValid = false;
+	else
+		ParseTemplate(); // reparse template to make sure we are valid	
+}
+
 
 void Spec::ParseTemplate()
 {
+	// Clear the clusters
+	clusters.clear();
+
 	// format is: name:{streams,color,thickness,speed}(;stream)+
 	// try to parse this out; if at any time we fail, exit leaving valid == false
 	const char *format = specTemplate.c_str();
@@ -128,8 +149,12 @@ void Spec::ParseTemplate()
 }
 
 
-bool Spec::WriteToString(char *format, int formatLen)
+void Spec::UpdateTemplate()
 {
+	int formatLen = TEMPLATE_MAX_SIZE;
+	char data[TEMPLATE_MAX_SIZE];
+	char *format = (char *)&data;
+
 	_snprintf(format, formatLen, "%s:", name.c_str());
 	format += strlen(format);
 	formatLen -= strlen(format);
@@ -145,11 +170,11 @@ bool Spec::WriteToString(char *format, int formatLen)
 		formatLen -= strlen(format);
 
 		if (formatLen <= 0) {
-			return false;
+			return;
 		}
 	}
-
-	return true;
+	
+	specTemplate = string(data);
 }
 
 
