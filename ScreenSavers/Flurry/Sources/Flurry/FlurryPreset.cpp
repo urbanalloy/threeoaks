@@ -59,7 +59,7 @@ Spec::Spec(char *format) : specTemplate(string(format))
 	ParseTemplate();
 }
 
-Spec::Spec(Spec& arg) :  specTemplate(arg.specTemplate)					 
+Spec::Spec(const Spec& arg) :  specTemplate(arg.specTemplate)					 
 {
 	ParseTemplate();
 }

@@ -67,13 +67,13 @@ namespace Flurry {
 			void ParseTemplate();
 
 			int ColorModeFromName(char *colorName);
-			const char* ColorModeToName(int colorMode);
+			
 
 			const static char *colorTable[];			
 		
 		public:
 			Spec(char *format);
-			Spec(Spec& arg);
+			Spec(const Spec& arg);
 			~Spec();
 
 			bool isValid;
@@ -83,6 +83,8 @@ namespace Flurry {
 			vector<ClusterSpec> clusters;
 
 			bool WriteToString(char *format, int formatLen);	
+
+			const char* ColorModeToName(int colorMode);
 	};
 
 }
