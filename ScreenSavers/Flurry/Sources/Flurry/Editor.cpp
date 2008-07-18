@@ -54,7 +54,6 @@ using namespace Flurry;
 CEditor::CEditor(int index, Settings* settings) : index(index), settings(settings)
 {
 	hBrushBackground = CreateSolidBrush(RGB(255,255,206));
-
 }
 
 CEditor::~CEditor()
@@ -97,7 +96,11 @@ LRESULT CEditor::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 	SendDlgItemMessage(IDC_THICKNESS, EM_SETLIMITTEXT, 10, (LPARAM)NULL);
 	SendDlgItemMessage(IDC_SPEED, EM_SETLIMITTEXT, 10, (LPARAM)NULL);
 
+	// Add the list of colors
+	for (int i = 0; i < Spec::nColors; i++)
+		ComboBox_AddString(GetDlgItem(IDC_COLOR), Spec::colorTable[i]);
 
+	ComboBox_SetCurSel(GetDlgItem(IDC_COLOR), 0);
 
 	// If we got a preset, load data
 	if (index == -1) {
@@ -137,8 +140,31 @@ LRESULT CEditor::OnName(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
 	return 0;
 }
 
-LRESULT CEditor::OnListView(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
+LRESULT CEditor::OnListView(int wID, LPNMHDR pNMHDR, BOOL& bHandled)
 {
+	// On select event, update the buttons
+	int selected = ListView_GetNextItem(GetDlgItem(IDC_STREAM_LIST), -1, LVNI_FOCUSED);
+
+	// List view empty
+	if (selected == -1)
+		return 0;
+
+	// Update cluster editor contents
+	char text[256];
+
+	sprintf_s(text, sizeof(text), "%d", spec->clusters[selected].nStreams);
+	SetDlgItemText(IDC_STREAMS, text);
+
+	ComboBox_SetCurSel(GetDlgItem(IDC_COLOR), spec->clusters[selected].color);
+
+	sprintf_s(text, sizeof(text), "%.2f", spec->clusters[selected].thickness);
+	SetDlgItemText(IDC_THICKNESS, text);
+
+	sprintf_s(text, sizeof(text), "%.2f", spec->clusters[selected].speed);
+	SetDlgItemText(IDC_SPEED, text);
+	
+	UpdateAddCancelButtons(false, false, false, true);
+
 	return 0;
 }
 
@@ -151,8 +177,10 @@ LRESULT CEditor::OnListView(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
 // Add or update a cluster
 LRESULT CEditor::OnClusterAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled) {
 	
-	// check if we are editing a cluster (a line is selected in the listview)
+	HWND hList = GetDlgItem(IDC_STREAM_LIST); 
 
+	// check if we are editing a cluster (a line is selected in the listview)
+	
 
 
 
@@ -160,12 +188,45 @@ LRESULT CEditor::OnClusterAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
 
 
 
+	//UpdateAddCancelButtons();
+
 	return 0;
 }
 
 // Remove or cancel editing a cluster
 LRESULT CEditor::OnClusterRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled) 
 {
+	// Check if an item is selected -> Remove or cancel clicked
+	int selected = ListView_GetNextItem(GetDlgItem(IDC_STREAM_LIST), -1, LVNI_FOCUSED);
+	if (selected != -1)
+	{
+		// Check if the update button is disabled -> Remove clicked
+		CWindow wnd;
+		wnd.Attach(GetDlgItem(IDC_BUTTON_ADD_EDIT));
+		if (!wnd.IsWindowEnabled())
+		{
+			// Remove the cluster from the listview and from the spec
+			ListView_DeleteItem(GetDlgItem(IDC_STREAM_LIST), selected);			
+
+			spec->clusters.erase(spec->clusters.begin() + selected);
+			UpdateTemplate();
+			UpdateOKButton();
+		}
+		else
+		{		
+			// Cancel clicked - clear the selection
+			ListView_SetItemState(GetDlgItem(IDC_STREAM_LIST), -1, 0, LVIS_FOCUSED|LVIS_SELECTED);
+		}
+	}
+
+	// Cancel adding new item -> clear the fields
+	SetDlgItemText(IDC_STREAMS, "");
+	ComboBox_SetCurSel(GetDlgItem(IDC_COLOR), 0);
+	SetDlgItemText(IDC_THICKNESS, "");
+	SetDlgItemText(IDC_SPEED, "");
+
+	UpdateAddCancelButtons(true, false, true, false);
+
 	return 0;
 }
 
@@ -260,7 +321,7 @@ void CEditor::UpdateClusters()
 	ListView_DeleteAllItems(GetDlgItem(IDC_STREAM_LIST));
 
 	for (int i = 0; i < (signed)spec->clusters.size(); i++) {
-		InsertCluster(spec->clusters[i]);
+		InsertCluster(spec->clusters[i], i);
 	}
 }
 
@@ -314,5 +375,38 @@ void CEditor::UpdateOKButton()
 	CWindow wnd;
 	wnd.Attach(GetDlgItem(IDOK));
 	wnd.EnableWindow(spec->IsValid());
+}
 
+// Update the Add/Cancel buttons (name and enabled status)
+void CEditor::UpdateAddCancelButtons(bool isAdd, bool isAddEnabled, bool isCancel, bool isCancelEnabled) 
+{
+	// Listview selected -> Update(Disabled) / Remove
+	//	+ modified value -> Update / Cancel
+	//
+	// No selection -> Add(Disabled) / Cancel (Disabled)
+	//  + modified  -> Add / Cancel
+
+	if (isAdd)
+		SetDlgItemText(IDC_BUTTON_ADD_EDIT, "Add");
+	else
+		SetDlgItemText(IDC_BUTTON_ADD_EDIT, "Update");
+
+	CWindow wndAdd;
+	wndAdd.Attach(GetDlgItem(IDC_BUTTON_ADD_EDIT));
+	wndAdd.EnableWindow(isAddEnabled);
+
+	if (isCancel)
+		SetDlgItemText(IDC_BUTTON_REMOVE_CANCEL, "Cancel");
+	else
+		SetDlgItemText(IDC_BUTTON_REMOVE_CANCEL, "Remove");
+
+	CWindow wndCancel;
+	wndCancel.Attach(GetDlgItem(IDC_BUTTON_REMOVE_CANCEL));
+	wndCancel.EnableWindow(isCancelEnabled);
+
+
+
+
+
+	
 }

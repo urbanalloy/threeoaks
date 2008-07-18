@@ -58,8 +58,6 @@ namespace Flurry {
 
 			HBRUSH hBrushBackground;
 
-			int currentCluster;
-
 			// Copy of spec to edit
 			Spec* spec;
 
@@ -69,6 +67,7 @@ namespace Flurry {
 			void UpdateClusters();
 			void UpdateTemplate();
 			void UpdateOKButton();
+			void UpdateAddCancelButtons(bool isAdd, bool isAddEnabled, bool isCancel, bool isCancelEnabled) ;
 
 			void InsertCluster(ClusterSpec cluster, int line = 0);
 
@@ -92,7 +91,7 @@ namespace Flurry {
 			BEGIN_MSG_MAP(CEditor)
 				MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
 				COMMAND_ID_HANDLER(IDC_NAME, OnName)
-				COMMAND_ID_HANDLER(IDC_STREAM_LIST, OnListView)
+				NOTIFY_HANDLER(IDC_STREAM_LIST, LVN_ITEMCHANGED, OnListView)
 				COMMAND_ID_HANDLER(IDC_BUTTON_ADD_EDIT, OnClusterAdd)	
 				COMMAND_ID_HANDLER(IDC_BUTTON_REMOVE_CANCEL, OnClusterRemove)			
 				COMMAND_ID_HANDLER(IDC_TEMPLATE, OnTemplate)
@@ -105,7 +104,7 @@ namespace Flurry {
 			LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);			
 
 			LRESULT OnName(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-			LRESULT OnListView(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
+			LRESULT OnListView(int wID, LPNMHDR pNMHDR, BOOL& bHandled);
 
 			LRESULT OnClusterAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 			LRESULT OnClusterRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
