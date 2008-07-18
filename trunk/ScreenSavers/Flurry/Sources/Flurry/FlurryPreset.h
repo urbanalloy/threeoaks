@@ -68,9 +68,7 @@ namespace Flurry {
 		private:
 			void ParseTemplate();
 
-			int ColorModeFromName(char *colorName);
-			
-			const static char *colorTable[];			
+			int ColorModeFromName(char *colorName);			
 
 			bool isValid;
 			string name;
@@ -82,13 +80,15 @@ namespace Flurry {
 			Spec(const Spec& arg);
 			~Spec();
 
+			const static char *colorTable[];
+			const static int nColors;
 			vector<ClusterSpec> clusters;
 
 			void SetName(string name);
 			string GetName() { return name; }
-			bool IsValid() { return isValid; };
+			bool IsValid() { if (clusters.size() == 0) return false; return isValid; };
 
-			string GetTemplate() { return specTemplate; }
+			string GetTemplate() { UpdateTemplate(); return specTemplate; }
 			void SetTemplate(string format);
 
 			const char* ColorModeToName(int colorMode);

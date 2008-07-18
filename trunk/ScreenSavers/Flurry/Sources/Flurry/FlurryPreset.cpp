@@ -50,6 +50,24 @@
 
 using namespace Flurry;
 
+// keep parallel with typedef enum _ColorModes in GL_saver.h
+const char* Spec::colorTable[] = {
+	"red",
+	"magenta",
+	"blue",
+	"cyan",
+	"green",
+	"yellow",
+	"slowCyclic",
+	"cyclic",
+	"tiedye",
+	"rainbow",
+	"white",
+	"multi",
+	"darkColorMode"
+};
+const int Spec::nColors (sizeof colorTable / sizeof colorTable[0]);
+
 /*
  * Implementation
  */
@@ -177,26 +195,6 @@ void Spec::UpdateTemplate()
 	specTemplate = string(data);
 }
 
-
-
-
-// keep parallel with typedef enum _ColorModes in GL_saver.h
-const char* Spec::colorTable[] = {
-	"red",
-	"magenta",
-	"blue",
-	"cyan",
-	"green",
-	"yellow",
-	"slowCyclic",
-	"cyclic",
-	"tiedye",
-	"rainbow",
-	"white",
-	"multi",
-	"darkColorMode"
-};
-#define nColors (sizeof colorTable / sizeof colorTable[0])
 
 int Spec::ColorModeFromName(char *colorName)
 {

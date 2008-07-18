@@ -94,9 +94,8 @@ void Settings::Write()
 	CRegKey reg;
 
 	// create the registry key
-	if (ERROR_SUCCESS != reg.Create(HKEY_CURRENT_USER, flurryRegistryKey)) {
+	if (ERROR_SUCCESS != reg.Create(HKEY_CURRENT_USER, flurryRegistryKey))
 		return;
-	}
 
 	reg.SetValue("Buffering mode", REG_DWORD, &settingBufferMode, sizeof(DWORD));
 	reg.SetValue("Multimon behavior", REG_DWORD, &multiMonPosition, sizeof(DWORD));
@@ -129,9 +128,6 @@ void Settings::ReadVisuals(CRegKey& reg)
 	};
 	static const int nPresets = sizeof PresetVisuals / sizeof PresetVisuals[0];
 
-	// cleanup visuals
-
-
 	int i = 0;
 	for (i = 0; i < nPresets; i++) {
 		Spec *preset = new Spec(PresetVisuals[i]);
@@ -149,7 +145,8 @@ void Settings::ReadVisuals(CRegKey& reg)
 		return;
 
 	CRegKey presets;
-	presets.Open(reg, "Presets", KEY_READ);
+	if (ERROR_SUCCESS != presets.Open(reg, "Presets", KEY_READ))
+		return;
 
 	while (true) {
 		char customFormat[2000];
@@ -211,8 +208,9 @@ void Settings::ReadMonitors(CRegKey& reg)
 	if (reg == NULL)
 		return;
 
-	CRegKey monitors;
-	monitors.Open(reg, "Monitors", KEY_READ);
+	CRegKey monitors;	
+	if (ERROR_SUCCESS != monitors.Open(reg, "Monitors", KEY_READ))
+		return;
 
 	while (true) {
 		char nextValue[20];
