@@ -67,9 +67,11 @@ namespace Flurry {
 			void UpdateClusters();
 			void UpdateTemplate();
 			void UpdateOKButton();
-			void UpdateAddCancelButtons(bool isAdd, bool isAddEnabled, bool isCancel, bool isCancelEnabled) ;
+			void UpdateAddCancelNames(bool isAdd, bool isCancel);
+			void UpdateAddCancelStates(bool isAddEnabled, bool isCancelEnabled);
+			void ClearClusterFields();
 
-			void InsertCluster(ClusterSpec cluster, int line = 0);
+			void InsertCluster(ClusterSpec cluster, int line = 0, bool replace = false);
 
 		public:
 			// "factory"
@@ -95,7 +97,11 @@ namespace Flurry {
 				COMMAND_ID_HANDLER(IDC_BUTTON_ADD_EDIT, OnClusterAdd)	
 				COMMAND_ID_HANDLER(IDC_BUTTON_REMOVE_CANCEL, OnClusterRemove)			
 				COMMAND_ID_HANDLER(IDC_TEMPLATE, OnTemplate)
-				MESSAGE_HANDLER(WM_CTLCOLOREDIT, OnTemplateColor)
+				MESSAGE_HANDLER(WM_CTLCOLOREDIT, OnEntryValid)
+				COMMAND_ID_HANDLER(IDC_STREAMS, OnCluster)
+				COMMAND_ID_HANDLER(IDC_COLOR, OnCluster)
+				COMMAND_ID_HANDLER(IDC_THICKNESS, OnCluster)
+				COMMAND_ID_HANDLER(IDC_SPEED, OnCluster)
 				COMMAND_ID_HANDLER(IDOK, OnOK)
 				COMMAND_ID_HANDLER(IDCANCEL, OnCancel)	
 			END_MSG_MAP()
@@ -110,7 +116,10 @@ namespace Flurry {
 			LRESULT OnClusterRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
 			LRESULT OnTemplate(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-			LRESULT OnTemplateColor(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+
+			LRESULT OnEntryValid(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+
+			LRESULT OnCluster(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
 			LRESULT OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 			LRESULT OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);

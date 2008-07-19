@@ -650,6 +650,9 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 				case IDC_FLURRY_EDIT:
 					{
 						int index = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_FLURRY));
+						if (index < PRESETS_READONLY)
+							return TRUE;
+
 						CEditor::AutomaticDoModal(index, settings);						
 						LoadDialogPresets(hWnd);
 
@@ -661,15 +664,16 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 					{
 						int index = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_FLURRY));
 
-						if (index == -1)
+						if (index < PRESETS_READONLY) // also tests if no flurry is selected
 							return TRUE;
 
 						// Only removed from visuals, not written to registry until the user press OK
 						settings->DeleteVisual(index);										
 						LoadDialogPresets(hWnd);
-
+						
 						// Reselect a preset
 						ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_FLURRY), settings->globalPreset);						
+						UpdateEditButtons(hWnd);
 					}				
 					return TRUE;
 

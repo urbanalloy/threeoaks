@@ -50,6 +50,8 @@ using namespace Flurry;
 
 #pragma warning(disable:4100)
 
+#define FIELD_MAX_SIZE 10
+
 
 CEditor::CEditor(int index, Settings* settings) : index(index), settings(settings)
 {
@@ -92,9 +94,9 @@ LRESULT CEditor::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 	// Max size for edit box
 	SendDlgItemMessage(IDC_NAME, EM_SETLIMITTEXT, TEMPLATE_MAX_SIZE_NAME, (LPARAM)NULL);
 	SendDlgItemMessage(IDC_TEMPLATE, EM_SETLIMITTEXT, TEMPLATE_MAX_SIZE, (LPARAM)NULL);
-	SendDlgItemMessage(IDC_STREAMS, EM_SETLIMITTEXT, 10, (LPARAM)NULL);
-	SendDlgItemMessage(IDC_THICKNESS, EM_SETLIMITTEXT, 10, (LPARAM)NULL);
-	SendDlgItemMessage(IDC_SPEED, EM_SETLIMITTEXT, 10, (LPARAM)NULL);
+	SendDlgItemMessage(IDC_STREAMS, EM_SETLIMITTEXT, FIELD_MAX_SIZE, (LPARAM)NULL);
+	SendDlgItemMessage(IDC_THICKNESS, EM_SETLIMITTEXT, FIELD_MAX_SIZE, (LPARAM)NULL);
+	SendDlgItemMessage(IDC_SPEED, EM_SETLIMITTEXT, FIELD_MAX_SIZE, (LPARAM)NULL);
 
 	// Add the list of colors
 	for (int i = 0; i < Spec::nColors; i++)
@@ -163,7 +165,9 @@ LRESULT CEditor::OnListView(int wID, LPNMHDR pNMHDR, BOOL& bHandled)
 	sprintf_s(text, sizeof(text), "%.2f", spec->clusters[selected].speed);
 	SetDlgItemText(IDC_SPEED, text);
 	
-	UpdateAddCancelButtons(false, false, false, true);
+	UpdateAddCancelNames(false, false);
+	UpdateAddCancelStates(false, true);
+
 
 	return 0;
 }
@@ -174,21 +178,61 @@ LRESULT CEditor::OnListView(int wID, LPNMHDR pNMHDR, BOOL& bHandled)
 // Clusters
 //////////////////////////////////////////////////////////////////////////
 
+#define GET_FLOAT(id, size, var) \
+	float var; \
+	{ \
+		char input_text[size]; \
+		GetDlgItemText(id, input_text, size); \
+		var = (float)atof(input_text); \
+	}
+
+	
+
 // Add or update a cluster
 LRESULT CEditor::OnClusterAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled) {
 	
-	HWND hList = GetDlgItem(IDC_STREAM_LIST); 
-
-	// check if we are editing a cluster (a line is selected in the listview)
+	bool replace = false;
 	
+	// Check if we are editing a cluster (a line is selected in the listview) -> Update pressed
+	int selected = ListView_GetNextItem(GetDlgItem(IDC_STREAM_LIST), -1, LVNI_FOCUSED);
+	if (selected != -1)
+	{
+		// Remove any selection in the listview
+		ListView_SetItemState(GetDlgItem(IDC_STREAM_LIST), -1, 0, LVIS_FOCUSED|LVIS_SELECTED);
 
+		replace = true;
+	}
+	else
+	{
+		ClusterSpec cluster;
+		spec->clusters.push_back(cluster);
+		selected = spec->clusters.size() - 1;
+	}	
 
+	// Update data from cluster editor
+	BOOL success;
+	int streams = GetDlgItemInt(IDC_STREAMS, &success, FALSE);
+	if (!success)
+		return -1;
 
-	// Remove any selection in the listview
+	GET_FLOAT(IDC_SPEED, FIELD_MAX_SIZE, speed);
+	GET_FLOAT(IDC_THICKNESS, FIELD_MAX_SIZE, thickness);
 
+	spec->clusters[selected].nStreams = streams;
+	spec->clusters[selected].color = ComboBox_GetCurSel(GetDlgItem(IDC_COLOR));
+	spec->clusters[selected].speed = speed;
+	spec->clusters[selected].thickness = thickness;
 
+	// Update listview
+	InsertCluster(spec->clusters[selected], selected, replace);
 
-	//UpdateAddCancelButtons();
+	// Clear the fields
+	ClearClusterFields();
+
+	UpdateTemplate();
+	UpdateOKButton();
+	UpdateAddCancelNames(true, true);
+	UpdateAddCancelStates(false, false);
 
 	return 0;
 }
@@ -220,16 +264,152 @@ LRESULT CEditor::OnClusterRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
 	}
 
 	// Cancel adding new item -> clear the fields
-	SetDlgItemText(IDC_STREAMS, "");
-	ComboBox_SetCurSel(GetDlgItem(IDC_COLOR), 0);
-	SetDlgItemText(IDC_THICKNESS, "");
-	SetDlgItemText(IDC_SPEED, "");
+	ClearClusterFields();
 
-	UpdateAddCancelButtons(true, false, true, false);
+	UpdateAddCancelNames(true, true);
+	UpdateAddCancelStates(false, false);
 
 	return 0;
 }
 
+//////////////////////////////////////////////////////////////////////////
+// Defines for checking fields
+//////////////////////////////////////////////////////////////////////////
+
+#define CHECK_NOT_EMPTY(id, size) {\
+	char input_text[size]; \
+	GetDlgItemText(id, input_text, size); \
+	if (strcmp(input_text, "") == 0) { \
+		isValid = false; \
+		numEmpty++; \
+	} \
+	}
+
+#define CHECK_NOT_ZERO(id, var) \
+	GET_FLOAT(id, FIELD_MAX_SIZE, var); \
+	if (var == 0.0) \
+		isValid = false;
+	
+#define CHECK_NOT_EQUAL(val, var) \
+	if (selected != -1) {\
+		if (val != spec->clusters[selected].var) \
+			numModified++; \
+	}
+
+
+// Update buttons when the fields are modified
+LRESULT CEditor::OnCluster(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
+{
+	if (wNotifyCode != EN_CHANGE && wNotifyCode != CBN_SELCHANGE)
+		return 0;
+
+	bool isValid = true;
+	int numEmpty = 0;
+	int numModified = 0;
+
+	// Always cancel once we have been edited
+	SetDlgItemText(IDC_BUTTON_REMOVE_CANCEL, "Cancel");
+
+	// Check if we are valid: 
+	// - every edit box has a value
+	// - value is valid
+	// - TODO: values have been modified (if editing a cluster)
+	int selected = ListView_GetNextItem(GetDlgItem(IDC_STREAM_LIST), -1, LVNI_FOCUSED);
+
+	// Streams
+	CHECK_NOT_EMPTY(IDC_STREAMS, FIELD_MAX_SIZE);
+	CHECK_NOT_ZERO(IDC_STREAMS, streams);
+	CHECK_NOT_EQUAL(streams, nStreams);
+
+	// Color
+	CHECK_NOT_EQUAL(ComboBox_GetCurSel(GetDlgItem(IDC_COLOR)), color);
+
+	// Speed
+	CHECK_NOT_EMPTY(IDC_SPEED, FIELD_MAX_SIZE);
+	CHECK_NOT_ZERO(IDC_SPEED, speed);
+	CHECK_NOT_EQUAL(speed, speed);
+
+	// Thickness
+	CHECK_NOT_EMPTY(IDC_THICKNESS, FIELD_MAX_SIZE);
+	CHECK_NOT_ZERO(IDC_THICKNESS, thickness);
+	CHECK_NOT_EQUAL(thickness, thickness);
+
+	// Ask to redraw edit control
+	CWindow wnd;
+	wnd.Attach(hWndCtl);
+	wnd.RedrawWindow();
+
+	if (selected != -1 && numModified == 0)
+		isValid = false;
+
+	UpdateAddCancelStates(isValid, (numEmpty != 3));	
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Fields color
+//////////////////////////////////////////////////////////////////////////
+
+#define VALID_NOT_EMPTY(id, size) \
+	char input_text[size]; \
+	GetDlgItemText(id, input_text, size); \
+	if (strcmp(input_text, "") == 0) \
+	return 0;
+
+LRESULT CEditor::OnEntryValid(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	if (uMsg != WM_CTLCOLOREDIT) 
+		return 0;
+
+	bool isValid = true;
+
+	if (GetDlgItem(IDC_STREAMS) == (HWND)lParam)
+	{
+		// Check that the input box contains text
+		VALID_NOT_EMPTY(IDC_STREAMS, 10);
+
+		// always a number, but shouldn't be 0
+		if (strcmp(input_text, "0") == 0) \
+			isValid = false;
+	} 
+	else if (GetDlgItem(IDC_SPEED) == (HWND)lParam)
+	{
+		VALID_NOT_EMPTY(IDC_SPEED, 10);
+
+		CHECK_NOT_ZERO(IDC_SPEED, speed);
+	} 
+	else if (GetDlgItem(IDC_THICKNESS) == (HWND)lParam)
+	{
+		VALID_NOT_EMPTY(IDC_THICKNESS, 10);
+
+		CHECK_NOT_ZERO(IDC_THICKNESS, thickness);
+	} 
+	else if (GetDlgItem(IDC_TEMPLATE) == (HWND)lParam)
+	{		
+		VALID_NOT_EMPTY(IDC_TEMPLATE, TEMPLATE_MAX_SIZE);
+
+		isValid = spec->IsValid();
+	}
+	else
+		return 0;
+
+	DeleteObject(hBrushBackground);
+
+	// Paint green if valid, red otherwise
+	if (isValid) {
+		SetBkColor((HDC)wParam, RGB(209,255,181));
+		hBrushBackground = CreateSolidBrush(RGB(209,255,181));
+	} else {
+		SetBkColor((HDC)wParam, RGB(255,178,178));
+		hBrushBackground = CreateSolidBrush(RGB(255,178,178));
+	}
+
+	return (LRESULT)hBrushBackground;
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Template
+//////////////////////////////////////////////////////////////////////////
 
 // When the template is modified, try to parse the text and update clusters accordingly
 LRESULT CEditor::OnTemplate(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled) 
@@ -259,34 +439,9 @@ LRESULT CEditor::OnTemplate(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
 	return 0;
 }
 
-LRESULT CEditor::OnTemplateColor(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	if (uMsg != WM_CTLCOLOREDIT) 
-		return 0;
-
-	if (GetDlgItem(IDC_TEMPLATE) != (HWND)lParam)
-		return 0;
-
-	// Check that the template contains text
-	char text[TEMPLATE_MAX_SIZE];
-	GetDlgItemText(IDC_TEMPLATE, text, TEMPLATE_MAX_SIZE);
-	if (string(text).empty())
-		return 0;
-
-	DeleteObject(hBrushBackground);
-
-	// Paint green if valid, red otherwise
-	if (spec->IsValid()) {
-		SetBkColor((HDC)wParam, RGB(209,255,181));
-		hBrushBackground = CreateSolidBrush(RGB(209,255,181));
-	} else {
-		SetBkColor((HDC)wParam, RGB(255,178,178));
-		hBrushBackground = CreateSolidBrush(RGB(255,178,178));
-	}
-
-	return (LRESULT)hBrushBackground;
-}
-
+//////////////////////////////////////////////////////////////////////////
+// Dialog buttons
+//////////////////////////////////////////////////////////////////////////
 
 LRESULT CEditor::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -325,7 +480,7 @@ void CEditor::UpdateClusters()
 	}
 }
 
-void CEditor::InsertCluster(ClusterSpec cluster, int line)
+void CEditor::InsertCluster(ClusterSpec cluster, int line, bool replace)
 {
 	HWND hList = GetDlgItem(IDC_STREAM_LIST); 
 
@@ -342,7 +497,11 @@ void CEditor::InsertCluster(ClusterSpec cluster, int line)
 	LvItem.iSubItem = 0;
 	sprintf_s(text, sizeof(text), "%d", cluster.nStreams);
 	LvItem.pszText = text;
-	ListView_InsertItem(hList, &LvItem);
+	if (replace)
+		ListView_SetItem(hList, &LvItem);
+	else
+		ListView_InsertItem(hList, &LvItem);
+	
 
 	// Color
 	LvItem.iSubItem = 1;
@@ -378,7 +537,7 @@ void CEditor::UpdateOKButton()
 }
 
 // Update the Add/Cancel buttons (name and enabled status)
-void CEditor::UpdateAddCancelButtons(bool isAdd, bool isAddEnabled, bool isCancel, bool isCancelEnabled) 
+void CEditor::UpdateAddCancelNames(bool isAdd, bool isCancel) 
 {
 	// Listview selected -> Update(Disabled) / Remove
 	//	+ modified value -> Update / Cancel
@@ -391,22 +550,31 @@ void CEditor::UpdateAddCancelButtons(bool isAdd, bool isAddEnabled, bool isCance
 	else
 		SetDlgItemText(IDC_BUTTON_ADD_EDIT, "Update");
 
-	CWindow wndAdd;
-	wndAdd.Attach(GetDlgItem(IDC_BUTTON_ADD_EDIT));
-	wndAdd.EnableWindow(isAddEnabled);
+	
 
 	if (isCancel)
 		SetDlgItemText(IDC_BUTTON_REMOVE_CANCEL, "Cancel");
 	else
 		SetDlgItemText(IDC_BUTTON_REMOVE_CANCEL, "Remove");
 
+	
+}
+
+void CEditor::UpdateAddCancelStates(bool isAddEnabled, bool isCancelEnabled) 
+{
+	CWindow wndAdd;
+	wndAdd.Attach(GetDlgItem(IDC_BUTTON_ADD_EDIT));
+	wndAdd.EnableWindow(isAddEnabled);
+
 	CWindow wndCancel;
 	wndCancel.Attach(GetDlgItem(IDC_BUTTON_REMOVE_CANCEL));
 	wndCancel.EnableWindow(isCancelEnabled);
+}
 
-
-
-
-
-	
+void CEditor::ClearClusterFields()
+{
+	SetDlgItemText(IDC_STREAMS, "");
+	ComboBox_SetCurSel(GetDlgItem(IDC_COLOR), 0);
+	SetDlgItemText(IDC_THICKNESS, "");
+	SetDlgItemText(IDC_SPEED, "");
 }
