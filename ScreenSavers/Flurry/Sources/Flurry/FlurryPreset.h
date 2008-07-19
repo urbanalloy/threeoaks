@@ -88,7 +88,7 @@ namespace Flurry {
 			string GetName() { return name; }
 			bool IsValid() { if (clusters.size() == 0) return false; return isValid; };
 
-			string GetTemplate() { UpdateTemplate(); return specTemplate; }
+			string GetTemplate() { UpdateTemplate(); ParseTemplate(); return specTemplate; }
 			void SetTemplate(string format);
 
 			const char* ColorModeToName(int colorMode);
