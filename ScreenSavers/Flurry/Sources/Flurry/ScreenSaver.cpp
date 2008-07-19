@@ -644,6 +644,7 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 						// check if a new preset has been added and select it
 						int newIndex = (size < (signed)settings->visuals.size() ? settings->visuals.size() - 1 : index);
 						ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_FLURRY), newIndex);
+						UpdateEditButtons(hWnd);
 					}					
 					return TRUE;
 
