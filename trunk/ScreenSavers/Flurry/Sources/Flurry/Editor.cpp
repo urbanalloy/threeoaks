@@ -427,6 +427,7 @@ LRESULT CEditor::OnTemplate(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
 	// Update spec with new template
 	spec->SetTemplate(text);
 
+	SetDlgItemText(IDC_NAME, spec->GetName().c_str());
 	UpdateClusters();
 
 	// Ask to redraw edit control
