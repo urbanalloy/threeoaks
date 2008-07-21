@@ -82,9 +82,9 @@ BEGIN
     CONTROL         "Accurate &double buffering (may be slow)",IDC_DOUBLE_BUFFER_PARANOID,
                     "Button",BS_AUTORADIOBUTTON,16,166,176,10
     DEFPUSHBUTTON   "O&K",IDOK,211,11,54,14
-    PUSHBUTTON      "&Preview",IDC_TEST,211,32,54,14
-    PUSHBUTTON      "&About",IDC_ABOUT,211,53,54,14
-    PUSHBUTTON      "&Cancel",IDCANCEL,211,74,54,14
+    PUSHBUTTON      "&Preview",IDC_TEST,210,53,54,14
+    PUSHBUTTON      "&About",IDC_ABOUT,210,74,54,14
+    PUSHBUTTON      "&Cancel",IDCANCEL,210,32,54,14
     GROUPBOX        "Advanced",IDC_ADVANCED,7,188,194,60
     CONTROL         "",IDC_SHRINK,"msctls_trackbar32",TBS_AUTOTICKS | TBS_TOOLTIPS | WS_TABSTOP,109,197,84,19
     LTEXT           "Shrink window size (%)",IDC_SHRINKTEXT,16,201,75,8

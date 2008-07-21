@@ -173,6 +173,22 @@ void Settings::ReadVisuals(CRegKey& reg)
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////
+void Settings::WriteVisual(CRegKey& presets, int index) {
+	
+	if (visuals[index]->IsValid()) {
+
+		string format = visuals[index]->GetTemplate();
+
+		char nextValue[20];
+		_snprintf_s(nextValue, sizeof nextValue, "preset%02d", index);
+		//presets.SetValue(format, nextValue);
+		presets.SetValue(nextValue, REG_SZ, format.c_str(), format.size() );
+	} else {
+		_RPT1(_CRT_WARN, "WriteVisuals: Can't write preset %d!\n", index);
+	}
+
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 void Settings::WriteVisuals(CRegKey& reg)
@@ -184,19 +200,26 @@ void Settings::WriteVisuals(CRegKey& reg)
 	presets.Create(reg, "Presets");
 
 	for (int i = 0; i < (signed)visuals.size(); i++) {
-		
-		if (visuals[i]->IsValid()) {
-			
-			string format = visuals[i]->GetTemplate();
-
-			char nextValue[20];
-			_snprintf_s(nextValue, sizeof nextValue, "preset%02d", i);
-			//presets.SetValue(format, nextValue);
-			presets.SetValue(nextValue, REG_SZ, format.c_str(), format.size() );
-		} else {
-			_RPT1(_CRT_WARN, "WriteVisuals: Can't write preset %d!\n", i);
-		}
+		WriteVisual(presets, i);		
 	}	
+}
+
+//////////////////////////////////////////////////////////////////////////
+void Settings::UpdateVisual(int index)
+{
+	if (index < 0 || index > (signed)visuals.size())
+		return;
+
+	CRegKey reg;
+
+	// create the registry key
+	if (ERROR_SUCCESS != reg.Create(HKEY_CURRENT_USER, flurryRegistryKey))
+		return;
+
+	CRegKey presets;
+	presets.Create(reg, "Presets");
+
+	WriteVisual(presets, index);
 }
 
 
@@ -269,6 +292,8 @@ int Settings::GetPresetForMonitor(int monitor)
 // if the current preset is the deleted one, reset to default preset
 void Settings::DeleteVisual(int index)
 {
+	if (index < 0 || index > (signed)visuals.size())
+		return;
 
 	visuals.erase(visuals.begin() + index);
 
