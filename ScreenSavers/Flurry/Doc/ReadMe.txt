@@ -10,7 +10,7 @@ Updated by Julien Templier
 - This is a port to Windows of Flurry, a beautiful screen saver for
   Mac OS X written by Calum Robinson (http://homepage.mac.com/calumr/).
 - Calum credits the original Windows version, Seraphim, by Brian Wade
-  (brianwade@va.prestige.net).  I can't find any trace of this any more.
+  (brianwade@va.prestige.net). I can't find any trace of this any more.
 
 ***************************************************************************
 ** Instructions
@@ -33,7 +33,18 @@ You might try to rename the file to Flurry.sCr as a workaround.
 
 ==== Release 1.3 ====
 
-Version 1.3.0 Build 26 (08/10/08)    
+Version 1.3.1 Build 41 (07/21/08)  
+	- Added per-monitor flurries
+		* Separated global preset and per-monitor preset
+		* Simple UI for assigning flurries to monitors
+	- Added flurry editor
+		* Presets are saved directly after creation/modification. Deletion is effective when closing the main dialog.
+	- Bug fixed
+		* Preset names were not stored correctly in registry
+		* Fixed deletion of preset (UI was not updated correctly)
+		* Crash if Flurry wasn't installed before on the computer
+
+Version 1.3.0 Build 26 (07/10/08)    
 	- UI Changes
 	  * Moved credits to About window
 	  * Added UI for shrink percentage & FPS indicator (only in single-buffer mode)

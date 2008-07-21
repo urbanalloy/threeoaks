@@ -1,6 +1,9 @@
-This is a port to Windows of Flurry, a beautiful screen saver for Mac OS X written by Calum Robinson (http://homepage.mac.com/calumr/).
+This is a port to Windows of Flurry, a beautiful screen saver for Mac OS X written by Calum Robinson, ported to Windows by Matt Ginzton and then updated by Julien Templier (aka Littleboy).
 
-This ScreenSaver was ported to Windows by Matt Ginzton and then modified by me. 
+What's new in version 1.3.1:
 
-INSTRUCTIONS: Extract the Flurry screensaver file (Flurry.scr) from the zip file using your favorite zip program. Place the .scr file in your Windows\system directory (Win95), Winnt\system32 directory (WinNT/Win2K) or Windows\system32 directory (WinXP) . Open your Display Properties window by right-clicking on the desktop and then select your new screensaver.
-
+ - Per-monitor flurries: you can now assign a different flurry for each of your monitors
+ - Flurry Editor: create new flurry presets and share the templates with your friends!
+ - and a few bugs fixed :D
+ 
+See instructions in Readme.txt
