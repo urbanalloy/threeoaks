@@ -73,7 +73,6 @@ LRESULT CEditor::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 	memset(&LvCol, 0, sizeof(LvCol));
 
 	LvCol.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_SUBITEM;  // Type of mask
-	LvCol.fmt = LVCFMT_LEFT | LVCFMT_FIXED_WIDTH;		 // Format
 	LvCol.cx = 0x70;                                     // Width of column
 	LvCol.pszText = "Streams";                           // Header Text
 	ListView_InsertColumn(hList, 0, &LvCol);
@@ -89,7 +88,7 @@ LRESULT CEditor::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 	LvCol.pszText = "Speed";
 	ListView_InsertColumn(hList, 3, &LvCol);
 
-	ListView_SetExtendedListViewStyle(hList, LVS_EX_FULLROWSELECT);
+	ListView_SetExtendedListViewStyle(hList, LVS_EX_FULLROWSELECT|LVS_EX_ONECLICKACTIVATE );
 
 	// Max size for edit box
 	SendDlgItemMessage(IDC_NAME, EM_SETLIMITTEXT, TEMPLATE_MAX_SIZE_NAME, (LPARAM)NULL);
@@ -144,12 +143,13 @@ LRESULT CEditor::OnName(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
 
 LRESULT CEditor::OnListView(int wID, LPNMHDR pNMHDR, BOOL& bHandled)
 {
-	// On select event, update the buttons
-	int selected = ListView_GetNextItem(GetDlgItem(IDC_STREAM_LIST), -1, LVNI_FOCUSED);
+	// Get the currently selected item
+	int selected = ListView_GetNextItem(GetDlgItem(IDC_STREAM_LIST), -1, LVNI_SELECTED);
 
 	// List view empty
-	if (selected == -1)
+	if (selected == -1) {
 		return 0;
+	}
 
 	// Update cluster editor contents
 	char text[256];
@@ -168,6 +168,21 @@ LRESULT CEditor::OnListView(int wID, LPNMHDR pNMHDR, BOOL& bHandled)
 	UpdateAddCancelNames(false, false);
 	UpdateAddCancelStates(false, true);
 
+	return 0;
+}
+
+LRESULT CEditor::OnListViewChanged(int wID, LPNMHDR pNMHDR, BOOL& bHandled)
+{
+	// no selected item -> clear the edit fields and reset the buttons.
+	int selected = ListView_GetNextItem(GetDlgItem(IDC_STREAM_LIST), -1, LVNI_SELECTED);
+
+	// List view empty
+	if (selected != -1)
+		return 0;
+
+	ClearClusterFields();
+	UpdateAddCancelNames(true, true);
+	UpdateAddCancelStates(false, false);
 
 	return 0;
 }
