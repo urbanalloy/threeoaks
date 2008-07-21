@@ -638,12 +638,18 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 						int size = settings->visuals.size();
 						int index = ComboBox_GetCurSel(GetDlgItem(hWnd, IDC_FLURRY));
 
-						CEditor::AutomaticDoModal(-1, settings);						
+						CEditor::AutomaticDoModal(-1, settings);							
 						LoadDialogPresets(hWnd);
 
 						// check if a new preset has been added and select it
-						int newIndex = (size < (signed)settings->visuals.size() ? settings->visuals.size() - 1 : index);
+						int newIndex = index;
+						if (size < (signed)settings->visuals.size())
+						{
+							newIndex = settings->visuals.size() - 1;
+							settings->UpdateVisual(newIndex);
+						}
 						ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_FLURRY), newIndex);
+						
 						UpdateEditButtons(hWnd);
 					}					
 					return TRUE;
@@ -654,7 +660,8 @@ BOOL WINAPI ScreenSaverConfigureDialog(HWND hWnd, UINT message, WPARAM wParam, L
 						if (index < PRESETS_READONLY)
 							return TRUE;
 
-						CEditor::AutomaticDoModal(index, settings);						
+						CEditor::AutomaticDoModal(index, settings);		
+						settings->UpdateVisual(index);
 						LoadDialogPresets(hWnd);
 
 						ComboBox_SetCurSel(GetDlgItem(hWnd, IDC_FLURRY), index);

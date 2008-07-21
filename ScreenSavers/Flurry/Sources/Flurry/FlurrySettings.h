@@ -66,6 +66,7 @@ namespace Flurry {
 			void WriteMonitors(CRegKey& reg);
 
 			void ReadVisuals(CRegKey& reg);
+			void WriteVisual(CRegKey& presets, int index);
 			void WriteVisuals(CRegKey& reg);			
 
 		public:
@@ -110,6 +111,7 @@ namespace Flurry {
 
 			void ReloadVisuals();
 			void DeleteVisual(int index);
+			void UpdateVisual(int index);
 
 			int GetPresetForMonitor(int monitor);			
 	};
