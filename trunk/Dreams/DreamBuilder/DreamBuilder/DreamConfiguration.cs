@@ -242,7 +242,7 @@ namespace DreamBuilder
     	public void Load(string buffer) {
 			ValidateConfiguration(new StringReader(buffer), Resources.DreamBuilderXSD);
 
-			XmlDocument document = new XmlDocument();
+			var document = new XmlDocument();
 			document.Load(new StringReader(buffer));
 
             config = (DreamConfig)Deserialize(document, typeof(DreamConfig));      
@@ -260,17 +260,14 @@ namespace DreamBuilder
         public static void ValidateConfiguration(StringReader file, string schema) {                                   	
 
             // Set the validation settings.
-            XmlReaderSettings settings = new XmlReaderSettings();
-            settings.ValidationType = ValidationType.Schema;
-			settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation | 
+            var settings = new XmlReaderSettings {ValidationType = ValidationType.Schema};
+            settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation | 
 									    XmlSchemaValidationFlags.ReportValidationWarnings;
 			settings.Schemas.Add(null, new XmlTextReader(new StringReader(schema)));
             settings.ValidationEventHandler += ValidationCallBack;
 
 			using (XmlReader reader = XmlReader.Create(file, settings))
-			{				
-				while (reader.Read());
-			}
+				while (reader.Read()) {}			
 
         }
 
@@ -294,10 +291,10 @@ namespace DreamBuilder
         /// <returns>A deserialized object</returns>
         public static object Deserialize(XmlNode xml, Type type)
         {
-            XmlSerializer s = new XmlSerializer(type);
+            var s = new XmlSerializer(type);
             string xmlString = xml.OuterXml;
-            byte[] buffer = ASCIIEncoding.UTF8.GetBytes(xmlString);
-            MemoryStream ms = new MemoryStream(buffer);
+            byte[] buffer = Encoding.UTF8.GetBytes(xmlString);
+            var ms = new MemoryStream(buffer);
             XmlReader reader = new XmlTextReader(ms);
             Exception caught = null;
 
@@ -328,13 +325,15 @@ namespace DreamBuilder
         /// <param name="file">The path to the file to serialize to</param>        
         public static void Serialize(object o, string file)
         {
-            XmlSerializer s = new XmlSerializer(o.GetType());
+            var s = new XmlSerializer(o.GetType());
 
-            FileStream fs = new FileStream(file, FileMode.OpenOrCreate, FileAccess.Write);             
-            XmlTextWriter writer = new XmlTextWriter(fs, new UnicodeEncoding());
-            writer.Formatting = Formatting.Indented;
-            writer.IndentChar = ' ';
-            writer.Indentation = 4;        		
+            var fs = new FileStream(file, FileMode.OpenOrCreate, FileAccess.Write);             
+            var writer = new XmlTextWriter(fs, new UnicodeEncoding())
+                         {
+                             Formatting = Formatting.Indented,
+                             IndentChar = ' ',
+                             Indentation = 4
+                         };
             Exception caught = null;
 
             try

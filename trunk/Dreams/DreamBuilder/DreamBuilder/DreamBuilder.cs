@@ -104,20 +104,20 @@ namespace DreamBuilder
 		[DllImport("DreamBuilderHook.dll", CharSet = CharSet.Unicode)]
 		private static extern bool BuildDream(string dllPath, string output, string name, string description, string contents, string preview, string author, string url, string copyright, string permissions);
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         static extern IntPtr LoadLibrary(string lpFileName);
 
 		[DllImport("kernel32.dll", SetLastError = true)]
 		static extern bool FreeLibrary(IntPtr hModule);
         
-        private static readonly string DreamMakerDll = "DreamMaker.dll";
+        private const string DreamMakerDll = "DreamMaker.dll";
 
-		private static readonly int NO_FILESIZE_CHECK = -1;
-    	private static readonly int MAX_VIDEOSIZE = 157286400;
+		private const int NO_FILESIZE_CHECK = -1;
+    	private const int MAX_VIDEOSIZE = 157286400;
 
-    	private static readonly string[] FILTER_VIDEO = new string[] {".avi", ".mpg", ".mpeg", ".wmv"};
-    	private static readonly string[] FILTER_IMAGE = new string[] {".jpg", ".jpeg", ".png", ".bmp"};
-		private static readonly string[] FILTER_INVALID = new string[] { ".scr", ".exe" };
+    	private static readonly string[] FILTER_VIDEO = new[] {".avi", ".mpg", ".mpeg", ".wmv"};
+    	private static readonly string[] FILTER_IMAGE = new[] {".jpg", ".jpeg", ".png", ".bmp"};
+		private static readonly string[] FILTER_INVALID = new[] { ".scr", ".exe" };
 
         /// <summary>
         /// DreamMaker install path
@@ -189,10 +189,7 @@ namespace DreamBuilder
             inputFile = input;
 
             // in the case we have defines, but no ouputDir
-            if (String.IsNullOrEmpty(outputDir))
-                outputDirectory = Environment.CurrentDirectory;
-            else
-                outputDirectory = outputDir;
+            outputDirectory = String.IsNullOrEmpty(outputDir) ? Environment.CurrentDirectory : outputDir;
 
             defines = defs;
 		}
@@ -264,7 +261,7 @@ namespace DreamBuilder
                 return;
             }
 
-            installPath = deskcapesKey.GetValue("Path").ToString();
+            installPath = deskcapesKey.GetValue("Path").ToString();            
 
             if (installPath == null)
             {
@@ -300,7 +297,7 @@ namespace DreamBuilder
         {
 
             // Read data
-            DreamConfiguration configuration = new DreamConfiguration();
+            var configuration = new DreamConfiguration();
 
 			string buffer = ReplaceDefines(File.ReadAllText(inputFile));
             try 
@@ -376,7 +373,7 @@ namespace DreamBuilder
 
 			bool ret = BuildDream(dllPath, outputFile, name, description, GetContentList(), preview, author, url, copyright, permissions);
 
-			StringBuilder buffer = new StringBuilder(2000);
+			var buffer = new StringBuilder(2000);
         	GetLastMessage(buffer, 2000);
 
 			FreeLibrary(hLibrary);
@@ -416,7 +413,7 @@ namespace DreamBuilder
         private string ReplaceDefines(string input) { 
 
             // Check for strings to replace            
-            Regex FindVars = new Regex(@"\$(\w+)\$");
+            var FindVars = new Regex(@"\$(\w+)\$");
 
             string Output = FindVars.Replace(input,
                 delegate(Match m)
@@ -518,7 +515,7 @@ namespace DreamBuilder
 				}
 
 				if (!check)									
-					OutputError("File is not in a valid format", "Accepted Formats are " + formatList.TrimEnd(new char[] {' ', ','}) + " - " + file, null);				
+					OutputError("File is not in a valid format", "Accepted Formats are " + formatList.TrimEnd(new[] {' ', ','}) + " - " + file, null);				
 			}
 
             // Check for target directory  
@@ -632,22 +629,27 @@ namespace DreamBuilder
         	string triggersDefinition = Path.Combine(buildDir, "DreamTriggers.xml");
 			AddContent(triggersDefinition);
 
-			TriggersV1 triggersV1 = new TriggersV1();
-			triggersV1.version = 100;
-			triggersV1.fileVersion = "1.0";
-			triggersV1.triggers = new TriggerSetV1();
-			triggersV1.triggers.triggers = new List<TriggerV1>();
-			triggersV1.triggers.type = triggers.type;        	
+			var triggersV1 = new TriggersV1
+		                     {
+		                         version = 100,
+		                         fileVersion = "1.0",
+		                         triggers = new TriggerSetV1
+	                                        {
+	                                            triggers =
+	                                                new List<TriggerV1>(),
+	                                            type = triggers.type
+	                                        }
+		                     };
 
-			// Process the list of triggers
+            // Process the list of triggers
             //   - Check for duplicates
 			//		+ triggers that start at the same time
 			//		The case where there is only two triggers, but with the same file is not handled        	
 			//   - Check & copy the files	
 			//   - Build the DreamTriggersV1 structure				
         	int id = 1;
-			List<DateTime> timeList = new List<DateTime>();
-			List<string> fileList = new List<string>();
+			var timeList = new List<DateTime>();
+			var fileList = new List<string>();
 			foreach (DreamTrigger trigger in triggers.triggers)
 			{
 				// Check unique time
@@ -664,14 +666,16 @@ namespace DreamBuilder
 				}				
 
 				// Add trigger
-				TriggerV1 triggerV1 = new TriggerV1();
-				triggerV1.id = id;
-				triggerV1.video = Path.GetFileName(trigger.file);
-				triggerV1.hour = trigger.time.Hour;
-				triggerV1.minute = trigger.time.Minute;
-				triggerV1.second = trigger.time.Second;
+				var triggerV1 = new TriggerV1
+		                        {
+		                            id = id,
+		                            video = Path.GetFileName(trigger.file),
+		                            hour = trigger.time.Hour,
+		                            minute = trigger.time.Minute,
+		                            second = trigger.time.Second
+		                        };
 
-				triggersV1.triggers.triggers.Add(triggerV1);
+			    triggersV1.triggers.triggers.Add(triggerV1);
 
 				Console.WriteLine("  Adding trigger: " + triggerV1.video + " at " + trigger.time.Hour + ":" + trigger.time.Minute + ":" + trigger.time.Second);
 
