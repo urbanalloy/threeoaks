@@ -76,7 +76,7 @@ namespace DreamBuilder.Test
 			configuration.Load(File.ReadAllText(path));
 		}
 
-		[RowTest]
+        [Test]
 		[Row("NameNotPresent.xml")]
 		[Row("NameTooLong.xml")]
 		[Row("DescriptionNotPresent.xml")]
@@ -109,7 +109,7 @@ namespace DreamBuilder.Test
 			configuration.Load(File.ReadAllText(path));
         }
 
-		[RowTest]	
+        [Test]	
 		[Row("ValidVideoDream.xml")]
 		[Row("ValidTriggerDream.xml")]
 		[Row("ValidDynamicDream.xml")]
@@ -144,7 +144,7 @@ namespace DreamBuilder.Test
 			Assert.AreEqual(configuration.Type, DreamType.Trigger);
 		}
 
-		[RowTest]
+        [Test]
 		[Row("ValidDynamicDream.xml")]
 		[Row("ValidDynamicDreamNoResources.xml")]
 		public void Test_DreamTypeDynamic(string file)

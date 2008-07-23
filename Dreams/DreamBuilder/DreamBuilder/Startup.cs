@@ -52,16 +52,16 @@ namespace DreamBuilder
 
             foreach (Object obj in objArray)
             {
-                AssemblyTitleAttribute title = obj as AssemblyTitleAttribute;
+                var title = obj as AssemblyTitleAttribute;
                 if (title != null) name = title.Title;
 
-                AssemblyCopyrightAttribute cop = obj as AssemblyCopyrightAttribute;
+                var cop = obj as AssemblyCopyrightAttribute;
 				if (cop != null) copyright = cop.Copyright;
 
-                AssemblyCompanyAttribute comp = obj as AssemblyCompanyAttribute;
+                var comp = obj as AssemblyCompanyAttribute;
                 if (comp != null) company = comp.Company;
 
-                AssemblyDescriptionAttribute note = obj as AssemblyDescriptionAttribute;
+                var note = obj as AssemblyDescriptionAttribute;
                 if (note != null) description = note.Description;
             }
 
@@ -84,7 +84,7 @@ namespace DreamBuilder
             string outputDir = null;
             Dictionary<String, String> defines = null;
 
-            string pattern = @"(?<argname>/[DO])(?<argvalue>.+)";
+            const string pattern = @"(?<argname>/[DO])(?<argvalue>.+)";
             foreach (string arg in args)
             {
                 // First string is the input file
@@ -129,7 +129,7 @@ namespace DreamBuilder
 
                     string[] parts = param.Split('=');
 
-					if (parts == null || parts.Length != 2 || String.IsNullOrEmpty(parts[0]))
+					if (parts.Length != 2 || String.IsNullOrEmpty(parts[0]))
                     {
                         Console.WriteLine("Improperly formatted define:" + param);
                         OutputCommandLineHelp();
@@ -141,7 +141,7 @@ namespace DreamBuilder
             }
 
 
-            DreamBuilder builder = new DreamBuilder(inputFile, outputDir, defines);
+            var builder = new DreamBuilder(inputFile, outputDir, defines);
             
             try
             {

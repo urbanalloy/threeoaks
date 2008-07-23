@@ -58,7 +58,7 @@ namespace DreamBuilder.Test
 				Directory.CreateDirectory(Path.GetDirectoryName(path));
 
 			if (File.Exists(path)) {
-				FileInfo info = new FileInfo(path);
+				var info = new FileInfo(path);
 				if (info.Length == size)
 					return;				
 			}
@@ -98,7 +98,7 @@ namespace DreamBuilder.Test
 			builder.Build();
 		}
 
-		[RowTest]
+        [Test]
 		[Row("BasicInvalidFileExe.xml")]
 		[Row("BasicInvalidFileScr.xml")]
 		[ExpectedException(typeof(BuilderException), "File is not in a valid format")]
@@ -136,34 +136,33 @@ namespace DreamBuilder.Test
 			builder.Build();
 		}
 
-		[RowTest]
+        [Test]
 		[Row("VariableReplacementVideo.xml")]
 		[Row("VariableReplacementTrigger.xml")]
 		[Row("VariableReplacementDynamic.xml")]
 		public void Test_VariableReplacement(string file)
 		{
-			Dictionary<string, string>  defines = new Dictionary<string, string>();
-			defines.Add("name", "Variable Replacement");
-			defines.Add("description", "Description Variable Replacement");
-			defines.Add("author", "Julien Templier");
-			defines.Add("url", "http://julien.wincustomize.com");
-			defines.Add("copyright", "(C) 2007, Three Oaks Crossing, LLC");
-			defines.Add("permissions", "N/A");
-			defines.Add("preview", "../preview.jpg");
+			var  defines = new Dictionary<string, string>
+			                   {
+			                       {"name", "Variable Replacement"},
+			                       {"description", "Description Variable Replacement"},
+			                       {"author", "Julien Templier"},
+			                       {"url", "http://julien.wincustomize.com"},
+			                       {"copyright", "(C) 2007, Three Oaks Crossing, LLC"},
+			                       {"permissions", "N/A"},
+			                       {"preview", "../preview.jpg"},
+			                       {"video", "../Videos/TestVideo.avi"},
+			                       {"time1", "01:00:00"},
+			                       {"path1", "../Videos/TestVideo.avi"},
+			                       {"time2", "02:00:00"},
+			                       {"path2", "../Videos/TestVideo.mpg"},
+			                       {"dll32", "../DreamDynamic/resources/dynamic32.dll"},
+			                       {"dll64", "../DreamDynamic/resources/dynamic32.dll"},
+			                       {"file1", "../preview.jpg"},
+			                       {"path_res1", "resources"}
+			                   };
 
-			defines.Add("video", "../Videos/TestVideo.avi");
-
-			defines.Add("time1", "01:00:00");
-			defines.Add("path1", "../Videos/TestVideo.avi");
-			defines.Add("time2", "02:00:00");
-			defines.Add("path2", "../Videos/TestVideo.mpg");
-
-			defines.Add("dll32", "../DreamDynamic/resources/dynamic32.dll");
-			defines.Add("dll64", "../DreamDynamic/resources/dynamic32.dll");
-			defines.Add("file1", "../preview.jpg");
-			defines.Add("path_res1", "resources");
-
-			builder = new DreamBuilder(Path.Combine(resourceFolder, "Variables\\" + file), null, defines);
+            builder = new DreamBuilder(Path.Combine(resourceFolder, "Variables\\" + file), null, defines);
 			builder.Build();
 		}
 
@@ -235,7 +234,7 @@ namespace DreamBuilder.Test
 			builder.Build();
 		}
 
-		[RowTest]
+        [Test]
 		[Row("PreviewFormatBMP.xml")]
 		[Row("PreviewFormatJPEG.xml")]
 		[Row("PreviewFormatJPG.xml")]
@@ -301,7 +300,7 @@ namespace DreamBuilder.Test
 			builder.Build();
 		}
 
-		[RowTest]
+        [Test]
 		[Row("VideoFormatAVI.xml")]
 		[Row("VideoFormatMPEG.xml")]
 		[Row("VideoFormatMPG.xml")]
@@ -382,7 +381,7 @@ namespace DreamBuilder.Test
 			builder.Build();
 		}
 
-		[RowTest]
+        [Test]
 		[Row("TriggerFormatAVI-WMV.xml")]
 		[Row("TriggerFormatMPG-MPEG.xml")]	
 		[Row("TriggerTwoIdenticalFiles.xml")]
@@ -396,7 +395,7 @@ namespace DreamBuilder.Test
 
 		#region Dynamic Dream
 
-		[RowTest]
+        [Test]
 		[Row("DynamicDll32NotFound.xml")]
 		[Row("DynamicDll64NotFound.xml")]
 		[Row("DynamicResourceNotFound.xml")]
@@ -407,7 +406,7 @@ namespace DreamBuilder.Test
 			builder.Build();
 		}
 
-		[RowTest]
+        [Test]
 		[Row("DynamicInvalidCharsInPathDll32.xml")]
 		[Row("DynamicInvalidCharsInPathDll64.xml")]
 		[Row("DynamicInvalidCharsInPathResourceFile.xml")]
@@ -419,7 +418,7 @@ namespace DreamBuilder.Test
 			builder.Build();
 		}
 
-		[RowTest]
+        [Test]
 		[Row("DynamicInvalidCharsInFilenameDll32.xml")]
 		[Row("DynamicInvalidCharsInFilenameDll64.xml")]
 		[Row("DynamicInvalidCharsInFilenameResourceFile.xml")]
@@ -445,7 +444,7 @@ namespace DreamBuilder.Test
 			Assert.Fail();
 		}
 
-		[RowTest]
+        [Test]
 		[Row("../resources")]
 		[Row("../resources/")]
 		[Row("./../resources")]
@@ -457,14 +456,13 @@ namespace DreamBuilder.Test
 		[ExpectedException(typeof(BuilderException), "Resulting resource path is outside the build directory")]
 		public void Test_DynamicResourcePathOutsideBuildDirectory(string path)
 		{
-			Dictionary<string, string> defines = new Dictionary<string, string>();
-			defines.Add("test_path", path);			
+			var defines = new Dictionary<string, string> {{"test_path", path}};
 
-			builder = new DreamBuilder(Path.Combine(resourceFolder, "DreamDynamic\\DynamicResourcePathOutsideBuildDirectory.xml"), null, defines);
+            builder = new DreamBuilder(Path.Combine(resourceFolder, "DreamDynamic\\DynamicResourcePathOutsideBuildDirectory.xml"), null, defines);
 			builder.Build();
 		}
 
-		[RowTest]
+        [Test]
 		[Row("DynamicNoResources.xml")]
 		[Row("DynamicResourcesWithoutPath.xml")]
 		[Row("DynamicResourcesWithPath.xml")]		
