@@ -21,12 +21,15 @@ public:
 				CTimer();
 	void		Init(void);
 	void		Update(void);
+	void		ResetTime(void);
 	f32			GetDeltaTime(void);
+	f64			GetTotalTime(void);
 
 protected:
 	LARGE_INTEGER	m_OldCount;
 	LARGE_INTEGER	m_PFreq;
 	f32				m_DeltaTime;
+	f64				m_totalTime;
 	
 };
 
@@ -38,6 +41,7 @@ protected:
 inline CTimer::CTimer()
 {
 	m_DeltaTime		= 0.0f;
+	m_totalTime		= 0.0f;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -57,13 +61,25 @@ inline void	CTimer::Update(void)
 	m_DeltaTime = (f32)((f64)(newCount.QuadPart-m_OldCount.QuadPart)/(f64)m_PFreq.QuadPart);
 	m_OldCount = newCount;
 
+	m_totalTime += m_DeltaTime;
+
 	if (m_DeltaTime > 1.0f/30.0f)
 		m_DeltaTime = 1.0f/30.0f;
 }
 
 ////////////////////////////////////////////////////////////////////////////
-//
-inline f32		CTimer::GetDeltaTime(void)
+inline f32 CTimer::GetDeltaTime(void)
 {
 	return m_DeltaTime;
 }
+
+inline f64 CTimer::GetTotalTime(void)
+{
+	return m_totalTime;
+}
+
+inline void CTimer::ResetTime(void)
+{
+	m_totalTime = 0.0f;
+}
+
