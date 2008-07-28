@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dream>
+	<name>Valentine</name>
+	<description>Special Dream for Valentine's day</description>
+	<author>Julien Templier</author>
+	<url>http://julien.wincustomize.com</url>
+	<copyright>(C) 2008 Julien Templier</copyright>
+	<permissions>The following photos are licensed under the Creative Commons
+For license terms see http://creativecommons.org/licenses/
+
+Valentines
+http://www.flickr.com/photos/spoungeworthy/390037732/ by Spoungeworthy (CC BY 2.0)
+
+Happy Valentine's Day!
+http://www.flickr.com/photos/buckofive/390024916/ by buckofive  (CC BY-NC-SA 2.0)
+
+Valentine Mosaic
+http://www.flickr.com/photos/auntikhaki/389474428/ by Auntie K (CC BY-NC-SA 2.0)
+
+Valentine Roses
+http://www.flickr.com/photos/elainegreycats/102501987/ by Elaine with Grey Cats (CC BY-SA 2.0)
+
+Valentine Favorites
+http://www.flickr.com/photos/craftilyeverafter/2172443573/ by craftilyeverafter (CC BY-NC 2.0)</permissions>
+	
+	<preview>$resdir$/Valentine.png</preview>
+
+	<data>		
+		<dynamic>
+			<dll32>$builddir$/Valentine32.dll</dll32>
+			<dll64>$builddir$/Valentine64.dll</dll64>
+			
+			<resources>
+				<resource>
+					<file>$resdir$/Readme.txt</file>
+					<path>Resources</path>
+				</resource>
+				<resource>
+					<file>$resdir$/Backgrounds/Happy Valentine's Day.jpg</file>
+					<path>Resources/Backgrounds</path>
+				</resource>
+				<resource>
+					<file>$resdir$/Backgrounds/Valentine Favorites.jpg</file>
+					<path>Resources/Backgrounds</path>
+				</resource>
+				<resource>
+					<file>$resdir$/Backgrounds/Valentine Mosaic.jpg</file>
+					<path>Resources/Backgrounds</path>
+				</resource>
+				<resource>
+					<file>$resdir$/Backgrounds/Valentines.jpg</file>
+					<path>Resources/Backgrounds</path>
+				</resource>
+				<resource>
+					<file>$resdir$/Backgrounds/Valentines Roses.jpg</file>
+					<path>Resources/Backgrounds</path>
+				</resource>
+				<resource>
+					<file>$resdir$/Textures/Round.bmp</file>
+					<path>Resources/Textures</path>
+				</resource>		
+				<resource>
+					<file>$resdir$/Textures/Flare.bmp</file>
+					<path>Resources/Textures</path>
+				</resource>
+				<resource>
+					<file>$resdir$/Textures/Heart.bmp</file>
+					<path>Resources/Textures</path>
+				</resource>				
+				<resource>
+					<file>$resdir$/Shaders/Effect.fx</file>
+					<path>Resources/Shaders</path>
+				</resource>
+			</resources>
+		</dynamic>
+	</data>
+</dream>
