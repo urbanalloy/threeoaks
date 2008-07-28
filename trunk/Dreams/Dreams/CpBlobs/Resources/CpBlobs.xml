@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dream>
+	<name>CpBlobs</name>
+	<description>A Dream displaying metaballs moving around in an environment</description>
+	<author>Julien Templier</author>
+	<url>http://julien.wincustomize.com/</url>
+	<copyright>(C) 2007-2008 Julien Templier
+	
+Adapted from the cpBlobs Screensaver for XBox Media Center
+Copyright (c) 2004, Simon Windmill (siw@coolpowers.com)</copyright>
+	<permissions>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</permissions>
+	
+	<preview>$resdir$/cpBlobs.png</preview>
+
+	<data>		
+		<dynamic>
+			<dll32>$builddir$/cpBlobs32.dll</dll32>
+			<dll64>$builddir$/cpBlobs64.dll</dll64>
+			
+			<resources>
+				<resource>
+					<file>$resdir$/Config.xml</file>
+					<path>Resources</path>
+				</resource>
+				<resource>				
+					<file>$resdir$/data/cp/cube.dds</file>
+					<path>Resources/data</path>
+				</resource>
+				<resource>				
+					<file>$resdir$/data/cp/cube_diffuse.dds</file>
+					<path>Resources/data</path>
+				</resource>
+				<resource>				
+					<file>$resdir$/data/cp/cube_specular.dds</file>
+					<path>Resources/data</path>
+				</resource>				
+			</resources>
+		</dynamic>
+	</data>
+</dream>

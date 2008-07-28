@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dream>
+	<name>AsterWave</name>
+	<description>A field of liquid that deforms realistically to changes in height using actual physics equations.</description>
+	<author>Julien Templier</author>
+	<url>http://julien.wincustomize.com/</url>
+	<copyright>(C) 2007-2008 Julien Templier
+	
+Adapted from the AsterWave Screensaver for XBox Media Center
+Copyright (c) 2007, Asteron (http://asteron.projects.googlepages.com/home)
+
+Thanks to Jyra (Team XBMC) for his submission liquid2cj0-1.jpg
+
+Also thanks to XBMC's own MilkDrop visualization for some of the outlandish textures.
+
+All photos not credited were taken gratefully from the public domain, special thanks to
+Jon Sullivan - http://www.pdphoto.org
+
+The following picture(s) included in this distribution are licensed under the GFDL
+For the full GFDL text see
+http://commons.wikimedia.org/wiki/Commons:GNU_Free_Documentation_License
+
+Koh_Samui_Lipa_Noi2.jpg (modified)
+http://en.wikipedia.org/wiki/Image:Koh_Samui_Lipa_Noi2.jpg by Manfred Werner (GFDL)
+
+
+These photos are licensed under the Creative Commons 
+For license terms see
+http://creativecommons.org/licenses/ 
+
+Esplanade sunset
+http://www.flickr.com/photos/pearbiter/133448650/ by Pear Bitter (CC by-sa 2.0)
+
+Sunset in Hawaii
+http://www.flickr.com/photos/nicolala/424490412/ by GoddessNicole (CC by 2.0)</copyright>
+	<permissions>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</permissions>
+	
+	<preview>$resdir$/AsterWave.png</preview>
+
+	<data>		
+		<dynamic>
+			<dll32>$builddir$/AsterWave32.dll</dll32>
+			<dll64>$builddir$/AsterWave64.dll</dll64>
+			
+			<resources>
+				<resource>
+					<file>$resdir$/Config.xml</file>
+					<path>Resources</path>
+				</resource>
+				<resource>				
+					<file>$resdir$/textures/800px-Koh_Samui_Lipa_Noi3.jpg</file>
+					<path>Resources/textures</path>
+				</resource>
+				<resource>				
+					<file>$resdir$/textures/133448650_b17a854ff4_b.jpg</file>
+					<path>Resources/textures</path>
+				</resource>
+				<resource>				
+					<file>$resdir$/textures/424490412_8e52094ee4_b.jpg</file>
+					<path>Resources/textures</path>
+				</resource>
+				<resource>				
+					<file>$resdir$/textures/ireland_152_bg_061702.jpg</file>
+					<path>Resources/textures</path>
+				</resource>
+				<resource>				
+					<file>$resdir$/textures/liquid2cj0-1.jpg</file>
+					<path>Resources/textures</path>
+				</resource>
+				<resource>				
+					<file>$resdir$/textures/screenshot025.jpg</file>
+					<path>Resources/textures</path>
+				</resource>
+				<resource>				
+					<file>$resdir$/textures/screenshot026.jpg</file>
+					<path>Resources/textures</path>
+				</resource>
+				<resource>				
+					<file>$resdir$/textures/screenshot032b.png</file>
+					<path>Resources/textures</path>
+				</resource>
+				<resource>				
+					<file>$resdir$/textures/xbmc clouds.jpg</file>
+					<path>Resources/textures</path>
+				</resource>
+			</resources>
+		</dynamic>
+	</data>
+</dream>

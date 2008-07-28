@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<dream>
+	<name>CrystalMorph</name>
+	<description>CrystalMorph Dream</description>
+	<author>Julien Templier</author>
+	<url>http://julien.wincustomize.com/</url>
+	<copyright>Copyright (c) 2008, Julien Templier
+
+Adapted from the CrystalMorph Screensaver for XBox Media Center
+Copyright (c) 2007 Asteron (http://asteron.projects.googlepages.com/home)</copyright>
+	<permissions>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</permissions>
+	
+	<preview>$resdir$/CrystalMorph.png</preview>
+
+	<data>		
+		<dynamic>
+			<dll32>$builddir$/CrystalMorph32.dll</dll32>
+			<dll64>$builddir$/CrystalMorph64.dll</dll64>
+			
+			<resources>
+				<resource>
+					<file>$resdir$/Config.xml</file>
+					<path>Resources</path>
+				</resource>
+			</resources>
+		</dynamic>		
+	</data>
+	
+</dream>
