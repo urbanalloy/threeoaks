@@ -17,10 +17,6 @@
 
 #define TEXTUREUV		1.0f
 
-#define d3dSetRenderState			d3dDevice->SetRenderState
-#define d3dGetRenderState			d3dDevice->GetRenderState
-#define d3dSetTextureStageState		d3dDevice->SetTextureStageState
-
 /***************************** D E F I N E S *******************************/
 
 typedef signed char			s8;
