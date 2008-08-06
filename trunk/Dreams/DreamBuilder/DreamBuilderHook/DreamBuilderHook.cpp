@@ -65,7 +65,11 @@ BOOL BuildDream(LPCWSTR dreamDll, LPCWSTR output, LPCWSTR name, LPCWSTR descript
 	// Intercept MessageBox calls
 	InterceptDllCall(hInstance, L"user32.dll", "MessageBoxW", (PVOID)&MyMessageBox, (PVOID*)&p_fnMessageBoxOrg, NULL);
 
-	return (*buildDream)(output, name, description, contents, preview, author, url, copyright, permissions);
+	BOOL ret = (*buildDream)(output, name, description, contents, preview, author, url, copyright, permissions);
+	
+	FreeLibrary(hInstance);
+	
+	return ret;
 }
 
 int GetLastMessage(LPCWSTR buffer, int length)
