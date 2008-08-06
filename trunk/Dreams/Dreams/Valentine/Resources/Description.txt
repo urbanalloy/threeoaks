@@ -1,7 +1,0 @@
-This is a special dynamic Dream for Valentine's Day.
-
-It shows animated particles forming a heart.
-
-You can tweak the color, size and texture of the particles in the Dream configuration window. You can also choose amongst five different backgrounds (and decide if you want to blur and/or colorize them).
-
-More info on the development process here: http://www.wincustomize.com/articles.aspx?aid=174456
