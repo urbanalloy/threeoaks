@@ -37,7 +37,7 @@ BOOL (__stdcall *SDHostMessage)(UINT, DWORD, DWORD) = NULL;
 static HINSTANCE dllInstance = NULL;
 static HANDLE processHandle = NULL;
 
-DECLARE_DXPLUGIN_READTYPEINFO(IID_IAeroColor)
+DECLARE_DXPLUGIN_READTYPEINFO(ReadAeroColorTypeInfo, IID_IAeroColor)
 
 BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DWORD param2)
 {
@@ -65,9 +65,9 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 
 		        *pluginIndex = (DWORD)pAeroColor;
 				SCRIPTABLEPLUGIN sp;
-				strcpy(sp.szName, "AeroColor");
+				strcpy_s(sp.szName, 9*sizeof(char), "AeroColor");
 				pAeroColor->QueryInterface(IID_IUnknown, (void**)&sp.pUnk);
-				sp.pTI =  pReadTypeInfoFromThisFile(dllInstance);
+				sp.pTI =  ReadAeroColorTypeInfo(dllInstance);
 				SDHostMessage(SD_REGISTER_SCRIPTABLE_PLUGIN, objID, (DWORD)&sp);
         
 				DWORD *flags = (DWORD *) param1;
