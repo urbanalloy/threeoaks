@@ -65,7 +65,7 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 
 		        *pluginIndex = (DWORD)pAeroColor;
 				SCRIPTABLEPLUGIN sp;
-				strcpy_s(sp.szName, 9*sizeof(char), "AeroColor");
+				strcpy(sp.szName, "AeroColor");
 				pAeroColor->QueryInterface(IID_IUnknown, (void**)&sp.pUnk);
 				sp.pTI =  ReadAeroColorTypeInfo(dllInstance);
 				SDHostMessage(SD_REGISTER_SCRIPTABLE_PLUGIN, objID, (DWORD)&sp);
