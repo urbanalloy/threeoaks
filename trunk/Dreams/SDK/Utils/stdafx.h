@@ -27,6 +27,7 @@
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 // Windows Header Files:
 #include <windows.h>
+#include <windowsx.h>
 #include <mmsystem.h>
 
 // Direct3D9 includes
@@ -35,6 +36,8 @@
 #endif
 #include <d3d9.h>
 #include <d3dx9.h>
+
+#include <stdio.h>
 
 //////////////////////////////////////////////////////////////////////////
 // Macros
@@ -51,16 +54,3 @@
 	return false;				\
 }								\
 }
-
-// Registry
-#define LOAD_KEY(name, var) \
-	if (RegQueryValueEx(key, name, NULL, NULL, (LPBYTE)&value, &size) == ERROR_SUCCESS) \
-	var = value; \
-	else { \
-	value = var; \
-	RegSetValueEx(key, name, NULL, REG_DWORD, (CONST BYTE*)&value, sizeof(value)); \
-	}
-
-#define SAVE_KEY(name, var) \
-	value = var; \
-	RegSetValueEx(key, name, NULL, REG_DWORD, (CONST BYTE*)&value, sizeof(value));
