@@ -12,6 +12,14 @@ Running this widget on XP has the following limitations:
 Original idea by ZubaZ and CerebroJD on #Stardock (irc.stardock.com)
 
 ********************************************************
+** Installation
+********************************************************
+
+Because of a bug in DesktopX, you need to install the plugins manually before launching the widget.
+
+Copy DXMouseWheel.dll and DXVolumeControl.dll to %ProgramFiles%/Stardock/Object Desktop/DesktopX/SDPlugins/
+
+********************************************************
 ** Usage
 ********************************************************
 
