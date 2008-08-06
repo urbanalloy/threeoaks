@@ -40,9 +40,11 @@ static LRESULT CALLBACK MessageHookProc(int nCode, WPARAM wParam, LPARAM lParam)
     int msg = (UINT)wParam;
 
 	if (msg == WM_MOUSEWHEEL) {
-
 		MSLLHOOKSTRUCT* mouseStruct = (MSLLHOOKSTRUCT*)lParam;
-		int zDelta = GET_WHEEL_DELTA_WPARAM(mouseStruct->mouseData);
+		int delta = GET_WHEEL_DELTA_WPARAM(mouseStruct->mouseData);
+
+		if ((delta / WHEEL_DELTA) == 0)
+			delta = (delta > 0) ? 120 : -120;
 
 		SD_SCRIPTABLE_EVENT se;
 		se.cbSize = sizeof(SD_SCRIPTABLE_EVENT);
@@ -55,7 +57,7 @@ static LRESULT CALLBACK MessageHookProc(int nCode, WPARAM wParam, LPARAM lParam)
 		VARIANT* lpvt = (VARIANT*)malloc(sizeof(VARIANT)*1);
 		VariantInit(&lpvt[0]);							
 		lpvt[0].vt = VT_I4;
-		lpvt[0].lVal = zDelta;
+		lpvt[0].lVal = delta;
 
 		se.dp.rgvarg = lpvt;
 
