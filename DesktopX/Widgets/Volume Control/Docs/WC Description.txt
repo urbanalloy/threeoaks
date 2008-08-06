@@ -1,0 +1,21 @@
+The Volume Control widget allows you to adjust the volume using your mouse wheel.
+
+- Support for master volume control in Vista
+- Middle click for muting the volume
+- Hotkey support for volume up/volume down/mute
+- Volume overlay animated with the peak level 
+
+
+Limitation on WindowsXP: Disabling the animation will also disable the 'synchronisation' between the widget and the volume mixer. 
+
+
+Original idea by ZubaZ and CerebroJD on #Stardock (irc.stardock.com)
+Speaker image by Dwight Robinson aka vica (http://vica.deviantart.com)
+
+
+
+
+---
+Vista only features: full synchronisation between the object and the volume mixer.
+
+Note: Disabling the volume overlay animation on WindowsXP will also disable the 'synchronisation' between the object and the volume mixer.
