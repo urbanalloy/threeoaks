@@ -68,9 +68,9 @@ STDMETHODIMP CVistaVolume::put_Mute(BOOL isMuted)
 	isMuted == VARIANT_FALSE ? muted = FALSE : muted = TRUE;
 
 	if (Is_WinVista_or_Later())
-		return Vista_put_Mute(isMuted);
+		return Vista_put_Mute(muted);
 	else
-		return XP_put_Mute(isMuted);
+		return XP_put_Mute(muted);
 	
 }
 
