@@ -1,5 +1,5 @@
 DXVolumeControl plugin for DesktopX
- (c) 2007 Julien TEMPLIER aka Littleboy
+ Copyright 2007-2008, Julien TEMPLIER aka Littleboy
 ---------------------------------------
 
 The DXVolumeControl plugin adds support for master volume control on
@@ -8,6 +8,8 @@ Windows Vista.
 It has a basic XP compatibility layer so that you can use it in your objects
 without making two different versions. On XP, it will only support the
 volume, mute and peak value properties. The callback functions will never be called.
+
+Full source code is available here: http://code.google.com/p/threeoaks/
 
 ***************************************************************************
 ** Installation
@@ -100,6 +102,8 @@ XP Compatibility: might not work with some cards, in which case it will always
 ***************************************************************************
 ** Changelog
 ***************************************************************************
+
+Version 1.2.4: Fixed bug with VistaVolume.Mute not muting audio correctly
 
 Version 1.2.3: Added basic XP compatibility (volume/mute properties only)
 			   Fixed crash bug on XP when loading the plugin
