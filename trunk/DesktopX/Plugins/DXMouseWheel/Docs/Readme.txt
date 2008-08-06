@@ -1,5 +1,5 @@
 DXMouseWheel plugin for DesktopX
- (c) 2006 Julien TEMPLIER aka Littleboy
+ Copyright 2006-2008, Julien TEMPLIER aka Littleboy
 ---------------------------------------
 
 The DXMouseWheel plugin adds support for the mouse wheel to your DesktopX objects.
@@ -15,6 +15,8 @@ under Additional Abilities, click "Add" and select the DXMouseWheel plugin
 (should appears as MouseWheel Support).
 
 Your object now has a new ability: MouseWheel Support.
+
+Full source code is available here: http://code.google.com/p/threeoaks/
 
 ***************************************************************************
 ** Documentation
@@ -58,6 +60,8 @@ http://msdn2.microsoft.com/en-us/library/ms645611.aspx
 ***************************************************************************
 ** Changelog
 ***************************************************************************
+
+Version 1.2.2: Adjusted rotation delta to work with high precision mouses
 
 Version 1.2.1: Added middle button click detection.
 
