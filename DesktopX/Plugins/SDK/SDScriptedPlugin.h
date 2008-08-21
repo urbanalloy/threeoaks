@@ -16,6 +16,7 @@ ITypeInfo* functionName(HMODULE hm) \
 }
 
 
+#pragma warning ( disable: 4100 )
 #define DECLARE_DXPLUGIN_DLLFUNCTIONS(libId, dllName, clsId, progId, typeLib, indProgId, version, typeLibName) \
 extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved) \
 { \
