@@ -151,13 +151,3 @@ typedef struct SD_PLUGIN_INFO_
 #define SD_OBJECT_STATE_SHOW	  "Show"
 #define SD_OBJECT_STATE_HIDE	  "Hide"
 #define SD_OBJECT_STATE_COMMAND	  "Command executed"
-
-int WritePrivateProfileInt(LPCTSTR lpAppName, LPCTSTR lpKeyName, int iValue, LPCTSTR lpFileName)
-{
-	//////////////////////////////////////////////////////////////////////////
-	///Helper function included to quickly & easily save integers to an Ini
-	char szNumber[100];
-	strcpy_s(szNumber, 100, "");
-	_itoa_s(iValue, szNumber, 100, 10);
-	return WritePrivateProfileString(lpAppName, lpKeyName, szNumber, lpFileName);
-}
