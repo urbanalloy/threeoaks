@@ -11,8 +11,9 @@ typedef struct SD_DRAW_INFO_
 {
 	HDC hdc;
 	HBITMAP hBitmap;
-	RECT rcObject;
-	char *szCurrentState;
+	RECT rcObject; // bounding rectangle of the area occupied by the object in the HDC
+				   // if the host is DesktopX, this rectangle will be always (0, 0, width, height)
+	char *szCurrentState; // current state identifier
 } SD_DRAW_INFO;
 
 typedef struct SD_SCRIPTABLE_EVENTtag  
