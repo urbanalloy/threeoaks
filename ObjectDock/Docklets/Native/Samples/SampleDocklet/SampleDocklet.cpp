@@ -201,8 +201,55 @@ BOOL CALLBACK OnAcceptDropFiles(DOCKLET_DATA *data)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
-void CALLBACK OnDropFiles(DOCKLET_DATA *data, HDROP hDrop)
+// never called, DOCUMENTATION IS WRONG!
+BOOL CALLBACK OnDropFiles(DOCKLET_DATA *data, HDROP hDrop) 
 {
 	MessageBox(NULL, "File Dropped", "Sample Docklet", MB_OK | MB_ICONINFORMATION);
+
+	return FALSE;
 }
+
+HRESULT CALLBACK OnDropData(IDataObject *pDataObject, DWORD grfKeyState, DWORD *pdwEffect)
+{
+	FORMATETC fmtetc = { CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
+	STGMEDIUM stgmed;
+
+	// ask the IDataObject for some CF_TEXT data, stored as a HGLOBAL
+	if(pDataObject->GetData(&fmtetc, &stgmed) == S_OK)
+	{
+		// We need to lock the HGLOBAL handle because we can't
+		// be sure if this is GMEM_FIXED (i.e. normal heap) data or not
+		HDROP hdrop = (HDROP)GlobalLock(stgmed.hGlobal);
+
+		UINT  uNumFiles;
+		TCHAR szNextFile [MAX_PATH];
+
+		// Get the # of files being dropped.
+		uNumFiles = DragQueryFile ( hdrop, -1, NULL, 0 );
+
+		for ( UINT uFile = 0; uFile < uNumFiles; uFile++ )
+		{
+			// Get the next filename from the HDROP info.
+			if ( DragQueryFile ( hdrop, uFile, szNextFile, MAX_PATH ) > 0 )
+			{
+				MessageBox(NULL, szNextFile, "Sample Docklet", MB_OK | MB_ICONINFORMATION);
+			}
+		}
+
+		// cleanup
+		GlobalUnlock(stgmed.hGlobal);
+		ReleaseStgMedium(&stgmed);
+	}
+
+	*pdwEffect = DROPEFFECT_LINK;
+
+	return S_OK;
+}
+
+IDropSource* CALLBACK OnDragDropGetSourceObject(DWORD dwOKEffect) // always 4?
+{
+	// to investigate... :D
+	return NULL;
+}
+
 
