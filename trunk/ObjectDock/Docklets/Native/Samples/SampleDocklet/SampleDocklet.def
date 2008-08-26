@@ -8,5 +8,9 @@ EXPORTS
 	OnDestroy
 	OnAcceptDropFiles
 	OnDropFiles
+	OnDropData
+	OnDragDropGetSourceObject
+
+	
 	
 
