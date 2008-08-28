@@ -48,11 +48,11 @@ typedef struct SD_SOP_INFO_
 
 typedef struct SD_IMAGE_INFO_
 {
-	char fileName[MAX_PATH];
-	HBITMAP hb;
-	int width;
-	int height;
-	BOOL bHasAlpha;
+	char fileName[MAX_PATH];	// input: full path
+	HBITMAP hb;					// output: receives a 32 bit bitmap
+	int width;					// input: set this to the extract icon size if the file is an icon. output: image width
+	int height;					// output: image height
+	BOOL bHasAlpha;				// output: true if the image contains per pixel alpha values, false otherwise
 } SD_IMAGE_INFO;
 
 #define SD_HOST_DESKTOPX  0x00000001
