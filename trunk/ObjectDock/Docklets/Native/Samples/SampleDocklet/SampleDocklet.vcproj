@@ -52,7 +52,7 @@
 				AdditionalIncludeDirectories="../../../../DockletSDK/"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;SAMPLEDOCKLET_EXPORTS"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile="$(IntDir)/SampleDocklet.pch"
 				AssemblerListingLocation="$(IntDir)/"
