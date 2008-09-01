@@ -246,9 +246,10 @@ HRESULT CALLBACK OnDropData(IDataObject *pDataObject, DWORD grfKeyState, DWORD *
 	return S_OK;
 }
 
-IDropSource* CALLBACK OnDragDropGetSourceObject(DWORD dwOKEffect) // always 4?
+// OnDragDropGetSourceObject allows you to export a shell/virtual drop source for your docklet
+IDataObject* CALLBACK OnDragDropGetSourceObject(DWORD *pdwDropEffect) // always 4?
 {
-	// to investigate... :D
+	// not really useful :(
 	return NULL;
 }
 
