@@ -1,0 +1,119 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_CONFIG DIALOGEX 0, 0, 199, 260
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure Stars Dream..."
+FONT 8, "Segoe UI", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,88,239,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,142,239,50,14
+    LTEXT           "Build %s",IDC_BUILD,6,241,70,8,WS_DISABLED
+    LTEXT           "Number of stars",IDC_STARS_TEXT,10,51,56,8
+    CONTROL         "",IDC_STARS,"msctls_trackbar32",TBS_AUTOTICKS | TBS_TOP | TBS_TOOLTIPS | WS_TABSTOP,69,43,122,26
+    CONTROL         103,IDC_PICTURE,"Static",SS_BITMAP | SS_REALSIZEIMAGE,0,0,200,37
+    LTEXT           "Gamma",IDC_GAMMA_TEXT,15,86,26,8
+    CONTROL         "",IDC_GAMMA,"msctls_trackbar32",TBS_AUTOTICKS | TBS_TOP | TBS_TOOLTIPS | WS_TABSTOP,53,77,133,20
+    GROUPBOX        "Visuals",IDC_VISUALS,8,128,182,88
+    GROUPBOX        "Display",IDC_DISPLAY,7,68,182,56
+    LTEXT           "Brightness",IDC_BRIGHTNESS_TEXT,15,106,38,8
+    CONTROL         "",IDC_BRIGHTNESS,"msctls_trackbar32",TBS_AUTOTICKS | TBS_TOP | TBS_TOOLTIPS | WS_TABSTOP,53,98,133,20
+    LTEXT           "Speed",IDC_SPEED_TEXT,15,144,22,8
+    CONTROL         "",IDC_SPEED,"msctls_trackbar32",TBS_AUTOTICKS | TBS_TOP | TBS_TOOLTIPS | WS_TABSTOP,55,136,133,20
+    LTEXT           "Zoom",IDC_ZOOM_TEXT,15,164,20,8
+    CONTROL         "",IDC_ZOOM,"msctls_trackbar32",TBS_AUTOTICKS | TBS_TOP | TBS_TOOLTIPS | WS_TABSTOP,55,157,133,20
+    LTEXT           "Expanse",IDC_EXPANSE_TEXT,15,185,29,8
+    CONTROL         "",IDC_EXPANSE,"msctls_trackbar32",TBS_AUTOTICKS | TBS_TOP | TBS_TOOLTIPS | WS_TABSTOP,55,178,133,20
+    PUSHBUTTON      "Reset to Defaults",IDC_DEFAULT,88,221,104,14
+    CONTROL         "Camera movement (pan && tilt)",IDC_CAMERA,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,201,165,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_CONFIG, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 253
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP1             BITMAP                  "Resources\\Config.bmp"
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

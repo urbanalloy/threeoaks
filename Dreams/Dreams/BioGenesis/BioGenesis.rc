@@ -1,0 +1,119 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_CONFIG DIALOGEX 0, 0, 199, 260
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure BioGenesis Dream..."
+FONT 8, "Segoe UI", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,88,239,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,142,239,50,14
+    LTEXT           "Build %s",IDC_BUILD,6,241,70,8,WS_DISABLED
+    LTEXT           "Number of iterations",IDC_ITERATIONS_TEXT,10,47,72,8
+    CONTROL         "",IDC_ITERATIONS,"msctls_trackbar32",TBS_AUTOTICKS | TBS_TOP | TBS_TOOLTIPS | WS_TABSTOP,85,39,106,26
+    CONTROL         103,IDC_PICTURE,"Static",SS_BITMAP | SS_REALSIZEIMAGE,0,0,200,37
+    LTEXT           "Minimum Size",IDC_MINSIZE_TEXT,14,81,48,8
+    CONTROL         "",IDC_MIN_SIZE,"msctls_trackbar32",TBS_AUTOTICKS | TBS_TOP | TBS_TOOLTIPS | WS_TABSTOP,70,72,116,20
+    GROUPBOX        "Colors",IDC_COLORS,8,140,182,76
+    GROUPBOX        "Grid",IDC_GRID,7,64,182,73
+    LTEXT           "Maximun Size",IDC_MAXSIZE_TEXT,14,101,48,8
+    CONTROL         "",IDC_MAX_SIZE,"msctls_trackbar32",TBS_AUTOTICKS | TBS_TOP | TBS_TOOLTIPS | WS_TABSTOP,70,93,116,20
+    LTEXT           "Preset Chance",IDC_PRESET_TEXT,16,156,49,8
+    CONTROL         "",IDC_PRESET,"msctls_trackbar32",TBS_AUTOTICKS | TBS_TOP | TBS_TOOLTIPS | WS_TABSTOP,70,148,116,20
+    PUSHBUTTON      "Reset to Defaults",IDC_DEFAULT,88,221,104,14
+    CONTROL         "Use neighbor coloring mode",IDC_NEIGHBOR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,202,165,10
+    CONTROL         "Use lifetime coloring mode",IDC_LIFETIME,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,187,165,10
+    CONTROL         "Use colony coloring mode",IDC_COLONY,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,172,165,10
+    LTEXT           "Grid lines",IDC_GRID_LINES_TEXT,14,122,34,8
+    CONTROL         "",IDC_GRID_LINES,"msctls_trackbar32",TBS_AUTOTICKS | TBS_TOP | TBS_TOOLTIPS | WS_TABSTOP,70,114,116,20
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_CONFIG, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 253
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP1             BITMAP                  "Resources\\Config.bmp"
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
