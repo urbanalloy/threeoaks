@@ -32,8 +32,12 @@ dialog, as well as toggle the glow animation on or off.
 ** Changelog
 ********************************************************
 
-Version 1.1: Updated DXMouseWheel and DXVistaVolume plugins
-			 Exported as a standalone gadget
+Version 1.2:
+  - Added volume change speed as an option (defaults to increments of 3%)
+  
+Version 1.1: 
+  - Updated DXMouseWheel and DXVistaVolume plugins
+  - Exported as a standalone gadget
 
 Version 1.0: First released version
 
