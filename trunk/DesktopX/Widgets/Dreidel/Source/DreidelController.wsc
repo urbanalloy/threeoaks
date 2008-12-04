@@ -1,0 +1,310 @@
+<?xml version="1.0"?>
+<package>
+<?component error="true" debug="true"?>
+<comment>
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Dreidel Widget
+//
+// Copyright (c) 2008, Julien Templier
+// All rights reserved.
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// * $LastChangedRevision$
+// * $LastChangedDate$
+// * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
+// 
+// Redistribution and use in source and binary forms, with or without modification, are
+// permitted provided that the following conditions are met:
+//	1. Redistributions of source code must retain the above copyright notice, this list of
+//		 conditions and the following disclaimer. 
+//	2. Redistributions in binary form must reproduce the above copyright notice, this list
+//		 of conditions and the following disclaimer in the documentation and/or other materials
+//		 provided with the distribution. 
+//	3. The name of the author may not be used to endorse or promote products derived from this
+//		 software without specific prior written permission. 
+//
+//	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//	OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+//	MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+//	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+//	EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+//	GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+//	ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+//	OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+//	POSSIBILITY OF SUCH DAMAGE.
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+</comment>
+
+<component id="DreidelController">
+	<registration description="Dreidel Controller"
+      			  progid="DreidelWidget.Controller"
+      			  version="1"
+    	    	  classid="{8625FCED-441F-4547-B4F9-9BBFA05A2C6E}"/>
+
+  <object id="m_filesystem" progid="Scripting.FileSystemObject"/>
+
+  <public>
+    
+    <method name="Init">
+      <parameter name="object" />
+      <parameter name="desktopX" />
+      <parameter name="system" />
+      <parameter name="widget" />
+      <parameter name="iniReader" />
+      <parameter name="dataFolder" />
+    </method>
+    <method name="InitPreferences" />
+    <method name="LoadPreferences" />
+    <method name="OnPreferencesChange" />
+    <method name="OnClick" />
+		
+	</public>
+
+  <resource id="ini_filename">DreidelConfig.ini</resource>
+  <resource id="ini_main_section">Dreidels</resource>
+  <resource id="error_picture">Error.png</resource>
+	
+	<script language="VBScript">
+	<![CDATA[
+	
+  Option Explicit
+
+	Dim m_scriptObject
+	Dim m_desktopX
+	Dim m_system
+	Dim m_widget
+  Dim m_iniReader
+  Dim m_dataFolder
+  
+  Dim m_currentDreidel
+  Dim m_currentFrame
+  Dim m_loaded
+  Dim m_animating
+  
+  Sub Init(object, desktopX, system, widget, iniReader, dataFolder)
+	
+		Set m_scriptObject = object
+		Set m_desktopX = desktopX
+		Set m_system = system
+		Set m_widget = widget
+    Set m_iniReader = iniReader 
+    
+    m_dataFolder = dataFolder
+    
+    m_loaded = false
+    m_animating = false
+  End Sub
+  
+  Sub InitPreferences()  
+    'Preference for dreidel animation
+	  m_widget.AddPreference "DreidelAnimation"
+	  m_widget.Preference("DreidelAnimation").Type = "ComboList"
+	  m_widget.Preference("DreidelAnimation").Caption = "Dreidel Animation"
+    m_widget.Preference("DreidelAnimation").DefaultValue = "Default"
+    
+    Dim name
+    Dim names
+    names = GetConfigurationNames()
+    For Each name in names
+      m_widget.Preference("DreidelAnimation").AddValue(name)
+    Next    	      
+  End Sub
+  
+  'Get the dreidel info associated with the currently selected dreidel animation
+  Sub LoadPreferences()           
+    LoadConfiguration(m_widget.Preference("DreidelAnimation").Value) 
+    
+    ' Check that the filename exists, reset to error image otherwise 
+    Dim path
+    path = m_dataFolder & m_currentDreidel.FileName
+    
+    If (m_currentDreidel.FileName = "" Or Not m_filesystem.FileExists(path)) Then
+      m_currentDreidel.TotalFrames = 0
+      m_scriptObject.SetPicture m_dataFolder & getResource("error_picture"), 1, 10, &H00000008
+      m_scriptObject.TooltipText = "Invalid image path: " & m_currentDreidel.FileName
+    Else
+      ' Apply the animation
+      m_scriptObject.SetPicture path, m_currentDreidel.TotalFrames, m_currentDreidel.Interval, &H00000008
+      m_scriptObject.TooltipText = ""
+    End If
+    
+    m_loaded = true
+  End Sub
+  
+  Sub OnPreferencesChange()
+    LoadPreferences()
+  End Sub
+  
+  Sub OnClick()
+    Dim side
+    
+    ' Pick a side
+    side = Int( ( 4 - 1 + 1 ) * Rnd + 1 )
+
+    If side = 1 Then
+      Animate m_currentDreidel.Frame_Gimel, 1
+    Else
+      If side = 2 Then
+        Animate m_currentDreidel.Frame_Hei, 1
+      Else
+        If side = 3 Then
+         Animate m_currentDreidel.Frame_Shin, 1
+        Else
+          If side = 4 Then
+           Animate m_currentDreidel.Frame_Nun, 1
+          End If  
+        End If  
+      End If    
+    End If  
+    
+  End Sub
+  
+  
+  '===========================================================================================
+  '= Private subs and functions
+  '===========================================================================================
+  
+  ' Load the list of dreidel configurations
+  Function GetConfigurationNames()  
+    Dim key, keys, k
+    Dim name, file
+    
+    Redim names(0)
+            
+    m_iniReader.FileName = m_dataFolder & getResource("ini_filename")   
+    m_iniReader.Section = getResource("ini_main_section")
+    
+    keys = m_iniReader.SectionKeys
+    
+    ' Get each configuration name
+    k = 0
+    For Each key in keys
+      m_iniReader.Section = "Dreidels"
+      m_iniReader.Section = m_iniReader.getKeyValue(key)
+       
+      Redim preserve names(k)
+      name = m_iniReader.getKeyValue("Name")
+     
+      names(k) = name       
+      k = k + 1      
+    Next
+        
+    GetConfigurationNames = names 
+  End Function
+  
+  ' Load configuration data
+  Sub LoadConfiguration(name)    
+    m_iniReader.Section = name
+    
+    Set m_currentDreidel = createComponent("Dreidel")
+    m_currentDreidel.Name = m_iniReader.getKeyValue("Name")   
+    m_currentDreidel.FileName = m_iniReader.getKeyValue("FileName")
+    m_currentDreidel.TotalFrames = m_iniReader.getKeyValue("TotalFrames")    
+    m_currentDreidel.Interval = m_iniReader.getKeyValue("Interval")    
+    m_currentDreidel.Frame_Nun = m_iniReader.getKeyValue("Frame_Nun")
+    m_currentDreidel.Frame_Gimel = m_iniReader.getKeyValue("Frame_Gimel")
+    m_currentDreidel.Frame_Hei = m_iniReader.getKeyValue("Frame_Hei")
+    m_currentDreidel.Frame_Shin = m_iniReader.getKeyValue("Frame_Shin")
+  End Sub
+  
+  ' Animate the object from the current frame to the end frame
+  ' Note: we block during animation, but that should not be a problem as the animation is quick
+  ' and we don't have to bother about managing multiple mouse clicks
+  Sub Animate(endFrame, loops)
+    Dim i    
+    
+    If m_loaded = false Or m_animating = true Then
+      Exit Sub
+    End If
+    
+    m_animating = true
+    
+    ' If we do not need to loop, check that the endframe is after the current frame
+    ' and loop once if it is just go to the end frame
+    If (endFrame < m_currentFrame) Then
+      loops = loops + 1
+    End If
+    
+    ' Loop to end and reset to initial frame
+    While loops > 0
+    
+      For i =  m_currentFrame + 1 To m_currentDreidel.TotalFrames
+        SetFrame(i)         
+      Next
+      
+      ' Go to first frame directly as the last one is identical
+      SetFrame(1)
+      loops = loops - 1
+    Wend
+    
+    ' Go to the end frame
+    For i =  m_currentFrame + 1 To endFrame
+      SetFrame(i)
+    Next   
+    
+    m_animating = false
+    
+  End Sub
+  
+  Sub SetFrame(index)
+    m_currentFrame = index
+    m_scriptObject.CurrentFrame = m_currentFrame  
+    m_scriptObject.Sleep m_currentDreidel.Interval
+  End Sub
+	
+	]]>
+	</script>
+
+</component>
+  
+<component id="Dreidel">
+  <comment>
+    Encapsulate a dreidel configuration
+  </comment>
+  <registration description="Dreidel Information"
+                progid="DreidelWidget.Dreidel"
+                version="1"
+                classid="{E00DB463-78C6-4d69-B7A3-B8771EE2197C}"/>
+
+  <public>
+    <property name="Name" internalName="m_name"/>
+    <property name="FileName" internalName="m_filename"/>
+    <property name="TotalFrames" internalName="m_total_frames"/>
+    <property name="Interval" internalName="m_interval"/>
+    <property name="Frame_Nun" internalName="m_frame_nun"/>
+    <property name="Frame_Gimel" internalName="m_frame_gimel"/>
+    <property name="Frame_Hei" internalName="m_frame_hei"/>
+    <property name="Frame_Shin" internalName="m_frame_shin"/>
+  </public>
+
+  <script language="VBScript">
+  <![CDATA[	
+
+  Dim m_name
+  Dim m_filename
+  Dim m_total_frames
+  Dim m_interval
+  
+  Dim m_frame_nun
+  Dim m_frame_gimel
+  Dim m_frame_hei
+  Dim m_frame_shin
+  
+   m_name = ""
+   m_filename = ""
+   m_total_frames = 0
+   m_interval = 0
+  
+   m_frame_nun = 0
+   m_frame_gimel = 0
+   m_frame_hei = 0
+   m_frame_shin = 0
+  ]]>
+  </script>
+
+</component>  
+
+</package>

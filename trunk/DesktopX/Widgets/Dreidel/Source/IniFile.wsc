@@ -1,0 +1,375 @@
+<?xml version="1.0"?>
+<package>
+<?component error="true" debug="true"?>
+<comment>
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Ini File Reader Script Component for DesktopX
+//
+// Copyright (c) 2007-2008, Julien Templier
+// All rights reserved.
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// * $LastChangedRevision$
+// * $LastChangedDate$
+// * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
+// 
+// Redistribution and use in source and binary forms, with or without modification, are
+// permitted provided that the following conditions are met:
+//	1. Redistributions of source code must retain the above copyright notice, this list of
+//		 conditions and the following disclaimer. 
+//	2. Redistributions in binary form must reproduce the above copyright notice, this list
+//		 of conditions and the following disclaimer in the documentation and/or other materials
+//		 provided with the distribution. 
+//	3. The name of the author may not be used to endorse or promote products derived from this
+//		 software without specific prior written permission. 
+//
+//	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//	OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+//	MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+//	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+//	EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+//	GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+//	ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+//	OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+//	POSSIBILITY OF SUCH DAMAGE.
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+</comment>
+
+
+<comment>
+	Ini File Reader component
+	
+	Either file bound or "in-memory"
+</comment>
+<component>
+	<registration description="IniFile Component"
+      			  progid="DXScriptLibrary.IniFileReader"
+      			  version="1"
+      	    	  classid="{FA229BBE-2FEE-45e5-8EE8-840D9EE97BA9}" />  
+      	    
+      	    
+	<public>
+		<comment>
+			Setting a filename puts the component in FileBound mode.
+		</comment>
+		<property name="FileName">
+			<get />
+			<put />
+		</property>
+		
+		<property name="Section" />
+		<property name="Key" />
+		
+		<comment>
+			If no file name has been set, you can set the content and the component will function in "in-memory" mode.
+			
+			If a filename has been set, the contents of the file will be overwritten.
+		</comment>
+		<property name="Content">
+			<get />
+			<put />
+		</property>
+		
+		<property name="Value">
+			<get />
+			<put />
+		</property>
+		
+		<property name="SectionNames">
+			<get />
+		</property>
+
+		<property name="SectionKeys">
+			<get />
+		</property>
+		
+		<comment>
+			Shortcut to get a key value
+			
+			Equivalent to:				
+				IniFile.Key = [param]
+				ret = IniFile.Value
+		</comment>
+		<method name="getKeyValue" />		
+
+	</public>
+	
+	<object id="objFso" progid="Scripting.FileSystemObject"/>
+
+	
+	<script language="VBScript">
+	<![CDATA[
+
+	Option Explicit
+	
+	'//////////////////////////////////////////////////////////////
+	'//  Variables
+	'//////////////////////////////////////////////////////////////	
+	Dim Section
+    Dim Key
+   
+    Dim objIni
+    Dim isFileBound
+    Dim m_content
+    Dim m_fileName
+    Dim m_loaded    
+    
+    isFileBound = False
+	m_loaded = False
+
+	'//////////////////////////////////////////////////////////////
+	'//  Filename
+	'//////////////////////////////////////////////////////////////    
+    Function put_Filename(name)
+    	If name = "" Then
+    		isFileBound = False
+    		m_loaded = False
+    	Else
+    		m_fileName = name
+    		isFileBound = True
+    		m_loaded = False
+    	End If
+    End Function
+    
+    Function get_Filename
+    	get_Filename = m_fileName
+    End Function
+    
+	'//////////////////////////////////////////////////////////////
+	'//  Content
+	'//////////////////////////////////////////////////////////////     
+    Function get_Content
+
+		If isFileBound And m_loaded = False Then
+	        Const FOR_READING = 1
+	
+	        get_Content = ""
+	        If objFso.FileExists(m_fileName) Then
+	            Set objIni = objFso.OpenTextFile(m_fileName, FOR_READING)
+	            get_Content = objIni.ReadAll
+	            objIni.Close
+	            Set objIni = Nothing
+	        End If
+	    Else
+	    	get_Content = m_content
+	    	m_loaded = True
+	   	End If
+
+    End Function
+    
+    Function put_Content(strContent)
+
+		If isFileBound Then
+	        Const OVERWRITE = True
+	
+	        Set objIni = objFso.CreateTextFile(m_fileName, OVERWRITE)
+	        objIni.Write strContent
+	        objIni.Close
+	        Set objIni = Nothing
+	        
+	        'Replace loaded content
+	        m_content = strContent 
+	    Else
+	    	m_content = strContent
+	   	End If
+
+    End Function   
+    
+    
+	'//////////////////////////////////////////////////////////////
+	'//  Section Names & Keys
+	'//////////////////////////////////////////////////////////////      
+    Function get_SectionNames
+    
+    	Dim arrContent
+    	Dim i, s, k, sec
+    	
+    	Redim sec(0)
+ 
+    	arrContent = Split(get_Content, vbNewLine, -1, 1)
+   	   	If (UBound(arrContent) > -1) Then
+   	   		k = 0   	   		           
+			For i = LBound(arrContent) To UBound(arrContent)
+            	s = Trim(arrContent(i))            	
+            	If (Left(s, 1) = "[") And (Right(s, 1) = "]") Then 
+            		ReDim Preserve sec(k)           		
+            		sec(k) = Mid(s, 2, Len(s)-2)
+            		
+            		k = k+1
+            	End If
+            	
+            Next
+        End If
+
+   		get_SectionNames = sec
+   		
+    End Function
+    
+    Function get_SectionKeys
+
+        Dim lngSectionStart, lngSectionEnd, lngIndex, arrContent
+        Dim strLine, i, s, k
+        
+        Redim keys(0)
+    
+        SectionStartEnd lngSectionStart, lngSectionEnd
+        If (lngSectionStart > -2) Then
+            arrContent = Split(get_Content, vbNewLine, -1, 1)
+            k = 0
+            For lngIndex = lngSectionStart + 1 To lngSectionEnd
+                strLine = arrContent(lngIndex)
+                i = InStr(1, strLine, "=", 1)
+                If (i > 0) Then
+                    s = Left(strLine, i - 1)
+                    s = Trim(s)
+                    
+                    ReDim Preserve keys(k)
+                    keys(k) = s
+                    
+                    k = k+1
+                End If
+            Next
+        End If
+        
+        get_SectionKeys = keys
+
+    End Function    
+    
+    
+    '//////////////////////////////////////////////////////////////
+	'// Value
+	'//////////////////////////////////////////////////////////////    
+    Function get_Value
+
+        Dim lngSectionStart, lngSectionEnd, lngIndex, arrContent
+        Dim strLine, i, s
+
+        get_Value = ""
+        SectionStartEnd lngSectionStart, lngSectionEnd
+        If (lngSectionStart > -2) Then
+            arrContent = Split(get_Content, vbNewLine, -1, 1)
+            For lngIndex = lngSectionStart + 1 To lngSectionEnd
+                strLine = arrContent(lngIndex)                
+                i = InStr(1, strLine, "=", 1)
+                If (i > 0) Then
+                    s = Left(strLine, i - 1)
+                    s = Trim(s)                                        
+                    If (LCase(s) = LCase(Key)) Then                       	                 
+                        get_Value = Mid(strLine, i + 1)
+                        get_Value = Trim(get_Value)
+                        Exit For
+                    End If
+                End If
+            Next
+        End If
+
+    End Function
+
+    Function put_Value(strValue)
+
+        Dim lngSectionStart, lngSectionEnd, arrContent
+        Dim lngIndex, lngIndex2, strContent, blnKeyNotFound
+        Dim strLine, i, s
+
+        SectionStartEnd lngSectionStart, lngSectionEnd
+        If (lngSectionStart < -1) AND (strValue <> "") Then
+            strContent = get_Content & vbNewLine _
+                & "[" & Section & "]" & vbNewLine _
+                    & Key & "=" & strValue
+        Else
+            blnKeyNotFound = True
+            arrContent = Split(get_Content, vbNewLine, -1, 1)
+            For lngIndex = lngSectionStart + 1 To lngSectionEnd
+                strLine = arrContent(lngIndex)
+                i = InStr(1, strLine, "=", 1)
+                If (i > 0) Then
+                    s = Left(strLine, i - 1)
+                    s = Trim(s)
+                    If (LCase(s) = LCase(Key)) Then
+                        blnKeyNotFound = False
+                        If (strValue <> "") Then
+                            arrContent(lngIndex) = Key & "=" & strValue
+                        Else
+                            For lngIndex2 = lngIndex To UBound(arrContent) - 1
+                                arrContent(lngIndex2) = arrContent(lngIndex2 + 1)
+                            Next
+                            Redim Preserve arrContent(UBound(arrContent) - 1)
+                        End If
+                        Exit For
+                    End If
+                End If
+            Next
+            If blnKeyNotFound AND (strValue <> "") Then
+                Redim Preserve arrContent(UBound(arrContent) + 1)
+                For lngIndex = UBound(arrContent) To lngSectionEnd + 2 Step -1
+                    arrContent(lngIndex) = arrContent(lngIndex - 1)
+                Next
+                arrContent(lngSectionEnd + 1) = Key & "=" & strValue
+            End If
+            strContent = arrContent(0)
+            For lngIndex = 1 To UBound(arrContent)
+                strContent = strContent & vbNewLine & arrContent(lngIndex)
+            Next
+        End If
+        put_Content strContent
+
+    End Function
+    
+    
+    '//////////////////////////////////////////////////////////////
+	'// Misc
+	'//////////////////////////////////////////////////////////////      
+    Public Function getKeyValue(keyValue)
+    	Key = keyValue    	
+    	getKeyValue = get_Value    	
+    End Function    
+    
+    
+    '//////////////////////////////////////////////////////////////
+	'//  Private functions
+	'//////////////////////////////////////////////////////////////
+    Sub SectionStartEnd(ByRef lngSectionStart, ByRef lngSectionEnd)
+
+        Dim arrContent, i, s
+
+        lngSectionStart = -2
+        lngSectionEnd = -1
+        arrContent = Split(get_Content, vbNewLine, -1, 1)
+        If (UBound(arrContent) > -1) Then
+            If (Section <> "") Then
+                For i = LBound(arrContent) To UBound(arrContent)
+                    s = Trim(arrContent(i))
+                    If (LCase(s) = "[" & LCase(Section) & "]") Then
+                        lngSectionStart = i
+                    ElseIf (Left(s, 1) = "[") AND _
+                        (Right(s, 1) = "]") AND _
+                        (lngSectionStart >= 0) Then
+                        lngSectionEnd = i - 1
+                        Exit For
+                    End If
+                Next
+                If (lngSectionStart >= 0) AND (lngSectionEnd < 0) Then
+                    lngSectionEnd = UBound(arrContent)
+                End If
+            Else
+                lngSectionStart = -1
+                lngSectionEnd = UBound(arrContent)
+            End If
+            If (lngSectionStart > -2) Then
+                If (arrContent(lngSectionEnd) = "") Then
+                    lngSectionEnd = lngSectionEnd - 1
+                End If
+            End If
+        End If
+
+    End Sub
+
+
+	]]>
+	</script>
+
+</component>
+</package>
