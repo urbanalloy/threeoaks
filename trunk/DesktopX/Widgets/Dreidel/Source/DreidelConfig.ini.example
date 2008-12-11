@@ -1,0 +1,53 @@
+;================================================================================================================
+;
+; This config file is a copy of the internal config file, with added support for AlexG Dreidel animation
+; To use this animation, rename this file to DreidelConfig.ini and put the dre.png file in the same folder
+; as Dreidel.exe
+;
+;================================================================================================================
+;
+; How to add your own animation:
+;  1. Create a DesktopX-ready animation (using AniUtil) and put the image file in the same folder as Dreidel.exe
+;  2. Add a new entry to the Dreidels section
+;  3. Add a new section for your animation
+;       - Add a name and the filename of your image
+;       - Specify the total number of frames of your animation
+;       - Specify on which frame is each of the 4 sides
+;       - Specify the interval between each frame of animation
+;
+;================================================================================================================
+
+[Dreidels]
+0=Default
+1=Shadow
+2=Dre
+
+[Default]
+Name=Default
+FileName=dreidel_no_shadow.png
+TotalFrames=36
+Interval=10
+Frame_Gimel=28
+Frame_Hei=1
+Frame_Shin=10
+Frame_Nun=19
+
+[Shadow]
+Name=Shadow
+FileName=dreidel_shadow.png
+TotalFrames=36
+Interval=10
+Frame_Gimel=28
+Frame_Hei=1
+Frame_Shin=10
+Frame_Nun=19
+
+[Dre]
+Name=Dre
+FileName=dre.png
+TotalFrames=36
+Interval=10
+Frame_Gimel=0
+Frame_Hei=9
+Frame_Shin=18
+Frame_Nun=27

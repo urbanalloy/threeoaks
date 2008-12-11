@@ -119,7 +119,7 @@
     
     ' Check that the filename exists, reset to error image otherwise 
     Dim path
-    path = m_dataFolder & m_currentDreidel.FileName
+    path = GetImagePath()
     
     If (m_currentDreidel.FileName = "" Or Not m_filesystem.FileExists(path)) Then
       m_currentDreidel.TotalFrames = 0
@@ -171,6 +171,35 @@
   '= Private subs and functions
   '===========================================================================================
   
+  Function GetImagePath()
+  
+    Dim path
+        
+    path = m_desktopX.ExecutableDirectory & "/" & m_currentDreidel.FileName
+
+    If (m_filesystem.FileExists(path)) Then
+      GetImagePath = path
+      Exit Function
+    End If        
+    
+    GetImagePath = m_dataFolder & m_currentDreidel.FileName
+  End Function
+  
+  Function GetConfigFilePath()
+  
+    Dim path
+        
+    path = m_desktopX.ExecutableDirectory & "/" & getResource("ini_filename")  
+
+    If (m_filesystem.FileExists(path)) Then
+      GetConfigFilePath = path
+      Exit Function
+    End If           
+  
+    GetConfigFilePath = m_dataFolder & getResource("ini_filename")   
+  
+  End Function
+  
   ' Load the list of dreidel configurations
   Function GetConfigurationNames()  
     Dim key, keys, k
@@ -178,7 +207,7 @@
     
     Redim names(0)
             
-    m_iniReader.FileName = m_dataFolder & getResource("ini_filename")   
+    m_iniReader.FileName = GetConfigFilePath()
     m_iniReader.Section = getResource("ini_main_section")
     
     keys = m_iniReader.SectionKeys
