@@ -1,3 +1,10 @@
+This is an animated dreidel widget.
 
+It comes with two animations (with or without shadow), but you can also use your own art with it. 
 
-Original idea by ZubaZ
+See DreidelConfig.ini.example for more information. There is included support for AlexG Dreidel animation: http://www.wincustomize.com/skins.aspx?skinid=1456&libid=3
+If you're interested in adding new animations and would like more flexibility, please contact me!
+
+Original idea and testing by ZubaZ - http://forums.wincustomize.com/331806
+
+Happy Hanukkah/Chanukah!
