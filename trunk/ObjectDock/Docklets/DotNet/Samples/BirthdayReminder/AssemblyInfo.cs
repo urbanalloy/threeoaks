@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 // associated with an assembly.
 //
 [assembly: AssemblyTitle("Birthday Reminder Docklet")]
-[assembly: AssemblyDescription("Shows today birthdays from Outlook Adress Book")]
+[assembly: AssemblyDescription("Shows today's and incoming birthdays")]
 [assembly: AssemblyCopyright("Julien Templier")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
