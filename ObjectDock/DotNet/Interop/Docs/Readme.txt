@@ -10,10 +10,11 @@ A SDK is available if you want to build you own plugins.
 ***************************************************************************
 
  2.0 (Build xx)
+    * Sample docklets, runtime and sdk are now distributed in the same package.
     * Recompiled for .Net 2.0
     * Renamed NetDockletHelper to ObjectDockSDK
     - Fixed Docklet registration (Interop & RegisterHelper)
-    - Removed "autorun" code
+    - Removed "autorun" code    
 
  1.0 (Build 35)
 	+ Added back FeaturedSkins Sample docklet
