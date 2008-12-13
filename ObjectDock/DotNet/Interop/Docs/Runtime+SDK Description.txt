@@ -1,0 +1,7 @@
+The .NET Runtime docklet allows you to use docklets built with .Net with ObjectDock.
+
+This update brings the old .Net runtime to the 2.0 world along with support for Vista and UAC.
+
+It includes 2 sample docklets (Birthday reminder and Featured skins) as well as the developer documentation.
+
+You will need to have the .Net Framework 2.0 from Microsoft installed on you computer for this docklet to work. You can download it from here: http://www.microsoft.com/net/
