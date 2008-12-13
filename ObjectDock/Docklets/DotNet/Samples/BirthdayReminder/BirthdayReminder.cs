@@ -63,8 +63,8 @@ namespace BirthdayReminder
 			OUTLOOK
 		}
 
-		private static string[] DATA_STRING = { "Birthday INI File",
-												"Outlook Address Book (Experimental)"};
+		private static string[] DATA_STRING = { "Birthday INI File" };//,
+												//"Outlook Address Book (Experimental)"};
 
 		public struct Birthday
 		{
@@ -128,7 +128,7 @@ namespace BirthdayReminder
 
 		public void OnCreate(DOCKLET_STATIC_DATA data, String ini, String iniGroup) 
 		{
-			ODConsole.Initialize();	
+			//ODConsole.Initialize();	
 			
 			dataB = new BirthdayData(new Docklet(data));
 	

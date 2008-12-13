@@ -105,7 +105,7 @@ namespace BirthdayReminder
 			}
 
 			if (!someBirthday) {
-				Console.WriteLine("No Birthday !!");
+				//Console.WriteLine("No Birthday !!");
 
 				Label noBirthday = new Label();
 				noBirthday.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, ((Byte)(0)));
