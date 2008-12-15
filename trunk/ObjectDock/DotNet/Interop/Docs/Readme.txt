@@ -9,7 +9,7 @@ A SDK is available if you want to build you own plugins.
 ** Changelog
 ***************************************************************************
 
- 2.0 (Build 78)
+ 2.0 (Build 81)
     * Sample docklets, runtime and sdk are now distributed in the same package.
     * Recompiled for .Net 2.0
     * Renamed NetDockletHelper to ObjectDockSDK
