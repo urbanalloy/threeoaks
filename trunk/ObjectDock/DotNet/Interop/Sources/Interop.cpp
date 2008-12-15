@@ -76,7 +76,7 @@ DOCKLET_DATA *CALLBACK InteropOnCreate(HWND hwndDocklet, HINSTANCE hInstance, ch
 {
 	// Create Plugin personal-data structure
 	DOCKLET_DATA *data = new DOCKLET_DATA;
-	ZeroMemory(data, sizeof(DOCKLET_DATA));
+	//ZeroMemory(data, sizeof(DOCKLET_DATA));
 
 	data->hwndDocklet = hwndDocklet;
 	data->hInstanceDll = hInstance;
