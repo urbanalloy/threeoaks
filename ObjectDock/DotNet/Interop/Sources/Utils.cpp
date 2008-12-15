@@ -52,8 +52,9 @@ void PopulateStaticData(DOCKLET_DATA *data) {
 	data->static_data.interopFolder = (LPSTR)malloc((FOLDER_SIZE)*sizeof(char));
 	data->static_data.relativeFolder = (LPSTR)malloc((FOLDER_SIZE)*sizeof(char));
 
-	strcpy(data->static_data.rootFolder, root);
-	strcpy(data->static_data.interopFolder, interop);
+	strcpy_s(data->static_data.rootFolder, (FOLDER_SIZE)*sizeof(char), root);
+	strcpy_s(data->static_data.interopFolder, (FOLDER_SIZE)*sizeof(char), interop);
+	strcpy_s(data->static_data.relativeFolder, (FOLDER_SIZE)*sizeof(char), "");
 	// relativeFolder needs to be set on plugin load
 }
 
