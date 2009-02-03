@@ -71,6 +71,7 @@ namespace Dummy
 			MenuItem config = new MenuItem("Configure", new EventHandler(onMenuConfigure));
 	
 			MenuItem testmenu = new MenuItem("Test Menu");
+            testmenu.MenuItems.Add("Browse For Image", new EventHandler(onBrowseForImage));
 			testmenu.MenuItems.Add("Item 1");
 			testmenu.MenuItems.Add("Item 2");
 
@@ -80,9 +81,9 @@ namespace Dummy
 			docklet.ContextMenu = menu;	
 
 			#endregion
-		}
+		}	    
 
-		private void ShowInfo()
+	    private void ShowInfo()
 		{
 			// Label
 			Console.WriteLine("Label: " + docklet.Label);
@@ -114,6 +115,16 @@ namespace Dummy
 		{
 			OnConfigure();
 		}
+
+        private void onBrowseForImage(object sender, EventArgs e)
+        {
+            string image = "Dummy.png";
+            bool ret = docklet.BrowseForImage(ref image, "");
+
+            if (ret)
+                Console.WriteLine("New Image: " + image + "\n");
+
+        }
 
 		public Boolean OnConfigure() 
 		{
