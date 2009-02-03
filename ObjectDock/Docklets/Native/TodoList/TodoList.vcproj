@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="TodoList"
 	ProjectGUID="{E045A4D3-3559-4540-B3C8-DA92418D7572}"
 	RootNamespace="TodoList"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -26,7 +27,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="echo &quot;C:\Program Files\Subversion\Subversion\bin\SubWCRev.exe&quot; $(ProjectDir) &quot;$(ProjectDir)/Sources/version.tpl&quot; &quot;$(ProjectDir)/Sources/version.h&quot;"
+				CommandLine=""
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -49,7 +50,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\DockletSDK"
+				AdditionalIncludeDirectories="../../../DockletSDK"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;TODOLIST_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -106,11 +107,8 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy /Y &quot;$(ProjectDir)/Data/*&quot;  &quot;C:\Program Files\Stardock\ObjectDock\Docklets\TodoList\&quot;&#x0D;&#x0A;xcopy /Y &quot;$(TargetPath)&quot; &quot;C:\Program Files\Stardock\ObjectDock\Docklets\TodoList\&quot;&#x0D;&#x0A;"
+				CommandLine="xcopy /Y /I  &quot;$(ProjectDir)/Data/*&quot;  &quot;$(OutDir)&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -152,7 +150,7 @@
 				InlineFunctionExpansion="1"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="../../DockletSDK/"
+				AdditionalIncludeDirectories="../../../DockletSDK/"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;TODOLIST_EXPORTS"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -207,9 +205,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -284,25 +279,34 @@
 			<File
 				RelativePath=".\Sources\version.tpl"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="&quot;c:/Program Files/TortoiseSVN/bin/SubWCRev.exe&quot; $(SolutionDir) $(InputPath) $(InputDir)/version.h"
+						Outputs="version.h"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
 			Name="SDK"
 			>
 			<File
-				RelativePath="..\..\DockletSDK\Docklet\Console.cpp"
+				RelativePath="..\..\..\DockletSDK\Docklet\Console.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\DockletSDK\Docklet\Console.h"
+				RelativePath="..\..\..\DockletSDK\Docklet\Console.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\DockletSDK\Docklet\Docklet.cpp"
+				RelativePath="..\..\..\DockletSDK\Docklet\Docklet.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\DockletSDK\Docklet\Docklet.h"
+				RelativePath="..\..\..\DockletSDK\Docklet\Docklet.h"
 				>
 			</File>
 		</Filter>
