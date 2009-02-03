@@ -355,7 +355,7 @@ namespace ObjectDockSDK
 		///		true if the image was changed.<br />
 		///     false if the image was not changed
 		/// </returns>
-		public Boolean BrowseForImage(String image, string alternativeRelativeRoot)
+		public Boolean BrowseForImage(ref String image, string alternativeRelativeRoot)
 		{
 			StringBuilder img = new StringBuilder(256);
 			img.Insert(0, image);
@@ -367,7 +367,10 @@ namespace ObjectDockSDK
 	            ret =  Interop.DockletBrowseForImage(data.hwndDocklet,
 													 img,
 													 alternativeRelativeRoot.ToCharArray());
-			//image = img.ToString();
+			
+            // Update image path
+            image = img.ToString();
+
 			return ret;
 		}
 
