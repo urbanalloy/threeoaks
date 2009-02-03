@@ -68,14 +68,16 @@ namespace Dummy
 			#region Context Menu
 
 			ContextMenu menu = new ContextMenu();
-			MenuItem config = new MenuItem("Configure", new EventHandler(onMenuConfigure));
+			MenuItem config = new MenuItem("Configure", onMenuConfigure);
 	
-			MenuItem testmenu = new MenuItem("Test Menu");
-            testmenu.MenuItems.Add("Browse For Image", new EventHandler(onBrowseForImage));
-			testmenu.MenuItems.Add("Item 1");
-			testmenu.MenuItems.Add("Item 2");
+			MenuItem testmenu = new MenuItem("Test Menu");            
+			testmenu.MenuItems.Add("Item 1", OnClickedItem1);
+            testmenu.MenuItems.Add("Item 2", OnClickedItem2);
+
+            MenuItem browse = new MenuItem("Browse", onBrowseForImage);
 
 			menu.MenuItems.Add(config);
+		    menu.MenuItems.Add(browse);
 			menu.MenuItems.Add(testmenu);
 
 			docklet.ContextMenu = menu;	
@@ -115,6 +117,16 @@ namespace Dummy
 		{
 			OnConfigure();
 		}
+
+        private void OnClickedItem1(object sender, EventArgs e)
+        {
+            docklet.ContextMenu.MenuItems.Add("Clicked 1");
+        }
+
+        private void OnClickedItem2(object sender, EventArgs e)
+        {
+            docklet.ContextMenu.MenuItems.Add("Clicked 2");
+        }
 
         private void onBrowseForImage(object sender, EventArgs e)
         {
