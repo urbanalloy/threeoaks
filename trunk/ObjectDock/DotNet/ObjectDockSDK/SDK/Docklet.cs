@@ -95,6 +95,23 @@ namespace ObjectDockSDK
 			}
 		}
 
+        /// <summary>
+        /// Gets or sets the context menu strip.
+        /// </summary>
+        /// <value>The context menu strip.</value>
+        public ContextMenuStrip ContextMenuStrip
+        {
+            set
+            {
+                Control.ContextMenuStrip = value;
+            }
+
+            get
+            {
+                return Control.ContextMenuStrip;
+            }
+        }
+
 		private Control Control
 		{
 			get {
@@ -438,6 +455,20 @@ namespace ObjectDockSDK
 				_control.ContextMenu.Show(_control, new Point(point.X-3, point.Y-25));
 			}
 		}
+
+        /// <summary>
+        /// Shows the context menu strip associated to this docklet
+        /// </summary>
+        /// <param name="point">The position where to show the context menu strip</param> 
+        /// <remarks>The menu is shown at the location of point + an offset (-5,-25)</remarks>
+        public void ShowContextMenuStrip(Point point)
+        {
+            if (_control != null)
+            {
+                _control.Location = Rect.Location;
+                _control.ContextMenuStrip.Show(_control, new Point(point.X - 3, point.Y - 25));
+            }
+        }
 
 		#endregion
 
