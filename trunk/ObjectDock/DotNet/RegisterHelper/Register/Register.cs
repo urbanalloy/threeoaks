@@ -156,12 +156,25 @@ namespace ObjectDockSDK.Registration
 				AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolve;
 				
 				Assembly asm = Assembly.LoadFrom(path);
-				RegistrationServices reg = new RegistrationServices();
+
+                // Check if assembly provides a minimal version
+                foreach (Attribute attribute in Attribute.GetCustomAttributes(asm))
+                {
+                    if (attribute.GetType() == typeof(SDKVersionAttribute))
+                    {
+                        // Get ObjectDockSDK Version
+                        Assembly SDK = Assembly.Load("ObjectDockSDK");
+
+                        if (((SDKVersionAttribute)attribute).Version > SDK.GetName().Version)
+                            return false;
+                    }
+                }                
 
                 // RegisterAssembly is writing to HKCR, redirect it to HKCU\\Software\\Classes\\
                 if (!MapRegistryKey(HkeyClassesRoot, "Software\\Classes\\"))
                     return false;
 
+                var reg = new RegistrationServices();
 				return reg.RegisterAssembly(asm, AssemblyRegistrationFlags.SetCodeBase);               
 			}
 			catch (Exception) {
@@ -175,10 +188,10 @@ namespace ObjectDockSDK.Registration
 
 		private static Assembly AssemblyResolve(object sender, ResolveEventArgs args)
 		{
-			if (args.Name.Equals("ObjectDockSDK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c9fbd721cea0951b"))
+			if (args.Name.StartsWith("ObjectDockSDK, Version=2"))
 			{
 				// Get the assembly path from the registry (looking for AssemblyData)
-                RegistryKey codebase = Registry.CurrentUser.OpenSubKey("Software\\Classes\\CLSID\\{0C16326F-E9A1-436a-ABFE-CF2057A6DB89}\\InprocServer32\\2.0.0.0");
+                RegistryKey codebase = Registry.CurrentUser.OpenSubKey("Software\\Classes\\CLSID\\{0C16326F-E9A1-436a-ABFE-CF2057A6DB89}\\InprocServer32\\2.1.0.0");
 			    if (codebase != null)
 			    {
 			        Assembly asm = Assembly.LoadFrom((String)codebase.GetValue("CodeBase"));
