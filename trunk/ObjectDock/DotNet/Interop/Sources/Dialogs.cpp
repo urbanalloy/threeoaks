@@ -154,7 +154,6 @@ void showInfo(HWND hDlg, DOCKLET_DATA *data, int selected)
 										data->docklets[selected].path,
 										data->docklets[selected].icon);
 
-
 	// Load the image
 	Bitmap* image = DockletLoadGDIPlusImage(fullpath);
 	
@@ -185,18 +184,17 @@ void showInfo(HWND hDlg, DOCKLET_DATA *data, int selected)
 		// Init Brushes & Font
 		SolidBrush  blackBrush(Color(255, 0, 0, 0));
 		SolidBrush  whiteBrush(Color(128, 160, 160, 160));
+		SolidBrush  grayBrush(Color(255, 128, 128, 128));
 		FontFamily  fontFamily(L"Arial");
 		Font        font(&fontFamily, 13, FontStyleBold, UnitPixel);
+		Font        smallFont(&fontFamily, 10, FontStyleBold, UnitPixel);
 
 		// Draw the name, author, version and notes
 		IDockletInterface *cpi = NULL;
 
 		CoInitialize(NULL);
-		HRESULT hr = CoCreateInstance(data->docklets[selected].CLSID_Docklet,
-									  NULL,	
-									  CLSCTX_INPROC_SERVER,
-									  IID_IDockletInterface,
-									  reinterpret_cast<void**>(&cpi));
+		HRESULT hr = CREATE_INSTANCE(data->docklets[selected].CLSID_Docklet, IID_IDockletInterface, &cpi);
+		
 		if (SUCCEEDED(hr)) {
 			// Get the info from the .net DLL
 			BSTR name1 = NULL; BSTR author1 = NULL; BSTR notes1 = NULL; long version1 = 0;
@@ -247,14 +245,12 @@ void showInfo(HWND hDlg, DOCKLET_DATA *data, int selected)
 			cpi->Release();
 			cpi = NULL;
 
-			// Set the docklet as valid
-			data->docklets[selected].invalid = false;
 		}
 		else
 		{
 			// Show an error Message
 			wchar_t message[200];
-			wcscpy(message, L"This Docklet is not a valid .Net Docklet...");
+			wcscpy(message, L"This docklet is not a valid .Net Docklet...");
 
 			RectF rect1(1.0f, 71.0f, 201.0f, 401.0f);
 			RectF rect2(0.0f, 70.0f, 200.0f, 400.0f);
@@ -264,6 +260,20 @@ void showInfo(HWND hDlg, DOCKLET_DATA *data, int selected)
 			// Set the docklet as invalid
 			data->docklets[selected].invalid = true;
 		}
+		
+		// If we are set as invalid, this means we got an error registering.
+		// Assume we are running a version of the SDK that is too old for this docklet
+		if (data->docklets[selected].invalid) 
+		{
+		  wchar_t message[200];
+		  wcscpy(message, L"This docklet needs a newer version of the ObjectDock .Net SDK...");
+
+		  RectF rect1(1.0f, 166.0f, 201.0f, 401.0f);
+		  RectF rect2(0.0f, 165.0f, 200.0f, 400.0f);
+		  bitmapGraphics.DrawString((WCHAR *)&message, -1, &smallFont, rect1, StringFormat::GenericDefault(), &whiteBrush);
+		  bitmapGraphics.DrawString((WCHAR *)&message, -1, &smallFont, rect2, StringFormat::GenericDefault(), &grayBrush);
+		}			
+			
 		// clean up COM
 		CoUninitialize();
 
