@@ -35,5 +35,4 @@
 
 #pragma once
 
-BOOL RegisterHelperDll(char* interop_path);
 BOOL RegisterDocklet(char* path, char* interop_path);
