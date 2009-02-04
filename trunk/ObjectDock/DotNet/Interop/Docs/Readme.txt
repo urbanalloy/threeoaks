@@ -1,5 +1,5 @@
 .NET Interop Docklet for ObjectDock
- (c) 2004-2008 Julien TEMPLIER
+ (c) 2004-2009 Julien TEMPLIER
 ---------------------------------------
 
 The .NET Interop docklet allows you to use .NET docklets with ObjectDock.
@@ -8,6 +8,10 @@ A SDK is available if you want to build you own plugins.
 ***************************************************************************
 ** Changelog
 ***************************************************************************
+
+ 2.1 (Build xx)
+    * Added ContextMenuStrip property to Docklet class (patch by Tide)
+    * Added check for custom attribute ObjectDockSDK.SDKVersion and refuse to load if the SDK is too old    
 
  2.0 (Build 81)
     * Sample docklets, runtime and sdk are now distributed in the same package.
