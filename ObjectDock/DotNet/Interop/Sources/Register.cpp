@@ -41,8 +41,12 @@
 #include "Interop.h"
 #include "Register.h"
 
+// Internal helper functions
+BOOL RegisterSDK(char* interop_path, IRegisterInterface * cpi);
+BOOL RegisterHelperDll(char* interop_path);
+
 #define REGISTER_HELPER_DLL "RegisterHelper.dll"
-#define DOCKLET_HELPER_DLL "ObjectDockSDK.dll"
+#define DOCKLET_SDK_DLL "ObjectDockSDK.dll"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 #define OPENKEY(key)\
@@ -117,6 +121,23 @@ BOOL RegisterHelperDll(char* interop_path)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
+//	Register the SDK dll
+BOOL SDKRegistered = FALSE;
+
+BOOL RegisterSDK(char* interop_path, IRegisterInterface * cpi)
+{
+	if (SDKRegistered)
+		return TRUE;
+
+	char codebase[MAX_PATH];
+	sprintf_s(codebase, MAX_PATH, "%s%s", interop_path, DOCKLET_SDK_DLL);
+
+	SDKRegistered = cpi->RegisterDll(codebase);
+
+	return SDKRegistered;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 //	Register the docklet dll
 BOOL RegisterDocklet(char* path, char* interop_path) {
 
@@ -133,15 +154,13 @@ BOOL RegisterDocklet(char* path, char* interop_path) {
 			hr = CREATE_INSTANCE(CLSID_Register, IID_IRegisterInterface, &cpi);
 	}
 
-	if (SUCCEEDED(hr)) {
-		// FIXME: only do that once!
+	if (SUCCEEDED(hr)) {		
 		// Register the ObjectDockSDK dll
-		char codebase[MAX_PATH];
-		sprintf_s(codebase, MAX_PATH, "%s%s", interop_path, DOCKLET_HELPER_DLL);
-		cpi->RegisterDll(codebase);
+		BOOL ret = RegisterSDK(interop_path, cpi);
 
 		// Register the current docklet dll
-		BOOL ret = cpi->RegisterDll(path);
+		if (ret)
+			ret = cpi->RegisterDll(path);
 
 		cpi->Release();
 		cpi = NULL;
