@@ -12,6 +12,7 @@ EXPORTS
 	OnAcceptDropFiles=InteropOnAcceptDropFiles
 	OnDropFiles=InteropOnDropFiles
 	OnProcessMessage=InteropOnProcessMessage
+	OnDropData=InteropOnDropData
 	
 	DockletIsVisible
 	DockletGetRect

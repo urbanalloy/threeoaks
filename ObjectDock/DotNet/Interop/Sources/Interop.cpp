@@ -52,6 +52,8 @@ const char* InteropFileNames[] = {"config.ini",
 								  "ObjectDockSDK.dll",
 								  "RegisterHelper.dll"};
 
+IDockletInterface *lastDockletCPI = NULL;
+
 ///////////////////////////////////////////////////////////////////////////////////////////////
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
@@ -157,7 +159,8 @@ DOCKLET_DATA *CALLBACK InteropOnCreate(HWND hwndDocklet, HINSTANCE hInstance, ch
 
         // Oops, if we got here, it means there is a problem loading this docklet
 		// clean up a little
-		CoUninitialize();		
+		CoUninitialize();	
+		data->cpi = NULL;
 		data->autoload = false;
 	}
 
@@ -201,6 +204,9 @@ void CALLBACK InteropOnDestroy(DOCKLET_DATA *data, HWND hwndDocklet)
 {
 	if (data->autoload) {
 		data->cpi->OnDestroy();
+
+		if (lastDockletCPI == data->cpi)
+			lastDockletCPI = NULL;
 
 		data->cpi->Release();
 		data->cpi = NULL;
@@ -299,6 +305,7 @@ BOOL CALLBACK InteropOnConfigure(DOCKLET_DATA *data)
 			HRESULT hr = CREATE_INSTANCE(data->docklets[data->index].CLSID_Docklet, IID_IDockletInterface, &data->cpi);
 			
 			if (FAILED(hr)) {
+				data->cpi = NULL;
 				data->autoload = false;
 				CoUninitialize();
 				return true;
@@ -425,7 +432,12 @@ BOOL CALLBACK InteropOnAcceptDropFiles(DOCKLET_DATA *data)
 	if (!data->autoload)
 		return false;
 
-	return (data->cpi->OnAcceptDropFiles() == VARIANT_TRUE) ? TRUE : FALSE;
+	BOOL acceptFiles = (data->cpi->OnAcceptDropFiles() == VARIANT_TRUE) ? TRUE : FALSE;
+
+	// ObjectDock does not cache the results, so store the last called docklet cpi pointer to be used in OnDropData
+	lastDockletCPI = (acceptFiles == TRUE) ? data->cpi : NULL;
+
+	return acceptFiles;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -438,6 +450,40 @@ void CALLBACK InteropOnDropFiles(DOCKLET_DATA *data, HDROP hDrop)
 
 	// free the hDrop structure
 	DragFinish(hDrop);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+HRESULT CALLBACK InteropOnDropData(IDataObject *pDataObject, DWORD grfKeyState, DWORD *pdwEffect)
+{
+	if (lastDockletCPI == NULL)
+	{
+#ifdef DEBUG				
+		MessageBox(NULL, "OnDropData was called before OnAcceptDropFiles!", "Interop Docklet", MB_OK | MB_ICONERROR);
+#endif
+		// Nothing the we can do here as we don't know on which docklet the data was dropped
+		return S_OK;
+	}
+
+	FORMATETC fmtetc = { CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
+	STGMEDIUM stgmed;
+
+	// ask the IDataObject for some CF_TEXT data, stored as a HGLOBAL
+	if(pDataObject->GetData(&fmtetc, &stgmed) == S_OK)
+	{
+		// We need to lock the HGLOBAL handle because we can't
+		// be sure if this is GMEM_FIXED (i.e. normal heap) data or not
+		HDROP hDrop = (HDROP)GlobalLock(stgmed.hGlobal);
+
+		lastDockletCPI->OnDropFiles((long)hDrop);
+
+		// cleanup
+		GlobalUnlock(stgmed.hGlobal);
+		ReleaseStgMedium(&stgmed);
+	}
+
+	*pdwEffect = DROPEFFECT_LINK;
+
+	return S_OK;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
