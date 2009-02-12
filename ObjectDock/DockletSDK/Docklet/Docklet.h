@@ -74,6 +74,9 @@ class Docklet
 
 		void LockMouseEffect(bool lock);
 		void DoAttentionAnimation();
+		void DoClickAnimation();
+		
+		void RemoveSelf(WPARAM wParam);
 
 		string GetRootFolder();
 		string GetRelativeFolder();
