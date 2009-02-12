@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="WeatherDocklet"
 	ProjectGUID="{B8485C02-5239-4572-A285-4C6AA74A30C6}"
+	RootNamespace="WeatherDocklet"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -49,7 +50,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../../../DockletSDK/"
+				AdditionalIncludeDirectories="../../../../DockletSDK/"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;WEATHERDOCKLET_EXPORTS"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -144,7 +145,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../DockletSDK/"
+				AdditionalIncludeDirectories="../../../../DockletSDK/"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;WEATHERDOCKLET_EXPORTS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -241,11 +242,11 @@
 			Name="SDK"
 			>
 			<File
-				RelativePath="..\..\..\DockletSDK\DockletSDK.cpp"
+				RelativePath="..\..\..\..\DockletSDK\DockletSDK.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\DockletSDK\DockletSDK.h"
+				RelativePath="..\..\..\..\DockletSDK\DockletSDK.h"
 				>
 			</File>
 		</Filter>

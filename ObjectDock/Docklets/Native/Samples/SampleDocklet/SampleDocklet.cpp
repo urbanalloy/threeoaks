@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <windows.h>
 #include <shlwapi.h>
-#include <DockletSDK.h>
+#include "DockletSDK.h"
 #include "resource.h"
 
 typedef struct
@@ -244,6 +244,10 @@ HRESULT CALLBACK OnDropData(IDataObject *pDataObject, DWORD grfKeyState, DWORD *
 	*pdwEffect = DROPEFFECT_LINK;
 
 	return S_OK;
+}
+
+void NotifySizeChange(void *lpData, int size, BOOL hasChanged)
+{
 }
 
 // OnDragDropGetSourceObject allows you to export a shell/virtual drop source for your docklet
