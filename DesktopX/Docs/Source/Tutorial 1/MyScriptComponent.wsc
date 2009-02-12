@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<package>
+<?component error="true" debug="true"?>
+<comment>
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Script Component tutorial for DesktopX
+//
+// Copyright (c) 2008, Julien Templier
+// All rights reserved.
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// 
+// Redistribution and use in source and binary forms, with or without modification, are
+// permitted provided that the following conditions are met:
+//	1. Redistributions of source code must retain the above copyright notice, this list of
+//		 conditions and the following disclaimer. 
+//	2. Redistributions in binary form must reproduce the above copyright notice, this list
+//		 of conditions and the following disclaimer in the documentation and/or other materials
+//		 provided with the distribution. 
+//	3. The name of the author may not be used to endorse or promote products derived from this
+//		 software without specific prior written permission. 
+//
+//	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//	OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+//	MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+//	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+//	EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+//	GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+//	ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+//	OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+//	POSSIBILITY OF SUCH DAMAGE.
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+</comment>
+<component>
+	<comment>
+	Script Component tutorial for DesktopX
+	</comment>
+	<registration description="My first Script Component"
+      	  	      progid="MyScriptComponent.Tutorial1"
+      		      version="1"
+      	    	  classid="{7D211F9F-E932-4091-922A-B2F0F0478BDA}"/>
+	<public>
+		<method name="Hello" internalName="getData">
+			<parameter name="name" />
+		</method> 
+	
+		<property name="Name">
+			<get />
+		</property>
+		
+		<resource id="hello">Hello </resource>
+
+	</public>
+	
+	<script language="VBScript">
+	<![CDATA[
+
+	Dim m_name 
+	m_name = “”
+	
+	Function get_Name
+		get_Name = m_name
+	End Function
+	
+	Function getData(name)
+		m_name = name
+		getData = getResource("hello") & m_name & "!"
+	End Function
+	
+	]]>
+	</script>
+</component>
+</package>	
