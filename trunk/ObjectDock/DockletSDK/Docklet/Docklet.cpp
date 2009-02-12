@@ -217,6 +217,30 @@ void Docklet::DoAttentionAnimation()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
+///	Causes this Docklet to animate in the dock to try to get the user's attention
+void Docklet::DoClickAnimation()
+{
+	typedef void(__stdcall *DUMMY_TYPEDEF)(HWND hwndDocklet);
+	DUMMY_TYPEDEF HostDockletDoClickAnimation = (DUMMY_TYPEDEF) GetProcAddress(GetModuleHandle(NULL), "DockletDoClickAnimation");
+	if(!HostDockletDoClickAnimation)
+		return;
+
+	HostDockletDoClickAnimation(data->hwndDocklet);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+///	Remove the current docklet from the dock
+void Docklet::RemoveSelf(WPARAM wParam)
+{
+	typedef void(__stdcall *DUMMY_TYPEDEF)(HWND hwndDocklet, WPARAM wParam);
+	DUMMY_TYPEDEF HostDockletRemoveSelf = (DUMMY_TYPEDEF) GetProcAddress(GetModuleHandle(NULL), "DockletRemoveSelf");
+	if(!HostDockletRemoveSelf)
+		return;
+
+	HostDockletRemoveSelf(data->hwndDocklet, wParam);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 ///	Retrieves the relative path of the folder that contains this Docklet's DLL
 string Docklet::GetRootFolder()
 {
