@@ -1,0 +1,38 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link href="dxstyle.css" rel="stylesheet">
+</head>
+
+<body>
+<h1>Scriptable plugins</h1>
+<h2>Scriptable E-Mail Notify plugin</h2>
+<p>DesktopX 3.0 supports scriptable plugins that simply add some custom 
+functionality. In the case of the Scriptable Mail Notify plugin, only the actual 
+email check functionality is offered by the plugin, while the account 
+management, the preferences, the configuration and everything else is left to 
+the DesktopX author to be implemented with DesktopX objects and scripts.<br>
+<br>
+In order to use this plugin, you should add both a script and the “Scriptable 
+Mail notify” plugin to an object.<br>
+The plugin exposes only one method and one notification event.<br>
+The method is:</p>
+<p class="code">Mail.CheckMail requestID, sLogin, sPass, sServer, accountType</p>
+<p>requestID is a string identifying the request. Since this method is 
+asynchronous and returns immediately, if you are handling multiple accounts you 
+need to match responses with requests. This value let you do that, since you get 
+back the same identifier when the response is ready.<br>
+sLogin is the mail account user name, sPass is the password, sSever is the 
+server name (i.e. “mail.stardock.com”).<br>
+AccountType can be 0 for POP3 or 1 for IMAP.<br>
+<br>
+Use the event wizard to get the following event added to the script:</p>
+<p class="code">Sub Mail_OnMailEvent(requestID, newMails)</p>
+<p>This event will be fired when a request has been accomplished. RequestID 
+contains the identifier passed in the request and newMails is a number 
+indicating the unread mails.<br>
+&nbsp;</p>
+</body>
+
+</html>

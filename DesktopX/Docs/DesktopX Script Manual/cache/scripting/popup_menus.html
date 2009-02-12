@@ -1,0 +1,59 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link href="dxstyle.css" rel="stylesheet">
+</head>
+
+<body>
+<h1>Scriptable popup menu</h1>
+<p>You can create simple popup menus and replace the default system tray menus 
+for DesktopX and widgets with scripting.<br>
+To create a popup menu use DesktopX.CreatePopupMenu.<br>
+I.e.</p>
+<p class="code">Dim menu<br>
+Set menu = DesktopX.CreatePopupMenu<br>
+menu.AppendMenu 0, 1, &quot;Item1&quot;<br>
+menu.AppendMenu 0, 2, &quot;Item2&quot;<br>
+Dim result<br>
+res = m.TrackPopupMenu(0, System.CursorX, System.CursorY)</p>
+<p>Note: popup menus cannot be used by scripts that run in a separated thread.</p>
+<p>Syntax as follow:</p>
+<h2>AppendMenu</h2>
+<p class="code">AppendMenu flags, ID, text</p>
+<p>ID is the item identifier. When the menu is shown and the user selects an 
+item, TrackPopupMenu will return the ID of the item.<br>
+Text is simply the text.<br>
+Flags let you specify the following options you can combine:<br>
+&amp;H00000800 – Menu separator<br>
+&amp;H00000001 – Grayed<br>
+&amp;H00000002 – Disabled<br>
+&amp;H00000008 – Checked<br>
+&amp;H00000010 – Popup<br>
+&amp;H00000020 – Menu bar break<br>
+&amp;H00000040 – Menu break<br>
+&amp;H00000080 – Hilite</p>
+<p>Popup (&amp;H00000010) let you add a submenu. You can do like this:</p>
+<p class="code">Dim submenu<br>
+Set submenu = DesktopX.CreatePopupMenu<br>
+submenu.AppendMenu 0, 1, &quot;Item in submenu&quot;<br>
+Dim menu<br>
+Set menu = DesktopX.CreatePopupMenu<br>
+menu.AppendMenu &amp;H00000010, submenu.MenuID, &quot;Sub menu&quot;<br>
+menu.AppendMenu 0, 2, &quot;Item in main menu&quot;</p>
+<h2>TrackPopupMenu</h2>
+<p class="code">Result = TrackPopupMenu(flags, posx, posy)</p>
+<p>It let you open the menu. It returns the ID of the selected item.<br>
+Posx and posy are the screen coordinates where the menu should open.<br>
+Flags let you specify some options:<br>
+&amp;H00000004 – Center align<br>
+&amp;H00000008 – Right align<br>
+&amp;H00000010 – Vertical center align<br>
+&amp;H00000020 – Bottom align<br>
+<br>
+Example:</p>
+<p class="code">res = m0.TrackPopupMenu(0, System.CursorX, System.CursorY)<br>
+&nbsp;</p>
+</body>
+
+</html>

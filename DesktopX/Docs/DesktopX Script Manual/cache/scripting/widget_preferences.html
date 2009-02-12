@@ -1,0 +1,93 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link href="dxstyle.css" rel="stylesheet">
+</head>
+
+<body>
+<h1>Widgets preferences</h1>
+<p>DesktopX 3.0 widgets and gadgets can use an integrated mechanism to manage 
+user preferences.<br>
+A “preference” is a local per-user setting that is initially set to a default 
+value and then maintained across multiple executions of the same widget for the 
+same user.<br>
+Widget preferences can integrate into the standard widget properties dialog, or 
+can be kept hidden if the author only likes to use persistency and not the 
+interactive feature.<br>
+<br>
+Preferences should be configured in script in Object_OnScriptEnter.<br>
+To add a preference object use:</p>
+<p class="code">Widget.AddPreference &quot;PreferenceName&quot;</p>
+<p>To access a preference object use:</p>
+<p class="code">Widget.Preference(&quot;PreferenceName&quot;)</p>
+<p>To access a preference property use:</p>
+<p class="code">Widget.Preference(&quot;PreferenceName&quot;).property</p>
+<p>Example:</p>
+<p class="code">Widget.AddPreference &quot;ZIPCode&quot;<br>
+Widget.Preference(&quot;ZIPCode”).Type = &quot;Text&quot;<br>
+Widget.Preference(&quot;ZIPCode”).Caption = &quot;ZIP Code&quot;<br>
+Widget.Preference(&quot;ZIPCode &quot;).DefaultValue = &quot;12345&quot;<br>
+Widget.Preference(&quot;ZIPCode&quot;).Description = &quot;It defines the ZIP area code to be 
+used by the weather widget&quot;</p>
+<p>It creates a ZIPCode item of Text type and is initially set to “12345” with 
+the given description for the Properties panel.<br>
+<br>
+To access the configured value you can later use:</p>
+<p class="code">Widget.Preference(&quot;ZIPCode &quot;).Value</p>
+<p>When the user changes the preferences through the Widget Properties dialog, 
+the script that configured the preferences receives the following event:</p>
+<p class="code">Sub Widget_OnPreferencesChange()</p>
+<p>Here is the complete Preference namespace reference:</p>
+<p class="code">Widget.AddPreference “name”</p>
+<p>Adds a new preference item. The name should not contain spaces. Use 
+Preference.Caption to assign a pretty name.</p>
+<p class="code">Preference.Type</p>
+<p>String property. It defines Valid types are:<br>
+“Hidden”: No control will be displayed in the Widget properties panel. Hidden is 
+the default type.<br>
+“Text”: Text box control type.<br>
+“Password”: Text box with obfuscated characters for password entries.<br>
+“Checkbox”: Checkbox control. Values for checkboxes are “1” or “0”.<br>
+“ComboEdit”: Editable text combobox control.<br>
+“ComboList”: Dropdown list combobox control.<br>
+“Slider”: Slider control. Values for sliders are still in string form.<br>
+&quot;File&quot;: Edit control with Browse File feature<br>
+&quot;Folder&quot;: Edit control with Browse Folder feature<br>
+&quot;Font&quot;: It is a &quot;ComboEdit&quot; preference, but it is automatically filled with 
+available Font names.<br>
+&quot;Color&quot;: It provides a color picker preference.<br>
+&quot;Hotkey&quot;: Hotkey selection control. You can directly pass preference value to 
+Object.RegisterHotkey like:</p>
+<p class="code">Object.RegisterHotkey myHotkeyID, 
+Widget.Preference(&quot;myHotkey&quot;).Value</p>
+<h2>Preference.Caption</h2>
+<p>Sets the pretty name used to name the preference in the Properties panel.</p>
+<h2>Preference.DefaultValue</h2>
+<p>Use to set the preference default value.</p>
+<h2>Preference.Description</h2>
+<p>Use to set the preference description that appears in the Widget properties 
+panel.</p>
+<h2>Preference.AddValue</h2>
+<p>Use to add an item to a Combobox preference.<br>
+Example:</p>
+<p class="code">Widget.Preference(&quot;MyCombo1&quot;).AddValue &quot;Green&quot;<br>
+Widget.Preference(&quot;MyCombo1&quot;).AddValue &quot;Red&quot;</p>
+<h2>Preference.MinValue, Preference.MaxValue</h2>
+<p>Use to configure the minimum and maximum values of a slider preference.<br>
+<br>
+Example:</p>
+<p class="code">Widget.Preference(&quot;Slidersample&quot;).MinValue = 1<br>
+Widget.Preference(&quot;Slidersample&quot;).MaxValue = 5</p>
+<h2>Preference.Ticks</h2>
+<p>It specifies the ticks distance for slider preferences.<br>
+<br>
+Example:</p>
+<p class="code">Widget.Preference(&quot;Slidersample&quot;).MinValue = 10 ‘page size of 10 
+and displayed tick each 10 values.</p>
+<h2>Sub Widget_OnPreferencesChange</h2>
+<p>Sent when the user applies the preferences in the Widget properties panel.<br>
+&nbsp;</p>
+</body>
+
+</html>

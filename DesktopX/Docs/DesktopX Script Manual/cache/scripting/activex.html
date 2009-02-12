@@ -1,0 +1,170 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link href="dxstyle.css" rel="stylesheet">
+</head>
+
+<body>
+<h1>ActiveX Controls in DXScript</h1>
+<p>The power of script is enhanced by the ability to display ActiveX controls on 
+the desktop instead of using images or text. You can then manipulate these using 
+scripts.<br>
+For example, imagine an Excel spreadsheet, Windows Media Player, Combo box, Web 
+Browser all embedded on your desktop. All are possible and very easy to create.<br>
+In the DesktopX Script Editor, the first option on the script menu is 'ActiveX 
+Control' from which there is a 'Select Control' option.<br>
+We'll look at how to create one of these controls now.<br>
+From the list that appears when you click 'Select Control', choose a control and 
+then click OK. In our examples below we will use the 'Microsoft Web Browser' 
+control.<br>
+As you will see below, the Script Editor immediately changes to reflect your 
+choice. On the right of the editor you will see a preview of the object, and 
+below that you will see the properties of that object.<br>
+<br>
+Note that the ActiveX Control menu item now has a 'Properties' option where you 
+can toggle to display of this extra information.<br>
+If you close the editor via the close button top right or via 'File ... Exit' 
+you will now see a control on your desktop.<br>
+You will see that as you move your mouse over the object the cursor changes. You 
+can move the control or resize it using the black handles at the edge.<br>
+If you right click the object, you will notice a new item, 'Script Enabled' at 
+the bottom of the list. This is the place where you can toggle the script 
+between a 'running' and 'not running' state. At the moment it is not running 
+which is why the resize handles are visible. Click 'Script Enabled' to toggle 
+the running state and you will see these disappear.<br>
+OK, so at the moment it's a dull white box, not very exciting, but nevertheless 
+it's a control and we're about to ramp up the excitement. Let's go back to the 
+editor.<br>
+If you right click the control you will note that nothing happens. This is 
+because you are effectively right clicking the Web Browser control, not a 
+DesktopX object. Hold down CTRL so the resize edges appear and right click. You 
+will see that the script is enabled because of the check mark next to that item. 
+Click the Edit Script item and the dialogue will reappear.<br>
+<br>
+OK, try changing the script you see to the one below:</p>
+<p class="code">Sub Object_OnScriptEnter<br>
+Control.Navigate2 &quot;www.wincustomize.com&quot;<br>
+End Sub</p>
+<p>OK, so exit out of here and enabled the script. Caboom - all of a sudden you 
+have a genuine webpage on your desktop!<br>
+You will note from this that scripting is basically the same for Controls as it 
+is for regular objects. The only real difference is that when referring to the 
+ActiveX control you use the Control prefix. Note that you can also use Object 
+methods and properties in the script but these refer to the host object. For 
+example Object.Visible in an object containing an ActiveX control would hide 
+that object and hence that control.<br>
+<br>
+Each ActiveX control will expose it's own properties and these are displayed in 
+the autocomplete feature. This makes it really easy to start coding for a 
+control.<br>
+In addition to this it is useful to know which events are associated with a 
+control. With this, we are able to react to events occurring in the control. 
+DesktopX provides a tool to do just this. In the Script Editor, go to the Script 
+Menu and select 'Event Wizard'.<br>
+<br>
+Select the event you want to add and click OK to add it to your script. Click 
+'Done' when you have added all the events you want to.<br>
+You can now add script to that event. For example:</p>
+<p class="code">Sub Control_DocumentComplete(pDisp, URL)<br>
+Msgbox &quot;Finished downloading the page &quot; &amp; URL<br>
+End Sub</p>
+<p>Now, you will be advised when the page is completely loaded.<br>
+<br>
+One final thing you should know is that DesktopX installs three controls by 
+default. There is an Edit control (to allow you to accept and react to user 
+input), a Push Button control (which acts just like a regular button), and a 
+Check Box control (to give you an on/off switch).<br>
+Each of these controls have specific events and properties associated with them.</p>
+<h1>PushButton Control</h1>
+<p>The PushButton control allows you to use a regular push button for 
+interaction with your scripts.</p>
+<h2>Properties</h2>
+<p>Caption: The text caption of the button. <br>
+Enabled: Whether or not the button is disabled.</p>
+<h2>Events </h2>
+<p>OnClick: Fired when the button is clicked</p>
+<h1>CheckBox Control</h1>
+<p>The CheckBox control allows you to use a regular checkbox for interaction 
+with your scripts. </p>
+<h2>Properties</h2>
+<p>Caption: The text caption of the checkbox. <br>
+Enabled: Whether or not the checkbox is disabled. <br>
+Checked: Whether or not the checkbox is checked.</p>
+<h2>Events</h2>
+<p>OnCheck(variant checked): Fired when the checkbox is checked or unchecked </p>
+<h1>Edit Control </h1>
+<p>The Edit control allows you to support text-based user input without 
+dependency on 3rd party controls. </p>
+<h2>Properties</h2>
+<p>Text: The text of the control<br>
+MultiLine: Whether the control is single line or multi, with scrollbars <br>
+ClientEdge: Whether the control has a client edge <br>
+Border: Whether the control has a border<br>
+BGColor: The background color of the box<br>
+TextColor: The color of text in the control</p>
+<h2>Events</h2>
+<p>OnKeyPress(key): Fired when a key is entered, returns the ASCII value of the 
+key. </p>
+<h2>Methods</h2>
+<p>ScrollToEnd(): Scrolls to the bottom of the text. </p>
+<h1>ComboBox Control </h1>
+<p>The ComboBox control allows you to create a drop-down list of options from 
+which the user can select. </p>
+<h2>Properties</h2>
+<p>BackColor: Sets or queries the color of the control background (as OLE_COLOR)<br>
+ForeColor: Sets or queries the color of the control text color (as OLE_COLOR)<br>
+SelectionBackColor: Sets or queries the background color of the selected item in 
+the control (as OLE_COLOR)<br>
+SelectionForeColor: Sets or queries the text color of the selected item in the 
+Control (as OLE_COLOR)<br>
+BorderVisible: Sets or queries whether or not the border of the control is 
+visible (as Boolean)<br>
+Enabled: Sets of queries whether an object can respond to user-generated events 
+(as Boolean)<br>
+Item(Item As Long): Sets of queries the text of a specific item in the control 
+(as String)<br>
+ItemCount: Queries the number of items in the control (as Long)<br>
+ListIndex: Sets or queries the currently selected item in the control (as Long)<br>
+Text: Queries the text of the currently selected item in the control (as String)<br>
+ListVisible: Sets or queries whether the control’s drop-down list is visible (as 
+Boolean)</p>
+<h2>Events</h2>
+<p>OnSelect(Item As Long, string As String): Fired when an item in the list is 
+selected<br>
+OnCloseUp(): Fired when the drop down menu is closed<br>
+OnDropDown(): Fired when the drop down menu is opened</p>
+<h2>Methods</h2>
+<p>AddItem (bstrItem As String): Inserts an item into the Control<br>
+ResetList(): Clears the Control</p>
+<h1>ListBox Control</h1>
+<p>The ListBox control allows you to display a box containing a list of options 
+from which the user can select.</p>
+<h2>Properties</h2>
+<p>BackColor: Sets or queries the color of the control background (as OLE_COLOR)<br>
+ForeColor: Sets or queries the color of the control text color (as OLE_COLOR)<br>
+SelectionBackColor: Sets or queries the background color of the selected item in 
+the control (as OLE_COLOR)<br>
+SelectionForeColor: Sets or queries the text color of the selected item in the 
+Control (as OLE_COLOR)<br>
+BorderVisible: Sets or queries whether or not the border of the control is 
+visible (as Boolean)<br>
+Enabled: Sets of queries whether an object can respond to user-generated events 
+(as Boolean)<br>
+Item(Item As Long): Sets of queries the text of a specific item in the control 
+(as String)<br>
+ItemCount: Queries the number of items in the control (as Long)<br>
+ItemHeight: Sets of queries the height of individual items in the ListBox (as 
+Long)<br>
+ListIndex: Sets or queries the currently selected item in the control (as Long)<br>
+Text: Queries the text of the currently selected item in the control (as String)</p>
+<h2>Events</h2>
+<p>OnSelect(Item As Long, string As String): Fired when an item in the list is 
+selected</p>
+<h2>Methods</h2>
+<p>AddItem (bstrItem As String): Inserts an item into the Control<br>
+ResetList(): Clears the Control<br>
+&nbsp;</p>
+</body>
+
+</html>

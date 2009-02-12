@@ -1,0 +1,98 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link href="dxstyle.css" rel="stylesheet">
+</head>
+
+<body>
+<h1>Controller scripts</h1>
+<p class="MsoNormal">In the newest DesktopX release you can register an object 
+and its script to act as a controller for certain functions. Only the controller 
+receives some messages like system tray messages (i.e. the right-click message 
+on the widget right click menu).<br>
+<br>
+To register an object as a controller use Desktopx.RegisterController ObjectName<br>
+Example:</p>
+<p class="code">Sub Object_OnScriptEnter<br>
+desktopx.RegisterController Object.Name<br>
+End Sub</p>
+<p class="MsoNormal">The object will then be called from the OnControl 
+notification:</p>
+<p class="code">Function OnControl(lType, lCode)<br>
+<br>
+End function</p>
+<p class="MsoNormal">The host will call OnControl with messages information in 
+lType and lCode. These messages are available:</p>
+<table border="0" cellspacing="0" cellpadding="0" style="border-collapse: collapse" id="table1">
+	<tr>
+		<td width="31" valign="top" style="width:23.05pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">lType</span></td>
+		<td width="62" valign="top" style="width:46.8pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">lCode</span></td>
+		<td width="547" valign="top" style="width:410.05pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">Description</span></td>
+	</tr>
+	<tr>
+		<td width="31" rowspan="2" valign="top" style="width:23.05pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">1</span></p>
+		<p class="MsoNormal"><span lang="EN-GB">1</span></td>
+		<td width="62" valign="top" style="width:46.8pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">1</span></td>
+		<td width="547" valign="top" style="width:410.05pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">The systray menu is requested.</span></td>
+	</tr>
+	<tr>
+		<td width="62" valign="top" style="width:46.8pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">2</span></td>
+		<td width="547" valign="top" style="width:410.05pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">The widget menu is requested 
+		from object right-click.</span></td>
+	</tr>
+	<tr>
+		<td width="31" rowspan="6" valign="top" style="width:23.05pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">2</span></td>
+		<td width="62" valign="top" style="width:46.8pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">0x0201</span></td>
+		<td width="547" valign="top" style="width:410.05pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">Left button down</span></td>
+	</tr>
+	<tr>
+		<td width="62" valign="top" style="width:46.8pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">0x0202</span></td>
+		<td width="547" valign="top" style="width:410.05pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">Left button up</span></td>
+	</tr>
+	<tr>
+		<td width="62" valign="top" style="width:46.8pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">0x0203</span></td>
+		<td width="547" valign="top" style="width:410.05pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">Left buttondouble-click</span></td>
+	</tr>
+	<tr>
+		<td width="62" valign="top" style="width:46.8pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">0x0204</span></td>
+		<td width="547" valign="top" style="width:410.05pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">Right button down</span></td>
+	</tr>
+	<tr>
+		<td width="62" valign="top" style="width:46.8pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">0x0205</span></td>
+		<td width="547" valign="top" style="width:410.05pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">Right button up</span></td>
+	</tr>
+	<tr>
+		<td width="62" valign="top" style="width:46.8pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">0x0206</span></td>
+		<td width="547" valign="top" style="width:410.05pt;padding:0cm 5.4pt 0cm 5.4pt">
+		<p class="MsoNormal"><span lang="EN-GB">Right button double-click</span></td>
+	</tr>
+</table>
+<p class="MsoNormal">Returning true to received messages will cause DesktopX not 
+processing them. For instance you can replace the right click or systray widget 
+menu by returning true to 1 / 1 notification and provide your own menu as 
+described in the preceding chapter.<br>
+&nbsp;</p>
+</body>
+
+</html>

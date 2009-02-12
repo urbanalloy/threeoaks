@@ -1,0 +1,59 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link href="dxstyle.css" rel="stylesheet">
+</head>
+
+<body>
+<h1>Widget Namespace</h1>
+<p>If you are creating a widget there are several script commands that you can 
+use to replicate the functionality of the widgets and provide additional user 
+feedback.</p>
+<h2>Widget.Minimize, Widget.Restore, Widget.About, Widget.Close</h2>
+<p>These simply replicate the options available from the various widget menus to 
+allow you to achieve the functionality via script.returns the current 
+coordinates of the mouse cursor.</p>
+<h2>Widget.Caption</h2>
+<p>If you have specified that your widget is displayed in the taskbar then this 
+command will set the text of that taskbar item. Where a system tray icon is 
+used, it will set a tooltip for that item.<br>
+Example:</p>
+<p class="code">Widget.Caption = &quot;This has been updated&quot;<br>
+Widget.Autorun</p>
+<h2>Widget.Autorun</h2>
+<p>A user can specify whether to run an application on startup by right clicking 
+the object, but you can also access this functionality via script. This allows 
+you to either prompt the user when they first run the object, or to provide some 
+sort of menu option.<br>
+<br>
+Example:</p>
+<p class="code">If Widget.Autorun = False Then<br>
+x = Msgbox (“Would you like to run this object when you start Windows?”, vbYesNo 
++ vbQuestion, “Autorun …”)<br>
+If x = vbYes Then<br>
+Widget.Autorun = True<br>
+End If<br>
+End If</p>
+<h2>Widget.RegisterController</h2>
+<p>Normally object events are fired to the parent if the child isn’t handling 
+them directly. If the parent isn’t handling them, events are lost. You can 
+configure a script of a widget to be the target of all unhandled events, 
+regardless of parent/children relations.<br>
+To do that you can write the following code in Object_OnScriptEnter</p>
+<p class="code">Widget.RegisterController Object.name</p>
+<h2>Widget.OpenProperties</h2>
+<p>Opens the Widget Properties panel programmatically.</p>
+<h2>Widget.StandardPreferencesOptions</h2>
+<p>Let you selectively disable standard preference options from the widget 
+options. Values can be a combination of the following values:</p>
+<p>&amp;H0001 - Removes the opaticy option<br>
+&amp;H0002 - Removes the shadow option<br>
+&amp;H0004 - Removes the zorder option<br>
+&amp;H0010 - Removes the accessibility option<br>
+&amp;H0020 - Removes the autorun option</p>
+<h2>Widget.OnTop</h2>
+<p>Brings the widget on foreground of other windows.</p>
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings for="DesktopX Script Manual" version="1.0">
+    <references basehref="http://www.stardock.com/products/desktopx/documentation/">
+    	<reference href="scripting/object_namespace.html">Object namespace</reference>
+    	<reference href="scripting/object_callbacks.html">Object callbacks</reference>
+    	<reference href="scripting/system_namespace.html">System namespace</reference>
+    	<reference href="scripting/system_callbacks.html">System callbacks</reference>
+    	<reference href="scripting/desktopx_namespace.html">DesktopX namespace</reference>
+    	<reference href="scripting/widget_namespace.html">Widget namespace</reference>
+    	<reference href="scripting/widget_preferences.html">Widget preferences</reference>
+    	<reference href="scripting/popup_menus.html">Scriptable popup menus</reference>
+    	<reference href="scripting/controllers.html">Controller scripts</reference>
+    	<reference href="scripting/forms.html">Forms</reference>
+    	<reference href="scripting/activex.html">ActiveX Controls</reference>
+    	<reference href="scripting/scriptable_plugins.html">Scriptable plugins</reference>
+    </references>
+</settings>
