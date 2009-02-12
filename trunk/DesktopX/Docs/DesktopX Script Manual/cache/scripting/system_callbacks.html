@@ -1,0 +1,36 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link href="dxstyle.css" rel="stylesheet">
+</head>
+
+<body>
+<h1>System Callbacks</h1>
+<h2>Sub System_OnScreenChange</h2>
+<p>If the screen resolution changes then you may wish to resize or reposition 
+the objects accordingly.<br>
+Since this is supposed to be a custom repositioning code, depending of 
+particular wanted behaviours, it is recommended that you set the automatic 
+repositioning in the “Relation” tab to “Disabled” for both horizontal and 
+vertical axis.<br>
+<br>
+Example:</p>
+<p class="code">Sub System_OnScreenChange<br>
+Object.Width = System.ScreenWidth - 350<br>
+End Sub</p>
+<h2>Sub System_OnWorkareaChange</h2>
+<p>If the workarea changes (as result of screen resolution changes or taskbar 
+resize) you may want to resize or reposition the objects accordingly.<br>
+Since this is supposed to be a custom repositioning code, depending of 
+particular wanted behaviours, it is recommended that you set the automatic 
+repositioning in the “Relation” tab to “Disabled” for both horizontal and 
+vertical axis.<br>
+<br>
+Example:</p>
+<p class="code">Sub System_OnScreenChange<br>
+Object.Width = System.ScreenWidth - 350<br>
+End Sub</p>
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link href="dxstyle.css" rel="stylesheet">
+</head>
+
+<body>
+<h1>DesktopX namespace</h1>
+<p>These allow you to refer to the DesktopX environment, the objects within in 
+and also the DesktopX application itself.</p>
+<h2>DesktopX.Object, DesktopX.ScriptObject</h2>
+<p>You use these two items to refer to objects other than the current one. You 
+should use the first for non scripted objects.<br>
+<br>
+Examples:</p>
+<p class="code">DesktopX.Object(&quot;mytextobject&quot;).Text = “Hello”<br>
+DesktopX.Object(&quot;otherobject&quot;).Top = Object.Bottom</p>
+<p>If the object is scripted however, you need to identify whether you are 
+referring to the object itself or the control contained within.<br>
+<br>
+Examples:</p>
+<p class="code">DesktopX.ScriptObject(&quot;scr_textobject&quot;).Object.Text = “Hello”<br>
+DesktopX.ScriptObject(&quot;scr_textcontrol&quot;).Object.Left = 300<br>
+DesktopX.ScriptObject(&quot;scr_textcontrol&quot;).Control.Text = “Type”</p>
+<h2>DesktopX.IsObject</h2>
+<p>This allows you to query the existence of another object in the theme which 
+you may choose to do before you interact with it, because it could have been 
+deleted.<br>
+<br>
+Example:</p>
+<p class="code">Sub Object_OnScriptEnter<br>
+If DesktopX.IsObject(&quot;textobj&quot;) = False Then<br>
+Msgbox &quot;Sorry – important data is missing!&quot;<br>
+End If<br>
+End Sub</p>
+<h2>DesktopX.ExecutableDirectory (only for Pro apps)</h2>
+<p>If you are running DesktopX Pro, then the created EXE may be running from any 
+location, so it is sometimes useful to know where this is. 
+DesktopX.ExecutableDirectory will return this directory.</p>
+<h2>DesktopX.HostType</h2>
+<p>Returns the host that is currently running the object. Return values are:<br>
+<br>
+1 – DesktopX Client<br>
+2 – DesktopX Builder<br>
+3 – Widget runtime<br>
+4 – DesktopX PRO application<br>
+0 – Unknow</p>
+<h2>DesktopX.GarbageCollection</h2>
+<p>It swaps out unused memory. Useful after using some COM object, ActiveX 
+object, graphics, etc that's not going to be used often anymore until unload.</p>
+<h2>DesktopX.Exit(params)</h2>
+<p>It quits DesktopX, current widget or gadget. Params is currently unused. Set 
+to 0.</p>
+<h2>DesktopX.MsgBox(msg, flags, title, owner)</h2>
+<p>Zorder and thread-friendly Msgbox replacement.<br>
+Msg is the actual messagebox content.<br>
+Flags contains standard flags. See MS Win32 SDK here:
+<a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/winui/windowsuserinterface/windowing/dialogboxes/dialogboxreference/dialogboxfunctions/messagebox.asp">
+http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/winui/<br/>
+windowsuserinterface/windowing/dialogboxes/dialogboxreference/<br/>dialogboxfunctions/messagebox.asp</a><br>
+Title contains the caption string and owner the owner object name (used to fix 
+the messagebox zorder).</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</body>
+
+</html>

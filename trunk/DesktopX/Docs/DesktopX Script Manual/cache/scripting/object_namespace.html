@@ -1,0 +1,417 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link href="dxstyle.css" rel="stylesheet">
+</head>
+
+<body>
+<h1>Object namespace</h1>
+<p>This section defines the scripting commands that can be applied to objects in 
+DesktopX.</p>
+<h2>Object.States namespace</h2>
+<p>From the object namespace you can access the States namespace to read/write 
+state specific properties. States properties also exist in the Object namespace. 
+There are basically three different methods you can use to read/write:<br>
+Object.property – it’ll read/write the state property for the current state<br>
+Object.States(“mystate1”).property - it’ll read/write the state property for the 
+“mystate1” state<br>
+Object.States(“”).property – it’ll write the property to all states in the 
+object<br>
+<br>
+Unless the object has only one state, it is usually better to use the second 
+method.<br>
+<br>
+All properties which can be applied in the States namespace as well as in the 
+Object namespace are suffixed with *<br>
+&nbsp;</p>
+<h2>Object.Name<br>
+Object.Parent<br>
+Object.Visible</h2>
+<p>Through use of these commands you can set an objects name, though it is more 
+likely you will want to retrieve the name of an object or its parent. 
+Object.Parent is used to retrieve the entire object model of the parent, so you 
+can refer to the object. In addition to this, you can also set an object’s 
+parent using this property.<br>
+The 'Visible' property is most useful allowing you to show or hide an object 
+without the use of popups or messaging.<br>
+Examples:</p>
+<p>&nbsp;</p>
+<p class="code">1) MsgBox &quot;This object is called &quot; &amp; Object.Name<br>
+2) Msgbox &quot;This object's parent is &quot; &amp; Object.Parent.Object.Name<br>
+3) Object.Parent = DesktopX.Object(&quot;Some object&quot;)<br>
+4) DesktopX.Object(&quot;AnObject&quot;).Parent = DesktopX.ScriptObject(&quot;anotherobject&quot;)<br>
+5) Object.Visible = False</p>
+<h2>Object.Clone<br>
+Object.Delete</h2>
+<p>This allows you to either duplicate or delete the specified object. When 
+duplicating an object you need to provide the name for the new object and the x 
+and y coordinates where it will be placed. Deleting objects may be useful for 
+things like deleting temporary objects such as instructions once the user has 
+taken note of them.<br>
+<br>
+Examples:</p>
+<p class="code">Object.Clone &quot;myobject&quot;, 300, 200<br>
+If Msgbox(&quot;Delete object&quot;, vbYesNo) = vbYes Then Object.Delete</p>
+<h2>Object.Top, Object.Bottom, Object.Left, Object.Right, Object.Move, 
+Object.Rotation (and Object.States(&quot;name&quot;).Rotation)</h2>
+<p>With these positioning properties, you can explicitly set or retrieve the 
+location of one side of the object.<br>
+If you want to reposition an object, the most efficient was to do it is via 
+'Move' To do this you specify x and y coordinates in pixels of where you want to 
+place the object.<br>
+You can also rotate an object using Object.Rotation. <br>
+<br>
+Examples:</p>
+<p class="code">Object.Top = 500<br>
+Object.Move 500,200<br>
+<br>
+For x = 1 To 10<br>
+Object.Rotation = x*36<br>
+Object.Sleep 200<br>
+Next</p>
+<h2>Object.Height, Object.Width</h2>
+<p>With this command you can retrieve or redefine the actual height and width of 
+the object. Obviously this will stretch the graphic used until it reaches this 
+size.<br>
+<br>
+Examples:</p>
+<p class="code">Object.Height = 120<br>
+Object.Width = Object.Width * 2</p>
+<h2>Object.Resize</h2>
+<p>With this command you can quickly and easily resize an object in one command 
+rather than setting width and height individually.<br>
+<br>
+Examples:</p>
+<p class="code">Object.Resize 100,300<br>
+Object.Resize Object.Width + 10, Object.Height + 10</p>
+<h2>Object.Hue, Object.Brightness, Object.Contrast, Object.Opacity<br>
+also Object.States(&quot;name&quot;).Hue, Object.States(&quot;name&quot;).Brightness, <br/>Object.States(&quot;name&quot;).Contrast, Object.States(&quot;name&quot;).Opacity)</h2>
+<p>If you want to dynamically change the color, hue or brightness of an object, 
+it is easy to do with these commands. Simply set a value of 1-255 for hue, -255 
+– 255 for brightness and -100 – 100 for contrast. Set it to 0 to remove any 
+previously made changes.<br>
+You can also set or retrieve the level of opacity that an object has in a range 
+from 0 (totally invisible) to 100 (totally visible).<br>
+Examples:</p>
+<p class="code">For x = 0 To 255<br>
+Object.Hue = x<br>
+Next </p>
+<p class="code">Object.Brightness = -30</p>
+<p class="code">DesktopX.Object(&quot;anotherobject&quot;).Contrast = 40</p>
+<p class="code">Object.Opacity = 60</p>
+<h2>Object.State, Object.StatePreempt</h2>
+<p>Through use of Object.State you can change or retrieve the state of an 
+object. This is one of the most common commands used in script as it is used to 
+trigger objects to act certain ways. Object.StatePreempt should be used when you 
+want to set a state immediately without waiting for any animations etc to 
+complete.<br>
+Examples:</p>
+<p class="code">If Object.State = &quot;Command executed&quot; Then ...</p>
+<p class="code">x = DesktopX.Object(&quot;anotherobject).State</p>
+<p class="code">DesktopX.ScriptObject(&quot;scr_object).Object.StatePreempt = &quot;Hide&quot; </p>
+<h2>Object.Text, Object.TextColor, Object.TextBorder, Object.TextBorderColor<br>
+also Object.States(&quot;name&quot;).Text, Object.States(&quot;name&quot;).TextColor, Object.States(&quot;name&quot;).TextBorder, 
+Object.States(&quot;name&quot;).TextBorderColor</h2>
+<p>If your object is a text object rather than an image, you can manipulate it 
+using script changing either the text itself or the appearance. You can 
+set/retrieve the text or it's color and well as defining whether the text has a 
+border, and if so what color it is.<br>
+The colors are most easily set using an RGB value separated via commas.<br>
+Examples:</p>
+<p class="code">If Instr(Object.Text, &quot;Data&quot;) Then Msgbox &quot;String found&quot;</p>
+<p class="code">Object.TextColor = RGB(120,200,255)</p>
+<p class="code">Object.TextBorder = True</p>
+<p class="code">Object.TextBorderColor = RGB(255,0,0)</p>
+<h2>Object.SetTimer, Object.KillTimer, Object.Sleep</h2>
+<p>As discussed earlier, the Object.SetTimer sets an event and an interval to 
+which you can then add code to run at the predefined interval. If you need to 
+stop a timer running you can use KillTimer to stop it. e.g. Object.KillTimer 
+12345 will stop any code in the Object_OnTimer12345 event from running.<br>
+Object.Sleep stops code running temporarily for a defined period of time. For 
+example Object.Sleep 1000 will wait for 1 second before continuing to run.<br>
+Example:</p>
+<p class="code">Sub Object_OnScriptEnter<br>
+&nbsp;
+Object.SetTimer 12345, 600000<br>
+End Sub<br>
+<br>
+Sub Object_OnTimer12345<br>
+&nbsp;
+MsgBox &quot;The time is &quot; &amp; Time()<br>
+End Sub<br>
+<br>
+Sub Object_OnScriptExit<br>
+&nbsp;
+Object.KillTimer 12345<br>
+End Sub</p>
+<h2>Object.ExecuteCommand</h2>
+<p>This executed any command associated with the object in it’s Object Type. 
+This is particularly useful for doing things at set intervals or events, such as 
+when DesktopX exits.<br>
+Example:</p>
+<p class="code">Sub Object_OnScriptExit<br>
+Object.ExecuteCommand<br>
+End Sub</p>
+<h2>Object.LocalStorage, Object.PersistStorage</h2>
+<p>When coding it is often useful to store persistent information which can be 
+retrieved and used as required across multiple executions of the same object or 
+widget.<br>
+To store data you need to give the data a unique reference (for that object) and 
+set it's value. For example Object.LocalStorage(&quot;MyZip&quot;) = 48152 would place the 
+value 48152 in a storage variable called MyZip. &quot;MyZip&quot;=48152 will be 
+automatically saved and restored when the object is unloaded and reloaded.<br>
+The difference between the two types is in its persistence across object 
+packaging and distribution. LocalStorage will NOT be saved when the object is 
+saved as .dxpack or a widget is built. PersistStorage instead will save its 
+value.<br>
+LocalStorage is useful to store personal information, like a passwork or a ZIP 
+code. Infact, you don’t want such information to be preserved when you export 
+and redistribute the object to other people. However, you want these values to 
+be preserved across multiple run of the same object/widget.<br>
+<br>
+Example:</p>
+<p class="code">Sub Object_OnScriptEnter<br>
+&nbsp;
+If Object.LocalStorage(&quot;MyZip&quot;) = &quot;&quot; Then<br>
+&nbsp;&nbsp;&nbsp;
+Object.LocalStorage(&quot;MyZip&quot;) = &quot;48152&quot;<br>
+&nbsp;
+End If<br>
+&nbsp;
+Object.SetTimer12346, 3600000 <br>
+End Sub<br>
+<br>
+Sub Object_OnTimer12346<br>
+&nbsp;
+GetWeather(Object.LocalStorage(&quot;MyZip&quot;))<br>
+End Sub<br>
+<br>
+Sub Object_OnScriptExit<br>
+&nbsp;
+Object.KillTimer 12346<br>
+End Sub<br>
+<br>
+Function GetWeather(zip)<br>
+&nbsp;
+...<br>
+End Function </p>
+<h2>Object.OnTop</h2>
+<p>The object pushes an object to the top of the z-order which obviously makes 
+it more visible. The below example makes an object appear above other objects 
+when you move the mouse over it.<br>
+Example:</p>
+<p class="code">Sub Object_OnStateChange(state)<br>
+&nbsp;
+If state = &quot;Mouse over&quot; Then<br>
+&nbsp;&nbsp;&nbsp;
+Object.OnTop<br>
+&nbsp;
+End If<br>
+End Sub</p>
+<h2>Object.SetFocus</h2>
+<p>The simply sets an objects focus so it can respond to events. For example all 
+objects have an Object_OnSetFocus so this will be triggered if this command is 
+used. Also, where a text based DesktopX object responds to functions based on 
+keyboard or mouse activity (e.g. Function Object_OnChar(dwKeyCode, flag), 
+Function Object_OnLButtonDown(x, y)) then it will respond when these events 
+occur. You can also apply this to ActiveX controls, so for example if an object 
+contains a DesktopX Edit Control then setting its focus will prepare it to 
+accept text input.<br>
+Example:</p>
+<p class="code">Sub Object_OnStateChange(state)<br>
+&nbsp;
+If state = &quot;Command executed&quot; Then<br>
+&nbsp;&nbsp;&nbsp;
+Msgbox &quot;Ready for input&quot;<br>
+&nbsp;&nbsp;&nbsp;
+Object.SetFocus<br>
+&nbsp;
+End If<br>
+End Sub</p>
+<h2>Object.TooltipText</h2>
+<p>This allows you to set the tooltip of the object which is particularly useful 
+to provide additional information to the user. You can also use this to provide 
+different information depending on different circumstances.<br>
+Example:</p>
+<p class="code">If Object.Text = &quot;New mail&quot; Then<br>
+&nbsp;
+Object.TooltipText = &quot;Click to launch mail software&quot;<br>
+Else<br>
+&nbsp;
+Object.TooltipText = &quot; &quot;<br>
+End If</p>
+<h2>Object.AppBar</h2>
+<p>An AppBar is an object that is designed to be attached to the edge of the 
+screen like the Taskbar. Also like the taskbar it can be set to autohide, but 
+beyond this you can undock it as well so it can be moved on the screen. When an 
+appbar is set to Autohide, then moving the mouse over the edge of the screen 
+will cause the AppBar to smoothly appear.<br>
+Note that Object.AppBar can only be written, not read, so if you need to check 
+the mode at any time you need to set a variable when you set the mode, and then 
+query the value of this variable. Example 1 shows how you may set a variable in 
+this manner.<br>
+The values for Object.AppBar are as follows:<br>
+0 = Disabled<br>
+1 = Docked<br>
+2 - Autohide<br>
+Example:</p>
+<p class="code">Sub Object_OnScriptEnter<br>
+&nbsp;
+Object.AppbarMode = 1<br>
+&nbsp;
+appmode = 1<br>
+End Sub</p>
+<p class="code">If state = &quot;Command executed&quot; Then<br>
+&nbsp;
+DesktopX.Object(&quot;maindock&quot;).AppbarMode = 2<br>
+End If</p>
+<h2>Object.Directory</h2>
+<p>This tells you the directory within which the object is located. This will 
+point to the user’s theme directory.</p>
+<h2>Object.Sound *</h2>
+<p>This allows you to set the sound associated with the object either globally 
+or specific to certain states. The sound file targeted can either be a WAV or 
+MP3 format file.<br>
+Example:</p>
+<p class="code">Object.Sound = &quot;c:\mydirectory\mytune.mp3&quot;<br>
+Object.State(&quot;Mouse down&quot;).Sound = &quot;ding.wav&quot;</p>
+<h2>Object.Volume</h2>
+<p>This allows you to set the volume of the sound played by an object. The range 
+is 0 (muted) to 100 (full system volume)<br>
+Example:</p>
+<p class="code">Object.Volume = 80<br>
+Object.Volume = Object.Volume + 10</p>
+<h2>Object.Picture<br>
+also Object.States(&quot;name&quot;).Picture</h2>
+<p>This allows you to get/set the picture of an object or state.<br>
+Example:</p>
+<p class="code">Object.Picture = “image01.png”<br>
+Object.States(“Mouse away”).Picture = “C:\images\image01.png”<br>
+Object.Picture = <a href="http://www.something.com/pic.png">
+http://www.something.com/pic.png</a></p>
+<p>Notes:<br>
+- You can use the following modes:<br>
+o File names: DX will check into the current theme or widget folder. Note that 
+files must be registered as custom files or bound to at least one state for them 
+to be packed into a .dxtheme, .dxpack or .exe.<br>
+o Full path: this can be useful for totally dynamic things like a Picture viewer 
+widget in that you can simply do:</p>
+<p class="code">Sub Object_OnDropFiles(files)<br>
+Object.picture = files<br>
+End Sub</p>
+<p>&#61607; Full path images are not exported.<br>
+o Remote paths: you can use this to easily make a webcam object.<br>
+&#61607; Remote path files are not exported.</p>
+<h2>Object.SetPicture<br>
+also Object.States(&quot;name&quot;).SetPicture</h2>
+<p>This method let you set the picture of an object or state AND its other 
+properties in one call.<br>
+Syntax:</p>
+<p class="code">Object.SetPicture fileName, frames, interval, flags<br>
+For fileName see Object.Picture.<br>
+Frames is the number of frames in the picture.<br>
+Interval is the number of milliseconds between each frame.<br>
+Flags is a combination of the following flags:<br>
+&amp;H00000001 – Loop<br>
+&amp;H00000002 – Reverse<br>
+&amp;H00000004 – Alternate<br>
+&amp;H00000008 – Interruptable<br>
+&amp;H00000010 – Static</p>
+<h2>Object.CurrentFrame</h2>
+<p>Gets/sets the current frame of the animation. In order to use this, the 
+animation should be set “Scripted” in the Properties panel.</p>
+<h2>Object.Child</h2>
+<p>Returns true if the object is a contained child. If it has a parent but it is 
+only “owned” (Child = No in Summary page) , it will return false.<br>
+Contained children coordinates are relative to the parent’s top/left corner.</p>
+<h2>Object.SetMargins<br>
+also Object.States(&quot;name&quot;).SetMargins</h2>
+<p>This allows you to assign the image margins and tile/stretch settings of a 
+state or all states of an object.<br>
+Syntax:<br>
+Object.SetMargins leftMargin, topMargin, rightMargin, bottomMargin, 
+boolStretchX, boolStretchY</p>
+<p>Values are distance from each edge. Set boolStretchX and boolStretchY to true 
+to configure stretching mode. Leave false for tiling mode.</p>
+<h2>Object.Command and Object.CommandParams</h2>
+<p>Gets/sets the object command and parameters for Shortcut and URL object 
+types.</p>
+<h2>Object.Group</h2>
+<p>Gets/sets the object group name.</p>
+<h2>Object.RegisterHotkey and Object.UnregisterHotkey</h2>
+<p>Let you register an hotkey combination. A special event is called when the 
+user hits the hotkey.<br>
+Syntax:<br>
+Object.RegisterHotkey hotkeyID, hotkeyValue</p>
+<p>hotkeyValue is defined as a long in the same way the HKM_GETHOTKEY returns (<a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/shellcc/platform/commctls/hotkey/messages/hkm_gethotkey.asp">
+http://msdn.microsoft.com/library/default.asp?url=/library/en-us/shellcc/<br/>platform/commctls/hotkey/messages/hkm_gethotkey.asp</a>):<br>
+The virtual key code is in the low-order byte, and the modifier flags are in the 
+high-order byte. The modifier flags can be a combination of the following 
+values:</p>
+<p>&amp;H00000001 - shift<br>
+&amp;H00000002 - control<br>
+&amp;H00000004 - alt<br>
+&amp;H00000008 - extended key</p>
+<p>Once the hotkey is set, the object script will be notified through:</p>
+<p class="code">Sub Object_OnHotkey(id)</p>
+<p>where id is the first parameter that is passed to RegisterHotkey.</p>
+<p>To unregister the hotkey call:</p>
+<p class="code">Object.UnregisterHotkey id</p>
+<h2>Object.Comments</h2>
+<p>Gets/sets the object comments field</p>
+<h2>Object.SetFont<br>
+also Object.States(&quot;name&quot;).SetFont</h2>
+<p>Let you assign all font settings at once.<br>
+Syntax:<br>
+Object.SetFont fontName, size, boolBold, boolItalic, boolUnderline, 
+boolStrikeOut, lfCharSet</p>
+<p>You can leave the last parameter = 0</p>
+<h2>Object.FontName, Object.FontSize, Object.FontBold, Object.FontItalic, 
+Object.FontUnderline, Object.FontStrikeout<br>
+also Object.States(&quot;name&quot;).FontName, Object.States(&quot;name&quot;).FontSize, 
+Object.States(&quot;name&quot;).FontBold, Object.States(&quot;name&quot;).FontItalic, 
+Object.States(&quot;name&quot;).FontUnderline, Object.States(&quot;name&quot;).FontStrikeout</h2>
+<p>Let you get/set individual font options.</p>
+<h2>Object.SetShadow<br>
+also Object.States(&quot;name&quot;).SetShadow</h2>
+<p>This allows you to assign the shadow options of a state or all states of an 
+object.<br>
+Syntax:<br>
+Object.SetShadow boolEnabled, sharpness, darkness, offsetX, offsetY, sdwColor</p>
+<p>Sharpness ranges from 0 to 100.<br>
+Darkness can take values greater than 255.</p>
+<h2>Object.SetScript(name)</h2>
+<p>It let change script at runtime. This has a couple of rules:</p>
+<ul>
+	<li>Path can be either relative to local path (CurrentTheme) or full path. 
+	Files pointed to relative paths are automatically saved into 
+	.dxpack/.desktop/.exe packages.</li>
+	<li>ActiveX dynamic scripting is not yet supported.</li>
+	<li>An object must be first configured as scripted and eventually have a 
+	blank script if no real script is initially needed.</li>
+	<li>The default script, edited from DesktopX GUI will not be used, if 
+	overridden by an external script, unless the external script is &quot;unlinked&quot; 
+	by calling Object.SetScript(&quot;&quot;).</li>
+</ul>
+<h2>Object.Cursor</h2>
+<p>Let you get/set the current cursor.</p>
+<p>0 = Normal select<br>
+1 = Help select<br>
+2 = Working in background<br>
+3 = Busy<br>
+4 = Precision select<br>
+5 = Text select<br>
+6 = Handwriting<br>
+7 = Unavailable<br>
+8 = Vertical resize<br>
+9 = Horizontal resize<br>
+10 = Diagonal resize 1 (NW-SE)<br>
+11 = Diagonal resize 2 (NE-SW)<br>
+12 = Move<br>
+13 = Alternate select<br>
+14 = Hand<br>
+&nbsp;</p>
+</body>
+
+</html>

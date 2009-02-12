@@ -1,0 +1,246 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link href="dxstyle.css" rel="stylesheet">
+</head>
+
+<body>
+<h1>System namespace</h1>
+<h2>System.CursorX, System.CursorY</h2>
+<p>These returns the current coordinates of the mouse cursor.<br>
+Example:</p>
+<p class="code">Object.Text = &quot;X:&quot; &amp; System.CursorX &amp; &quot; Y:&quot; &amp; System.CursorY</p>
+<h2>System.PixelColor</h2>
+<p>This returns the color of the pixel at the specified coordinates.<br>
+Example:</p>
+<p class="code">Sub Object_OnTimer1<br>
+hexcolor = Hex(System.PixelColor(System.CursorX, System.CursorY))<br>
+red = Right(hexcolor, 2)<br>
+green = Mid(hexcolor, 2,2)<br>
+blue = Left(hexcolor, 2)<br>
+Object.Text = CStr(CLng(&quot;&amp;H&quot; &amp; red)) &amp; &quot;, &quot; &amp; CStr(CLng(&quot;&amp;H&quot; &amp; green)) &amp; &quot;, &quot; &amp; 
+CStr(CLng(&quot;&amp;H&quot; &amp; blue))<br>
+End Sub </p>
+<h2>System.InternetConnected, System.Ping</h2>
+<p>Many good examples of DXScript objects make use of the Internet, so it makes 
+sense to detect whether access to the Internet is available. You can also check 
+the speed of access to a web address (ping) by using System.Ping. <br>
+Examples:</p>
+<p class="code">1) If System.InternetConnected = False Then Msgbox &quot;Go online&quot;<br>
+2) x = System.Ping(&quot;<a href="http://www.wincustomize.com">www.wincustomize.com</a>&quot;)</p>
+<h2>System.SetWallpaper</h2>
+<p>This allows you to specify the Windows wallpaper. You need to provide a full 
+path to the wallpaper and then an option to feine how to display the wallpaper.<br>
+Option:<br>
+<br>
+0 = use default wallpaper<br>
+1 = Center wallpaper<br>
+2 = Tile wallpaper<br>
+3 = Stretch wallpaper<br>
+<br>
+Examples:</p>
+<p class="code">System.SetWallpaper &quot;C:\temp\wall1.bmp&quot;, 1<br>
+System.SetWallpaper Object.Directory &amp; &quot;wall1.jpg&quot;, 1<br>
+System.SetWallpaper &quot;&quot;, 0 This will restore the original wallpaper.</p>
+<h2>System.ScreenWidth, System.ScreenHeight</h2>
+<p>System.ScreenHeight and System.ScreenWidth return the height and width of the 
+primary monitor. This is mostly kept for backward compatibility. New objects 
+should use System.Vscreen* properties instead, since these are multimonitor 
+compatible (see the next chapter).<br>
+Examples:</p>
+<p class="code">Msgbox &quot;Primary monitor resolution: &quot; &amp; System.ScreenHeight &amp; 
+&quot;x&quot; &amp; System.ScreenWidth</p>
+<h2>System.VscreenLeft, System.VScreenTop, System.VScreenWidth, 
+System.VScreenHeight</h2>
+<p>These are the suggested properties to use when checking the monitor 
+coordinates, since they take in consideration the whole virtual screen area, and 
+not only the primary monitor. This will still work in a single monitor setup but 
+will also support multi-monitor setups.<br>
+Note that the virtual screen origin is NOT generally (0,0), but it is 
+(VscreenLeft, VscreenTop). Because of this .VscreenWidth returns the WIDTH of 
+the virtual screen, not the right border! To calculate the right and bottom 
+borders use the following code:</p>
+<p class="code">VirtualScreenRight = System.VScreenLeft + System.VScreenWidth<br>
+VirtualScreenBottom = System.VScreenTop + System.VScreenHeight</p>
+<h2>System.WorkareaLeft, System.WorkareaRight, System.WorkareaTop, 
+System.WorkareaBottom</h2>
+<p>These properties retrieve the boundaries of the desktop workarea. This is 
+usually even better than System.Vscreen* properties to base calulations for 
+moving and keeping objects in the wanted position, since it represents the 
+actual “available” working area.</p>
+<p class="code">System.FolderDialog (info, initialDir, flags)</p>
+<p>This shows a dialog that allows the user to select a specific folder which 
+can then be acted upon. The parameters to provide are a string which places 
+information at the top of the dialog, the path where browsing should commence 
+from, and then a range of customization flags. The full list of the flags is 
+shown below:</p>
+<p class="code">'Only file system directories<br>
+BIF_RETURNONLYFSDIRS = &amp;H1 <br>
+'No network folders below domain level<br>
+BIF_DONTGOBELOWDOMAIN = &amp;H2 <br>
+'Allows user to rename selection<br>
+BIF_EDITBOX = &amp;H10 <br>
+'Insist on valid edit box result (or CANCEL)<br>
+BIF_VALIDATE = &amp;H20 <br>
+'Allow URLs To be displayed Or entered<br>
+BIF_BROWSEINCLUDEURLS = &amp;H80 <br>
+'Only returns computers<br>
+BIF_BROWSEFORCOMPUTER = &amp;H1000<br>
+'Only returns printers<br>
+BIF_BROWSEFORPRINTER = &amp;H2000<br>
+'Browse for everything<br>
+BIF_BROWSEINCLUDEFILES = &amp;H4000<br>
+'Sharable resources displayed<br>
+BIF_SHAREABLE = &amp;H8000</p>
+<p>Examples:</p>
+<p class="code">Const BIF_RETURNONLYFSDIRS = &amp;H1<br>
+x = System.FolderDialog (&quot;Please select your image folder:&quot;, &quot;c:\&quot;, 
+BIF_RETURNONLYFSDIRS)<br>
+Const BIF_EDITBOX = &amp;H10 <br>
+x = System.FolderDialog (&quot;&quot;, &quot;&quot;, BIF_EDITBOX)<br>
+Const BIF_BROWSEINCLUDEFILES = &amp;H4000<br>
+x = System.FolderDialog (&quot;Please select the directory:&quot;, 
+DesktopX.ExecutableDirectory, BIF_BROWSEINCLUDEFILES)</p>
+<h2>System.FileOpenDialog (title, defaultFile, intialDir, extensions, flags), 
+System.FileSaveDialog (title, defaultFile, intialDir, extensions, flags)</h2>
+<p>This shows a dialog that allows the user to select a specific folder which 
+can then be acted upon. The parameters are a title for the dialog, the default 
+file name, the path where browsing should commence from. You then specific the 
+file types to select in the dialog in a series of pipe (‘|’) separated 
+description/extention pairs such as Text files|*.txt|All files|*.* .<br>
+Finally, you can provide a range of customization flags. The full list of the 
+flags is shown below:</p>
+<p class="code">'Causes the Read Only check box to be selected when the dialog 
+is created<br>
+OFN_READONLY = &amp;H1<br>
+'Causes the Save As dialog box to generate a message box if the selected file 
+already exists. The user must confirm whether to overwrite the file<br>
+OFN_OVERWRITEPROMPT = &amp;H2<br>
+'Hides the read only check box<br>
+OFN_HIDEREADONLY = &amp;H4<br>
+'Restores the current directory if the user changes directory while searching<br>
+OFN_NOCHANGEDIR = &amp;H8<br>
+'Allow invalid characters in the returned file name<br>
+OFN_NOVALIDATE = &amp;H100<br>
+'Specifies that the user typed a file name extension that differs from the 
+default extension specified<br>
+OFN_EXTENSIONDIFFERENT = &amp;H400<br>
+'Specifies that the user can type only valid paths and file names<br>
+OFN_PATHMUSTEXIST = &amp;H800<br>
+'User can type only names of existing files in the File Name entry field<br>
+OFN_FILEMUSTEXIST = &amp;H1000 <br>
+'If a file that doesn’t exist is selected ask for confirmation to create it<br>
+OFN_CREATEPROMPT = &amp;H2000<br>
+'If the command fails because of a network sharing violation, error is ignored<br>
+OFN_SHAREAWARE = &amp;H4000<br>
+'Specifies that the returned file does not have the Read Only check box selected 
+and is not in a write-protected directory<br>
+OFN_NOREADONLYRETURN = &amp;H8000<br>
+'Specifies that the file is not created before the dialog box is closed<br>
+OFN_NOTESTFILECREATE = &amp;H10000<br>
+'Hides and disables the Network button <br>
+OFN_NONETWORKBUTTON = &amp;H20000<br>
+'Directs the dialog box to return the path and file name of the selected 
+shortcut (.LNK) file. If this value is not specified, the dialog box returns the 
+path and file name of the file referenced by the shortcut <br>
+OFN_NODEREFERENCELINKS = &amp;H100000</p>
+<p>Examples:</p>
+<p class="code">x = System.FileSaveDialog(&quot;My title&quot;, &quot;new.txt&quot;, &quot;c:\&quot;, &quot;Text 
+files|*.txt|All files|*.*&quot;,0)<br>
+x = System.FileOpenDialog(&quot;Select document ...&quot;, &quot;&quot;, 
+Desktopx.ExecutableDirectory &amp; &quot;docs&quot;, &quot;DesktopX Help|*.pdf&quot;, 0)</p>
+<h2>System.KeyState(vk)</h2>
+<p>This allows to establish the state of any given key from the list available 
+here:<br>
+<br>
+<a href="http://msdn.microsoft.com/library/en-us/winui/WinUI/WindowsUserInterface/UserInput/VirtualKeyCodes.asp">
+http://msdn.microsoft.com/library/en-us/winui/WinUI/WindowsUserInterface/<br/>UserInput/VirtualKeyCodes.asp</a><br>
+<br>
+The value returned is either 0 (), 1 (), or 2 () depending on the key state.<br>
+Example:</p>
+<p class="code">Function Object_OnLButtonUp(x,y,dragged)<br>
+Const VK_NUMLOCK = &amp;H90<br>
+x = System.KeyState(VK_NUMLOCK)<br>
+If x = 0 Then<br>
+msgbox &quot;NumLock is Off&quot;<br>
+ElseIf x = 1 Then<br>
+msgbox &quot;NumLock is being pressed&quot;<br>
+ElseIf x = 2 Then<br>
+msgbox &quot;NumLock is On&quot;<br>
+End If<br>
+End Function</p>
+<h2>System.Clipboard</h2>
+<p>Property to get and set the text content of the system clipboard.<br>
+Example:</p>
+<h2 class="code">System.Clipboard = Object.text</h2>
+<h2>System.CPUActivity</h2>
+<p>Property to get the percentage of current CPU activity.<br>
+Example:</p>
+<p class="code">Object.text = “CPU usage: “ &amp; System.CPUActivity &amp; “%”</p>
+<h2>System.Volume</h2>
+<p>Property to get/set the system audio volume level (0-100).</p>
+<h2>System.Mute</h2>
+<p>Property to get/set the system audio muting (boolean).</p>
+<h2>System.DesktopColor</h2>
+<p>Sets the current desktop solid color.<br>
+Example:</p>
+<p class="code">System.DesktopColor = RGB(128, 128, 128)</p>
+<p>&nbsp;</p>
+<h2>System.DownloadFile(remoteUrl, localPath, bAsync)</h2>
+<p>Downloads a remote file.</p>
+<p>RemoteUrl points to the remote file location.<br>
+LocalPath points to the local postition to save the file.<br>
+bAsync is a boolean value that tells the host to download the file synchronously 
+(the function return only when the file is downloaded) or asynchronously (the 
+function returns immediately and a System_OnDownloadFinish(url) callback is used 
+to notify when the download has finished.</p>
+<p>Example:</p>
+<p class="code">System.DownloadFile &quot;http://www.mysite.com/myfile.zip&quot;, 
+&quot;c:\temp\myfile.zip&quot;, True<br>
+<br>
+Sub System_OnDownloadFinish(url)<br>
+&nbsp; 'url equals &quot;http://www.mysite.com/myfile.zip&quot;<br>
+End Sub</p>
+<h2>&nbsp;</h2>
+<h2>System.SendRequest(remoteUrl, postParams, bAsync)</h2>
+<p>Sends an HTTP request (POST or GET).</p>
+<p>RemoteUrl points to the remote page location.<br>
+PostParams can contain a string to pass POST parameters. If no parameters are 
+passed there, GET is used. You can also pass GET parameters in remoteUrl using 
+standard conventions.<br>
+bAsync is a boolean value that tells the host to request the page synchronously 
+(the function return only when the page is completely downloaded) or 
+asynchronously (the function returns immediately and a 
+System_OnRequestFinish(url, pagecontent) callback is used to notify when the 
+download has finished.</p>
+<p>Example:</p>
+<p class="code">strPage = System.SendRequest(&quot;http://www.mysite.com/page.asp&quot;, 
+&quot;param1=123&amp;param2=456&quot;, false<br>
+<br>
+strPage = System.SendRequest(&quot;http://www.mysite.com/page2.asp&quot;, 
+&quot;param1=123&amp;param2=456&quot;, true<br>
+<br>
+Sub System_OnRequestFinish(url, pagecontent)<br>
+&nbsp; If instr(szurl, &quot;page2.asp&quot;) &gt; 0 Then<br>
+&nbsp;&nbsp;&nbsp; 'parse pagecontent...<br>
+&nbsp; End if<br>
+end sub</p>
+<p>&nbsp;</p>
+<h2>System.SimpleWrite(path, content, param)</h2>
+<p>It writes a file to disk with passed content.<br>
+Only param=1 is currently supported.</p>
+<p>Example:</p>
+<p class="code">System.SimpleWrite baseDir &amp; &quot;Data/mylog.txt&quot;, logString, 1<br>
+&nbsp;</p>
+<h2>&nbsp;</h2>
+<h2>System.SimpleRead(path, param)</h2>
+<p>It reads a file from disk to a string variable.</p>
+<p>Only param=1 is currently supported.</p>
+<p>Example:</p>
+<p class="code">txtLog = System.SimpleRead(baseDir &amp; &quot;Data\mylog&quot;, 1)<br>
+&nbsp;</p>
+<p>&nbsp;</p>
+</body>
+
+</html>

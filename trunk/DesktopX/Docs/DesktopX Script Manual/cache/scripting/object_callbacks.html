@@ -1,0 +1,253 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link href="dxstyle.css" rel="stylesheet">
+</head>
+
+<body>
+<h1>Object callbacks</h1>
+<p>These are events to which an object can respond. Script can be placed within 
+these Subroutines and Functions to perform actions when these events occur.<br>
+<br>
+For functions, you should also return True or False at the end of the function 
+as a clean coding practice. Returning True stops DesktopX processing additional 
+events, which means that you can use functions like Object_OnRButtonDown to 
+perform actions other that displaying the DesktopX right click menu (if 
+enabled). You should return False otherwise.</p>
+<h2>Object callbacks and scripts</h2>
+<p>Starting 3.0 release, you don’t need a script just to respond to an Object 
+callback. Child objects events will be automatically notified to the parent 
+script, if one exists.<br>
+It means you only need one script in the root parent object to get all events 
+from its descendants, for instance Object_OnLButtonUp.<br>
+To support this new style of coding and support pre-3.0 scripts at the same 
+time, all callbacks described in this chapter, except for Object_OnScriptEnter 
+and Object_OnScriptExit, also exist in *Ex form. *Ex callbacks have an 
+additional first parameter of type Object.<br>
+<br>
+Examples:<br>
+Standard callback:</p>
+<p class="code">Sub Object_OnLButtonDown(x,y) ‘only called if the object has a 
+script associated</p>
+<p>Ex callback:</p>
+<p class="code">Sub Object_OnLButtonDownEx(obj,x,y) ‘receives events from the 
+object and all its children<br>
+&nbsp; Select case obj.name<br>
+&nbsp;&nbsp;&nbsp; Case “mybutton01”<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ‘do something<br>
+&nbsp;&nbsp;&nbsp; Case “mybutton02”<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ‘etc<br>
+&nbsp; End Select<br>
+End Sub</p>
+<h2>Sub Object_OnScriptEnter</h2>
+<p>Occurs as soon as the script is enabled, which usually occurs when an object 
+is loaded.<br>
+Example:</p>
+<p class="code">Sub Object_OnScriptEnter<br>
+Object.Text = Object.PersistStorage(&quot;mytext&quot;)<br>
+End Sub</p>
+<h2>Sub Object_OnScriptExit</h2>
+<p>Occurs as soon as the script is disabled, which usually occurs when an object 
+is unloaded.<br>
+Example:</p>
+<p class="code">Sub Object_OnScriptExit<br>
+Object.PersistStorage(&quot;mytext&quot;) = Object.Text<br>
+End Sub</p>
+<h2>Sub Object_OnStateChange(state), Sub Object_OnStateChanged(state)</h2>
+<p>When the state of the object changes state these events are called and the 
+variable (state) is identified allowing this one event to deal with all states.<br>
+The differentiating factor is that OnStateChange is called as the change 
+commences, and the OnStateChanged event occurs when the state change has 
+completed. OnStateChanged is particularly useful for the synchronization of 
+animated objects and effects.<br>
+Note: Setting Object.StatePreempt inside Object_OnStateChange will actually have 
+the special effect of switching the state being changed to the specified state. 
+For instance you can hijack &quot;Mouse over&quot; messages to &quot;MyMover1&quot; and &quot;MyMover2&quot; 
+depending on some state information.<br>
+Note: You can usually more effectively use Object_OnMouseEnter and 
+Object_OnMouseLeave notifications instead of checking for “Mouse over” and 
+“Mouse away” states in Object_OnStateChange. It is more efficient because those 
+events are direct and don’t rely on animation delays and queued animated states 
+completitions.<br>
+Note: Any references to states should be case sensitive.<br>
+<br>
+Example:</p>
+<p class="code">Sub Object_OnStateChange(state)<br>
+&nbsp; If state = &quot;Mouse over&quot; Then<br>
+&nbsp;&nbsp;&nbsp; Object.Opacity = 100<br>
+&nbsp; ElseIf state = &quot;Mouse away&quot; Then<br>
+&nbsp;&nbsp;&nbsp; Object.Opacity = 50<br>
+&nbsp; End If<br>
+End Sub</p>
+<h2>Sub Object_OnMouseEnter, Sub Object_OnMouseLeave</h2>
+<p>This is the cleaner way to check for user mouse interaction with an object. 
+By using this you can avoid your code for these events being combined with other 
+the state change code. You can use the OnMouseButton functions described later 
+in combination with these very effectively.<br>
+Example:</p>
+<p class="code">Sub Object_OnMouseEnter<br>
+Object.Opacity = 100<br>
+End Sub<br>
+Sub Object_OnMouseLeave<br>
+Object.Opacity = 50<br>
+End Sub</p>
+<h2>Sub Object_OnShow(IsVisible)</h2>
+<p>This function is triggered whenever the visibility of an object changes. A 
+single variable is respond which is “True” or “False” depending on whether the 
+object is being shown or hidden.<br>
+Example:</p>
+<p class="code">Sub Object_OnShow(IsVisible)<br>
+If IsVisible = True Then<br>
+msgbox &quot;Showing object&quot;<br>
+Else<br>
+msgbox &quot;Hiding object&quot;<br>
+End If<br>
+End Sub</p>
+<h2>Sub Object_OnMove(x, y)</h2>
+<p>This function is triggered whenever the position of an object changes, but it 
+via mouse or keyboard movement, or by script manipulation. The coordinates of 
+it’s new position are returned.<br>
+Example:</p>
+<p class="code">Sub Object_OnMove(x,y)<br>
+If x &lt; 100 Then Object.Left = 100<br>
+End Sub</p>
+<h2>Sub Object_OnSize(width, height)</h2>
+<p>If the objects size is adjusted then you can react to this event using this 
+subroutine. In the following example the event ensures that the proportions of 
+the object are constrained if the object gets resized.<br>
+Example:</p>
+<p class="code">Sub Object_OnSize(width, height)<br>
+Object.Height = Object.Width / 2<br>
+End Sub</p>
+<h2>Sub Object_OnDropFiles (files)</h2>
+<p>This event is triggered if the user drags one or more files onto the object 
+and releases the mouse. A variable is returned containing the full path of all 
+the files separates by a pipe (“|”) character.<br>
+Example:</p>
+<p class="code">Dim filelist<br>
+Sub Object_OnDropFiles(files)<br>
+filelist = Split(files,&quot;|&quot;)<br>
+For x = 0 To UBound(filelist)<br>
+outputmsg = outputmsg &amp; filelist(x) &amp; vbNewLine<br>
+Next<br>
+msgbox outputmsg<br>
+End Sub</p>
+<h2>Sub Object_OnDrag(x, y, newX, newY)</h2>
+<p>This event is fired as the object is dragged. The x and the y coordinates 
+correspond the where on the object the click occurred and the “newPos” 
+coordinated specify the top left position of the object in the position it has 
+been dragged to.<br>
+If the object’s position is locked then the x,y coordinated report a position 
+relative to where the object was originally clicked.<br>
+You can get the position of the object before it was dragged using Object.Left 
+and Object.Top<br>
+The example below allows you to drag an object to within 100 pixels of the 
+primary monitor screen edge but no further.<br>
+<br>
+Example:</p>
+<p class="code">Sub Object_OnDrag(x, y, newX, newY)<br>
+If newX &lt; 100 Then Object.Left = 100<br>
+If (newX + Object.Width) &gt; System.ScreenWidth - 100 Then<br>
+Object.Right = System.ScreenWidth - 100 <br>
+End If <br>
+If newY &lt; 100 Then Object.Top = 100<br>
+If (newY + Object.Width) &gt; System.ScreenHeight - 100 Then<br>
+Object.Bottom = System.ScreenHeight - 100 <br>
+End If <br>
+End Sub</p>
+<h2>Sub Object_OnDragFinish</h2>
+<p>This event occurs when you finish dragging the object so you can react to the 
+new position of the object. For example, the script below ensures that after an 
+object has been moved then a second object is placed directly underneath it 
+wherever it is placed.<br>
+Example:</p>
+<p class="code">Sub Object_OnDragFinish<br>
+DesktopX.Object(&quot;obj2&quot;).Top = Object.Bottom<br>
+DesktopX.Object(&quot;obj2&quot;).Left = Object.Left<br>
+End Sub</p>
+<h2>Sub Object_OnSetFocus, Sub Object_OnKillFocus</h2>
+<p>These events occur when an object receives or loses the focus. This means 
+that you can react to a user starting to interact with or ending interaction 
+with an object. You may just want to draw attention to the fact that the object 
+has the focus of do something more like validate the input of a DesktopX Edit 
+control if the user tries to leave it.<br>
+Example:</p>
+<p class="code">Sub Object_OnSetFocus<br>
+Object.state = &quot;FocusON&quot;<br>
+End Sub<br>
+<br>
+Sub Object_OnKillFocus<br>
+Object.state = &quot;FocusOFF&quot;<br>
+End Sub</p>
+<h2>Function Object_OnChar(key, extended)</h2>
+<p>If an object has the focus then this function is called when a key is 
+depressed and the ASCII character code is returned in the variable. Note that 
+‘a’ and ‘A’ return different values so this event is well suited to responding 
+to a user typing. It also returns a code to represent extended variables. These 
+are not really necessary to interpret and can be ignored.<br>
+Example:</p>
+<p class="code">Function Object_OnChar(key, extended)<br>
+Msgbox &quot;You pressed the &quot; &amp; Asc(key) &quot; key which has the ASCII value of &quot; &amp; key<br>
+Object_OnChar = False<br>
+End Sub</p>
+<h2>Function Object_OnKeyDown(key, flags), Function Object_OnKeyUp(key, flags)</h2>
+<p>This returns the actual key pressed rather than the ASCII value of the 
+character returned. As such it is better suited to when you want to return the 
+actual key such as an arrow key or Shift key. Note that in Edit mode certain 
+keys such as the arrow key will move the object rather than respond to your 
+code, but when in User mode as you should be whenever possible it will work 
+fine.<br>
+You can get a list of the valid key values here:<br>
+http://msdn.microsoft.com/library/en-us/winui/winui/windowsuserinterface/<br/>userinput/virtualkeycodes.asp<br>
+You need to define the constant at the beginning of the script if you want to 
+use a textual name for clarity.<br>
+There is only really one useful extended value which will stop a character from 
+repeating. This is shown in the second example.<br>
+Example:</p>
+<p class="code">Const VK_SHIFT = &amp;H10 'Shift Key<br>
+Function Object_OnKeyDown(key, extended)<br>
+If key = VK_SHIFT Then<br>
+Msgbox &quot;Shift pressed&quot;<br>
+End If<br>
+Object_OnKeyDown = False<br>
+End Function</p>
+<p>The below example will move an object when it is selected and the enter key 
+is pressed, but will not repeat the movement if the key is help; so the user 
+must actively click the key again to do this.</p>
+<p class="code">Const EnterKey = &amp;H0D<br>
+Const Repeat = &amp;H40000000<br>
+Function Object_OnKeyDown(key, flags)<br>
+If key = EnterKey Then<br>
+If Repeat &lt;&gt; (flags And Repeat) Then<br>
+Object.Move Object.Left + 10, Object.Top<br>
+End If<br>
+End If<br>
+End Function</p>
+<h2>Function Object_OnLButtonDown(x, y), Function Object_OnRButtonDown(x, y), 
+Function <br/>Object_OnLButtonUp(x, y, Dragged), Function Object_OnRButtonUp(x, y, 
+Dragged)</h2>
+<p>These functions are called as soon as the corresponding mouse button is 
+pressed or released. In all cases two variables are returned which are the x and 
+y coordinates within the object (i.e. not the screen position). In the ButtonUp 
+functions, a third is returned True or False depending on whether the object has 
+been dragged or not.<br>
+Example:</p>
+<p class="code">Function Object_OnLButtonDown(x, y)<br>
+Object.PersistStorage(&quot;x&quot;) = Object.Left<br>
+Object.PersistStorage(&quot;y&quot;) = Object.Top<br>
+Object_OnLButtonDown = False<br>
+End Function<br>
+<br>
+Function Object_OnLButtonUp(x, y, Dragged)<br>
+If Dragged = True Then<br>
+Msgbox &quot;You moved the object &quot; &amp; Object.Left - Object.PersistStorage(&quot;x&quot;) &amp; &quot; 
+pixels horizontally and &quot; _<br>
+&amp; Object.Top - Object.PersistStorage(&quot;y&quot;) &amp; &quot; pixels vertically&quot;<br>
+End If<br>
+Object_OnLButtonUp = False<br>
+End Function<br>
+&nbsp;</p>
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link href="dxstyle.css" rel="stylesheet">
+</head>
+
+<body>
+<h1>Forms</h1>
+<p>Forms is a new feature introduced in DesktopX 3.1. They are a sort of 
+enhanced input box and are very similar to widget preferences.</p>
+<p>You can use forms to prompt an input dialog to the user. Input elements are 
+the same as the widget preference types:</p>
+<p>You can create a work by calling:</p>
+<p class="code">Set frm = DesktopX.CreateForm</p>
+<p>You can add input controls by calling:</p>
+<p class="code">frm.AddPreference &quot;Text1&quot;<br>
+frm.Preference(&quot;Text1&quot;).Type = &quot;Text&quot;<br>
+frm.Preference(&quot;Text1&quot;).DefaultValue = &quot;Sample text pref&quot;<br>
+frm.Preference(&quot;Text1&quot;).Caption = &quot;Default text&quot;<br>
+frm.Preference(&quot;Text1&quot;).Description = &quot;This is a sample description&quot;</p>
+<p>To prompt the form simply call:</p>
+<p class="code">frm.Prompt</p>
+<p>Then you can retrieve the form return values using:</p>
+<p class="code">frm.Preference(&quot;Text1&quot;).value</p>
+<p>&nbsp;</p>
+<h1>Reference</h1>
+<h2>DesktopX.CreateForm</h2>
+<p>It returns a new form object.</p>
+<h2>Form.Caption</h2>
+<p>Gets/sets the form's caption.</p>
+<h2>Form.OkButton</h2>
+<p>Gets/sets the form's Ok button text.</p>
+<h2>Form.CancelButton</h2>
+<p>Gets/sets the form's Cancel button text.</p>
+<h2>Form.Prompt</h2>
+<p>Prompts the form. It returns true if the user chose the Ok button, false 
+otherwise.</p>
+<h2>Form.AddPreference &quot;name&quot;</h2>
+<p>Adds a new input item to the form. Input preference items are identical to 
+widget preferences, so you can go <a href="widget_preferences.html">here</a>.</p>
+</body>
+
+</html>
