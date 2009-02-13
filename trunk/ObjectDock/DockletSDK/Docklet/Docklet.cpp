@@ -230,14 +230,14 @@ void Docklet::DoClickAnimation()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ///	Remove the current docklet from the dock
-void Docklet::RemoveSelf(WPARAM wParam)
+BOOL Docklet::RemoveSelf(WPARAM wParam)
 {
-	typedef void(__stdcall *DUMMY_TYPEDEF)(HWND hwndDocklet, WPARAM wParam);
+	typedef BOOL(__stdcall *DUMMY_TYPEDEF)(HWND hwndDocklet, WPARAM wParam);
 	DUMMY_TYPEDEF HostDockletRemoveSelf = (DUMMY_TYPEDEF) GetProcAddress(GetModuleHandle(NULL), "DockletRemoveSelf");
 	if(!HostDockletRemoveSelf)
-		return;
+		return FALSE;
 
-	HostDockletRemoveSelf(data->hwndDocklet, wParam);
+	return HostDockletRemoveSelf(data->hwndDocklet, wParam);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
