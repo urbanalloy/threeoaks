@@ -2,7 +2,7 @@
 //
 // DotNetDocklets : bringing .NET to ObjectDock
 //
-// Copyright (c) 2004-2008, Julien Templier
+// Copyright (c) 2004-2009, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,6 +74,9 @@ namespace ObjectDockSDK
 		[DllImport("Interop.dll")]
 		public static extern void DockletDoAttentionAnimation(IntPtr hwndDocklet);
 
+        [DllImport("Interop.dll")]
+        public static extern void DockletDoClickAnimation(IntPtr hwndDocklet);
+
 		[DllImport("Interop.dll")]
 		public static extern void DockletDefaultConfigDialog(IntPtr hwndDocklet);
 
@@ -89,6 +92,9 @@ namespace ObjectDockSDK
 		[DllImport("Interop.dll")]
 		public static extern Boolean DockletSetDockAlign(IntPtr hwndDocklet, int iNewAlign);
 
+        [DllImport("Interop.dll")]
+        public static extern Boolean DockletRemoveSelf(IntPtr hwndDocklet, IntPtr wParam);
+        
 		/////////////////////////
 		//        Image        //
 		/////////////////////////
