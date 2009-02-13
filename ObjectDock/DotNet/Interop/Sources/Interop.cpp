@@ -76,8 +76,7 @@ void CALLBACK InteropOnGetInformation(char *szName, char *szAuthor, int *iVersio
 DOCKLET_DATA *CALLBACK InteropOnCreate(HWND hwndDocklet, HINSTANCE hInstance, char *szIni, char *szIniGroup)
 {
 	// Create Plugin personal-data structure
-	DOCKLET_DATA *data = new DOCKLET_DATA;
-	//ZeroMemory(data, sizeof(DOCKLET_DATA));
+	DOCKLET_DATA *data = new DOCKLET_DATA;	
 
 	data->hwndDocklet = hwndDocklet;
 	data->hInstanceDll = hInstance;
@@ -228,63 +227,66 @@ void CALLBACK InteropOnDestroy(DOCKLET_DATA *data, HWND hwndDocklet)
 ///////////////////////////////////////////////////////////////////////////////////////////////
 BOOL CALLBACK InteropOnExportFiles(DOCKLET_DATA *data, char *szFileRelativeOut, int iteration)
 {
-	LOG("Exporting files...\n");
-	if (!data->autoload)
-		return false;
+	// No longer called by ObjectDock
+	return FALSE;
 
-	////////////////////////////////////////////////////////////////////////////
-	//int iteration = 0;
-	//char szFileRelativeOut[MAX_PATH];
-	//strcpy(szFileRelativeOut, "");
-	//BOOL ret = TRUE;
+	/*
+	LOG("Exporting Files\n");
 
-	//LOG("Exporting Files\n");
+	strcpy(szFileRelativeOut, "");
 
-	//while (ret) {
+	//////////////////////////////////////////////////////////////////////////
+	// Get the total number of files to export
+	if (iteration == 0) {		
+		if (data->autoload)
+			data->files = data->cpi->OnExportFiles();
 
-	//	if (iteration == 0) {
-	//		data->files = data->cpi->OnExportFiles();
-	//		data->filesSize = data->files->cbElements + InteropFileNamesSize;
-	//	}
+		if (data->files == NULL)
+			data->filesSize = InteropFileNamesSize;
+		else
+			data->filesSize = data->files->cbElements + InteropFileNamesSize;
+	}
 
-	//	// Export the .Net Docklet files
-	//	if (iteration < (signed)data->files->cbElements)
-	//	{
-	//		// get the file name
-	//		wchar_t file;
-	//		HRESULT hresult = SafeArrayGetElement(data->files, (long*)&iteration, &file);
-	//		if(FAILED(hresult)) {
-	//			LOG("Failed!!!\n");
-	//			ret = FALSE;	
-	//		}
+	//////////////////////////////////////////////////////////////////////////
+	// Export the interop docklet files
+	if (iteration < InteropFileNamesSize)
+	{
+		sprintf(szFileRelativeOut, "%s%s", data->static_data.interopFolder, InteropFileNames[iteration]);
+		LOG(szFileRelativeOut); LOG("\n");
+		return TRUE;
+	}
 
-	//		sprintf(szFileRelativeOut, "%s%S", data->static_data.relativeFolder, &file);
+	//////////////////////////////////////////////////////////////////////////
+	// Check that we got files from the .Net docklet
+	if (data->files == NULL)
+		return FALSE;
 
-	//		LOG(szFileRelativeOut); LOG("\n");
-	//		//ret = TRUE;
-	//	}
+	// Export the .Net Docklet files
+	if (iteration >= InteropFileNamesSize && iteration <= data->filesSize)
+	{
+		// get the file name
+		wchar_t file;
+		long index = iteration - InteropFileNamesSize;
+		HRESULT hresult = SafeArrayGetElement(data->files, &index, &file);
+		if(FAILED(hresult))			
+			return FALSE;			
 
-	//	// Export the interop docklet files
-	//	if (iteration > (signed)data->files->cbElements && iteration <= data->filesSize)
-	//	{
-	//		sprintf(szFileRelativeOut, "%s%s", data->static_data.interopFolder, InteropFileNames[iteration-(signed)data->files->cbElements-1]);
-	//		LOG(szFileRelativeOut); LOG("\n");
-	//		ret = TRUE;
-	//	}
+		sprintf(szFileRelativeOut, "%s/%S", data->static_data.relativeFolder, &file);
 
-	//	// Finish Export
-	//	if (iteration > data->filesSize) {
-	//		SafeArrayDestroy(data->files);
-	//		ret = FALSE;
-	//	}
+		LOG(szFileRelativeOut); LOG("\n");
+		
+		return TRUE;
+	}
 
-	//	iteration++;
+	// Finish Export
+	if (iteration > data->filesSize) {
+		SafeArrayDestroy(data->files);
+		data->files = NULL;
+		data->filesSize = 0;		
+	}
 
-
-	//}
-	////////////////////////////////////////////////////////////////////////////
-
-	return false;
+	return FALSE;
+	*/
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////

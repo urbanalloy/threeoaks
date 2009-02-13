@@ -97,16 +97,24 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-typedef struct {
+struct DOCKLET_LIST {
 	char name[FOLDER_SIZE];
 	char icon[FOLDER_SIZE];
 	char path[FOLDER_SIZE];
 	GUID CLSID_Docklet;
 	BOOL invalid;
-} DOCKLET_LIST;
+
+	DOCKLET_LIST()
+	{
+		strcpy_s(name, "");
+		strcpy_s(icon, "");
+		strcpy_s(path, "");
+		invalid = true;
+	}
+};
 
 // Docklet 'Data' struct.
-typedef struct {
+struct DOCKLET_DATA{
 	// Interop
 	HWND hwndDocklet;
 	HINSTANCE hInstanceDll;
@@ -120,4 +128,15 @@ typedef struct {
 	std::vector< DOCKLET_LIST > docklets;	// List of available docklets
 	int index; // index of the selected docklet in docklets.
 	IDockletInterface *cpi;
-} DOCKLET_DATA;
+
+	DOCKLET_DATA()
+	{
+		hwndDocklet = NULL;
+		hInstanceDll = NULL;
+		autoload = FALSE;
+		files = NULL;
+		filesSize = 0;
+		
+		cpi = NULL;
+	}
+};
