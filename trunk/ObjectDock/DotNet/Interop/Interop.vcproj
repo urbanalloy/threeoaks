@@ -269,6 +269,10 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 			<File
+				RelativePath=".\Sources\Interop.def"
+				>
+			</File>
+			<File
 				RelativePath=".\Sources\Interop.rc"
 				>
 			</File>
@@ -303,14 +307,6 @@
 		<Filter
 			Name="Others"
 			>
-			<File
-				RelativePath=".\Data\config.ini"
-				>
-			</File>
-			<File
-				RelativePath=".\Sources\Interop.def"
-				>
-			</File>
 			<Filter
 				Name="Doc"
 				>
