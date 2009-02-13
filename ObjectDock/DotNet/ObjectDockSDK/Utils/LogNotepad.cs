@@ -2,7 +2,7 @@
 //
 // DotNetDocklets : bringing .NET to ObjectDock
 //
-// Copyright (c) 2004-2008, Julien Templier
+// Copyright (c) 2004-2009, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////

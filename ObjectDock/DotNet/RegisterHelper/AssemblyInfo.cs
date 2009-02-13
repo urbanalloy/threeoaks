@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct(".Net Docklet Register Helper")]
-[assembly: AssemblyCopyright("Julien Templier")]
+[assembly: AssemblyCopyright("(C) 2004-2009 Julien Templier")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
 

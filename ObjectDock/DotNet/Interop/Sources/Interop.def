@@ -22,10 +22,12 @@ EXPORTS
 	DockletBrowseForImage
 	DockletLockMouseEffect
 	DockletDoAttentionAnimation
+	DockletDoClickAnimation
 	DockletDefaultConfigDialog
 	DockletQueryDockEdge
 	DockletQueryDockAlign
 	DockletSetDockEdge
 	DockletSetDockAlign
-
+	DockletRemoveSelf
+	
 	DockletSetImageManaged
