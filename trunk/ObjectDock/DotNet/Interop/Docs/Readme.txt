@@ -6,6 +6,13 @@ The .NET Interop docklet allows you to use .NET docklets with ObjectDock.
 A SDK is available if you want to build you own plugins.
 
 ***************************************************************************
+** Source Code & Examples
+***************************************************************************
+
+The latest source code and examples are available at:
+http://code.google.com/p/threeoaks/source/browse/#svn/trunk/ObjectDock/DotNet
+
+***************************************************************************
 ** Changelog
 ***************************************************************************
 
