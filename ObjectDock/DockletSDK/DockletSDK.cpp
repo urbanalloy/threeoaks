@@ -159,14 +159,14 @@ int DockletQueryDockEdge(HWND hwndDocklet)
 
 //////////////////////////////////////////////////////////////////////////
 // 14
-void DockletRemoveSelf(HWND hwndDocklet, WPARAM wParam)
+BOOL DockletRemoveSelf(HWND hwndDocklet, WPARAM wParam)
 {
-	typedef void(__stdcall *DUMMY_TYPEDEF)(HWND hwndDocklet, WPARAM wParam);
+	typedef BOOL(__stdcall *DUMMY_TYPEDEF)(HWND hwndDocklet, WPARAM wParam);
 	DUMMY_TYPEDEF HostDockletRemoveSelf = (DUMMY_TYPEDEF) GetProcAddress(GetModuleHandle(NULL), "DockletRemoveSelf");
 	if(!HostDockletRemoveSelf)
 		return FALSE;
 
-	HostDockletRemoveSelf(hwndDocklet, wParam);
+	return HostDockletRemoveSelf(hwndDocklet, wParam);
 }
 
 //////////////////////////////////////////////////////////////////////////

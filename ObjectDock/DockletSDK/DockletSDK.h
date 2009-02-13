@@ -27,7 +27,7 @@ void DockletGetRootFolder(HWND hwndDocklet, char *szFolder);
 void DockletGetRelativeFolder(HWND hwndDocklet, char *szFolder);
 
 void DockletDefaultConfigDialog(HWND hwndDocklet);
-void DockletRemoveSelf(HWND hwndDocklet, WPARAM wParam);
+BOOL DockletRemoveSelf(HWND hwndDocklet, WPARAM wParam);
 
 int DockletQueryDockEdge(HWND hwndDocklet);
 int DockletQueryDockAlign(HWND hwndDocklet);

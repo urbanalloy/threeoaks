@@ -76,7 +76,7 @@ class Docklet
 		void DoAttentionAnimation();
 		void DoClickAnimation();
 		
-		void RemoveSelf(WPARAM wParam);
+		BOOL RemoveSelf(WPARAM wParam);
 
 		string GetRootFolder();
 		string GetRelativeFolder();
