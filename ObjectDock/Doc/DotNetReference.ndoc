@@ -1,39 +1,36 @@
-<project SchemaVersion="1.3">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<project SchemaVersion="2.0">
     <assemblies>
-        <assembly location="..\DotNet\NetDockletHelper\..\Release\NetDockletHelper.dll" documentation="..\DotNet\NetDockletHelper\Doc.xml" />
+        <assembly location="..\Builds\DotNetDocklets\Release\ObjectDockSDK.dll" documentation="..\DotNet\ObjectDockSDK\Doc.xml" />
     </assemblies>
+    <namespaces>
+        <namespace name="ObjectDockSDK">Main ObjectDockSDK namespace</namespace>
+        <namespace name="ObjectDockSDK.Utils">Misc utilities for .Net Docklets</namespace>
+    </namespaces>
     <documenters>
-        <documenter name="JavaDoc">
-            <property name="OutputDirectory" value=".\doc\" />
-        </documenter>
-        <documenter name="LaTeX">
-            <property name="OutputDirectory" value=".\doc\" />
-            <property name="TextFileFullName" value="Documentation.tex" />
-            <property name="TexFileBaseName" value="Documentation" />
-            <property name="LatexCompiler" value="latex" />
-            <property name="TexFileFullPath" value=".\doc\Documentation.tex" />
-        </documenter>
-        <documenter name="LinearHtml">
-            <property name="OutputDirectory" value=".\doc\" />
-            <property name="Title" value="An NDoc Documented Class Library" />
-        </documenter>
-        <documenter name="MSDN">
-            <property name="OutputDirectory" value=".\Manual\Reference\DotNet\" />
-            <property name="HtmlHelpName" value="ObjectDockSDK(DotNet)" />
-            <property name="Title" value="ObjectDock .Net SDK Reference" />
-            <property name="DocumentInheritedFrameworkMembers" value="False" />
-            <property name="AutoDocumentConstructors" value="False" />
-            <property name="DocumentInheritedAttributes" value="False" />
-            <property name="IncludeDefaultThreadSafety" value="False" />
-            <property name="CleanIntermediates" value="True" />
-        </documenter>
-        <documenter name="VS.NET 2003">
+        <documenter name="MSDN-Help2">
+            <property name="PlugInNamespace" value="ms.vscc" />
             <property name="OutputDirectory" value=".\doc\" />
             <property name="HtmlHelpName" value="Documentation" />
             <property name="Title" value="An NDoc documented library" />
         </documenter>
         <documenter name="XML">
             <property name="OutputFile" value=".\doc\doc.xml" />
+        </documenter>
+        <documenter name="MSDN-CHM">
+            <property name="OutputDirectory" value=".\Doc\" />
+            <property name="HtmlHelpName" value="ObjectDockSDK(DotNet)" />
+            <property name="Title" value="ObjectDock .Net SDK Reference" />
+            <property name="CopyrightText" value="(C) 2004-2009 Julien TEMPLIER" />
+            <property name="CopyrightHref" value="http://www.templier.info" />
+        </documenter>
+        <documenter name="Intellisense">
+            <property name="OutputDirectory" value=".\intellisense\" />
+        </documenter>
+        <documenter name="MSDN-Web">
+            <property name="OutputDirectory" value=".\doc\" />
+            <property name="HtmlHelpName" value="Documentation" />
+            <property name="Title" value="An NDoc documented library" />
         </documenter>
     </documenters>
 </project>
