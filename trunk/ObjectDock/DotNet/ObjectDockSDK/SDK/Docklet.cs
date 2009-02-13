@@ -2,7 +2,7 @@
 //
 // DotNetDocklets : bringing .NET to ObjectDock
 //
-// Copyright (c) 2004-2008, Julien Templier
+// Copyright (c) 2004-2009, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +165,7 @@ namespace ObjectDockSDK
 		public String Label
 		{
 			get {
-				StringBuilder label = new StringBuilder(256);
+				var label = new StringBuilder(256);
 				Interop.DockletGetLabel(data.hwndDocklet, label);
 				return label.ToString();
 			}
@@ -374,7 +374,7 @@ namespace ObjectDockSDK
 		/// </returns>
 		public Boolean BrowseForImage(ref String image, string alternativeRelativeRoot)
 		{
-			StringBuilder img = new StringBuilder(256);
+			var img = new StringBuilder(256);
 			img.Insert(0, image);
 			
 			Boolean ret;
@@ -437,6 +437,15 @@ namespace ObjectDockSDK
 		{
 			Interop.DockletDoAttentionAnimation(data.hwndDocklet);
 		}
+
+        /// <summary>
+        ///		Causes the specified Docklet to animate in the dock to try to get the user's attention.
+        ///     Same as DoAttentionAnimation in current builds?
+        /// </summary>
+        public void DoClickAnimation()
+        {
+            Interop.DockletDoClickAnimation(data.hwndDocklet);
+        }
 
 		#endregion
 
@@ -504,9 +513,9 @@ namespace ObjectDockSDK
 			if (nb == 0)
 				return null;
 
-			String[] files = new String[nb];
+			var files = new String[nb];
 			for (int i = 0; i < nb; i++) {
-				StringBuilder str = new StringBuilder(256);
+				var str = new StringBuilder(256);
 				Interop.DragQueryFile(hDrop, (uint)i, str, str.Capacity);
                 files[i] = str.ToString();
 			}
@@ -516,15 +525,29 @@ namespace ObjectDockSDK
 
 		#endregion
 
-		/***************** Private *****************/
+        #region Misc
+
+        /// <summary>
+        /// Remove the docklet from the dock
+        /// </summary>
+        /// <param name="wParam">??</param>
+        /// <returns>true if the function succeeded, false otherwise</returns>
+        public bool RemoveSelf(IntPtr wParam)
+        {
+            return Interop.DockletRemoveSelf(data.hwndDocklet, wParam);
+        }
+
+        #endregion
+
+        /***************** Private *****************/
 
 		#region Utility
 
 		private void SetImageManaged(Image newImage, Boolean isOverlay)
 		{
 			// Lock the bitmap's bits
-			Bitmap bitmap = new Bitmap(newImage);
-			Rectangle rect = new Rectangle(0,0,newImage.Width, newImage.Height);
+			var bitmap = new Bitmap(newImage);
+			var rect = new Rectangle(0,0,newImage.Width, newImage.Height);
 			BitmapData bitmapData = bitmap.LockBits(rect,
 				ImageLockMode.ReadOnly,
 				PixelFormat.Format32bppArgb);
