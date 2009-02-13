@@ -112,7 +112,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="@echo off&#x0D;&#x0A;xcopy /Y /I &quot;$(ProjectDir)\Data\config.ini&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;xcopy /Y /I &quot;$(ProjectDir)\Data\Interop.png&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+				CommandLine="@echo off&#x0D;&#x0A;xcopy /Y /I &quot;$(ProjectDir)\Data\Interop.png&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -216,7 +216,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="@echo off&#x0D;&#x0A;xcopy /Y /I &quot;$(ProjectDir)\Data\config.ini&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;xcopy /Y /I &quot;$(ProjectDir)\Data\Interop.png&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
+				CommandLine="@echo off&#x0D;&#x0A;xcopy /Y /I &quot;$(ProjectDir)\Data\Interop.png&quot; &quot;$(OutDir)&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
