@@ -46,8 +46,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 const int InteropFileNamesSize = 5;
-const char* InteropFileNames[] = {"config.ini",
-								  "Interop.dll",
+const char* InteropFileNames[] = {"Interop.dll",
 								  "Interop.png",
 								  "ObjectDockSDK.dll",
 								  "RegisterHelper.dll"};
