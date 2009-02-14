@@ -311,10 +311,6 @@
 				Name="Doc"
 				>
 				<File
-					RelativePath=".\Docs\howto.txt"
-					>
-				</File>
-				<File
 					RelativePath=".\Docs\readme.txt"
 					>
 				</File>
