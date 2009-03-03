@@ -164,7 +164,7 @@ namespace DreamBuilder
 			{
 				Console.ForegroundColor = ConsoleColor.Magenta;
 				Console.WriteLine("\n");
-				Console.WriteLine("INTERNAL ERROR: Please report this bug to bugs@threeoakscrossing.com.");
+				Console.WriteLine("INTERNAL ERROR: Please report this bug to bugs@3oakscrossing.com.");
 				Console.WriteLine("                Don't forget to provide the full output from the program.");
 
 				Console.WriteLine("\nException:");
