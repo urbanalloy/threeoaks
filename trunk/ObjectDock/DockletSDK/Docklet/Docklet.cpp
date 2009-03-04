@@ -32,12 +32,12 @@ void Docklet::PopulateStaticData(HWND hwndDocklet,HINSTANCE hInstance)
 	data->hwndDocklet = hwndDocklet;
 
 	char root[MAX_PATH+1];
-	strcpy(root, "");
+	strcpy_s(root, "");
 	_GetRootFolder(root);
 	data->rootFolder = string(root);
 
 	char relative[MAX_PATH+1];
-	strcpy(relative,"");
+	strcpy_s(relative,"");
 	_GetRelativeFolder(relative);
 	data->relativeFolder = string(relative);
 }
@@ -124,7 +124,7 @@ string Docklet::GetLabel()
 		return 0;
 
 	char label[MAX_PATH+1];
-	strcpy(label, "");
+	strcpy_s(label, "");
 	HostDockletGetLabel(data->hwndDocklet, label);
 	
 	return string(label);
@@ -326,8 +326,8 @@ int WritePrivateProfileInt(LPCTSTR lpAppName, LPCTSTR lpKeyName, int iValue, LPC
 	//////////////////////////////////////////////////////////////////////////
 	///Helper function included to quickly & easily save integers to an Ini
 	char szNumber[100];
-	strcpy(szNumber, "");
-	itoa(iValue, szNumber, 10);
+	strcpy_s(szNumber, "");
+	_itoa_s(iValue, szNumber, 10);
 	return WritePrivateProfileString(lpAppName, lpKeyName, szNumber, lpFileName);
 }
 

@@ -94,12 +94,12 @@ void ODConsole::Output(const char* szOutput, ...)
 
 	// if not parameter set, write a new line
 	if(szOutput == NULL) 
-		sprintf(out,"\n");
+		sprintf_s(out,"\n");
 	// process arguments
 	else
 	{
 		va_start(va, szOutput);
-			vsprintf(out, szOutput, va);
+			vsprintf_s(out, szOutput, va);
 		va_end(va);	
 	}		
    
