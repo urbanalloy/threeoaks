@@ -15,12 +15,7 @@
 #include <Windows.h>
 
 #ifdef _DEBUG
-	#define LOG(str) SendNotepadString(str)
-	// Do not use directly, use LOG(str) instead
-	void SendNotepadString(char *szText);
-	void SendNotepadString(const char *szText);
-	void SendNotepadString(int number);
-	void ErrorDescription(HRESULT hr);
+	#define LOG(str) OutputDebugString(str)
 #else
 	#define LOG(str)
 #endif
