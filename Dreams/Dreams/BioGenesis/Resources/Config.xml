@@ -1,0 +1,41 @@
+<!-- BioGenesis Screensaver by Asteron  -->
+<!-- Ver 1.0 2007-07-29 -->
+<!-- http://asteron.projects.googlepages.com/home  -->
+
+<!-- This is an iterative mathematical function over a grid of cells -->
+<!-- This function borders the boundary of stability and chaos -->
+<!-- While the grid is initially populated by random noise structures quickly see structures emerge -->
+<!-- Some of these structures are quite rare and fun to spot -->
+<!-- See http://wwwhomes.uni-bielefeld.de/achim/freq_top_life.html for a frequency table -->
+
+<screensaver>
+	<!-- approximately the number of squares along the length of the grid -->
+	<!-- this is rounded for pixel size and screen dimensions -->
+	<mingridsize>45</mingridsize>50
+	<maxgridsize>140</maxgridsize>250
+	
+	<!-- beneath this cell size grid lines won't be drawn -->
+	<gridlinesminsize>4</gridlinesminsize>	3
+
+	<!-- amount of iterations before the board will reset -->
+	<resettime>1400</resettime>2000
+
+	<!-- the chance of lifetime or neighbor coloring will use the premade preset -->
+	<!-- 0-100 -->
+	<presetchance>20</presetchance>30
+
+	<!-- allow COLONY coloring mode? -->
+	<!-- cells are colored according to the color of cells which they spawn from -->
+	<!-- true/false -->
+	<usecolonycoloring>true</usecolonycoloring>7
+
+	<!-- allow LIFETIME coloring mode? -->
+	<!-- cells are colored according to how long they've been alive (chance to shimmer) -->
+	<!-- true/false -->
+	<uselifetimecoloring>true</uselifetimecoloring>
+
+	<!-- allow NEIGHBOR coloring mode? -->
+	<!-- cells are colored according to the configuration of their neighbors -->
+	<!-- true/false -->
+	<useneighborcoloring>true</useneighborcoloring>
+</screensaver>
