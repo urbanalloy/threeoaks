@@ -27,12 +27,15 @@ class DreamDll
 		HINSTANCE hLibrary;
 		LPCSTR dllName;
 
+		// Deskscape lib
+		HINSTANCE hDeskscape;
+
 		// Load Plugin
 		void LoadPluginInstance( INT nCount, ... );
 		
 		// Informations
 		struct DREAM_SETTINGS {
-			int query_1;
+			int d3dFormat;
 			int videoTexture;
 			int screenUpdateFrequency;
 			int query_4;
@@ -49,6 +52,8 @@ class DreamDll
 		// State
 		BOOL initialized;
 
+		// Time delta (delta between calls to achieve the target fps)
+		float deltaTime;
 	
 		DreamDll(LPCSTR dll);
 		~DreamDll();
@@ -74,7 +79,14 @@ class DreamDll
 		DREAM_NOTIFICATIONPROCEDURE_SEC NotificationProcedureSecure;
 
 		void Notify(int type, int value);
-		void LoadSignature();
+		BOOL Render(BOOL isRenderingDisabled, LPDIRECT3DDEVICE9 pd3dDevice, RECT rect, RECT screen, HWND hDeskscapes);
+		void LoadSignatureID();
+		BOOL LoadSignedDll();
+		void LoadSignatureData();
 
-		void QuerySettings(D3DPRESENT_PARAMETERS d3dpp);
+		void QuerySettings(D3DFORMAT format);
+
+
+		PSID DreamDll::GetUserSID();
+		BOOL DreamDll::ComputeSID(PSID pSid, LPSTR lpString, int dSize);
 };
