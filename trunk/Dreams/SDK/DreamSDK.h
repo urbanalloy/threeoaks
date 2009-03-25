@@ -59,14 +59,24 @@
 
 void getDreamContentPath(char *path);
 
+//////////////////////////////////////////////////////////////////////////
+// Utilities
+
+struct DreamInfo
+{	
+	bool isDreamPaused;
+	float renderWidth;
+	float renderHeight;
+	char contentPath[260];
+};
 
 //////////////////////////////////////////////////////////////////////////
 // Functions
 
 #define QUERY_DEFAULT_SETTINGS int QueryDefaultSettings(int type, int value)
 #define NOTIFICATION_PROCEDURE void NotificationProcedure(int type, int value)
+#define NOTIFICATIONPROCEDURE_SECURE void NotificationProcedureSecure(int type, int value, DWORD* SecureSignature)
 #define SETUP_PLUGIN BOOL SetupPlugin(LPDIRECT3DDEVICE9 pd3dDevice, RECT rect, int nMonitors, HWND hDeskscapes)
-#define SETUP_PLUGIN_PER_SCREEN BOOL SetupPluginPerScreen(LPDIRECT3DDEVICE9 pd3dDevice, RECT rect, int monitor, HWND hDeskscapes)
 #define CONFIG_PLUGIN BOOL ConfigPlugin(HWND hWndParent)
 #define UPDATE_SCENE void UpdateScene()
 #define RENDER_SCENE_ON_SCREEN int RenderSceneOnScreen(BOOL isRenderingDisabled, LPDIRECT3DDEVICE9 pd3dDevice, RECT rect, RECT screen, HWND hDeskscapes)
