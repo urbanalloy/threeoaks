@@ -1,0 +1,7 @@
+EXPORTS
+	QueryDefaultSettings
+	FreePlugin
+	SetupPlugin
+	NotificationProcedure
+	UpdateScene
+	RenderSceneOnScreen
