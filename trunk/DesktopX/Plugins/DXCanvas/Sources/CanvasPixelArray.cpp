@@ -55,7 +55,7 @@ STDMETHODIMP CCanvasPixelArray::InterfaceSupportsErrorInfo(REFIID riid)
 STDMETHODIMP CCanvasPixelArray::get_length(unsigned long* length)
 {
 	if (!data)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasPixelArray, _T("Data not present"), __FUNCTION__ "Internal error: data is not present", 0, NULL);
+		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasPixelArray, _T("Internal error"), __FUNCTION__ ": data is not present", 0, NULL);
 
 	*length = this->length;
 
@@ -65,7 +65,7 @@ STDMETHODIMP CCanvasPixelArray::get_length(unsigned long* length)
 STDMETHODIMP CCanvasPixelArray::XXX5(unsigned long index, unsigned char* value)
 {
 	if (!data)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasPixelArray, _T("Data not present"), __FUNCTION__ "Internal error: data is not present", 0, NULL);
+		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasPixelArray, _T("Internal error"), __FUNCTION__ ": data is not present", 0, NULL);
 
 	if (index > length)
 		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_CanvasPixelArray, _T("Index out of bounds"), __FUNCTION__ "Index is out of bounds", 0, NULL);
@@ -78,7 +78,7 @@ STDMETHODIMP CCanvasPixelArray::XXX5(unsigned long index, unsigned char* value)
 STDMETHODIMP CCanvasPixelArray::XXX6(unsigned long index, int value)
 {
 	if (!data)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasPixelArray, _T("Data not present"), __FUNCTION__ "Internal error: data is not present", 0, NULL);
+		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasPixelArray, _T("Internal error"), __FUNCTION__ ": data is not present", 0, NULL);
 
 	if (index > length)
 		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_CanvasPixelArray, _T("Index out of bounds"), __FUNCTION__ "Index is out of bounds", 0, NULL);

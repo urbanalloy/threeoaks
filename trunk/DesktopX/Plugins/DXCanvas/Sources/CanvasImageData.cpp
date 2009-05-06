@@ -110,7 +110,7 @@ STDMETHODIMP CCanvasImageData::get_height(unsigned long int* height)
 STDMETHODIMP CCanvasImageData::get_data(ICanvasPixelArray** array)
 {
 	if (!data)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasImageData, _T("Data not present"), __FUNCTION__ "Internal error: data is not present", 0, NULL);
+		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasImageData, _T("Internal error"), __FUNCTION__ ": data is not present", 0, NULL);
 
 	CComObject<CCanvasPixelArray>* pixelArray;
 	CComObject<CCanvasPixelArray>::CreateInstance(&pixelArray);

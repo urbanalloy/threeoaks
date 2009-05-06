@@ -154,7 +154,7 @@ HRESULT CanvasState::setStyle(VARIANT style, Style type)
 {
 	// We accept two type of variant: VT_BSTR and VT_DISPATCH (containing a CCanvasGradient)
 	if (style.vt != VT_DISPATCH && style.vt != VT_BSTR)
-		return (canvas->debugMode ? CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid style"), __FUNCTION__ ": style should be a color, gradient or pattern", 0, NULL) : S_OK);
+		return (canvas->debugMode ? CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid style"), __FUNCTION__ ": style should be a color, gradient or pattern", 0, NULL) : S_OK);
 
 	USES_CONVERSION;
 
@@ -169,7 +169,7 @@ HRESULT CanvasState::setStyle(VARIANT style, Style type)
 			if (canvas->debugMode) {
 				char error[1000];
 				sprintf_s(error, __FUNCTION__ ": Failed to parse color value (value: %s)", OLE2T(style.bstrVal));
-				return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Failed to parse color value"), error, 0, NULL);
+				return CCOMError::DispatchError(SYNTAX_ERR, CLSID_CanvasRenderingContext2D, _T("Failed to parse color value"), error, 0, NULL);
 			} else
 				return S_OK;
 		}
@@ -240,7 +240,7 @@ HRESULT CanvasState::setStyle(VARIANT style, Style type)
 		return S_OK;
 	}
 
-	return (canvas->debugMode ? CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid style"), __FUNCTION__ ": style should be a color, gradient or pattern", 0, NULL) : S_OK);
+	return (canvas->debugMode ? CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid style"), __FUNCTION__ ": style should be a color, gradient or pattern", 0, NULL) : S_OK);
 }
 
 HRESULT CanvasState::getStyle(VARIANT* style, Style type)
@@ -297,7 +297,8 @@ HRESULT CanvasState::getStyle(VARIANT* style, Style type)
 			return S_OK;
 		}
 
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": internal error when retrieving the current style", 0, NULL);;
+		// Failed to get the current style!
+		return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": internal error when retrieving the current style", 0, NULL);;
 	}
 
 	// Simple color

@@ -58,7 +58,7 @@ HRESULT CCanvasRenderingContext2D::processText(BSTR txt, float x, float y, VARIA
 	if (maxW.vt != VT_ERROR && maxW.vt == VT_I4)
 	{
 		if (maxW.lVal <= 0)
-			return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Parameter error"), __FUNCTION__ ": maxWidth should be strictly positive", 0, NULL);
+			return CCOMError::DispatchError(SYNTAX_ERR, CLSID_CanvasRenderingContext2D, _T("Parameter error"), __FUNCTION__ ": maxWidth should be strictly positive", 0, NULL);
 
 		maxWidth = (float)maxW.lVal;
 	}
@@ -126,7 +126,7 @@ HRESULT CCanvasRenderingContext2D::processText(BSTR txt, float x, float y, VARIA
 			anchorX = 0.5;
 			break;
 		default:
-			return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": invalid value for text baseline", 0, NULL);		
+			return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": invalid value for text baseline", 0, NULL);		
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -152,7 +152,7 @@ HRESULT CCanvasRenderingContext2D::processText(BSTR txt, float x, float y, VARIA
 			anchorY = -(float)fontDescent;
 			break;
 		default:
-			return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": invalid value for text baseline", 0, NULL);		
+			return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": invalid value for text baseline", 0, NULL);		
 	}
 
 	// Text position
@@ -257,8 +257,9 @@ HRESULT CCanvasRenderingContext2D::processText(BSTR txt, float x, float y, VARIA
 	}
 	else
 	{
+		// Uh oh, FAIL!
 		cairo_restore(canvas->context);
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": invalid text operation type", 0, NULL);		
+		return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": invalid text operation type", 0, NULL);		
 	}
 
 	cairo_restore(canvas->context);
@@ -267,7 +268,7 @@ HRESULT CCanvasRenderingContext2D::processText(BSTR txt, float x, float y, VARIA
 
 	return S_OK;
 #else
-	return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": text rendering is not enabled", 0, NULL);		
+	return CCOMError::DispatchError(NOT_SUPPORTED_ERR, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": text rendering is not enabled", 0, NULL);		
 #endif
 }
 
@@ -432,7 +433,7 @@ STDMETHODIMP CCanvasRenderingContext2D::put_globalAlpha(float alpha)
 {
 	// Value must be in range 0.0 (fully transparent) - 1.0 (no additional transparency)
 	if (alpha < 0.0 || alpha > 1.0)
-		return (canvas->debugMode ? CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid value"), __FUNCTION__ ": invalid value: global alpha should be between 0.0 and 1.0", 0, NULL) : S_OK);
+		return (canvas->debugMode ? CCOMError::DispatchError(SYNTAX_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid value"), __FUNCTION__ ": invalid value: global alpha should be between 0.0 and 1.0", 0, NULL) : S_OK);
 
 	currentState().globalAlpha = alpha;
 
@@ -466,7 +467,7 @@ STDMETHODIMP CCanvasRenderingContext2D::put_globalCompositeOperation(BSTR operat
 	IS_OPERATION("lighter", ADD)
 	IS_OPERATION("copy", SOURCE)
 	IS_OPERATION("xor", XOR)
-	return (canvas->debugMode ? CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid operation"), __FUNCTION__ ": invalid type of operation", 0, NULL) : S_OK);
+	return (canvas->debugMode ? CCOMError::DispatchError(SYNTAX_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid operation"), __FUNCTION__ ": invalid type of operation", 0, NULL) : S_OK);
 
 	cairo_set_operator(canvas->context, cairo_op);
 
@@ -526,7 +527,7 @@ STDMETHODIMP CCanvasRenderingContext2D::get_fillStyle(VARIANT* style)
 STDMETHODIMP CCanvasRenderingContext2D::put_lineWidth(float width)
 {
 	if (width <= 0)
-		return (canvas->debugMode ? CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid operation"), __FUNCTION__ ": line width should be positive", 0, NULL) : S_OK);
+		return (canvas->debugMode ? CCOMError::DispatchError(SYNTAX_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid operation"), __FUNCTION__ ": line width should be positive", 0, NULL) : S_OK);
 
 	cairo_set_line_width(canvas->context, width);
 
@@ -552,7 +553,7 @@ STDMETHODIMP CCanvasRenderingContext2D::put_lineCap(BSTR cap)
 	IS_LINECAP("butt", BUTT)
 	IS_LINECAP("round", ROUND)
 	IS_LINECAP("square", SQUARE)
-	return (canvas->debugMode ? CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid operation"), __FUNCTION__ ": invalid type of line cap", 0, NULL) : S_OK);
+	return (canvas->debugMode ? CCOMError::DispatchError(SYNTAX_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid operation"), __FUNCTION__ ": invalid type of line cap", 0, NULL) : S_OK);
 
 	cairo_set_line_cap(canvas->context, cairo_cap);
 
@@ -589,7 +590,7 @@ STDMETHODIMP CCanvasRenderingContext2D::put_lineJoin(BSTR join)
 	IS_LINEJOIN("bevel", BEVEL)
 	IS_LINEJOIN("round", ROUND)
 	IS_LINEJOIN("miter", MITER)
-	return (canvas->debugMode ? CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid operation"), __FUNCTION__ ": invalid type of line join", 0, NULL) : S_OK);
+	return (canvas->debugMode ? CCOMError::DispatchError(SYNTAX_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid operation"), __FUNCTION__ ": invalid type of line join", 0, NULL) : S_OK);
 
 	cairo_set_line_join(canvas->context, cairo_join);
 
@@ -617,7 +618,7 @@ STDMETHODIMP CCanvasRenderingContext2D::get_lineJoin(BSTR* join)
 STDMETHODIMP CCanvasRenderingContext2D::put_miterLimit(float limit)
 {
 	if (limit <= 0)
-		return (canvas->debugMode ? CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid operation"), __FUNCTION__ ": miter limit should be positive", 0, NULL) : S_OK);
+		return (canvas->debugMode ? CCOMError::DispatchError(SYNTAX_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid operation"), __FUNCTION__ ": miter limit should be positive", 0, NULL) : S_OK);
 
 	cairo_set_miter_limit(canvas->context, limit);
 
@@ -664,7 +665,7 @@ STDMETHODIMP CCanvasRenderingContext2D::get_shadowOffsetY(float* offset)
 STDMETHODIMP CCanvasRenderingContext2D::put_shadowBlur(float size)
 {
 	if (size < 0)
-		return (canvas->debugMode ? CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid operation"), __FUNCTION__ ": shadow blur should be positive or 0", 0, NULL) : S_OK);
+		return (canvas->debugMode ? CCOMError::DispatchError(SYNTAX_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid operation"), __FUNCTION__ ": shadow blur should be positive or 0", 0, NULL) : S_OK);
 
 	currentState().shadowBlur = size;
 
@@ -711,9 +712,9 @@ STDMETHODIMP CCanvasRenderingContext2D::put_font(BSTR font)
 		if (canvas->debugMode)
 		{
 			if (family == NULL)
-				return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid font"), __FUNCTION__ ": the font family is missing!", 0, NULL);
+				return CCOMError::DispatchError(SYNTAX_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid font"), __FUNCTION__ ": the font family is missing!", 0, NULL);
 			else
-				return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid font"), __FUNCTION__ ": the font size is invalid or missing!", 0, NULL);
+				return CCOMError::DispatchError(SYNTAX_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid font"), __FUNCTION__ ": the font size is invalid or missing!", 0, NULL);
 		}
 		else
 			return S_OK;		
@@ -745,7 +746,7 @@ STDMETHODIMP CCanvasRenderingContext2D::put_textAlign(BSTR align)
 	IS_TEXT_ALIGN("left", TEXT_ALIGN_LEFT)
 	IS_TEXT_ALIGN("right", TEXT_ALIGN_RIGHT)
 	IS_TEXT_ALIGN("center", TEXT_ALIGN_CENTER)
-	return (canvas->debugMode ? CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid text alignment"), __FUNCTION__ ": invalid type of alignment", 0, NULL) : S_OK);
+	return (canvas->debugMode ? CCOMError::DispatchError(SYNTAX_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid text alignment"), __FUNCTION__ ": invalid type of alignment", 0, NULL) : S_OK);
 
 	return S_OK;
 }
@@ -782,7 +783,7 @@ STDMETHODIMP CCanvasRenderingContext2D::put_textBaseline(BSTR baseline)
 	IS_TEXT_BASELINE("alphabetic", TEXT_BASELINE_ALPHABETIC)
 	IS_TEXT_BASELINE("ideographic", TEXT_BASELINE_IDEOGRAPHIC)
 	IS_TEXT_BASELINE("bottom", TEXT_BASELINE_BOTTOM)
-	return (canvas->debugMode ? CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid text baseline"), __FUNCTION__ ": invalid type of baseline", 0, NULL) : S_OK);
+	return (canvas->debugMode ? CCOMError::DispatchError(SYNTAX_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid text baseline"), __FUNCTION__ ": invalid type of baseline", 0, NULL) : S_OK);
 
 	return S_OK; 
 }
@@ -1360,7 +1361,7 @@ STDMETHODIMP CCanvasRenderingContext2D::measureText(BSTR text, ICanvasTextMetric
 STDMETHODIMP CCanvasRenderingContext2D::loadImage(BSTR path, ICanvasImage** image)
 {
 	if (CComBSTR(path) == CComBSTR(""))
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Path is not valid"), "You need to provide a valid path!", 0, NULL);
+		return CCOMError::DispatchError(NOT_FOUND_ERR, CLSID_CanvasRenderingContext2D, _T("Path is not valid"), "You need to provide a valid path!", 0, NULL);
 
 	USES_CONVERSION;
 	wstring img(OLE2W(path));
@@ -1655,7 +1656,7 @@ STDMETHODIMP CCanvasRenderingContext2D::createImageData(float sw, float sh, ICan
 STDMETHODIMP CCanvasRenderingContext2D::getImageData(float sx, float sy, float sw, float sh, ICanvasImageData** data)
 {
 	if (sw == 0 || sh == 0)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid parameters"), __FUNCTION__ ": sw or sh cannot be 0", 0, NULL);
+		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid parameters"), __FUNCTION__ ": sw or sh cannot be 0", 0, NULL);
 
 	float w = abs(sw);
 	float h = abs(sh);
@@ -1766,7 +1767,7 @@ STDMETHODIMP CCanvasRenderingContext2D::putImageData(ICanvasImageData* canvasIma
 	cairo_surface_t* surface = cairo_image_surface_create_for_data(imageData->getData(), CAIRO_FORMAT_ARGB32, imageData->getWidth(), imageData->getHeight(), stride);
 	if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS) {
 		cairo_surface_destroy(surface);
-		return E_FAIL;
+		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": error while creating a surface from the image data", 0, NULL);		
 	}
 
 	// Save the current path
