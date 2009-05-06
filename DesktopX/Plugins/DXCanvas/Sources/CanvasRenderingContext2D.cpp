@@ -917,7 +917,7 @@ STDMETHODIMP CCanvasRenderingContext2D::createPattern(VARIANT vInput, BSTR repea
 	
 	// We only accept CCanvasImage and CCanvas
 	if (vInput.vt != VT_DISPATCH && vInput.vt != 0x400c)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
+		return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
 
 	VARIANT* input = &vInput;
 
@@ -925,7 +925,7 @@ STDMETHODIMP CCanvasRenderingContext2D::createPattern(VARIANT vInput, BSTR repea
 	{
 		input = vInput.pvarVal;
 		if (input->vt != VT_DISPATCH)
-			return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
+			return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -933,6 +933,10 @@ STDMETHODIMP CCanvasRenderingContext2D::createPattern(VARIANT vInput, BSTR repea
 	CCanvas* pCanvas;
 	HRESULT result = input->pdispVal->QueryInterface(IID_ICanvas, (void**)&pCanvas);
 	if (result != E_NOINTERFACE && pCanvas != NULL) {
+
+		if (pCanvas->getWidth() == 0 || pCanvas->getHeight() == 0)
+			return CCOMError::DispatchError(INVALID_STATE_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid canvas"), __FUNCTION__ ": canvas should have a width or a height different from 0", 0, NULL);
+
 		cairoPattern = createNewPatternFromSurface(pCanvas->getSurface(), pCanvas->getWidth(), pCanvas->getHeight());
 
 		goto pattern_loaded;
@@ -944,7 +948,7 @@ STDMETHODIMP CCanvasRenderingContext2D::createPattern(VARIANT vInput, BSTR repea
 	result = input->pdispVal->QueryInterface(IID_ICanvasImage, (void**)&pImage);
 
 	if (result == E_NOINTERFACE || pImage == NULL)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
+		return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
 
 	cairoPattern = createNewPatternFromSurface(pImage->getSurface(), pImage->getWidth(), pImage->getHeight());
 
@@ -965,7 +969,7 @@ pattern_loaded:
 	IS_REPEAT("repeat-x", CAIRO_EXTEND_REPEAT) // FIXME handle repeat-x case
 	IS_REPEAT("repeat-y", CAIRO_EXTEND_REPEAT) // FIXME handle repeat-y case
 	IS_REPEAT("no-repeat", CAIRO_EXTEND_NONE)
-	return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid repeat value"), __FUNCTION__ ": invalid type of repeat", 0, NULL);
+	return CCOMError::DispatchError(SYNTAX_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid repeat value"), __FUNCTION__ ": invalid type of repeat", 0, NULL);
 
 	// Create a new CCanvasPattern instance
 	CComObject<CCanvasPattern>* pPattern;
@@ -1176,37 +1180,9 @@ STDMETHODIMP CCanvasRenderingContext2D::arcTo(float x1, float y1, float x2, floa
 	if (d != 0)
 		goto no_collinear;
 
-	// all points on a line, and P1 between P0/P2, draws a straight line to P1 
-	// (the direction from (x0, y0) to (x1, y1) is the same as the direction from (x1, y1) to (x2, y2))
-	if ((x0 <= x1 && x1 <= x2) && (y0 <= y1 && y1 <= y2))
-	{
-		cairo_line_to(canvas->context, x1, y1);
-		return S_OK;
-	}
-
-#define INFINITY 64000
-
-	// all points on a line, and P2 between P0/P1, draws an infinite line along P1->P2	
-	if ((x0 <= x2 && x2 <= x1) && (y0 <= y2 && y2 <= y1))
-	{
-		// Calculate intersection of line P1..P2 with canvas borders
-		float xi = x1;
-		float yi = y1;
-
-		cairo_line_to(canvas->context, xi, yi);
-		return S_OK;
-	}
-
-	// all points on a line, and P0 between P1/P2, draws an infinite line along P1->P2
-	if ((x1 <= x0 && x0 <= x2) && (y1 <= y0 && y0 <= y2))
-	{
-		// Calculate intersection of line P1..P2 with canvas borders
-		float xi = x1;
-		float yi = y1;
-
-		cairo_line_to(canvas->context, xi, yi);
-		return S_OK;
-	}
+	// connect new point (x1,y1) to (x0,y0) by a straight line
+	cairo_line_to(canvas->context, x1, y1);
+	return S_OK;
 
 no_collinear:
 
@@ -1412,7 +1388,7 @@ STDMETHODIMP CCanvasRenderingContext2D::drawImage(VARIANT vInput, float dx, floa
 	// we will effectively be checking twice for it...
 	// We only accept CCanvasImage and CCanvas
 	if (vInput.vt != VT_DISPATCH && vInput.vt != 0x400c)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
+		return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
 
 	VARIANT* input = &vInput;
 
@@ -1420,7 +1396,7 @@ STDMETHODIMP CCanvasRenderingContext2D::drawImage(VARIANT vInput, float dx, floa
 	{
 		input = vInput.pvarVal;
 		if (input->vt != VT_DISPATCH)
-			return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
+			return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -1428,9 +1404,7 @@ STDMETHODIMP CCanvasRenderingContext2D::drawImage(VARIANT vInput, float dx, floa
 	CCanvas* pCanvas;
 	HRESULT result = input->pdispVal->QueryInterface(IID_ICanvas, (void**)&pCanvas);
 	if (result != E_NOINTERFACE && pCanvas != NULL)
-	{
 		return drawImageRegion(vInput, 0, 0, (float)pCanvas->getWidth(), (float)pCanvas->getHeight(), dx, dy, dw, dh);
-	}
 
 	//////////////////////////////////////////////////////////////////////////
 	// CCanvasImage
@@ -1438,7 +1412,7 @@ STDMETHODIMP CCanvasRenderingContext2D::drawImage(VARIANT vInput, float dx, floa
 	result = input->pdispVal->QueryInterface(IID_ICanvasImage, (void**)&pImage);
 
 	if (result == E_NOINTERFACE || pImage == NULL)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
+		return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
 
 	return drawImageRegion(vInput, 0, 0, (float)pImage->getWidth(), (float)pImage->getHeight(), dx, dy, dw, dh);
 }
@@ -1454,7 +1428,7 @@ STDMETHODIMP CCanvasRenderingContext2D::drawImageRegion(VARIANT vInput, float sx
 
 	// We only accept CCanvasImage and CCanvas
 	if (vInput.vt != VT_DISPATCH && vInput.vt != 0x400c)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
+		return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
 
 	VARIANT* input = &vInput;
 
@@ -1462,7 +1436,7 @@ STDMETHODIMP CCanvasRenderingContext2D::drawImageRegion(VARIANT vInput, float sx
 	{
 		input = vInput.pvarVal;
 		if (input->vt != VT_DISPATCH)
-			return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
+			return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -1473,6 +1447,10 @@ STDMETHODIMP CCanvasRenderingContext2D::drawImageRegion(VARIANT vInput, float sx
 	{
 		imgWidth = (float)pCanvas->getWidth();
 		imgHeight = (float)pCanvas->getHeight();
+
+		if (pCanvas->getWidth() == 0 || pCanvas->getHeight() == 0)
+			return CCOMError::DispatchError(INVALID_STATE_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid canvas"), __FUNCTION__ ": canvas should have a width or a height different from 0", 0, NULL);
+
 		pattern = createNewPatternFromSurface(pCanvas->getSurface(), pCanvas->getWidth(), pCanvas->getHeight());
 
 		goto pattern_loaded;
@@ -1483,7 +1461,7 @@ STDMETHODIMP CCanvasRenderingContext2D::drawImageRegion(VARIANT vInput, float sx
 	CCanvasImage* pImage;
 	result = input->pdispVal->QueryInterface(IID_ICanvasImage, (void**)&pImage);
 	if (result == E_NOINTERFACE || pImage == NULL)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
+		return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
 	
 	imgWidth = (float)pImage->getWidth();
 	imgHeight = (float)pImage->getHeight();
@@ -1491,7 +1469,7 @@ STDMETHODIMP CCanvasRenderingContext2D::drawImageRegion(VARIANT vInput, float sx
 	
 pattern_loaded:
 	if (!pattern || cairo_pattern_status(pattern) != CAIRO_STATUS_SUCCESS)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
+		return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
 
 
 	// check for dw and dh
@@ -1526,7 +1504,7 @@ pattern_loaded:
 		sx < 0.0 || sy < 0.0 ||
 		sw <= 0.0 || sw > imgWidth ||
 		sh <= 0.0 || sh > imgHeight)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Out of bounds"), __FUNCTION__ ": the source rectangle should be entirely within the source image, and sw or sh should not be zero", 0, NULL);
+		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_CanvasRenderingContext2D, _T("Out of bounds"), __FUNCTION__ ": the source rectangle should be entirely within the source image, and sw or sh should not be zero", 0, NULL);
 
 
 	// Apply the transformation to the pattern
@@ -1624,10 +1602,21 @@ pattern_loaded:
 
 //////////////////////////////////////////////////////////////////////////
 // pixel manipulation
+STDMETHODIMP CCanvasRenderingContext2D::createImageDataFromImageData(ICanvasImageData* canvasImageData, ICanvasImageData** data)
+{
+	// Check that imagedata is valid
+	if (canvasImageData == NULL)
+		return CCOMError::DispatchError(NOT_SUPPORTED_ERR, CLSID_CanvasRenderingContext2D, _T("CanvasImageData is NULL"), __FUNCTION__ ": you must pass a valid CanvasImageData object", 0, NULL);
+
+	CCanvasImageData* imageData = (CCanvasImageData*) canvasImageData;
+
+	return createImageData((float)imageData->getWidth(), (float)imageData->getHeight(), data);
+}
+
 STDMETHODIMP CCanvasRenderingContext2D::createImageData(float sw, float sh, ICanvasImageData** data)
 {
 	if (sw == 0 || sh == 0)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Invalid parameters"), __FUNCTION__ ": sw or sh cannot be 0", 0, NULL);
+		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid parameters"), __FUNCTION__ ": sw or sh cannot be 0", 0, NULL);
 
 	// Get the absolute values
 	float w = abs(sw);
@@ -1719,7 +1708,7 @@ STDMETHODIMP CCanvasRenderingContext2D::getImageData(float sx, float sy, float s
 STDMETHODIMP CCanvasRenderingContext2D::putImageData(ICanvasImageData* canvasImageData, float dx, float dy, VARIANT dirtyX, VARIANT dirtyY, VARIANT dirtyWidth, VARIANT dirtyHeight)
 {
 	if (canvasImageData == NULL)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("CanvasImageData is NULL"), __FUNCTION__ ": you must pass an CanvasImageData object", 0, NULL);
+		return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("CanvasImageData is NULL"), __FUNCTION__ ": you must pass a CanvasImageData object", 0, NULL);
 
 	CCanvasImageData* imageData = (CCanvasImageData*) canvasImageData;
 

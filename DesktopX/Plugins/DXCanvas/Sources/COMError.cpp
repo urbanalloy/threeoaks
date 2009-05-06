@@ -105,18 +105,17 @@ HRESULT CCOMError::DispatchError(HRESULT hError, REFCLSID clsid, LPCTSTR source,
 
 	// Set this error information in the current thread
 	hSuccess = SetErrorInfo(0, pErrorInfo);
-	if(FAILED(hSuccess))
-	{
-		pCreateErrorInfo->Release();
-		pErrorInfo->Release();
-		return hSuccess;
-	}
 
 	// Finally release the interfaces
 	pCreateErrorInfo->Release();
 	pErrorInfo->Release();
 
+	// Failed to set the error info!
+	if(FAILED(hSuccess))
+		return hSuccess;
+
 	// And, Return the error code that was asked
 	// to be dispatched
-	return hError;
+	HRESULT domError = MAKE_HRESULT(1, FACILITY_ITF, hError);
+	return domError;
 }

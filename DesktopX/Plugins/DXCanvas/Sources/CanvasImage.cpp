@@ -53,7 +53,7 @@ HRESULT CCanvasImage::loadImage(wstring image)
 	{
 		char error[1000];
 		sprintf_s(error, "There was an error loading the image: %S", image.c_str());
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasImage, _T("Error loading image"), error, 0, NULL);
+		return CCOMError::DispatchError(NOT_SUPPORTED_ERR, CLSID_CanvasImage, _T("Error loading image"), error, 0, NULL);
 	}
 
 	this->width = bitmap->GetWidth();

@@ -49,12 +49,21 @@ http://manual.widgets.yahoo.com/
 Wincustomize thread on the plugin
 http://forums.wincustomize.com/322221
 
+Google Code project
+http://code.google.com/p/threeoaks/
+
 ***************************************************************************
 ** Changelog
 ***************************************************************************
 
-1.1 Build :
-	* Tweaked text drawing on paths
+1.2 Build 146:
+    + Exceptions now return the correct DOMException error code
+    + Completed documentation of IDL interface
+    - Fixed crash on exit when BETA was expired    
+	* Tweaked text drawing on paths	
+	* Updated box blur algorithm to use precomputed values (slightly faster)
+	* Moved support libs to a subfolder of project	
+	* Moved source code from private repository to Google Code
 	* Update Cairo (HEAD), Pixman (0.15.2), Pango (1.24.2), Glib (2.20.1)
 
 1.1 Build 457:

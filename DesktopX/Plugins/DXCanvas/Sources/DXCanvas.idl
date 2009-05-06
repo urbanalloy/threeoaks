@@ -43,8 +43,8 @@ interface ICanvasImageData : IDispatch{
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Properties
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	[propget, id(1), helpstring("Get the width of the image, in pixels.")] HRESULT width([out, retval] unsigned long int* width);
-	[propget, id(2), helpstring("Get the height of the image, in pixels.")] HRESULT height([out, retval] unsigned long int* height);
+	[propget, id(1), helpstring("Get the width of the image, in pixels.")] HRESULT width([out, retval] unsigned long* width);
+	[propget, id(2), helpstring("Get the height of the image, in pixels.")] HRESULT height([out, retval] unsigned long* height);
 	[propget, id(3), helpstring("Get the pixel array containing the image data")] HRESULT data([out, retval] ICanvasPixelArray** array);
 };
 
@@ -197,36 +197,37 @@ interface ICanvasRenderingContext2D : IDispatch{
 
 	// paths
 	[helpstring("Empty the list of subpaths.")] HRESULT beginPath();
-	[helpstring("Mark the last subpath as closed if there are subpaths and create a new subpath.")] HRESULT closePath();
-	[helpstring("")] HRESULT moveTo([in] float x, [in] float y);
-	[helpstring("")] HRESULT lineTo([in] float x, [in] float y);	
-	[helpstring("")] HRESULT quadraticCurveTo([in] float cpx, [in] float cpy, [in] float x, [in] float y);
-	[helpstring("")] HRESULT bezierCurveTo([in] float cp1x, [in] float cp1y, [in] float cp2x, [in] float cp2y, [in] float x, [in] float y);	
-	[helpstring("")] HRESULT arcTo([in] float x1, [in] float y1, [in] float x2, [in] float y2, [in] float radius);
-	[helpstring("")] HRESULT rect([in] double x, [in] double y, [in] double width, [in] double height);
-	[helpstring("")] HRESULT arc([in] float x, [in] float y, [in] float radius, [in] float startAngle, [in] float endAngle, [in] VARIANT_BOOL anticlockwise);	
-	[helpstring("")] HRESULT fill();
-	[helpstring("")] HRESULT stroke();
-	[helpstring("")] HRESULT clip();
-	[helpstring("")] HRESULT isPointInPath([in] float x, [in] float y, [out, retval] VARIANT_BOOL* isPresent);
+	[helpstring("Marks the current subpath as closed, and starts a new subpath with a point the same as the start and end of the newly closed subpath.")] HRESULT closePath();
+	[helpstring("Creates a new subpath with the given point.")] HRESULT moveTo([in] float x, [in] float y);
+	[helpstring("Adds the given point to the current subpath, connected to the previous one by a straight line.")] HRESULT lineTo([in] float x, [in] float y);	
+	[helpstring("Adds the given point to the current path, connected to the previous one by a quadratic Bézier curve with the given control point.")] HRESULT quadraticCurveTo([in] float cpx, [in] float cpy, [in] float x, [in] float y);
+	[helpstring("Adds the given point to the current path, connected to the previous one by a cubic Bézier curve with the given control points.")] HRESULT bezierCurveTo([in] float cp1x, [in] float cp1y, [in] float cp2x, [in] float cp2y, [in] float x, [in] float y);	
+	[helpstring("Adds a point to the current path, connected to the previous one by a straight line, then adds a second point to the current path, connected to the previous one by an arc whose properties are described by the arguments.")] HRESULT arcTo([in] float x1, [in] float y1, [in] float x2, [in] float y2, [in] float radius);
+	[helpstring("Adds a new closed subpath to the path, representing the given rectangle.")] HRESULT rect([in] double x, [in] double y, [in] double width, [in] double height);
+	[helpstring("Adds points to the subpath such that the arc described by the circumference of the circle described by the arguments, starting at the given start angle and ending at the given end angle, going in the given direction, is added to the path, connected to the previous point by a straight line.")] HRESULT arc([in] float x, [in] float y, [in] float radius, [in] float startAngle, [in] float endAngle, [in] VARIANT_BOOL anticlockwise);	
+	[helpstring("Fills the subpaths with the current fill style.")] HRESULT fill();
+	[helpstring("Strokes the subpaths with the current stroke style.")] HRESULT stroke();
+	[helpstring("Further constrains the clipping region to the given path.")] HRESULT clip();
+	[helpstring("Returns true if the given point is in the current path.")] HRESULT isPointInPath([in] float x, [in] float y, [out, retval] VARIANT_BOOL* isPresent);
 
 	// text
-	[helpstring("")] HRESULT fillText([in] BSTR text, [in] float x, [in] float y, [in, optional] VARIANT maxWidth);	
-	[helpstring("")] HRESULT strokeText([in] BSTR text, [in] float x, [in] float y, [in, optional] VARIANT maxWidth);
+	[helpstring("Fills the given text at the given position. If a maximum width is provided, the text will be scaled to fit that width if necessary.")] HRESULT fillText([in] BSTR text, [in] float x, [in] float y, [in, optional] VARIANT maxWidth);	
+	[helpstring("Strokes the given text at the given position. If a maximum width is provided, the text will be scaled to fit that width if necessary.")] HRESULT strokeText([in] BSTR text, [in] float x, [in] float y, [in, optional] VARIANT maxWidth);
 	[helpstring("Adds (or draws) the specified text along the current path.")] HRESULT textAlongPath([in] BSTR text, [in] BOOL stroke);
 	[helpstring("Adds the strokes from the specified text to the current path.")] HRESULT pathText([in] BSTR text);
 
-	[helpstring("")] HRESULT measureText([in] BSTR text, [out, retval] ICanvasTextMetrics** metrics);	
+	[helpstring("Returns a TextMetrics object with the metrics of the given text in the current font.")] HRESULT measureText([in] BSTR text, [out, retval] ICanvasTextMetrics** metrics);	
 
 	// drawing images
 	[helpstring("Load a new image to be used to ")] HRESULT loadImage([in] BSTR path, [out, retval] ICanvasImage** image);
-	[helpstring("")] HRESULT drawImage([in] VARIANT image, [in] float dx, [in] float dy, [in, optional] VARIANT dw, [in, optional] VARIANT dh);
-	[helpstring("")] HRESULT drawImageRegion([in] VARIANT image, [in] float sx, [in] float sy, [in] float sw, [in] float sh, [in] float dx, [in] float dy, [in, optional] VARIANT dw, [in, optional] VARIANT dh);
+	[helpstring("Draws the given image onto the canvas.")] HRESULT drawImage([in] VARIANT image, [in] float dx, [in] float dy, [in, optional] VARIANT dw, [in, optional] VARIANT dh);
+	[helpstring("Draws the given image onto the canvas.")] HRESULT drawImageRegion([in] VARIANT image, [in] float sx, [in] float sy, [in] float sw, [in] float sh, [in] float dx, [in] float dy, [in, optional] VARIANT dw, [in, optional] VARIANT dh);
 
 	// pixel manipulation
-	[helpstring("")] HRESULT createImageData([in] float sw, [in] float sh, [out, retval] ICanvasImageData** data);
-	[helpstring("")] HRESULT getImageData([in] float sx, [in] float sy, [in] float sw, [in] float sh, [out, retval] ICanvasImageData** data);
-	[helpstring("")] HRESULT putImageData([in] ICanvasImageData* CanvasImageData, [in] float dx, [in] float dy, [in, optional] VARIANT dirtyX, [in, optional] VARIANT dirtyY, [in, optional] VARIANT dirtyWidth, [in, optional] VARIANT dirtyHeight);
+	[helpstring("Returns an ImageData object with the given dimensions in pixels. All the pixels in the returned object are transparent black.")] HRESULT createImageData([in] float sw, [in] float sh, [out, retval] ICanvasImageData** data);
+	[helpstring("Returns an ImageData object with the same dimensions as the argument. All the pixels in the returned object are transparent black.")] HRESULT createImageDataFromImageData([in] ICanvasImageData* canvasImageData, [out, retval] ICanvasImageData** data);
+	[helpstring("Returns an ImageData object containing the image data for the given rectangle of the canvas.")] HRESULT getImageData([in] float sx, [in] float sy, [in] float sw, [in] float sh, [out, retval] ICanvasImageData** data);
+	[helpstring("Paints the data from the given ImageData object onto the canvas. If a dirty rectangle is provided, only the pixels from that rectangle are painted.")] HRESULT putImageData([in] ICanvasImageData* canvasImageData, [in] float dx, [in] float dy, [in, optional] VARIANT dirtyX, [in, optional] VARIANT dirtyY, [in, optional] VARIANT dirtyWidth, [in, optional] VARIANT dirtyHeight);
 };
 
 [
