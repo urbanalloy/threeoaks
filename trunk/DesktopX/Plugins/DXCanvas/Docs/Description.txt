@@ -1,0 +1,9 @@
+The DXCanvas plugin is a scripting plugin that exposes a canvas context to scripts (implementing the HTML 5 specification). It provides a drawing surface, that can be controlled from script.
+
+It comes with a canvas controller widget, allowing you to quickly test your canvas scripts.
+
+For more information, you can consult the HTML5 specification on the canvas: http://www.whatwg.org/specs/web-apps/current-work/#the-canvas
+
+There is also some more info in this thread: http://forums.wincustomize.com/322221
+
+Special thanks to CaptainBeaker and SirSmiley who helped test numerous builds of the plugin!

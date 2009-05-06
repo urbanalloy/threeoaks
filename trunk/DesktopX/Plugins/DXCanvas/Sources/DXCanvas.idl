@@ -1,0 +1,352 @@
+// DXCanvas.idl : IDL source for DXCanvas
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (DXCanvas.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+interface ICanvas;
+interface ICanvasImage;
+interface ICanvasRenderingContext2D;
+interface ICanvasGradient;
+interface ICanvasPattern;
+interface ICanvasTextMetrics;
+interface ICanvasImageData;
+interface ICanvasPixelArray;
+
+[
+	object,
+	uuid(7DDB0070-C3D0-4472-B5AA-D726E3F442C9),
+	dual,
+	nonextensible,
+	helpstring("ICanvasTextMetrics Interface"),
+	pointer_default(unique)
+]
+interface ICanvasTextMetrics : IDispatch{
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Properties
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	[propget, id(1), helpstring("Get the width computed by measureText().")] HRESULT width([out, retval] float* width);
+};
+
+[
+	object,
+	uuid(59674F32-D383-42f7-A73B-23563A106681),
+	dual,
+	nonextensible,
+	helpstring("ICanvasImageData Interface"),
+	pointer_default(unique)
+]
+interface ICanvasImageData : IDispatch{
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Properties
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	[propget, id(1), helpstring("Get the width of the image, in pixels.")] HRESULT width([out, retval] unsigned long int* width);
+	[propget, id(2), helpstring("Get the height of the image, in pixels.")] HRESULT height([out, retval] unsigned long int* height);
+	[propget, id(3), helpstring("Get the pixel array containing the image data")] HRESULT data([out, retval] ICanvasPixelArray** array);
+};
+
+[
+	object,
+	uuid(73F25208-4FBB-4f66-9F3B-50BB071AFA02),
+	dual,
+	nonextensible,
+	helpstring("ICanvasPixelArray Interface"),
+	pointer_default(unique)
+]
+interface ICanvasPixelArray : IDispatch{
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Properties
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	[propget, id(1), helpstring("Get the length of the array.")] HRESULT length([out, retval] unsigned long* length);
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Methods
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	[id(2), helpstring("Get the value of the indexth component in the array. Value will be between 0 and 255.")] HRESULT XXX5([in] unsigned long index, [out, retval] unsigned char* value);
+	[helpstring("Set the value of the indexth component in the array.")] HRESULT XXX6([in] unsigned long index, [in] int value);
+
+};
+
+[
+	object,
+	uuid(73C9E4C4-309D-4a9f-A461-D4A34E563DD8),
+	dual,
+	nonextensible,
+	helpstring("ICanvasImage Interface"),
+	pointer_default(unique)
+]
+interface ICanvasImage : IDispatch{
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Properties
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+};
+
+[
+	object,
+	uuid(53D45C91-D916-4820-91EB-1226016343DE),
+	dual,
+	nonextensible,
+	helpstring("ICanvasGradient Interface"),
+	pointer_default(unique)
+]
+interface ICanvasGradient : IDispatch{
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Methods
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	[helpstring("Controls the color ramp of the gradient")] HRESULT addColorStop([in] double offset, [in] BSTR color);	
+};
+
+[
+	object,
+	uuid(343D1B82-42FA-4ce7-89B8-504FD28446C1),
+	dual,
+	nonextensible,
+	helpstring("ICanvasPattern Interface"),
+	pointer_default(unique)
+]
+interface ICanvasPattern : IDispatch{	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Methods
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+};
+
+
+[
+	object,
+	uuid(702BC3C2-0497-461c-8D96-EF533538FF7D),
+	dual,
+	nonextensible,
+	helpstring("ICanvasRenderingContext2D Interface"),
+	pointer_default(unique)
+]
+interface ICanvasRenderingContext2D : IDispatch{
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Attributes
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // compositing
+	[propput, id(1), helpstring("Set an alpha value to apply to all shapes and images before they are composited into the canvas. Default is 1.0.")] HRESULT globalAlpha([in] float alpha);
+	[propget, id(1), helpstring("Get the global alpha value.")] HRESULT globalAlpha([out, retval] float* alpha);
+	[propput, id(2), helpstring("Set how shapes and images are drawn onto the existing bitmap. Default is source-over.")] HRESULT globalCompositeOperation([in] BSTR operation);
+	[propget, id(2), helpstring("Get the global composite operation type.")] HRESULT globalCompositeOperation([out, retval] BSTR* operation);
+
+	// colors and styles
+	[propput, id(3), helpstring("Set the color or style to use for the lines around the shapes. Default is black.")] HRESULT strokeStyle([in] VARIANT style);
+	[propget, id(3), helpstring("Get current the stroke style")] HRESULT strokeStyle([out, retval] VARIANT* style);
+	[propput, id(4), helpstring("Set the color or style to use inside the shapes. Default is black.")] HRESULT fillStyle([in] VARIANT style);
+	[propget, id(4), helpstring("Get the current fill style")] HRESULT fillStyle([out, retval] VARIANT* style);
+
+	// line caps/joins
+	[propput, id(5), helpstring("Set the line width. Default is 1.")] HRESULT lineWidth([in] float width);
+	[propget, id(5), helpstring("Get the current line width")] HRESULT lineWidth([out, retval] float* width);
+	[propput, id(6), helpstring("Set the line cap. Default is butt.")] HRESULT lineCap([in] BSTR cap);
+	[propget, id(6), helpstring("Get the current line cap")] HRESULT lineCap([out, retval] BSTR* cap);
+	[propput, id(7), helpstring("Set the line join. Default is miter.")] HRESULT lineJoin([in] BSTR join);
+	[propget, id(7), helpstring("Get the current join")] HRESULT lineJoin([out, retval] BSTR* join);	
+	[propput, id(8), helpstring("Set the miter limit. Default is 10.0")] HRESULT miterLimit([in] float limit);
+	[propget, id(8), helpstring("Get the current miter limit")] HRESULT miterLimit([out, retval] float* limit);
+
+	// shadows
+	[propput, id(9), helpstring("Set the distance that the shadow will be offset in the horizontal distance. Default is 0.")] HRESULT shadowOffsetX([in] float offset);
+	[propget, id(9), helpstring("Get the distance that the shadow will be offset in the horizontal distance.")] HRESULT shadowOffsetX([out, retval] float* offset);
+    [propput, id(10), helpstring("Set the distance that the shadow will be offset in the vertical distance. Default is 0.")] HRESULT shadowOffsetY([in] float offset);
+	[propget, id(10), helpstring("Get the distance that the shadow will be offset in the vertical distance.")] HRESULT shadowOffsetY([out, retval] float* offset);
+    [propput, id(11), helpstring("Set the size of the shadow blurring effect. Default is 0.")] HRESULT shadowBlur([in] float size);
+	[propget, id(11), helpstring("Get the size of the shadow blurring effect.")] HRESULT shadowBlur([out, retval] float* size);
+    [propput, id(12), helpstring("Set the shadow color. Default is transparent black.")] HRESULT shadowColor([in] VARIANT color);
+	[propget, id(12), helpstring("Get the shadow color.")] HRESULT shadowColor([out, retval] VARIANT* color);
+
+	// text
+	[propput, id(13), helpstring("Set the font.")] HRESULT font([in] BSTR font);
+	[propget, id(13), helpstring("Get the current font.")] HRESULT font([out, retval] BSTR* font);	 
+	[propput, id(14), helpstring("Set the text alignment. Default is start.")] HRESULT textAlign([in] BSTR align);
+	[propget, id(14), helpstring("Get the current text alignment.")] HRESULT textAlign([out, retval] BSTR* align);	
+	[propput, id(15), helpstring("Set the text baseline. Default is alphabetic.")] HRESULT textBaseline([in] BSTR baseline);
+	[propget, id(15), helpstring("Get the current text baseline.")] HRESULT textBaseline([out, retval] BSTR* baseline);	
+
+	[propget, id(16), helpstring("Back-reference to the canvas.")] HRESULT canvas([out, retval] ICanvas** canvas);
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Methods
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// state
+	[id(30), helpstring("Push state on state stack")] HRESULT save();
+	[helpstring("Pop state stack and restore state")] HRESULT restore();
+
+	// transformations (default transform is the identity matrix)
+	[helpstring("Add the scaling transformation to the transformation matrix.")] HRESULT scale([in] float x, [in] float y);
+	[helpstring("Add the rotation transformation to the transformation matrix.")] HRESULT rotate([in] float angle);
+	[helpstring("Add the translation transformation to the transformation matrix.")] HRESULT translate([in] float x, [in] float y);
+	[helpstring("Multiply the current transformation by the matrix described by [[m11 m21 dx][m12 m22 dy][0 0 1]].")] HRESULT transform([in] float m11, [in] float m12, [in] float m21, [in] float m22, [in] float dx, [in] float dy);
+	[helpstring("Reset the transformation matrix and invoke the transform method with the passed arguments.")] HRESULT setTransform([in] float m11, [in] float m12, [in] float m21, [in] float m22, [in] float dx, [in] float dy);
+
+	// colors and styles
+	[helpstring("Create a new linear gradient object.")] HRESULT createLinearGradient([in] float x0, [in] float y0, [in] float x1, [in] float y1, [out, retval] ICanvasGradient** gradient);
+	[helpstring("Create a new radial gradient object.")] HRESULT createRadialGradient([in] float x0, [in] float y0, [in] float r0, [in] float x1, [in] float y1, [in] float r1, [out, retval] ICanvasGradient** gradient);
+	[helpstring("Create a new pattern object. Can be used with an image or a canvas as input")] HRESULT createPattern([in] VARIANT input, [in] BSTR repeat, [out, retval] ICanvasPattern** pattern);	
+
+	// rects
+	[helpstring("Clear the pixels in the specified rectangle.")] HRESULT clearRect([in] float x, [in] float y, [in] float w, [in] float h);
+	[helpstring("Paint the specified rectangular area with the current fill style")] HRESULT fillRect([in] float x, [in] float y, [in] float w, [in] float h);
+	[helpstring("Stroke the specified rectangle's path using the current stroke style, line width, line join and miter limit.")] HRESULT strokeRect([in] float x, [in] float y, [in] float w, [in] float h);
+
+	// paths
+	[helpstring("Empty the list of subpaths.")] HRESULT beginPath();
+	[helpstring("Mark the last subpath as closed if there are subpaths and create a new subpath.")] HRESULT closePath();
+	[helpstring("")] HRESULT moveTo([in] float x, [in] float y);
+	[helpstring("")] HRESULT lineTo([in] float x, [in] float y);	
+	[helpstring("")] HRESULT quadraticCurveTo([in] float cpx, [in] float cpy, [in] float x, [in] float y);
+	[helpstring("")] HRESULT bezierCurveTo([in] float cp1x, [in] float cp1y, [in] float cp2x, [in] float cp2y, [in] float x, [in] float y);	
+	[helpstring("")] HRESULT arcTo([in] float x1, [in] float y1, [in] float x2, [in] float y2, [in] float radius);
+	[helpstring("")] HRESULT rect([in] double x, [in] double y, [in] double width, [in] double height);
+	[helpstring("")] HRESULT arc([in] float x, [in] float y, [in] float radius, [in] float startAngle, [in] float endAngle, [in] VARIANT_BOOL anticlockwise);	
+	[helpstring("")] HRESULT fill();
+	[helpstring("")] HRESULT stroke();
+	[helpstring("")] HRESULT clip();
+	[helpstring("")] HRESULT isPointInPath([in] float x, [in] float y, [out, retval] VARIANT_BOOL* isPresent);
+
+	// text
+	[helpstring("")] HRESULT fillText([in] BSTR text, [in] float x, [in] float y, [in, optional] VARIANT maxWidth);	
+	[helpstring("")] HRESULT strokeText([in] BSTR text, [in] float x, [in] float y, [in, optional] VARIANT maxWidth);
+	[helpstring("Adds (or draws) the specified text along the current path.")] HRESULT textAlongPath([in] BSTR text, [in] BOOL stroke);
+	[helpstring("Adds the strokes from the specified text to the current path.")] HRESULT pathText([in] BSTR text);
+
+	[helpstring("")] HRESULT measureText([in] BSTR text, [out, retval] ICanvasTextMetrics** metrics);	
+
+	// drawing images
+	[helpstring("Load a new image to be used to ")] HRESULT loadImage([in] BSTR path, [out, retval] ICanvasImage** image);
+	[helpstring("")] HRESULT drawImage([in] VARIANT image, [in] float dx, [in] float dy, [in, optional] VARIANT dw, [in, optional] VARIANT dh);
+	[helpstring("")] HRESULT drawImageRegion([in] VARIANT image, [in] float sx, [in] float sy, [in] float sw, [in] float sh, [in] float dx, [in] float dy, [in, optional] VARIANT dw, [in, optional] VARIANT dh);
+
+	// pixel manipulation
+	[helpstring("")] HRESULT createImageData([in] float sw, [in] float sh, [out, retval] ICanvasImageData** data);
+	[helpstring("")] HRESULT getImageData([in] float sx, [in] float sy, [in] float sw, [in] float sh, [out, retval] ICanvasImageData** data);
+	[helpstring("")] HRESULT putImageData([in] ICanvasImageData* CanvasImageData, [in] float dx, [in] float dy, [in, optional] VARIANT dirtyX, [in, optional] VARIANT dirtyY, [in, optional] VARIANT dirtyWidth, [in, optional] VARIANT dirtyHeight);
+};
+
+[
+	object,
+	uuid(D6B0A900-A49A-4ba6-A244-57F5CDB7C6C1),
+	dual,
+	nonextensible,
+	helpstring("ICanvas Interface"),
+	pointer_default(unique)
+]
+interface ICanvas : IDispatch{
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Attributes
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	[propput, id(1), helpstring("Set the width of the canvas. This will reset the contents of the canvas.")] HRESULT width([in] long width);
+	[propget, id(1), helpstring("Get the width of the canvas.")] HRESULT width([out, retval] long* width);
+	[propput, id(2), helpstring("Set the height of the canvas. This will reset the contents of the canvas.")] HRESULT height([in] long height);
+	[propget, id(2), helpstring("Get the height of the canvas.")] HRESULT height([out, retval] long* height);
+	[propput, id(3), helpstring("Set the debug mode status.")] HRESULT debugMode([in] VARIANT_BOOL isDebugMode);
+	[propget, id(3), helpstring("Get the debug mode status.")] HRESULT debugMode([out, retval] VARIANT_BOOL* isDebugMode);
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Methods
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	[id(4), helpstring("Get the rendering context. The only accepted type at the moment is '2d'.")] HRESULT getContext([in] BSTR type, [out, retval] ICanvasRenderingContext2D** context);
+	[helpstring("Save the contents of the canvas to a png image. Return TRUE if the png image was written successfully, FALSE otherwise.")] HRESULT toImage([in] BSTR path, [out, retval] VARIANT_BOOL* result);	
+	[helpstring("Suspend canvas redraws")] HRESULT suspendDrawing();
+	[helpstring("Resume canvas redraws")] HRESULT resumeDrawing();
+};
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Library Definition
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+[
+	uuid(4AB89FAE-77C2-4204-827B-17BF775B43F6),
+	version(1.0),
+	helpstring("DXCanvas 1.0 Type Library")
+]
+library DXCanvasLib
+{
+	importlib("stdole2.tlb");
+
+	[
+		uuid(9215BB4D-AFC4-4b09-B39E-1967072BDD69),
+		helpstring("Canvas Class")
+	]
+	coclass Canvas
+	{
+		[default] interface ICanvas;	
+		interface ISupportErrorInfo;
+	};
+
+	[
+		uuid(95C09439-C99C-4b66-A39B-6880677F9D9E),
+		helpstring("CanvasRenderingContext2D Class")
+	]
+	coclass CanvasRenderingContext2D
+	{
+		[default] interface ICanvasRenderingContext2D;		
+		interface ISupportErrorInfo;
+	};
+
+	[
+		uuid(578A42B0-7DE0-442a-83B3-4B7516277F9B),
+		helpstring("CanvasGradient Class")
+	]
+	coclass CanvasGradient
+	{
+		[default] interface ICanvasGradient;
+		interface ISupportErrorInfo;
+	};
+
+	[
+		uuid(2097B776-E0FF-479d-B255-3FCE757E0347),
+		helpstring("CanvasPattern Class")
+	]
+	coclass CanvasPattern
+	{
+		[default] interface ICanvasPattern;	
+		interface ISupportErrorInfo;
+	};
+
+	[
+		uuid(475C66E0-BE35-4051-A9EC-C5A2B07C237A),
+		helpstring("CanvasImage Class")
+	]
+	coclass CanvasImage
+	{
+		[default] interface ICanvasImage;	
+		interface ISupportErrorInfo;
+	};
+
+	[
+		uuid(55DA7676-78BE-4be4-B055-1DC0AC5E51E7),
+		helpstring("CanvasTextMetrics Class")
+	]
+	coclass CanvasTextMetrics
+	{
+		[default] interface ICanvasTextMetrics;	
+		interface ISupportErrorInfo;
+	};
+
+	[
+		uuid(CA599818-4B3B-4e5c-ACB3-5E5BFFAE0AF4),
+		helpstring("CanvasImageData Class")
+	]
+	coclass CanvasImageData
+	{
+		[default] interface ICanvasImageData;	
+		interface ISupportErrorInfo;
+	};
+
+	[
+		uuid(737848EF-6E47-4b6d-B1B5-8C37E1188F5D),
+		helpstring("CanvasPixelArray Class")
+	]
+	coclass CanvasPixelArray
+	{
+		[default] interface ICanvasPixelArray;	
+		interface ISupportErrorInfo;
+	};
+};

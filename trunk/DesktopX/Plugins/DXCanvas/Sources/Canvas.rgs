@@ -1,0 +1,26 @@
+HKCR
+{
+	DXCanvas.Canvas.1 = s 'Canvas Class'
+	{
+		CLSID = s '{9215BB4D-AFC4-4b09-B39E-1967072BDD69}'
+	}
+	DXCanvas.Canvas = s 'Canvas Class'
+	{
+		CLSID = s '{9215BB4D-AFC4-4b09-B39E-1967072BDD69}'
+		CurVer = s 'DXCanvas.Canvas.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {9215BB4D-AFC4-4b09-B39E-1967072BDD69} = s 'Canvas Class'
+		{
+			ProgID = s 'DXCanvas.Canvas.1'
+			VersionIndependentProgID = s 'DXCanvas.Canvas'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{0DFF1531-6394-4E04-A09D-8AD69EA4B03A}'
+		}
+	}
+}
