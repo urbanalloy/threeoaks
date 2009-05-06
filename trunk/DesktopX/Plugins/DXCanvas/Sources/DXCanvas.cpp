@@ -196,6 +196,8 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 
 #ifdef DEBUG
 label_expiration:
+			*pluginIndex = NULL;
+
 			char message[2000];
 			sprintf_s(message, "This beta version of DXCanvas expired on %d/%d/%d.\n\n Please check http://julien.wincustomize.com or http://www.templier.info for new versions.", EXPIRATION_MONTH, EXPIRATION_DAY, EXPIRATION_YEAR);
 			MessageBox(NULL, (char *)message, "Beta version expiration!", MB_ICONERROR|MB_OK);
@@ -386,9 +388,11 @@ label_expiration:
 		{
 			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;				
 
-			pCanvas->killthreadQueueDraw();
+			if (pCanvas != NULL)
+				pCanvas->killthreadQueueDraw();
+			
 			SAFE_RELEASE(pCanvas);	
-
+			
 			return TRUE;
 		}		
 		
