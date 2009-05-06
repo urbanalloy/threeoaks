@@ -65,7 +65,7 @@ HRESULT CCanvasImage::loadImage(wstring image)
 	// Copy our image to the surface
 	HDC cairoDC = cairo_win32_surface_get_dc(surface);
 	if (cairoDC == NULL)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasImage, _T("Error loading image"), "Internal error when loading image", 0, NULL);
+		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasImage, _T("Internal error"), __FUNCTION__ ": failed to get the DC to the image surface", 0, NULL);
 
 	Graphics graphics(cairoDC);
 	graphics.DrawImage(bitmap, 0, 0);

@@ -47,7 +47,7 @@ using namespace std;
 	CHECK_POSITIVE_VALUE(value1); CHECK_POSITIVE_VALUE(value2);
 
 #define NOT_IMPLEMENTED \
-	CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Method not implemented"), "This method is not implemented yet: " __FUNCTION__, 0, NULL)
+	CCOMError::DispatchError(NOT_SUPPORTED_ERR, CLSID_CanvasRenderingContext2D, _T("Method not implemented"), "This method is not implemented yet: " __FUNCTION__, 0, NULL)
 //////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////

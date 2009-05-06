@@ -34,7 +34,7 @@ STDMETHODIMP CCanvasTextMetrics::InterfaceSupportsErrorInfo(REFIID riid)
 		if (InlineIsEqualGUID(*arr[i],riid))
 			return S_OK;
 	}
-	return E_FAIL;
+	return S_FALSE;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

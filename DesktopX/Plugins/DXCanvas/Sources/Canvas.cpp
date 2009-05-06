@@ -348,7 +348,7 @@ STDMETHODIMP CCanvas::toImage(BSTR path, VARIANT_BOOL* result)
 #endif
 
 	if (CComBSTR(path) == CComBSTR(""))
-		return CCOMError::DispatchError(E_FAIL, CLSID_Canvas, _T("Path is not valid"), "You need to provide a valid path!", 0, NULL);
+		return CCOMError::DispatchError(NOT_FOUND_ERR, CLSID_Canvas, _T("Path is not valid"), "You need to provide a valid path!", 0, NULL);
 
 	USES_CONVERSION;
 	cairo_status_t status = cairo_surface_write_to_png(surface, OLE2T(path));
