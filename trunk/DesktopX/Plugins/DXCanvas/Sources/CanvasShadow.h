@@ -58,7 +58,7 @@ private:
 	};
 
 	static const float MAX_SIGMA;
-	static const float SCALE_FACTOR;
+	static const float GAUSSIAN_SCALE_FACTOR;
 	float sigma;
 	int blurRadius;
 
@@ -73,8 +73,9 @@ private:
 
 	bool copyContext();
 	void applyBlur();
-
-	void blur(unsigned char* input, unsigned char* output, Direction direction, int blurRadius, int stride, int rows);
+	
+	void computeLobes(int radius, int lobes[3][2]);
+	void blur(unsigned char* input, unsigned char* output, Direction direction, int leftLobe, int rightLobe, int stride, int rows);
 
 public:
 
