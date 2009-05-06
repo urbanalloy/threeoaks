@@ -9,8 +9,8 @@ def extract():
 	doc = parser.parse(open('current-work'), encoding='utf-8')
 	
 	head = doc.getElementsByTagName('div')[0]
-	#thecanvas = doc.getElementById('the-canvas') # doesn't work (?!)
-	thecanvas = [ n for n in doc.getElementsByTagName('h4') if n.getAttribute('id') == 'the-canvas' ][0]
+	#thecanvas = doc.getElementById('the-canvas-element') # doesn't work (?!)
+	thecanvas = [ n for n in doc.getElementsByTagName('h4') if n.getAttribute('id') == 'the-canvas-element' ][0]
 	
 	keep = [head, thecanvas]
 	node = thecanvas.nextSibling
