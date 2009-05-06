@@ -172,8 +172,6 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
         if (now.tm_mon == EXPIRATION_MONTH-1)
           if (now.tm_mday > EXPIRATION_DAY)
             goto label_expiration;	
-
-label_continue:
 #endif
 
 	        CComObject<CCanvas>* pCanvas;
@@ -419,6 +417,8 @@ END_OBJECT_MAP()
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DLL
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma warning(push)
+#pragma warning(disable: 4100) 
 DECLARE_DXPLUGIN_DLLFUNCTIONS(LIBID_DXCanvasLib,
 							  "DXCanvas.dll",
 							  "{9215BB4D-AFC4-4b09-B39E-1967072BDD69}",
@@ -427,6 +427,8 @@ DECLARE_DXPLUGIN_DLLFUNCTIONS(LIBID_DXCanvasLib,
 							  "DXCanvas.Canvas",
 							  "1.0",
 							  "DXCanvas 1.0 Type Library")
+
+#pragma warning(pop)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Registry
