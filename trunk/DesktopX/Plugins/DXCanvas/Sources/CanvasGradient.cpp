@@ -52,7 +52,7 @@ STDMETHODIMP CCanvasGradient::InterfaceSupportsErrorInfo(REFIID riid)
 STDMETHODIMP CCanvasGradient::addColorStop(double offset, BSTR color)
 {
 	if (offset < 0 || offset > 1)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasGradient, _T("Invalid parameter"), __FUNCTION__ ": offset should be between 0 and 1.", 0, NULL);
+		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_CanvasGradient, _T("Invalid parameter"), __FUNCTION__ ": offset should be between 0 and 1.", 0, NULL);
 
 	USES_CONVERSION;
 
@@ -66,7 +66,7 @@ STDMETHODIMP CCanvasGradient::addColorStop(double offset, BSTR color)
 		delete rgba;	
 		char error[1000];
 		sprintf_s(error, __FUNCTION__ ": Failed to parse color value (value: %s)", colorT);
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasGradient, _T("Failed to parse color value"), error, 0, NULL);
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_CanvasGradient, _T("Failed to parse color value"), error, 0, NULL);
 	}
 
 	if (pattern)

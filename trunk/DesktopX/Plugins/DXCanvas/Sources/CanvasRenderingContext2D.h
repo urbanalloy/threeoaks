@@ -41,7 +41,7 @@ using namespace std;
 //////////////////////////////////////////////////////////////////////////
 // Error Management
 #define CHECK_POSITIVE_VALUE(value) \
-	if (value < 0) return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Value is invalid"), __FUNCTION__ ": negative values are forbidden (value: " #value ")", 0, NULL);
+	if (value < 0) return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_CanvasRenderingContext2D, _T("Value is invalid"), __FUNCTION__ ": negative values are forbidden (value: " #value ")", 0, NULL);
 
 #define CHECK_POSITIVE_VALUES(value1, value2) \
 	CHECK_POSITIVE_VALUE(value1); CHECK_POSITIVE_VALUE(value2);
@@ -260,6 +260,7 @@ public:
 
 	// pixel manipulation
 	STDMETHOD(createImageData)(float sw, float sh, ICanvasImageData** data);
+	STDMETHOD(createImageDataFromImageData)(ICanvasImageData* CanvasImageData, ICanvasImageData** data);
 	STDMETHOD(getImageData)(float sx, float sy, float sw, float sh, ICanvasImageData** data);
 	STDMETHOD(putImageData)(ICanvasImageData* CanvasImageData, float dx, float dy, VARIANT dirtyX, VARIANT dirtyY, VARIANT dirtyWidth, VARIANT dirtyHeight);
 

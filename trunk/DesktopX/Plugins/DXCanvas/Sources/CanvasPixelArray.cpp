@@ -68,7 +68,7 @@ STDMETHODIMP CCanvasPixelArray::XXX5(unsigned long index, unsigned char* value)
 		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasPixelArray, _T("Data not present"), __FUNCTION__ "Internal error: data is not present", 0, NULL);
 
 	if (index > length)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasPixelArray, _T("Index out of bounds"), __FUNCTION__ "Index is out of bounds", 0, NULL);
+		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_CanvasPixelArray, _T("Index out of bounds"), __FUNCTION__ "Index is out of bounds", 0, NULL);
 
 	*value = data[index];
 
@@ -81,7 +81,7 @@ STDMETHODIMP CCanvasPixelArray::XXX6(unsigned long index, int value)
 		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasPixelArray, _T("Data not present"), __FUNCTION__ "Internal error: data is not present", 0, NULL);
 
 	if (index > length)
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasPixelArray, _T("Index out of bounds"), __FUNCTION__ "Index is out of bounds", 0, NULL);
+		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_CanvasPixelArray, _T("Index out of bounds"), __FUNCTION__ "Index is out of bounds", 0, NULL);
 
 	// Clamp value
 	data[index] = (char)((value < 0) ? 0 : ((value > 255) ? 255 : value));
