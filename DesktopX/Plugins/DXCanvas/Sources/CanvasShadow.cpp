@@ -18,8 +18,9 @@
 #include "CanvasShadow.h"
 
 const float CanvasShadow::MAX_SIGMA = 35;
-const float CanvasShadow::SCALE_FACTOR = 3 * sqrt(2 * (float)M_PI) / 4;
 
+// Blur radius is approximately 3/2 times the box-blur size
+const float CanvasShadow::GAUSSIAN_SCALE_FACTOR = (3 * sqrt(2 * (float)M_PI) / 4) * (3/2);
 
 cairo_t* CanvasShadow::getContext(cairo_t* ctx, CanvasState* state, EXTENTS_RECT extents)
 {
@@ -38,8 +39,9 @@ cairo_t* CanvasShadow::getContext(cairo_t* ctx, CanvasState* state, EXTENTS_RECT
 	if (sigma > MAX_SIGMA)
 		sigma = MAX_SIGMA;
 
-	blurRadius = (int)floor(sigma*SCALE_FACTOR + 0.5);
+	blurRadius = (int)floor(sigma*GAUSSIAN_SCALE_FACTOR + 0.5);
 
+	// Add blur area to extents rectangle
 	extents.x1 -= blurRadius;
 	extents.y1 -= blurRadius;
 	extents.x2 += blurRadius;
@@ -142,13 +144,14 @@ bool CanvasShadow::copyContext()
 	return true;
 }
 
-//
+// Apply the blur
 void CanvasShadow::applyBlur()
 {
 	// Blur radius must be > 2
 	blurRadius = max(blurRadius, 2);
 
 	unsigned char* buffer = cairo_image_surface_get_data(surface);
+
 	int stride = cairo_image_surface_get_stride(surface);		
 	int rows = cairo_image_surface_get_height(surface);	
 
@@ -157,24 +160,25 @@ void CanvasShadow::applyBlur()
 	if (tempBuffer == NULL)
 		return;
 
-	blur(buffer, tempBuffer, HORIZONTAL, blurRadius, stride, rows);
-	blur(tempBuffer, buffer, HORIZONTAL, blurRadius, stride, rows);
-	blur(buffer, tempBuffer, HORIZONTAL, blurRadius, stride, rows);
+	// Computes lobes
+	int lobes[3][2];
+	computeLobes(blurRadius, lobes);
 
-	blur(tempBuffer, buffer, VERTICAL, blurRadius, stride, rows);
-	blur(buffer, tempBuffer, VERTICAL, blurRadius, stride, rows);
-	blur(tempBuffer, buffer, VERTICAL, blurRadius, stride, rows);
+	blur(buffer, tempBuffer, HORIZONTAL, lobes[0][0], lobes[0][1], stride, rows);
+	blur(tempBuffer, buffer, HORIZONTAL, lobes[1][0], lobes[1][1], stride, rows);
+	blur(buffer, tempBuffer, HORIZONTAL, lobes[2][0], lobes[2][1], stride, rows);
+
+	blur(tempBuffer, buffer, VERTICAL, lobes[0][0], lobes[0][1], stride, rows);
+	blur(buffer, tempBuffer, VERTICAL, lobes[1][0], lobes[1][1], stride, rows);
+	blur(tempBuffer, buffer, VERTICAL, lobes[2][0], lobes[2][1], stride, rows);
 
 	free(tempBuffer);
 }
 
 
-void CanvasShadow::blur(unsigned char* input, unsigned char* output, Direction direction, int blurRadius, int stride, int rows)
+void CanvasShadow::blur(unsigned char* input, unsigned char* output, Direction direction, int leftLobe, int rightLobe, int stride, int rows)
 {
-	int deltaX =  blurRadius / 2;
-	int deltaY = (blurRadius & 1) ? deltaX : deltaX - 1;
-
-	int boxSize = deltaX + deltaY + 1;
+	int boxSize = leftLobe + rightLobe + 1;
 
 	if (direction == HORIZONTAL)
 	{	
@@ -183,14 +187,14 @@ void CanvasShadow::blur(unsigned char* input, unsigned char* output, Direction d
 			int sum = 0;
 			
 			for (int i = 0; i < boxSize; i++) {
-				int pos = i - deltaX;
+				int pos = i - leftLobe;
 				pos = max(pos, 0);
 				pos = min(pos, stride - 1);
 				sum += input[stride * y + pos];
 			}
 			
 			for (int x = 0; x < stride; x++) {
-	            int tmp = x - deltaX;
+	            int tmp = x - leftLobe;
 	            int last = max(tmp, 0);
 	            int next = min(tmp + boxSize, stride - 1);
 	
@@ -208,14 +212,14 @@ void CanvasShadow::blur(unsigned char* input, unsigned char* output, Direction d
 			int sum = 0;
 
 			for (int i = 0; i < boxSize; i++) {
-				int pos = i - deltaX;
+				int pos = i - leftLobe; // top lobe
 				pos = max(pos, 0);
 				pos = min(pos, rows - 1);
 				sum += input[stride * pos + x];
 			}
 
 			for (int y = 0; y < rows; y++) {
-				int tmp = y - deltaX;
+				int tmp = y - rightLobe; // bottom lobe
 				int last = max(tmp, 0);
 				int next = min(tmp + boxSize, rows - 1);
 
@@ -226,4 +230,49 @@ void CanvasShadow::blur(unsigned char* input, unsigned char* output, Direction d
 			}
 		}
 	}
+}
+
+void CanvasShadow::computeLobes(int radius, int lobes[3][2])
+{
+	int major = 0, minor = 0, final = 0;
+
+	/* See http://www.w3.org/TR/SVG/filters.html#feGaussianBlur for
+	* some notes about approximating the Gaussian blur with box-blurs.
+	* The comments below are in the terminology of that page.
+	*/
+	int z = radius/3;
+	switch (radius % 3) {
+		case 0:
+			// aRadius = z*3; choose d = 2*z + 1
+			major = minor = final = z;
+			break;
+		case 1:
+			// aRadius = z*3 + 1
+			// This is a tricky case since there is no value of d which will
+			// yield a radius of exactly aRadius. If d is odd, i.e. d=2*k + 1
+			// for some integer k, then the radius will be 3*k. If d is even,
+			// i.e. d=2*k, then the radius will be 3*k - 1.
+			// So we have to choose values that don't match the standard
+			// algorithm.
+			major = z + 1;
+			minor = final = z;
+			break;
+		case 2:
+			// aRadius = z*3 + 2; choose d = 2*z + 2
+			major = final = z + 1;
+			minor = z;
+			break;
+	}
+	
+#ifdef DEBUG
+	// Lobes should sum to the right length
+	_ASSERT(major + minor + final == radius, "Lobes should sum to the right length");
+#endif
+
+	lobes[0][0] = major;
+	lobes[0][1] = minor;
+	lobes[1][0] = minor;
+	lobes[1][1] = major;
+	lobes[2][0] = final;
+	lobes[2][1] = final;
 }
