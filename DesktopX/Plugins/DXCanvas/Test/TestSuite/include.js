@@ -10,6 +10,9 @@ var ERROR_Y = 235;
 var CANVAS_WIDTH = 100;
 var CANVAS_HEIGHT = 50;
 
+// Error codes
+var INDEX_SIZE_ERR = 16389;
+
 
 var ctx = _getCanvas().getContext('2d');
 

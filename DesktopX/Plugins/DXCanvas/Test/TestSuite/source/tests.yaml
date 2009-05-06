@@ -212,6 +212,14 @@
   code: |
     @assert _getCanvas().getContext("2d#") === null;
 
+- name: context.unrecognised.nullsuffix
+  desc: Context name '2d' plus a "\0" suffix is unrecognised
+  testing:
+    - context.unrecognised
+  mozilla: { throws, bug: 401788 }
+  code: |
+    @assert _getCanvas().getContext("2d\0") === null;
+
 - name: context.unrecognised.unicode
   desc: Context name which kind of looks like '2d' is unrecognised
   testing:
@@ -230,3 +238,14 @@
   # incorrect case-insensitive comparison.
   code: |
     @assert _getCanvas().getContext('2D') === null;
+
+- name: context.arguments.missing
+  # testing "common conformance requirements for APIs exposed to JavaScript"
+  code: |
+    @assert throws NOT_SUPPORTED_ERR _getCanvas().getContext(); @moz-todo
+
+- name: context.arguments.extra
+  testing:
+    - context.extraarguments
+  code: |
+    @assert _getCanvas().getContext('2d', 'foo') !== null;
