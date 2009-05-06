@@ -11,7 +11,8 @@ var CANVAS_WIDTH = 100;
 var CANVAS_HEIGHT = 50;
 
 // Error codes
-var INDEX_SIZE_ERR = 16389;
+var INDEX_SIZE_ERR = 0;
+var NOT_SUPPORTED_ERR = 0;
 
 
 var ctx = _getCanvas().getContext('2d');
@@ -88,7 +89,7 @@ function _doTest()
 	}
 	catch (e)
 	{
-		_fail('Aborted with exception: ' + e.message);
+		_fail('Aborted with exception: ' + e.name  + ": " + e.message + " (" + (e.number & 0xFFFF) + " / " + e.description + ")");
 		deferred = false; // cancel any deference
 	}
 

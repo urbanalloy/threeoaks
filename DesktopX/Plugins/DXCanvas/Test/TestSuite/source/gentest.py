@@ -190,7 +190,7 @@ for i in range(len(tests)):
 			code)
 
 	code = re.sub(r'@assert throws (\S+_ERR) (.*);',
-			lambda m: 'try { var _thrown = false;\n  %s;\n} catch (e) { if ((e.number & 0xFFFF) != %s) _fail("Failed assertion: expected exception of type %s, got: "+e.message); _thrown = true; } finally { _assert(_thrown, "should throw exception of type %s: %s"); }'
+			lambda m: 'try { var _thrown = false;\n  %s;\n} catch (e) { if ((e.number & 0xFFFF) != %s) _fail("Failed assertion: expected exception of type %s, got: "+ (e.number & 0xFFFF) + ":" + e.message); _thrown = true; } finally { _assert(_thrown, "should throw exception of type %s: %s"); }'
 				% (m.group(2), m.group(1), m.group(1), m.group(1), escapeJS(m.group(2)))
 			, code)
 
