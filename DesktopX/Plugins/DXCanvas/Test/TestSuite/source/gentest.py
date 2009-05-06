@@ -86,12 +86,6 @@ def make_flat_image(filename, w, h, r,g,b,a):
 	return filename
 	
 
-#try: os.mkdir('tests')
-#except: pass # ignore if it already exists
-
-#try: os.mkdir('mochitests')
-#except: pass
-
 try: os.mkdir('../tests')
 except: pass # ignore if it already exists
 
@@ -196,7 +190,7 @@ for i in range(len(tests)):
 			code)
 
 	code = re.sub(r'@assert throws (\S+_ERR) (.*);',
-			lambda m: 'try { var _thrown = false;\n  %s;\n} catch (e) { if (e.code != DOMException.%s) _fail("Failed assertion: expected exception of type %s, got: "+e.message); _thrown = true; } finally { _assert(_thrown, "should throw exception of type %s: %s"); }'
+			lambda m: 'try { var _thrown = false;\n  %s;\n} catch (e) { if ((e.number & 0xFFFF) != %s) _fail("Failed assertion: expected exception of type %s, got: "+e.message); _thrown = true; } finally { _assert(_thrown, "should throw exception of type %s: %s"); }'
 				% (m.group(2), m.group(1), m.group(1), m.group(1), escapeJS(m.group(2)))
 			, code)
 
@@ -261,7 +255,7 @@ for i in range(len(tests)):
 			mochi_code)
 
 		mochi_code = re.sub(r'@assert throws (\S+_ERR) (.*);',
-			lambda m: 'var _thrown = undefined; try {\n  %s;\n} catch (e) { _thrown = e }; ok(_thrown && _thrown.code == DOMException.%s, "should throw %s");'
+			lambda m: 'var _thrown = undefined; try {\n  %s;\n} catch (e) { _thrown = e }; ok(_thrown && (_thrown.number & 0xFFFF) == %s, "should throw %s");'
 				% (m.group(2), m.group(1), m.group(1))
 			, mochi_code)
 
@@ -384,21 +378,7 @@ for i in range(len(tests)):
 	}
 
 	f = codecs.open('../tests/%s.js' % name, 'w', 'utf-8')
-	f.write(templates['standalone'] % template_params)
-	
-	#f = codecs.open('tests/framed.%s.html' % name, 'w', 'utf-8')
-	#f.write(templates['framed'] % template_params)
-
-	#f = codecs.open('tests/minimal.%s.html' % name, 'w', 'utf-8')
-	#f.write(templates['minimal'] % template_params)
-
-	#if mochitest:
-	#	mochitests.append(name)	
-	#	f = codecs.open('mochitests/test_%s.html' % name, 'w', 'utf-8')
-		#f.write(templates['mochitest'] % template_params)
-
-#for i in used_images:
-	#shutil.copyfile("images/%s" % i, "mochitests/image_%s" % i)
+	f.write(templates['standalone'] % template_params)	
 
 def write_mochitest_makefile():
 	f = open('mochitests/Makefile.in', 'w')
@@ -679,10 +659,4 @@ def write_annotated_spec():
 	head.insertBefore(doc.createElement('meta'), head.firstChild).setAttribute('charset', 'UTF-8')
 
 	codecs.open('tests/spec.html', 'w', 'utf-8').write(html5Serializer(doc))
-
-#write_index()
-#write_category_indexes()
-#write_reportgen()
-#write_results()
-#write_annotated_spec()
 
