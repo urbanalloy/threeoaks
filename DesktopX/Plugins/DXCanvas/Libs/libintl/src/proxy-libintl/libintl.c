@@ -144,10 +144,10 @@ DUMMY (dcngettext,
 DUMMY (textdomain,
        (const char *domainname),
        (domainname ?
-	(free (current_domain), current_domain = strdup (domainname)) :
+	(free (current_domain), current_domain = _strdup (domainname)) :
 	(current_domain ?
 	 current_domain :
-	 (current_domain = strdup ("messages")))))
+	 (current_domain = _strdup ("messages")))))
 
 /* bindtextdomain() should return the current dirname for the domain,
  * after possibly changing it. I don't think software usually checks
@@ -204,7 +204,7 @@ setup (void)
        */
       HMODULE intl_dll = LoadLibrary ("libintl-8.dll");
 #  elif defined( _WIN32)
-      HMODULE intl_dll = LoadLibrary ("intl.dll");
+      HMODULE intl_dll = LoadLibrary (TEXT("intl.dll"));
 #  elif defined(__APPLE__) && defined(__MACH__)
       HMODULE intl_dll = dlopen ("libintl.dylib", RTLD_LAZY);
 #  else

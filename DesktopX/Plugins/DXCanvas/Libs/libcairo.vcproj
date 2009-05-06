@@ -16,7 +16,7 @@
 	</ToolFiles>
 	<Configurations>
 		<Configuration
-			Name="Release (Static)|Win32"
+			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)\Builds\$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)\Builds\$(ConfigurationName)\Intermediate\$(ProjectName)"
 			ConfigurationType="4"
@@ -45,7 +45,7 @@
 				EnableIntrinsicFunctions="true"
 				OmitFramePointers="true"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories=".;&quot;$(SolutionDir)/cairo/src&quot;;&quot;$(SolutionDir)/pixman/pixman&quot;;&quot;$(SolutionDir)/libpng&quot;;&quot;$(SolutionDir)/zlib&quot;"
+				AdditionalIncludeDirectories=".;&quot;$(SolutionDir)/cairo/src&quot;;&quot;$(SolutionDir)/pixman/pixman&quot;;&quot;$(SolutionDir)/libpng&quot;;&quot;$(SolutionDir)/zlib&quot;;&quot;$(SolutionDir)/includes/cairo&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;CAIRO_BUILD;CAIRO_WIN32_STATIC_BUILD;LIBCAIRO_EXPORTS"
 				StringPooling="true"
 				MinimalRebuild="true"

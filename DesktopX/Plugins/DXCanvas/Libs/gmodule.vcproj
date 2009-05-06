@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="9.00"
+	Name="gmodule"
+	ProjectGUID="{4214047C-F5C1-40B3-8369-5DCED8C32770}"
+	RootNamespace="gmodule"
+	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="$(SolutionDir)\Builds\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Builds\$(ConfigurationName)\Intermediate\$(ProjectName)"
+			ConfigurationType="4"
+			CharacterSet="2"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+				CommandLine="if exist .\glib\gmodule\gmoduleconf.h goto END&#x0D;&#x0A;copy .\glib\gmodule\gmoduleconf.h.win32 .\glib\gmodule\gmoduleconf.h&#x0D;&#x0A;:END&#x0D;&#x0A;"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				InlineFunctionExpansion="1"
+				EnableIntrinsicFunctions="true"
+				OmitFramePointers="true"
+				WholeProgramOptimization="true"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/glib/glib&quot;;&quot;$(SolutionDir)/glib/gmodule&quot;;&quot;$(SolutionDir)/glib&quot;;&quot;$(SolutionDir)/includes/glib&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;GMODULE_EXPORTS;HAVE_CONFIG_H;G_LOG_DOMAIN=\&quot;GModule\&quot;"
+				StringPooling="true"
+				RuntimeLibrary="0"
+				BufferSecurityCheck="false"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="0"
+				ProgramDataBaseFileName="$(OutDir)\$(ProjectName).pdb"
+				WarningLevel="4"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="3"
+				CallingConvention="2"
+				DisableSpecificWarnings="4018,4100,4127,4152,4389"
+				ForcedIncludeFiles="msvc_recommended_pragmas.h"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				IgnoreAllDefaultLibraries="true"
+				IgnoreDefaultLibraryNames="Libcmtd.lib;libcmt.lib;msvcrt.lib;msvcrtd.lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="Source Files"
+			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			>
+			<File
+				RelativePath=".\glib\gmodule\gmodule.c"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
+			<File
+				RelativePath=".\glib\gmodule\gmodule.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Resource Files"
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			>
+			<File
+				RelativePath=".\glib\gmodule\gmodule.symbols"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Generating gmodule.def"
+						CommandLine="echo EXPORTS &gt; &quot;$(InputDir)/gmodule.def&quot; &amp;&amp; cl /EP -DG_OS_WIN32 &quot;$(InputPath)&quot; &gt;&gt; &quot;$(InputDir)/gmodule.def&quot;&#x0D;&#x0A;"
+						Outputs="$(InputDir)/gmodule.def"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Generating gmodule.def"
+						CommandLine="echo EXPORTS &gt; &quot;$(InputDir)/gmodule.def&quot; &amp;&amp; cl /EP -DG_OS_WIN32 &quot;$(InputPath)&quot; &gt;&gt; &quot;$(InputDir)/gmodule.def&quot;&#x0D;&#x0A;"
+						Outputs="$(InputDir)/gmodule.def"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Generating gmodule.def"
+						CommandLine="echo EXPORTS &gt; &quot;$(InputDir)/gmodule.def&quot; &amp;&amp; cl /EP -DG_OS_WIN32 &quot;$(InputPath)&quot; &gt;&gt; &quot;$(InputDir)/gmodule.def&quot;&#x0D;&#x0A;"
+						Outputs="$(InputDir)/gmodule.def"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Generating gmodule.def"
+						CommandLine="echo EXPORTS &gt; &quot;$(InputDir)/gmodule.def&quot; &amp;&amp; cl /EP -DG_OS_WIN32 &quot;$(InputPath)&quot; &gt;&gt; &quot;$(InputDir)/gmodule.def&quot;&#x0D;&#x0A;"
+						Outputs="$(InputDir)/gmodule.def"
+					/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>
