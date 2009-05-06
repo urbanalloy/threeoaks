@@ -1,0 +1,9 @@
+LIBRARY DXCanvas
+
+EXPORTS
+	DllCanUnloadNow		PRIVATE
+	DllGetClassObject	PRIVATE
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer	PRIVATE
+	SDMessage           @5
+	

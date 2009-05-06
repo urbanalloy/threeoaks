@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DXCanvas", "DXCanvas.vcproj", "{BC90005D-AAA2-4961-8BFC-9FCEA128B931}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug (Static)|Win32 = Debug (Static)|Win32
+		Debug|Win32 = Debug|Win32
+		Release (Static)|Win32 = Release (Static)|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BC90005D-AAA2-4961-8BFC-9FCEA128B931}.Debug (Static)|Win32.ActiveCfg = Debug (Static)|Win32
+		{BC90005D-AAA2-4961-8BFC-9FCEA128B931}.Debug (Static)|Win32.Build.0 = Debug (Static)|Win32
+		{BC90005D-AAA2-4961-8BFC-9FCEA128B931}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BC90005D-AAA2-4961-8BFC-9FCEA128B931}.Debug|Win32.Build.0 = Debug|Win32
+		{BC90005D-AAA2-4961-8BFC-9FCEA128B931}.Release (Static)|Win32.ActiveCfg = Release (Static)|Win32
+		{BC90005D-AAA2-4961-8BFC-9FCEA128B931}.Release (Static)|Win32.Build.0 = Release (Static)|Win32
+		{BC90005D-AAA2-4961-8BFC-9FCEA128B931}.Release|Win32.ActiveCfg = Release|Win32
+		{BC90005D-AAA2-4961-8BFC-9FCEA128B931}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

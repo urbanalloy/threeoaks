@@ -1,0 +1,169 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "1 TYPELIB ""DXCanvas.tlb""\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,1,0,1
+ PRODUCTVERSION 1,1,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName", "Three Oaks Crossing"
+            VALUE "FileDescription", "DesktopX plugin : Provides a scriptable free-form vector drawing surface"
+            VALUE "FileVersion", "1.1.0.0"
+            VALUE "InternalName", "DXCanvas.dll"
+            VALUE "LegalCopyright", "Copyright (c) 2008 Three Oaks Crossing. All rights reserved."
+            VALUE "OriginalFilename", "DXCanvas.dll"
+            VALUE "ProductName", "DXCanvas"
+            VALUE "ProductVersion", "1.1.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// REGISTRY
+//
+
+IDR_CANVAS              REGISTRY                "Canvas.rgs"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_CONFIG DIALOGEX 0, 0, 200, 163
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_TOOLWINDOW
+CAPTION "Configure Canvas Plugin..."
+FONT 8, "MS Shell Dlg", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,89,144,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,144,144,50,14
+    LTEXT           "Build %s",IDC_BUILD,6,149,70,8,WS_DISABLED
+    CONTROL         202,IDC_PICTURE,"Static",SS_BITMAP,0,0,200,37
+    GROUPBOX        "Canvas Size",IDC_SIZE_BOX,5,48,190,71
+    CONTROL         "Use per-pixel alpha blending",IDC_ALPHABLEND,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,125,185,10
+    EDITTEXT        IDC_WIDTH,100,80,47,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Initial Width",IDC_WIDTH_TEXT,36,83,39,8
+    LTEXT           "Those dimensions are the initial canvas dimensions. You can resize the canvas later via script.",IDC_SIZE_TEXT,11,58,173,16
+    EDITTEXT        IDC_HEIGHT,100,98,47,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Initial Height",IDC_HEIGHT_TEXT,36,101,41,8
+    LTEXT           "",IDC_BETA,95,41,100,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_CONFIG, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 158
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_PICTURE             BITMAP                  "..\\Docs\\Config.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_PROJNAME            "DXCanvas"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+1 TYPELIB "DXCanvas.tlb"
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

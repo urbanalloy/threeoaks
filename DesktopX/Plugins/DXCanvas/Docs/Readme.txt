@@ -1,0 +1,225 @@
+DXCanvas plugin for DesktopX
+ Copyright (c) 2008-2009 Julien Templier
+---------------------------------------
+
+DXCanvas is a DesktopX drawing plugin, implementing the canvas specification.
+
+***************************************************************************
+** Installation
+***************************************************************************
+
+Extract the DXCanvas.dll file in your DesktopX/SDPlugin folder.
+
+You can now add the new ability to your objects: in the Object Properties,
+under Additional Abilities, click "Add" and select the DXCanvas plugin.
+(should appears as Canvas Control).
+
+In the configuration, you can set the initial size for the canvas. By default,
+the drawing surface size will be 300x150. You can also specify whether you want
+the surface to be transparent and show the other objects or windows under it,
+or opaque.
+
+A canvas object is made available to scripting. To be able to draw on the canvas,
+you need to request a context. This is done by calling getContext(type) on the
+canvas object. The only supported type right now is "2d".
+
+***************************************************************************
+** Troubleshooting
+***************************************************************************
+
+  - Avast! AV might be blocking scripts from running. Please check that
+    DesktopX gadgets are excluded from it.
+  
+  - On Vista, you need to have UAC turned on for scripting plugins to work
+    correctly with DesktopX.
+
+***************************************************************************
+** More Information
+***************************************************************************
+
+HTML5 Spec on Canvas 
+http://www.whatwg.org/specs/web-apps/current-work/#the-canvas
+
+Canvas Tutorial
+http://developer.mozilla.org/En/Canvas_tutorial
+
+Yahoo! Widgets Canvas Documentation (Look in Core DOM Reference -> Canvas / CanvasRenderingContext2D) 
+http://manual.widgets.yahoo.com/
+
+Wincustomize thread on the plugin
+http://forums.wincustomize.com/322221
+
+***************************************************************************
+** Changelog
+***************************************************************************
+
+1.1 Build :
+	* Tweaked text drawing on paths
+	* Update Cairo (HEAD), Pixman (0.15.2), Pango (1.24.2), Glib (2.20.1)
+
+1.1 Build 457:
+	* Update Cairo (HEAD), Pixman (0.14.0), Pango (1.23.0), Glib (2.18.4), libpng (1.2.35)
+
+1.1 Build 287:
+	+ Added manual drawing mode with suspendDrawing/resumeDrawing methods
+	  (this should allow users to work around the flickering)
+	- Fixed text position being off baseline when drawing on a path
+	- Fixed a rare crash when drawing text on a path
+    * Activated Pixman MMX&SSE2 fast paths
+	* Updated Pango to fix font leak (rev 2746)
+	* Updated Pixman (0.13.2)
+
+1.1 Build 269:
+	+ Added textPath, textAlongPath (with stroke or fill option)
+	+ Added support for shadows
+	- arcTo is incorrect when the three points are collinear
+	- arcTo should draw a straight line from P0 to P1
+	- restore() with an empty stack has no effect
+	- Corrected order of data returned by getImageData (BRGA -> RGBA)
+	- ImageData is now converted to non-premultiplied color 
+	- Preserve the current path when clipping	
+	- rgba colors were not converted to string properly (green had the wrong value) 
+	- Some composite operations are now handled correctly
+	- Fixed Debug build crashing when expired
+	- Fixed stack overflow crash on exit
+	* Added check for font validity on assignment and fallback to default font
+	  (will raise an error in debug mode if font is incorrect)
+	* Moved state management to its own class
+	* Updated Cairo(1.8.4), Pixman(0.12.0), Pango(1.22.3), Glib(2.18.3) and libpng(1.2.33)
+
+1.0 Build 225:
+	- Fixed large canvas objects taking a lot of CPU
+	- Log is always enabled
+
+1.0 Build 217:
+	- Fixed drawing being incomplete in some cases
+	- Added workaround for pink color drawing transparent
+	  DesktopX always use pink to draw transparent surfaces, even in per-pixel mode. rgb(255, 0, 255) will be changed to rgb(255, 1, 255).
+	  The problem is still apparent with gradients...
+
+1.0 Build 214:
+	+ Added per-object log files
+	+ Added more log info when creating a new context object
+
+1.0 Build 211:
+	+ Added support for % in rgb/rgba colors
+	+ Added "transparent" color (equivalent to "rgba(0,0,0,0)")
+	+ Added SVG colors "darkgrey", "darkslategrey", "dimgrey", "grey", "lightgray", "lightslategrey" and "slategrey"
+	- Zero size canvas is allowed
+	- Properly share canvas state (context style stack was not properly shared before)
+	- DrawImage and DrawImageRegion check for negative width and height and adjust the coordinates
+	- Only match full color strings
+	- Accept rgb values outside [0;255] and clamp the value properly
+	- Clamp alpha and use premultiplied color values when painting with alpha (still somewhat wrong)
+	- Fixed leak and crash with CanvasImageData & CanvasPixelArray
+	- Fixed crash with invalid parameters in createImageData and getImageData
+	- Zero-length line gradients should paint nothing
+	- Radial gradients with the same start and end circle should paint nothing
+	- Image data now accepts negative width and height (you get the untransformed data for the resulting rectangle)
+	- arc() with zero radius draws a line to the start point.
+	- arcTo() has no effect if the context has no subpaths or if P0 = P1
+	- arcTo() draws a straight line to P1 if P1 = P2 or if radius = 0
+	- bezierCurveTo() has no effect if the context has no subpaths
+	- lineTo() has no effect if the context has no subpaths
+	- quadraticCurveTo() has no effect if the context has no subpaths
+	* Updated cairo, pixman and pango libraries
+	
+1.0 Build 201:
+	+ Added hsl/hsla color parsing
+	+ Added some logging (DXCanvas.log in object directory)
+	- Fixed text stroking always drawing at position (0,0)
+	- Fixed text baseline being off by the text height
+
+1.0 Build 191:
+	+ Added redraw calls buffering (less flickering)
+	+ Added debugMode attribute to canvas. In debug mode, passing invalid parameters will result in an error being
+	  raised instead of the invalid value being silently ignored. 
+	- No longer returns errors when passing invalid parameters to a lot of functions (as specified in Canvas specification)
+	* CanvasPixelArray.XXX6(index, value) now takes an int instead of a char and will clamp that value to [0;255]
+	
+1.0 Build 180:
+	+ Implemented toImage
+	+ Implemented createImageData, getImageData and putImageData
+	+ Added canvas support to createPattern, drawImage and drawImageRegion
+	- Fixed createPattern, drawImage and drawImageRegion not working in VBScript
+	- Fixed createPattern, drawImage and drawImageRegion not making a copy of the source image or canvas
+	- Fixed drawImageRegion using wrong default values for dw and dh
+	- Fixed drawImageRegion not creating a new path, resulting in image "corruption"
+
+1.0 Build 168:
+	+ Implemented font attribute setter/getter 
+	+ Implemented fillText, strokeText and measureText (using Pango) 
+	+ Implemented arcTo (using patch from Behdad Esfahbod) 
+	- Fixed image loading (SD_LOAD_IMAGE seems to be corrupting some images...) 
+
+1.0 Build 159:
+	+ Implemented textAlign and textBaseline attributes setters/getters 
+	+ Implemented createPattern, loadImage, drawImage and drawImageRegion
+	* Update to cairo 1.7.4 (better support for text) 
+	* Statically linked to cairo lib (no need for cairo.dll anymore)
+
+1.0 Build 149: First test version
+
+
+***************************************************************************
+** Licence
+***************************************************************************
+ Redistribution and use in source and binary forms, with or without modification, are
+ permitted provided that the following conditions are met:
+  1. Redistributions of source code must retain the above copyright notice, this list of
+     conditions and the following disclaimer. 
+  2. Redistributions in binary form must reproduce the above copyright notice, this list
+     of conditions and the following disclaimer in the documentation and/or other materials
+     provided with the distribution. 
+  3. The name of the author may not be used to endorse or promote products derived from this
+     software without specific prior written permission. 
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+  GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+  OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+
+***************************************************************************
+** Aknowledgments
+***************************************************************************
+  
+ DXCanvas is built using Cairo, Pango, Glib, LibPNG and Zlib.
+ 
+ Cairo is free software and is available to be redistributed and/or
+ modified under the terms of either the GNU Lesser General Public
+ License (LGPL) version 2.1 or the Mozilla Public License (MPL) version
+ 1.1. - see the files COPYING-LGPL-2.1 and COPYING-MPL-1.1 for details
+
+ Most of the code of Pango is licensed under the terms of the 
+ GNU Lesser Public License (LGPL) - see the file COPYING-LGPL-2.1
+ for details. Pango is based in part of the work of the FreeType Team.
+   
+ Glib is free software and is available to be redistributed and/or
+ modified under the terms of the GNU Lesser General Public License
+ (LGPL) version 2.1 - see the file COPYING-LGPL-2.1 for details.
+ 
+ LibPNG is free software and is available to be redistributed and/or
+ modified under the terms of the LIBPNG License - see the file
+ LICENSE-LIBPNG for details.
+ 
+ Zlib is free software and is available to be redistributed and/or
+ modified under the terms of the ZLIB License - see the file
+ LICENSE-ZLIB for details.
+ 
+ The Canvas Controller uses Silk icons from Mark James, licensed under
+ a Creative Commons Attribution 2.5 License. 
+ [ http://creativecommons.org/licenses/by/2.5/ ]
+ 
+ You can get the silk icon set from http://www.famfamfam.com/lab/icons/silk/
+ 
+***************************************************************************
+** Credits/Thanks
+***************************************************************************
+
+Special thanks to CaptainBeaker and SirSmiley who helped test numerous builds
+of the plugin!

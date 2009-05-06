@@ -1,0 +1,49 @@
+TODO
+-----------------------
+
+* Charts (doable via scripts, but given that it's a royal pain to share them...) .
+
+Tests that do not pass:
+-----------------------
+
+2d.composite.uncovered.fill.copy
+2d.composite.uncovered.image.*
+2d.composite.uncovered.pattern.copy
+
+2d.gradient.radial.cone.behind
+2d.gradient.radial.cone.beside
+2d.gradient.radial.cone.shape2
+2d.gradient.radial.outside2
+2d.gradient.radial.outside3
+2d.gradient.radial.touch1
+2d.gradient.radial.touch2
+2d.gradient.radial.touch3
+
+2d.imageData.get.source.negative	????
+2d.imageData.put.clip
+2d.imageData.put.unchanged
+
+2d.path.arc.shape.3					draws stuff on the bottom left corner
+
+2d.path.arcTo.collinear.2
+2d.path.arcTo.collinear.3
+
+2d.path.arcTo.shape.curve1
+2d.path.arcTo.shape.end
+
+2d.path.isPointInPath.edge  -- origin point of rectangle is not included in path  => FIXED IN TRUNK
+2d.path.isPointInPath.transform.* -- transformations not handled correctly
+
+2d.path.rect.selfintersect
+2d.path.rect.zero.6
+
+2d.path.stroke.prune.arc
+2d.path.stroke.prune.closed
+2d.path.stroke.prune.curve
+2d.path.stroke.prune.line
+2d.path.stroke.prune.rect
+
+2d.pattern.paint.repeatx.coord1
+2d.pattern.paint.repeatx.outside
+2d.pattern.paint.repeaty.coord1
+2d.pattern.paint.repeaty.outside
