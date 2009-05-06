@@ -46,7 +46,7 @@
 				EnableIntrinsicFunctions="true"
 				OmitFramePointers="true"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/glib/glib&quot;;&quot;$(SolutionDir)/glib/gmodule&quot;;&quot;$(SolutionDir)/glib&quot;;&quot;$(SolutionDir)/includes/glib&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/glib/glib&quot;;&quot;$(SolutionDir)/glib/gmodule&quot;;&quot;$(SolutionDir)/glib&quot;;&quot;$(SolutionDir)/include/glib&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;GMODULE_EXPORTS;HAVE_CONFIG_H;G_LOG_DOMAIN=\&quot;GModule\&quot;"
 				StringPooling="true"
 				RuntimeLibrary="0"

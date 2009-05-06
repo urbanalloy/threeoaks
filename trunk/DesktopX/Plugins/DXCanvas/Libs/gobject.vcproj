@@ -45,7 +45,7 @@
 				EnableIntrinsicFunctions="true"
 				OmitFramePointers="true"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/glib/glib&quot;;&quot;$(SolutionDir)/glib&quot;;&quot;$(SolutionDir)/glib/gobject&quot;;&quot;$(SolutionDir)/includes/glib&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/glib/glib&quot;;&quot;$(SolutionDir)/glib&quot;;&quot;$(SolutionDir)/glib/gobject&quot;;&quot;$(SolutionDir)/include/glib&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;GOBJECT_EXPORTS;GOBJECT_COMPILATION;HAVE_CONFIG_H"
 				StringPooling="true"
 				RuntimeLibrary="0"

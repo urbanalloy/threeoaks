@@ -47,7 +47,7 @@
 				FavorSizeOrSpeed="0"
 				OmitFramePointers="true"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/glib/build/win32/dirent&quot;;&quot;$(SolutionDir)/glib/glib&quot;;&quot;$(SolutionDir)/glib&quot;;&quot;$(SolutionDir)/libintl/include&quot;;&quot;$(SolutionDir)/includes/glib&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/glib/build/win32/dirent&quot;;&quot;$(SolutionDir)/glib/glib&quot;;&quot;$(SolutionDir)/glib&quot;;&quot;$(SolutionDir)/libintl/include&quot;;&quot;$(SolutionDir)/include/glib&quot;"
 				PreprocessorDefinitions="LIBDIR;ENABLE_NLS;_WINDOWS;_USRDLL;WIN32;NDEBUG;GLIB_EXPORTS;DLL_EXPORT;GLIB_COMPILATION;HAVE_CONFIG_H;G_LOG_DOMAIN=\&quot;Glib\&quot;;LINK_SIZE=2;MAX_NAME_SIZE=32;MAX_NAME_COUNT=10000;NEWLINE=-1;POSIX_MALLOC_THRESHOLD=10;MATCH_LIMIT=10000000;MATCH_LIMIT_RECURSION=10000000;PCRE_STATIC;G_DISABLE_DEPRECATED"
 				StringPooling="true"
 				RuntimeLibrary="0"

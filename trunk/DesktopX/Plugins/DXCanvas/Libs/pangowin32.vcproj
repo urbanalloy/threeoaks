@@ -47,7 +47,7 @@
 				FavorSizeOrSpeed="0"
 				OmitFramePointers="true"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/glib/glib&quot;;&quot;$(SolutionDir)/glib/gmodule&quot;;&quot;$(SolutionDir)/glib/&quot;;&quot;$(SolutionDir)/cairo/src&quot;;&quot;$(SolutionDir)/pango&quot;;&quot;$(SolutionDir)/pango/pango&quot;;&quot;$(SolutionDir)/includes/glib&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/glib/glib&quot;;&quot;$(SolutionDir)/glib/gmodule&quot;;&quot;$(SolutionDir)/glib/&quot;;&quot;$(SolutionDir)/cairo/src&quot;;&quot;$(SolutionDir)/pango&quot;;&quot;$(SolutionDir)/pango/pango&quot;;&quot;$(SolutionDir)/include/glib&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;HAVE_CAIRO_WIN32;PANGO_ENABLE_BACKEND;PANGO_ENABLE_ENGINE;DEFINE_PACKAGE_PANGO;PANGO_MODULE_PREFIX=pango_basic_win32"
 				StringPooling="true"
 				RuntimeLibrary="0"
