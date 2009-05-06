@@ -10,9 +10,27 @@ var ERROR_Y = 235;
 var CANVAS_WIDTH = 100;
 var CANVAS_HEIGHT = 50;
 
-// Error codes
-var INDEX_SIZE_ERR = 0;
-var NOT_SUPPORTED_ERR = 0;
+///////////////////////////////////////////////
+// DomException Error codes
+///////////////////////////////////////////////
+var INDEX_SIZE_ERR = 1;
+var DOMSTRING_SIZE_ERR = 2;
+var HIERARCHY_REQUEST_ERR = 3;
+var WRONG_DOCUMENT_ERR = 4;
+var INVALID_CHARACTER_ERR = 5;
+var NO_DATA_ALLOWED_ERR = 6;
+var NO_MODIFICATION_ALLOWED_ERR = 7;
+var NOT_FOUND_ERR = 8;
+var NOT_SUPPORTED_ERR = 9;
+var INUSE_ATTRIBUTE_ERR = 10;
+var INVALID_STATE_ERR = 11;
+var SYNTAX_ERR = 12;
+var INVALID_MODIFICATION_ERR = 13;
+var NAMESPACE_ERR = 14;
+var INVALID_ACCESS_ERR = 15;
+var VALIDATION_ERR = 16;
+var TYPE_MISMATCH_ERR = 17;
+///////////////////////////////////////////////
 
 
 var ctx = _getCanvas().getContext('2d');
@@ -89,7 +107,8 @@ function _doTest()
 	}
 	catch (e)
 	{
-		_fail('Aborted with exception: ' + e.name  + ": " + e.message + " (" + (e.number & 0xFFFF) + " / " + e.description + ")");
+		_fail('Aborted with exception: ' + e.name  + ": " + e.message);
+		_fail("Details: " + e.description + " (" + (e.number & 0xFFFF) + ")");
 		deferred = false; // cancel any deference
 	}
 
