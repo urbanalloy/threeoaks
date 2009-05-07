@@ -260,7 +260,7 @@ public:
 
 	// pixel manipulation
 	STDMETHOD(createImageData)(float sw, float sh, ICanvasImageData** data);
-	STDMETHOD(createImageDataFromImageData)(ICanvasImageData* CanvasImageData, ICanvasImageData** data);
+	STDMETHOD(createImageDataFrom)(ICanvasImageData* CanvasImageData, ICanvasImageData** data);
 	STDMETHOD(getImageData)(float sx, float sy, float sw, float sh, ICanvasImageData** data);
 	STDMETHOD(putImageData)(ICanvasImageData* CanvasImageData, float dx, float dy, VARIANT dirtyX, VARIANT dirtyY, VARIANT dirtyWidth, VARIANT dirtyHeight);
 

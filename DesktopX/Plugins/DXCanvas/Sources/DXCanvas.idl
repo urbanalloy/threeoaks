@@ -225,7 +225,7 @@ interface ICanvasRenderingContext2D : IDispatch{
 
 	// pixel manipulation
 	[helpstring("Returns an ImageData object with the given dimensions in pixels. All the pixels in the returned object are transparent black.")] HRESULT createImageData([in] float sw, [in] float sh, [out, retval] ICanvasImageData** data);
-	[helpstring("Returns an ImageData object with the same dimensions as the argument. All the pixels in the returned object are transparent black.")] HRESULT createImageDataFromImageData([in] ICanvasImageData* canvasImageData, [out, retval] ICanvasImageData** data);
+	[helpstring("Returns an ImageData object with the same dimensions as the argument. All the pixels in the returned object are transparent black.")] HRESULT createImageDataFrom([in] ICanvasImageData* canvasImageData, [out, retval] ICanvasImageData** data);
 	[helpstring("Returns an ImageData object containing the image data for the given rectangle of the canvas.")] HRESULT getImageData([in] float sx, [in] float sy, [in] float sw, [in] float sh, [out, retval] ICanvasImageData** data);
 	[helpstring("Paints the data from the given ImageData object onto the canvas. If a dirty rectangle is provided, only the pixels from that rectangle are painted.")] HRESULT putImageData([in] ICanvasImageData* canvasImageData, [in] float dx, [in] float dy, [in, optional] VARIANT dirtyX, [in, optional] VARIANT dirtyY, [in, optional] VARIANT dirtyWidth, [in, optional] VARIANT dirtyHeight);
 };

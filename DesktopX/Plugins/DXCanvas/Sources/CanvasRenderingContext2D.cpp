@@ -1603,7 +1603,7 @@ pattern_loaded:
 
 //////////////////////////////////////////////////////////////////////////
 // pixel manipulation
-STDMETHODIMP CCanvasRenderingContext2D::createImageDataFromImageData(ICanvasImageData* canvasImageData, ICanvasImageData** data)
+STDMETHODIMP CCanvasRenderingContext2D::createImageDataFrom(ICanvasImageData* canvasImageData, ICanvasImageData** data)
 {
 	// Check that imagedata is valid
 	if (canvasImageData == NULL)
