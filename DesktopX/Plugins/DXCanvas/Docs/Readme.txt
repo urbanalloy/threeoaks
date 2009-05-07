@@ -56,7 +56,7 @@ http://code.google.com/p/threeoaks/
 ** Changelog
 ***************************************************************************
 
-1.2 Build 146:
+2.0 Build 146:
     + Exceptions now return the correct DOMException error code
     + Completed documentation of IDL interface
     - Fixed crash on exit when BETA was expired    
