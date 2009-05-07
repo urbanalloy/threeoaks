@@ -33,7 +33,7 @@ var ctx;
 var filename = "Loading";
 var isMac = true;
 
-' If you want to save the results
+// If you want to save the results
 var save = false;
 
 function Object_OnScriptEnter() {
