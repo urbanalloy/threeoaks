@@ -33,6 +33,9 @@ var ctx;
 var filename = "Loading";
 var isMac = true;
 
+' If you want to save the results
+var save = false;
+
 function Object_OnScriptEnter() {
   ctx = canvas.getContext('2d');
 
@@ -50,8 +53,6 @@ function object_onScriptExit() {
   Object.KillTimer(1);
 }
 
-
-var save = true;
 function Object_OnTimer1() {
   canvas.suspendDrawing();
   
