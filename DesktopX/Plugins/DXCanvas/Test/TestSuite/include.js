@@ -59,7 +59,7 @@ function _prepareCanvas(name, image, desc)
 	 // Set test status
 	 test_name = name;
 	 test_description = desc;
-	 test_image = image;
+	 test_expected = image;
 	 ////////////////////////////
 
 	canvas.width = 600;
@@ -325,8 +325,8 @@ function endTest()
 	
 	if (callback != null) {
 		var test_image = Widget.Preference("TestsFolder").Value + '/results/' + test_name + ".png";
-				
-		ctx.toImage(test_image);		
+						
+		_getCanvas().toImage(test_image);
     	callback(test_name, test_description, test_expected, test_image, test_results, test_status);    	
     } 
 }
