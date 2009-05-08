@@ -56,9 +56,14 @@ http://code.google.com/p/threeoaks/
 ** Changelog
 ***************************************************************************
 
-2.0 Build 146:
+2.0 Build xxx:
+	+ Sync with the latest version of the Canvas specifications
+	+ Added new createImageDataFrom function to create an new ImageData instance using an existing one dimensions
     + Exceptions now return the correct DOMException error code
     + Completed documentation of IDL interface
+    + Updated Canvas Controller with a pin to desktop icon
+    + Integrated test suite into Canvas controller (allows to run all tests at once and generate a report)
+    - Fixed Canvas Controller dialog drag during long operations
     - Fixed crash on exit when BETA was expired    
 	* Tweaked text drawing on paths	
 	* Updated box blur algorithm to use precomputed values (slightly faster)
