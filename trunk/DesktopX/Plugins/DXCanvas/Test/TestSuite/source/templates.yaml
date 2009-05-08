@@ -1,17 +1,18 @@
-standalone: |
+standalone: |   
     var fso = new ActiveXObject("Scripting.FileSystemObject");
-    var file = fso.OpenTextFile(Widget.Preference("ScriptFolder").Value + '/include.js',1);
+    var file = fso.OpenTextFile(Widget.Preference("TestsFolder").Value + '/include.js',1);
     eval(file.ReadAll());
     file.close();
     function object_onScriptEnter() {
-        _prepareCanvas("%(name)s", "%(expected)s", "%(desc)s");
-        _doTest();
+        _prepareCanvas("%(name)s", "%(expected)s", "%(desc)s");       
     }
     function object_onScriptExit() {}
     function test()	{
         %(code)s
     }
-
+    function start(unattended) {
+       _doTest(unattended);
+    }
 
 mochitest.isPixel: |
     function isPixel(ctx, x,y, r,g,b,a, pos, colour, d) {

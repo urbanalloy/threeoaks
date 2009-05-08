@@ -32,7 +32,22 @@ var VALIDATION_ERR = 16;
 var TYPE_MISMATCH_ERR = 17;
 ///////////////////////////////////////////////
 
+///////////////////////////////////////////////
+// Test Info and results
+///////////////////////////////////////////////
+var STATUS_INVALID = -1;
+var STATUS_FAIL = 0;
+var STATUS_SUCCESS = 1;
+var STATUS_MANUAL = 2;
 
+var test_name = "";
+var test_description = "";
+var test_expected = "";
+var test_results = "";
+var test_status = STATUS_INVALID;
+///////////////////////////////////////////////
+
+var callback = null;
 var ctx = _getCanvas().getContext('2d');
 
 // The context used to show test results
@@ -40,6 +55,13 @@ var ctx_test = canvas.getContext('2d');
 
 function _prepareCanvas(name, image, desc)
 {
+	 ////////////////////////////
+	 // Set test status
+	 test_name = name;
+	 test_description = desc;
+	 test_image = image;
+	 ////////////////////////////
+
 	canvas.width = 600;
 	canvas.height = 400;
 
@@ -62,7 +84,6 @@ function _prepareCanvas(name, image, desc)
 	_getCanvas().height = CANVAS_HEIGHT;
 	DesktopX.Object("CanvasObjectTestSuite").Left = origin.Left + CANVAS_X;
 	DesktopX.Object("CanvasObjectTestSuite").Top  = origin.Top + CANVAS_Y;
-	DesktopX.Object("CanvasObjectTestSuite").Visible = true;
 	DesktopX.Object("CanvasObjectTestSuite").OnTop();
 	
 	ctx_test.fillStyle = "black";
@@ -79,13 +100,17 @@ function _prepareCanvas(name, image, desc)
 
 	ctx_test.fillText("Expected Output:", 5, 140);	
 	if (image != "") {
-		var img = ctx_test.loadImage(Widget.Preference("ScriptFolder").Value + '/output/' + image);
+		var img = ctx_test.loadImage(Widget.Preference("TestsFolder").Value + '/output/' + image);
 		ctx_test.drawImage(img, CANVAS2_X, CANVAS2_Y);
 	}
 }
 
 function _loadImage(name) {
-	return ctx.loadImage(Widget.Preference("ScriptFolder").Value + '/images/' + name);
+	return ctx.loadImage(Widget.Preference("TestsFolder").Value + '/images/' + name);
+}
+
+function registerCallback(callbackFunc) {
+  callback = callbackFunc;
 }
 
 // The canvas used for testing
@@ -98,9 +123,13 @@ function _getCanvas2() {
     return DesktopX.ScriptObject("CanvasObject").canvas;
 }
 
-function _doTest()
+function _doTest(unattended)
 {
-// Do the test
+	if (!unattended) {
+		DesktopX.Object("CanvasObjectTestSuite").Visible = true;
+	}
+
+	// Do the test
 	try
 	{
 		test();
@@ -111,7 +140,7 @@ function _doTest()
 		_fail("Details: " + e.description + " (" + (e.number & 0xFFFF) + ")");
 		deferred = false; // cancel any deference
 	}
-
+	
 	if (!deferred)
 		endTest();
 }
@@ -145,7 +174,11 @@ function _warn(text)
 
 	ctx_test.fillText(text, ERROR_X, ERROR_Y+line);	
 	line += 12;
+	
+	// Save text for callback
+	test_results += text + "\n";
 }
+
 function _fail(text)
 {
 	_warn(text);
@@ -240,7 +273,7 @@ function _getPixel(x,y)
 		}
 	}
 	
-	//_warn("(Can't test pixel value)");
+	_warn("(Can't test pixel value)");
 	_manual_check = true;
 	return undefined;
 }
@@ -271,16 +304,29 @@ function endTest()
 	if (_failed) // test failed
 	{
 		ctx_test.fillStyle = "red";
-		ctx_test.fillText("Fail!", ERROR_X, ERROR_Y);	
+		ctx_test.fillText("Fail!", ERROR_X, ERROR_Y);
+		
+		test_status = STATUS_FAIL;
 	}
 	else if (_manual_check || !_asserted) // test case explicitly asked for a manual check, or no automatic assertions were performed
 	{ 		
 		ctx_test.fillStyle = "orange";
 		ctx_test.fillText("Cannot automatically verify result!", ERROR_X, ERROR_Y);	
+		
+		test_status = STATUS_MANUAL;
 	}
 	else // test succeeded
 	{	
 		ctx_test.fillStyle = "green";
 		ctx_test.fillText("Success!", ERROR_X, ERROR_Y);		
+		
+		test_status = STATUS_SUCCESS;
 	}
+	
+	if (callback != null) {
+		var test_image = Widget.Preference("TestsFolder").Value + '/results/' + test_name + ".png";
+				
+		ctx.toImage(test_image);		
+    	callback(test_name, test_description, test_expected, test_image, test_results, test_status);    	
+    } 
 }
