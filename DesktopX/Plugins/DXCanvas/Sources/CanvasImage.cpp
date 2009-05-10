@@ -62,6 +62,10 @@ HRESULT CCanvasImage::loadImage(wstring image)
 	// Copy the image to our new cairo surface
 	surface = cairo_win32_surface_create_with_dib(CAIRO_FORMAT_ARGB32, this->width, this->height);
 
+	// Check the status of our surface
+	if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS)
+		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasImage, _T("Internal error"), __FUNCTION__ ": failed to create a surface from the image", 0, NULL);
+
 	// Copy our image to the surface
 	HDC cairoDC = cairo_win32_surface_get_dc(surface);
 	if (cairoDC == NULL)
@@ -73,7 +77,11 @@ HRESULT CCanvasImage::loadImage(wstring image)
 	// Create a new pattern
 	pattern = cairo_pattern_create_for_surface(surface);
 
-	// Cleamup
+	// Check the status of our pattern
+	if (cairo_pattern_status(pattern) != CAIRO_STATUS_SUCCESS)
+		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasImage, _T("Internal error"), __FUNCTION__ ": failed to create a pattern from the image", 0, NULL);
+
+	// Cleanup
 	delete bitmap;
 
 	return S_OK;
