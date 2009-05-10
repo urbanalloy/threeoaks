@@ -266,7 +266,7 @@ void CanvasShadow::computeLobes(int radius, int lobes[3][2])
 	
 #ifdef DEBUG
 	// Lobes should sum to the right length
-	_ASSERT(major + minor + final == radius, "Lobes should sum to the right length");
+	_ASSERT_EXPR((major + minor + final == radius), L"Lobes should sum to the right length");
 #endif
 
 	lobes[0][0] = major;

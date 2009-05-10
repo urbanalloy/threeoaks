@@ -31,6 +31,9 @@
 
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// some CString constructors will be explicit
 
+#ifdef _DEBUG
+#define _ATL_DEBUG_INTERFACES
+#endif
 
 #include "resource.h"
 #include <atlbase.h>

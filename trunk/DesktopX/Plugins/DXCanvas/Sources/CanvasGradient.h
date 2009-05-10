@@ -42,9 +42,9 @@ public:
 			cairo_pattern_destroy(pattern);
 	}
 
-DECLARE_NOT_AGGREGATABLE(CCanvasGradient)
-
 DECLARE_REGISTRY_RESOURCEID(IDR_CANVASGRADIENT)
+
+DECLARE_NOT_AGGREGATABLE(CCanvasGradient)
 
 BEGIN_COM_MAP(CCanvasGradient)
 	COM_INTERFACE_ENTRY(ICanvasGradient)
