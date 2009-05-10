@@ -27,7 +27,7 @@ Dim pTop
 Sub Object_OnScriptEnter
 	areTestRunning = False
 	Set test_report = Nothing
-	test_id = "1"
+	test_id = Month(Now) & "." & Day(Now) & "." & Year(Now) & " " & Hour(Now) & ":" & Minute(Now) & ":" & Second(Now)
 
 	' Save object position
 	pLeft = Object.Left
@@ -326,11 +326,7 @@ Sub UpdateReport(name, description, expected, image, results, status)
 	Dim test_name, test_description, test_expected, test_image, test_results, test_status
 	
 	' Select the tests node
-	Set tests = test_report.selectSingleNode("/reports/report[@id=" & test_id & "]/tests")	
-	
-	If (test = Nothing) Then
-    Exit Sub
-  End If
+	Set tests = test_report.selectSingleNode("/reports/report[@id=""" & test_id & """]/tests")	
 	
 	Set test = test_report.createElement("test")
 	tests.appendChild test
@@ -359,17 +355,17 @@ Sub UpdateReport(name, description, expected, image, results, status)
 	
 	Select Case status
 		Case STATUS_FAIL     
-      test_status.Text = "FAIL"
+      		test_status.Text = "FAIL"
 			tests_failed = tests_failed + 1
 		Case STATUS_SUCCESS  
-      test_status.Text = "PASS"
+      		test_status.Text = "PASS"
 			tests_passed = tests_passed + 1
 		Case STATUS_MANUAL  
-      test_status.Text = "MANUAL"
+     		test_status.Text = "MANUAL"
 			tests_unknown = tests_unknown + 1
 		Case Else
 			'Treat all other values as fail
-      test_status.Text = "FAIL"
+      		test_status.Text = "FAIL"
 			tests_failed = tests_failed + 1
 	End Select
 	
@@ -387,13 +383,13 @@ Sub CloseReport(isAbort)
 	' Update info node with global status if aborted
 	
 	If (isAbort) Then
-		SetNodeValue "/reports/report[@id=" & test_id & "]/info/status", "ABORT"
+		SetNodeValue "/reports/report[@id=""" & test_id & """]/info/status", "ABORT"
 	End If
 	
 	' Update tests values
-	SetNodeValue "/reports/report[@id=" & test_id & "]/info/pass", tests_passed
-	SetNodeValue "/reports/report[@id=" & test_id & "]/info/fail", tests_failed
-	SetNodeValue "/reports/report[@id=" & test_id & "]/info/unknown", tests_unknown
+	SetNodeValue "/reports/report[@id=""" & test_id & """]/info/pass", tests_passed
+	SetNodeValue "/reports/report[@id=""" & test_id & """]/info/fail", tests_failed
+	SetNodeValue "/reports/report[@id=""" & test_id & """]/info/unknown", tests_unknown
 	
 	' Save report file
 	test_report.save(Widget.Preference("TestsFolder").Value & "/results/results.xml")

@@ -27,6 +27,8 @@ import shutil
 import sys
 import xml.dom.minidom
 from xml.dom.minidom import Node
+from lxml import etree
+from lxml import objectify
 
 #import yaml
 import syck as yaml # lots faster
@@ -314,52 +316,51 @@ def write_index():
 
 def write_results():
 	results = {}
-	uas = []
-	uastrings = {}
+	ids = []	
 	for item in category_contents_all['.']: results[item] = {}
 
 	f = open('../results/results.html', 'w')
 	f.write(templates['results'])
 
-	if not os.path.exists('../results/results.yaml'):
+	if not os.path.exists('../results/results.xml'):
 		print "Can't find results.xml"
 	else:
-		for resultset in yaml.load(open('../results/results.xml').read()):
-			#title = "%s (%s)" % (resultset['ua'], resultset['time'])
-			title = resultset['name']
+		parsedResults = objectify.fromstring(open("../results/results.xml").read())
+		for resultset in parsedResults.iterchildren():						
+			id = resultset.get("id")
 			#assert title not in uas # don't allow repetitions
-			if title not in uas:
-				uas.append(title)
-				uastrings[title] = resultset['ua']
+			if id not in ids:
+				ids.append(id)				
 			else:
-				assert uastrings[title] == resultset['ua']
-			for r in resultset['results']:
-				if r['id'] not in results:
-					print 'Skipping results for removed test %s' % r['id']
-					continue
-				results[r['id']][title] = (
-						r['status'].lower(),
-						re.sub(r'%(..)', lambda m: chr(int(m.group(1), 16)),
-						re.sub(r'%u(....)', lambda m: unichr(int(m.group(1), 16)),
-							r['notes'])).encode('utf8')
-						)
+				assert ids[id] == resultset.get("id")
+			for r in resultset.tests.iterchildren():				
+				#if r.name not in results:
+				#	print 'Skipping results for removed test %s' % r.name
+				#	continue
+				#print(objectify.dump(r))				
+				results[r.name.text][id] = (
+						r.status.text,
+						r.description.text,
+						r.expected.text,
+						r.image.text,												
+						r.results.text)
 
 	passes = {}
-	for ua in uas:
-		f.write('<th title="%s">%s\n' % (uastrings[ua], ua))
-		passes[ua] = 0
-	for id in category_contents_all['.']:
-		f.write('<tr><td><a href="index.html#%s" id="%s">#</a> <a href="index.html#%s">%s</a>\n' % (id, id, id, id))
-		for ua in uas:
-			status, details = results[id].get(ua, ('', ''))
+	for id in ids:
+		f.write('<th title="%s">%s\n' % (id, id))
+		passes[id] = 0
+	for cat in category_contents_all['.']:
+		f.write('<tr><td><a href="index.html#%s" id="%s">#</a> <a href="results-detailed.html#%s">%s</a>\n' % (cat, cat, cat, cat))
+		for id in ids:
+			status, description, expected, image, details,  = results[cat].get(id, ('', '', '', '', ''))
 			f.write('<td class="r %s"><ul class="d">%s</ul>\n' % (status, details))
-			if status == 'pass': passes[ua] += 1
+			if status == 'PASS': passes[id] += 1
 	f.write('<tr><th>Passes\n')
-	for ua in uas:
-		f.write('<td>%.1f%%\n' % ((100.0 * passes[ua]) / len(category_contents_all['.'])))
+	for id in ids:
+		f.write('<td>%.1f%%\n' % ((100.0 * passes[id]) / len(category_contents_all['.'])))
 	f.write('<tr><td>\n')
-	for ua in uas:
-		f.write('<td>%s\n' % ua)
+	for id in ids:
+		f.write('<td>%s\n' % id)
 	f.write('</table>\n')
 
 def getNodeText(node):
@@ -540,6 +541,6 @@ def write_annotated_spec():
 
 	codecs.open('../results/spec.html', 'w', 'utf-8').write(html5Serializer(doc))
 
-write_index()
 write_results()
+write_index()
 write_annotated_spec()
