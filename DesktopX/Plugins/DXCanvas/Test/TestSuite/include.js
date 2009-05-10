@@ -100,8 +100,8 @@ function _prepareCanvas(name, image, desc)
 
 	ctx_test.fillText("Expected Output:", 5, 140);	
 	if (image != "") {
-		var img = ctx_test.loadImage(Widget.Preference("TestsFolder").Value + '/output/' + image);
-		ctx_test.drawImage(img, CANVAS2_X, CANVAS2_Y);
+		var img_expected = ctx_test.loadImage(Widget.Preference("TestsFolder").Value + '/output/' + image);
+		ctx_test.drawImage(img_expected, CANVAS2_X, CANVAS2_Y);
 	}
 }
 
@@ -327,6 +327,6 @@ function endTest()
 		var test_image = Widget.Preference("TestsFolder").Value + '/results/' + test_name + ".png";
 						
 		_getCanvas().toImage(test_image);
-    	callback(test_name, test_description, test_expected, test_image, test_results, test_status);    	
+    	callback(test_name, test_description, test_expected, test_name + ".png", test_results, test_status);    	
     } 
 }
