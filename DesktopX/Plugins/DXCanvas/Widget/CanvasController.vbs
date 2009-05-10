@@ -4,13 +4,19 @@ Dim scripts
 Dim currentScriptPath
 
 ' Test Suite
+Const STATUS_INVALID = -1
+Const STATUS_FAIL = 0
+Const STATUS_SUCCESS = 1
+Const STATUS_MANUAL = 2
+
 Dim areTestRunning
 Dim test_scripts
 Dim current_test_index
-Dim report_file
+Dim test_report
 Dim tests_failed
 Dim tests_unknown
 Dim tests_passed
+Dim test_id
 
 ' Pin to Desktop
 Dim pinned
@@ -20,7 +26,8 @@ Dim pTop
 'Called when the script is executed
 Sub Object_OnScriptEnter
 	areTestRunning = False
-	Set report_file = Nothing
+	Set test_report = Nothing
+	test_id = "1"
 
 	' Save object position
 	pLeft = Object.Left
@@ -259,40 +266,144 @@ Sub LoadTests()
 End Sub
 
 Sub PrepareReport()
-
+	Dim root, info, tests, total, status, fail, pass, unknown, id, report
+	
 	' Reset counters
 	tests_failed = 0
 	tests_passed = 0
 	tests_unknown = 0
 
 	' Open report file
-
-
+	Set test_report = CreateObject("Microsoft.XMLDOM") 
+	test_report.async = False 
+	test_report.preserveWhiteSpace = True	
+	
+	'====================================================
+	' Add root node	if it doesn't exit yet
+	Set root = test_report.createElement("reports")
+	test_report.appendChild root
+	
+	Set report = test_report.createElement("report")
+	root.appendChild report
+	
+	Set id = test_report.createAttribute("id")	
+	report.setAttribute "id", test_id
+	
+	'====================================================
+	' Add tests info
+	Set info = test_report.createElement("info")
+	report.appendChild info
+	
+	Set total = test_report.createElement("total")
+	total.Text = test_scripts.Count
+	info.appendChild total
+	
+	Set status = test_report.createElement("status")
+	status.Text = "OK"
+	info.appendChild status
+	
+	Set fail = test_report.createElement("fail")
+	fail.Text = "0"
+	info.appendChild fail
+	
+	Set pass = test_report.createElement("pass")
+	pass.Text = "0"
+	info.appendChild pass
+	
+	Set unknown = test_report.createElement("unknown")
+	unknown.Text = "0"
+	info.appendChild unknown
+	
+	'====================================================
+	' Add tests node
+	Set tests = test_report.createElement("tests")
+	report.appendChild tests
 End Sub
 
 ' Callback to update the report with a single test result
 Sub UpdateReport(name, description, expected, image, results, status)
+	Dim nodes, tests, test
+	Dim test_name, test_description, test_expected, test_image, test_results, test_status
+	
+	' Select the tests node
+	Set tests = test_report.selectSingleNode("/reports/report[@id=" & test_id & "]/tests")	
+	
+	If (test = Nothing) Then
+    Exit Sub
+  End If
+	
+	Set test = test_report.createElement("test")
+	tests.appendChild test
+	
+	Set test_name = test_report.createElement("name")
+	test_name.Text = name
+	test.appendChild test_name
+	
+	Set test_description = test_report.createElement("description")
+	test_description.Text = description
+	test.appendChild test_description
+	
+	Set test_expected = test_report.createElement("expected")
+	test_expected.Text = expected
+	test.appendChild test_expected
+	
+	Set test_image = test_report.createElement("image")
+	test_image.Text = image
+	test.appendChild test_image
+	
+	Set test_results = test_report.createElement("results")
+	test_results.Text = results
+	test.appendChild test_results
+	
+	Set test_status = test_report.createElement("status")	
+	
+	Select Case status
+		Case STATUS_FAIL     
+      test_status.Text = "FAIL"
+			tests_failed = tests_failed + 1
+		Case STATUS_SUCCESS  
+      test_status.Text = "PASS"
+			tests_passed = tests_passed + 1
+		Case STATUS_MANUAL  
+      test_status.Text = "MANUAL"
+			tests_unknown = tests_unknown + 1
+		Case Else
+			'Treat all other values as fail
+      test_status.Text = "FAIL"
+			tests_failed = tests_failed + 1
+	End Select
+	
+	test.appendChild test_status
 
-	'MsgBox name & vbNewLine & _
-	'	   description & vbNewLine & _
-	'	   expected & vbNewLine & _
-	'	   image & vbNewLine & _
-	'	   results & vbNewLine & _
-	'	   status
-
-	Object.SetTimer 2, 100
+	Object.SetTimer 2, 25
 End Sub
 
 Sub CloseReport(isAbort)
 	
-	If report_file Is Nothing Then	
+	If test_report Is Nothing Then	
 		Exit Sub
 	End If
 	
+	' Update info node with global status if aborted
 	
-	' Close report file
-	m_logFile.Close()
-	Set report_file = Nothing	
+	If (isAbort) Then
+		SetNodeValue "/reports/report[@id=" & test_id & "]/info/status", "ABORT"
+	End If
+	
+	' Update tests values
+	SetNodeValue "/reports/report[@id=" & test_id & "]/info/pass", tests_passed
+	SetNodeValue "/reports/report[@id=" & test_id & "]/info/fail", tests_failed
+	SetNodeValue "/reports/report[@id=" & test_id & "]/info/unknown", tests_unknown
+	
+	' Save report file
+	test_report.save(Widget.Preference("TestsFolder").Value & "/results/results.xml")
+	Set test_report = Nothing	
+End Sub
+
+Sub SetNodeValue(path, value)
+	Dim node
+	Set node = test_report.selectSingleNode(path)
+	node.Text = value
 End Sub
 
 Sub ShowReport
@@ -309,7 +420,7 @@ Sub UpdateTestInfo(index)
 		Exit Sub
 	End If
 	
-	DesktopX.Object("CC_Tests_Info").Text = "Running test " & index & "/" & test_scripts.Count
+	DesktopX.Object("CC_Tests_Info").Text = "Test " & index & "/" & test_scripts.Count
 	DesktopX.Object("CC_Tests_Info").ToolTipText = "PASS: " & tests_passed & " - UNKNOWN: " & tests_unknown & " - FAIL: " & tests_failed  
 End Sub
 
@@ -419,7 +530,6 @@ Sub LoadScriptsInternal()
 		End If
 	Next
 
-	
 	If (DesktopX.ScriptObject("CC_Select").Control.ItemCount > 0) Then
 		If Not areTestRunning Then
 			DesktopX.ScriptObject("CC_Select").Control.Enabled = True
@@ -614,8 +724,7 @@ Sub RemoveCurrentScript()
 	
 	' Move the other CanvasObject to the current coordinates
 	DesktopX.Object(other).Top = DesktopX.Object(name).Top
-	DesktopX.Object(other).Left = DesktopX.Object(name).Left
-	
+	DesktopX.Object(other).Left = DesktopX.Object(name).Left	
 End Sub
 
 Function GetCanvasName(path)

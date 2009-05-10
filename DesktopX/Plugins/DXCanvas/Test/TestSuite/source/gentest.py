@@ -92,7 +92,9 @@ except: pass # ignore if it already exists
 try: os.mkdir('../output')
 except: pass # ignore if it already exists
 
-mochitests = []
+try: os.mkdir('../results')
+except: pass # ignore if it already exists
+
 used_images = {}
 
 def expand_nonfinite(method, argstr, tail):
@@ -170,8 +172,8 @@ for i in range(len(tests)):
 			print "Test %s uses nonexistent spec point %s" % (name, ref)
 		spec_refs.setdefault(ref, []).append(name)
 	#if not (len(test.get('testing', [])) or 'mozilla' in test):
-	#if not test.get('testing', []):
-		#print "Test %s doesn't refer to any spec points" % name
+	if not test.get('testing', []):
+		print "Test %s doesn't refer to any spec points" % name
 	
 	code = test['code']
 	
@@ -236,90 +238,6 @@ for i in range(len(tests)):
 
 	assert('@' not in code)
 
-	mochitest = not ('@manual' in test['code'] or 'disabled' in test.get('mozilla', {}))
-	if mochitest:
-		mochi_code = test['code']
-
-		mochi_code = re.sub(r'@nonfinite ([^(]+)\(([^)]+)\)(.*)', lambda m: expand_nonfinite(m.group(1), m.group(2), m.group(3)), mochi_code)
-
-		mochi_code = re.sub(r'@assert pixel (\d+,\d+) == (\d+,\d+,\d+,\d+);',
-			r'isPixel(ctx, \1, \2, "\1", "\2", 0);',
-			mochi_code)
-
-		mochi_code = re.sub(r'@assert pixel (\d+,\d+) ==~ (\d+,\d+,\d+,\d+);',
-			r'isPixel(ctx, \1, \2, "\1", "\2", 2);',
-			mochi_code)
-
-		mochi_code = re.sub(r'@assert pixel (\d+,\d+) ==~ (\d+,\d+,\d+,\d+) \+/- (\d+);',
-			r'isPixel(ctx, \1, \2, "\1", "\2", \3);',
-			mochi_code)
-
-		mochi_code = re.sub(r'@assert throws (\S+_ERR) (.*);',
-			lambda m: 'var _thrown = undefined; try {\n  %s;\n} catch (e) { _thrown = e }; ok(_thrown && (_thrown.number & 0xFFFF) == %s, "should throw %s");'
-				% (m.group(2), m.group(1), m.group(1))
-			, mochi_code)
-
-		mochi_code = re.sub(r'@assert throws (.*);',
-			lambda m: 'try { var _thrown = false;\n  %s;\n} catch (e) { _thrown = true; } finally { ok(_thrown, "should throw exception"); }'
-				% (m.group(1))
-			, mochi_code)
-
-		mochi_code = re.sub(r'@assert (.*);',
-			lambda m: 'ok(%s, "%s");'
-				% (m.group(1), escapeJS(m.group(1)))
-			, mochi_code)
-
-		mochi_code = re.sub(r'((?:^|\n|;)\s*)ok(.*;) @moz-todo',
-			lambda m: '%stodo%s'
-				% (m.group(1), m.group(2))
-			, mochi_code)
-
-		mochi_code = re.sub(r'((?:^|\n|;)\s*)(is.*;) @moz-todo',
-			lambda m: '%stodo_%s'
-				% (m.group(1), m.group(2))
-			, mochi_code)
-
-		mochi_code = re.sub(r'@moz-UniversalBrowserRead;',
-			"netscape.security.PrivilegeManager.enablePrivilege('UniversalBrowserRead');"
-			, mochi_code)
-
-		mochi_code = mochi_code.replace('../images/', 'image_')
-
-		assert '@' not in mochi_code, '@ not in code:\n%s' % mochi_code
-
-		mochi_name = name
-		if 'mozilla' in test:
-			if 'throws' in test['mozilla']:
-				mochi_code = templates['mochitest.exception'] % mochi_code
-			if 'bug' in test['mozilla']:
-				mochi_name = "%s - bug %s" % (name, test['mozilla']['bug'])
-
-		if 'desc' in test:
-			mochi_desc = '<!-- Testing: %s -->\n' % test['desc']
-		else:
-			mochi_desc = ''
-
-		if 'deferTest' in mochi_code:
-			mochi_setup = ''
-			mochi_footer = ''
-		else:
-			mochi_setup = ''
-			mochi_footer = 'SimpleTest.finish();\n'
-
-		for f in ['isPixel', 'todo_isPixel', 'deferTest', 'wrapFunction']:
-			if f in mochi_code:
-				mochi_setup += templates['mochitest.%s' % f]
-
-
-	else:
-		#print "Skipping mochitest for %s" % name
-		mochi_name = ''
-		mochi_desc = ''
-		mochi_code = ''
-		mochi_setup = ''
-		mochi_footer = ''
-
-
 	background = ''
 	if 'background' in test:
 		background = ' style="background: %s"' % test['background']
@@ -362,7 +280,6 @@ for i in range(len(tests)):
 			used_images[i] = 1
 			i = '../images/%s' % i
 		images += '<img src="%s" id="%s" class="resource">\n' % (i,id)
-	mochi_images = images.replace('../images/', 'image_')
 
 	fallback = test.get('fallback', '<p class="fallback">FAIL (fallback content)</p>')
 
@@ -372,38 +289,15 @@ for i in range(len(tests)):
 		'name':name, 'name_wrapped':name_wrapped, 'backrefs':backref_html(name), 'desc':desc,
 		'prev':prev, 'next':next, 'refs':refs, 'notes':notes, 'images':images,
 		'canvas':canvas, 'expected':expectation_html, 'code':code,
-		'mochi_name':mochi_name, 'mochi_desc':mochi_desc, 'mochi_code':mochi_code,
-		'mochi_setup':mochi_setup, 'mochi_footer':mochi_footer, 'mochi_images':mochi_images,
 		'fallback':fallback
 	}
 
 	f = codecs.open('../tests/%s.js' % name, 'w', 'utf-8')
 	f.write(templates['standalone'] % template_params)	
 
-def write_mochitest_makefile():
-	f = open('mochitests/Makefile.in', 'w')
-	f.write(templates['mochitest.Makefile'])
-	files = ['test_%s.html' % n for n in mochitests] + ['image_%s' % n for n in used_images]
-	chunksize = 100
-	chunks = []
-	for i in range(0, len(files), chunksize):
-		chunk = files[i:i+chunksize]
-		name = '_TEST_FILES_%d' % (i / chunksize)
-		chunks.append(name)
-		f.write('%s = \\\n' % name)
-		for file in chunk: f.write('\t%s \\\n' % file)
-		f.write('\t$(NULL)\n\n')
-	f.write('# split up into groups to work around command-line length limits\n')
-	for name in chunks:
-		f.write('libs:: $(%s)\n\t$(INSTALL) $(foreach f,$^,"$f") $(DEPTH)/_tests/testing/mochitest/tests/$(relativesrcdir)\n\n' % name)
-		
-
-#write_mochitest_makefile()
-
-print
 
 def write_index():
-	f = open('tests/index.html', 'w')
+	f = open('../results/index.html', 'w')
 	f.write(templates['index'] % { 'updated':time.strftime('%Y-%m-%d', time.gmtime()) })
 	f.write('\n<ul class="testlist">\n')
 	depth = 1
@@ -415,22 +309,8 @@ def write_index():
 		f.write(' '*depth + templates['index.category.item'] % (name or 'all', name, count, '' if count==1 else 's'))
 		while new_depth+1 > depth: f.write(' '*depth + '<ul>\n'); depth += 1
 		for item in category_contents_direct.get(category, []):
-			f.write(' '*depth + '<li><a href="%s.html">%s</a>\n' % (item, item) )
+			f.write(' '*depth + '<li><a href="results.html#%s">%s</a>\n' % (item, item) )
 	while 0 < depth: f.write(' '*(depth-1) + '</ul>\n'); depth -= 1
-
-def write_category_indexes():
-	for category in category_names:
-		name = (category[1:-1] or 'all')
-		
-		f = open('tests/index.%s.html' % name, 'w')
-		f.write(templates['index.frame'] % { 'backrefs':backref_html(name), 'category':name })
-		for item in category_contents_all[category]:
-			f.write(templates['index.frame.item'] % item)
-
-def write_reportgen():
-	f = open('tests/reportgen.html', 'w')
-	items_text = ',\n'.join(('"%s"' % item) for item in category_contents_all['.'])
-	f.write(templates['reportgen'] % {'items':items_text })
 
 def write_results():
 	results = {}
@@ -438,13 +318,13 @@ def write_results():
 	uastrings = {}
 	for item in category_contents_all['.']: results[item] = {}
 
-	f = open('tests/results.html', 'w')
+	f = open('../results/results.html', 'w')
 	f.write(templates['results'])
 
-	if not os.path.exists('results.yaml'):
-		print "Can't find results.yaml"
+	if not os.path.exists('../results/results.yaml'):
+		print "Can't find results.xml"
 	else:
-		for resultset in yaml.load(open('results.yaml').read()):
+		for resultset in yaml.load(open('../results/results.xml').read()):
 			#title = "%s (%s)" % (resultset['ua'], resultset['time'])
 			title = resultset['name']
 			#assert title not in uas # don't allow repetitions
@@ -469,7 +349,7 @@ def write_results():
 		f.write('<th title="%s">%s\n' % (uastrings[ua], ua))
 		passes[ua] = 0
 	for id in category_contents_all['.']:
-		f.write('<tr><td><a href="#%s" id="%s">#</a> <a href="%s.html">%s</a>\n' % (id, id, id, id))
+		f.write('<tr><td><a href="index.html#%s" id="%s">#</a> <a href="index.html#%s">%s</a>\n' % (id, id, id, id))
 		for ua in uas:
 			status, details = results[id].get(ua, ('', ''))
 			f.write('<td class="r %s"><ul class="d">%s</ul>\n' % (status, details))
@@ -547,7 +427,7 @@ def write_annotated_spec():
 	# Insert our new stylesheet
 	n = doc.getElementsByTagName('head')[0].appendChild(doc.createElement('link'))
 	n.setAttribute('rel', 'stylesheet')
-	n.setAttribute('href', '../spectest.css')
+	n.setAttribute('href', '../css/spectest.css')
 	n.setAttribute('type', 'text/css')
 
 	spec_assertion_patterns = []
@@ -634,7 +514,7 @@ def write_annotated_spec():
 				n1.appendChild(doc.createTextNode(' '))
 				for test_id in spec_refs.get(id, []):
 					n = n1.appendChild(doc.createElement('a'))
-					n.setAttribute('href', '%s.html' % test_id)
+					n.setAttribute('href', 'results.html#%s' % test_id)
 					n.appendChild(doc.createTextNode(test_id))
 					n1.appendChild(doc.createTextNode(' '))
 				n0 = doc.createTextNode(end_node.nodeValue[:end])
@@ -658,5 +538,8 @@ def write_annotated_spec():
 	head = doc.documentElement.getElementsByTagName('head')[0]
 	head.insertBefore(doc.createElement('meta'), head.firstChild).setAttribute('charset', 'UTF-8')
 
-	codecs.open('tests/spec.html', 'w', 'utf-8').write(html5Serializer(doc))
+	codecs.open('../results/spec.html', 'w', 'utf-8').write(html5Serializer(doc))
 
+write_index()
+write_results()
+write_annotated_spec()
