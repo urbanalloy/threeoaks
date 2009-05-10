@@ -14,53 +14,33 @@ standalone: |
        _doTest(unattended);
     }
 
-mochitest.isPixel: |
-    function isPixel(ctx, x,y, r,g,b,a, pos, colour, d) {
-        var pixel = ctx.getImageData(x, y, 1, 1);
-        var pr = pixel.data[0],
-            pg = pixel.data[1],
-            pb = pixel.data[2],
-            pa = pixel.data[3];
-        ok(r-d <= pr && pr <= r+d &&
-           g-d <= pg && pg <= g+d &&
-           b-d <= pb && pb <= b+d &&
-           a-d <= pa && pa <= a+d,
-           "pixel "+pos+" is "+pr+","+pg+","+pb+","+pa+"; expected "+colour+" +/- "+d);
+index: |
+    <!DOCTYPE HTML>
+    <title>DXCanvas Tests :: Index</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <script>
+    function expand(obj) {
+        obj.parentNode.className = obj.parentNode.className ? "" : "expand";
+        return false;
     }
+    </script>
 
-mochitest.todo_isPixel: |
-    function todo_isPixel(ctx, x,y, r,g,b,a, pos, colour, d) {
-        var pixel = ctx.getImageData(x, y, 1, 1);
-        var pr = pixel.data[0],
-            pg = pixel.data[1],
-            pb = pixel.data[2],
-            pa = pixel.data[3];
-        todo(r-d <= pr && pr <= r+d &&
-           g-d <= pg && pg <= g+d &&
-           b-d <= pb && pb <= b+d &&
-           a-d <= pa && pa <= a+d,
-           "pixel "+pos+" is "+pr+","+pg+","+pb+","+pa+"; expected "+colour+" +/- "+d);
-    }
+    <h1>DXCanvas Test cases</h1>
 
-mochitest.deferTest: |
-    function deferTest() {
-        _deferred = true;
-    }
+    <p>For each test, a green background indicates success, red indicates
+    failure, blue indicates a need to manually confirm the output is as
+    expected.</p>
+    
+    <p>See <a href="results.html">test results</a> for a one-page view of test results.</p>
+    
+index.category.item: |
+    <li><h3><a href="results.html#%s">%s.*</a></h3><p>%d test%s <a href="#" onclick="return expand(this)">expand</a></p>
 
-mochitest.wrapFunction: |
-    function wrapFunction(f) {
-        return function () {
-            f.apply(null, arguments);
-            SimpleTest.finish();
-        }
-    }
-
-mochitest.exception: |
-    var _thrown_outer = false;
-    try {
-
-    %s
-    } catch (e) {
-        _thrown_outer = true;
-    }
-    todo(!_thrown_outer, 'should not throw exception');
+results: |
+    <!DOCTYPE HTML>
+    <title>DXCanvas Tests :: Results</title>
+    <link rel="stylesheet" href="../css/results.css">
+    <table>
+    <col id="col1">
+    <tr>
+    <th>Test
