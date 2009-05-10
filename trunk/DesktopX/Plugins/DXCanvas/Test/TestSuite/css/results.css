@@ -3,12 +3,16 @@ body {
 	font-size: small;
 }
 
-.pass {
+.PASS {
 	background: #8f8;
 }
 
-.fail {
+.FAIL {
 	background: #f88;
+}
+
+.MANUAL {
+  background: lightblue;
 }
 
 table {
