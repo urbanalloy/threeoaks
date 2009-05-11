@@ -2,7 +2,7 @@
 //
 // Canvas Plugin for DesktopX
 //
-// Copyright (c) 2008, Three Oaks Crossing
+// Copyright (c) 2008-2009, Three Oaks Crossing
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -14,6 +14,7 @@
 #include "stdafx.h"
 #include "CanvasGradient.h"
 #include "CSSColorParser.h"
+#include "CanvasParameter.h"
 
 #include "COMError.h"
 
@@ -51,7 +52,7 @@ STDMETHODIMP CCanvasGradient::InterfaceSupportsErrorInfo(REFIID riid)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 STDMETHODIMP CCanvasGradient::addColorStop(double offset, BSTR color)
 {
-	if (offset < 0 || offset > 1)
+	if (IS_NAN(offset) || IS_INFINITY(offset) || offset < 0 || offset > 1)
 		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_CanvasGradient, _T("Invalid parameter"), __FUNCTION__ ": offset should be between 0 and 1.", 0, NULL);
 
 	USES_CONVERSION;

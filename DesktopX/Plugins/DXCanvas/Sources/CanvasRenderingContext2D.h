@@ -2,7 +2,7 @@
 //
 // Canvas Plugin for DesktopX
 //
-// Copyright (c) 2008, Three Oaks Crossing
+// Copyright (c) 2008-2009, Three Oaks Crossing
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -18,6 +18,9 @@
 #include "resource.h"  
 #include <comsvcs.h>
 
+#include <string>
+using namespace std;
+
 #include <cairo.h>
 #ifdef ENABLE_PANGO
 #include <pango/pangocairo.h>
@@ -31,30 +34,12 @@
 #include "CanvasImageData.h"
 #include "CanvasTextMetrics.h"
 
+#include "CanvasParameter.h"
 #include "CanvasState.h"
 #include "CanvasShadow.h"
 #include "CSSColorParser.h"
 
-#include <string>
-#include <limits>
-using namespace std;
-
-//////////////////////////////////////////////////////////////////////////
-// Parameter validation
-#define ADJUST_COORD(dimension, coord) \
-	if (dimension < 0) { \
-	dimension = abs(dimension); \
-	coord -= dimension; }
-
-#define CHECK_INFINITY(var) \
-	if (var == numeric_limits<double>::infinity() || var == -numeric_limits<double>::infinity()) \
-		return S_OK;
-
-#define CHECK_NAN(var) \
-	if (!(var == var)) \
-		return S_OK;
-
-//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Error Management
 #define CHECK_POSITIVE_VALUE(value) \
 	if (value < 0) return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_CanvasRenderingContext2D, _T("Value is invalid"), __FUNCTION__ ": negative values are forbidden (value: " #value ")", 0, NULL);
@@ -64,7 +49,6 @@ using namespace std;
 
 #define NOT_IMPLEMENTED \
 	CCOMError::DispatchError(NOT_SUPPORTED_ERR, CLSID_CanvasRenderingContext2D, _T("Method not implemented"), "This method is not implemented yet: " __FUNCTION__, 0, NULL)
-//////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////
 // Drawing Mutex
