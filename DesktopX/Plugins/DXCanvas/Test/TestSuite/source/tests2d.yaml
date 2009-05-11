@@ -1679,7 +1679,7 @@
   testing:
     - 2d.gradient.linear.nonfinite
   code: |
-    @nonfinite @assert throws NOT_SUPPORTED_ERR ctx.createLinearGradient(<0 Infinity -Infinity NaN>, <0 Infinity -Infinity NaN>, <1 Infinity -Infinity NaN>, <0 Infinity -Infinity NaN>); @moz-todo
+    @nonfinite ctx.createLinearGradient(<0 Infinity -Infinity NaN>, <0 Infinity -Infinity NaN>, <1 Infinity -Infinity NaN>, <0 Infinity -Infinity NaN>); @moz-todo
 
 - name: 2d.gradient.linear.transform.1
   desc: Linear gradient coordinates are relative to the coordinate space at the time of filling
@@ -1753,7 +1753,7 @@
     - 2d.gradient.radial.nonfinite
   #mozilla: { bug: TODO }
   code: |
-    @nonfinite @assert throws NOT_SUPPORTED_ERR ctx.createRadialGradient(<0 Infinity -Infinity NaN>, <0 Infinity -Infinity NaN>, <1 Infinity -Infinity NaN>, <0 Infinity -Infinity NaN>, <0 Infinity -Infinity NaN>, <1 Infinity -Infinity NaN>); @moz-todo
+    @nonfinite ctx.createRadialGradient(<0 Infinity -Infinity NaN>, <0 Infinity -Infinity NaN>, <1 Infinity -Infinity NaN>, <0 Infinity -Infinity NaN>, <0 Infinity -Infinity NaN>, <1 Infinity -Infinity NaN>); @moz-todo
 
 - name: 2d.gradient.radial.inside1
   testing:
@@ -4982,7 +4982,7 @@
   desc: arcTo() with Infinity/NaN is ignored
   testing:
     - 2d.nonfinite
-  mozilla: { throws }
+  mozilla: { throws }  
   code: |
     ctx.moveTo(0, 0);
     ctx.lineTo(100, 0);
@@ -6835,8 +6835,7 @@
   code: |
     @assert throws TYPE_MISMATCH_ERR ctx.drawImage(undefined, 0, 0);
     @assert throws TYPE_MISMATCH_ERR ctx.drawImage(0, 0, 0);
-    @assert throws TYPE_MISMATCH_ERR ctx.drawImage("", 0, 0);
-    @assert throws TYPE_MISMATCH_ERR ctx.drawImage(document.createElement('p'), 0, 0); @moz-todo
+    @assert throws TYPE_MISMATCH_ERR ctx.drawImage("", 0, 0);    
 
 - name: 2d.drawImage.floatsource
   testing:
@@ -7118,7 +7117,7 @@
     - 2d.imageData.getcreate.nonfinite
   mozilla: { bug: 433004 }
   code: |
-    @nonfinite @assert throws NOT_SUPPORTED_ERR ctx.createImageData(<10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>); @moz-todo
+    @nonfinite ctx.createImageData(<10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>); @moz-todo
 
 - name: 2d.imageData.create.round
   desc: createImageData(w, h) is rounded the same as getImageData(0, 0, w, h)
@@ -7152,7 +7151,7 @@
   testing:
     - 2d.imageData.getcreate.nonfinite
   code: |
-    @nonfinite @assert throws NOT_SUPPORTED_ERR ctx.getImageData(<10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>); @moz-todo
+    @nonfinite ctx.getImageData(<10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>); @moz-todo
 
 - name: 2d.imageData.get.source.outside
   desc: getImageData() returns transparent black outside the canvas
@@ -7519,8 +7518,8 @@
     - 2d.imageData.put.nonfinite
   code: |
     var imgdata = ctx.getImageData(0, 0, 10, 10);
-    @nonfinite @assert throws NOT_SUPPORTED_ERR ctx.putImageData(<imgdata>, <10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>); @moz-todo
-    @nonfinite @assert throws NOT_SUPPORTED_ERR ctx.putImageData(<imgdata>, <10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>); @moz-todo
+    @nonfinite ctx.putImageData(<imgdata>, <10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>); @moz-todo
+    @nonfinite ctx.putImageData(<imgdata>, <10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>, <10 Infinity -Infinity NaN>); @moz-todo
 
 - name: 2d.imageData.put.basic
   desc: putImageData() puts image data from getImageData() onto the canvas
