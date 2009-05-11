@@ -143,7 +143,7 @@ def expand_nonfinite(method, argstr, tail):
 				f(c2, i+1, depth+1)
 	f(call, 0, 0)
 
-	return '\n'.join('%s(%s)%s' % (method, ', '.join(c), tail) for c in calls)
+	return '\n'.join('try { %s(%s)%s } catch (e) { _assert((e.number & 0xFFFF) == 6, "should throw exception: Overflow (6)"); }' % (method, ', '.join(c), tail) for c in calls)
 
 
 if len(sys.argv) > 1 and sys.argv[1] == '--test':
@@ -322,10 +322,10 @@ def write_results():
 	f = open('../results/results.html', 'w')
 	f.write(templates['results'])
 
-	if not os.path.exists('../results/results.xml'):
+	if not os.path.exists('../results.xml'):
 		print "Can't find results.xml"
 	else:
-		parsedResults = objectify.fromstring(open("../results/results.xml").read())
+		parsedResults = objectify.fromstring(open("../results.xml").read())
 		for resultset in parsedResults.iterchildren():						
 			id = resultset.get("id")
 			#assert title not in uas # don't allow repetitions
