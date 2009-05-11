@@ -1473,20 +1473,24 @@ pattern_loaded:
 		return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
 
 
-	// check for dw and dh
-	if (dw.vt == VT_I4)
+	// check for dw and dh - if NAN: ignore and return
+	if (dw.vt == VT_R8)
+		goto cleanup;
+	else if (dw.vt == VT_I4)
 		dWidth = (float)dw.lVal;
 	else
 		dWidth = sw;
 
-	if (dh.vt == VT_I4)
+	if (dw.vt == VT_R8)
+		goto cleanup;
+	else if (dh.vt == VT_I4)
 		dHeight = (float)dh.lVal;
 	else
 		dHeight = sh;
 
 	// Nothing to do -- if only this was always that easy
 	if (dHeight == 0 || dWidth == 0)
-		return S_OK;
+		goto cleanup;
 
 	// Check for negative width and height
 	float normalizeX, normalizeY, normalizeH, normalizeW;
@@ -1500,7 +1504,10 @@ pattern_loaded:
 	if (normalizeX < 0 || (normalizeX + normalizeW) > imgWidth ||
 		normalizeY < 0 || (normalizeY + normalizeH) > imgHeight ||
 		sw == 0 || sh == 0)
+	{
+		cairo_pattern_destroy(pattern);
 		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_CanvasRenderingContext2D, _T("Out of bounds"), __FUNCTION__ ": the source rectangle should be entirely within the source image, and sw or sh should not be zero", 0, NULL);
+	}
 
 	// Apply the transformation to the pattern
 	cairo_matrix_t matrix;
@@ -1588,6 +1595,7 @@ pattern_loaded:
 
 	canvas->queueDraw();
 
+cleanup:
 	// cleanup
 	if (pattern)
 		cairo_pattern_destroy(pattern);
