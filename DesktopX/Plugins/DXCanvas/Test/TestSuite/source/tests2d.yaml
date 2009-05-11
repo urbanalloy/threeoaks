@@ -7812,9 +7812,9 @@
 
 - name: 2d.shadow.attributes.shadowBlur.2
   code: |
-    @assert throws NOT_SUPPORTED_ERR ctx.shadowBlur = Infinity; @moz-todo
-    @assert throws NOT_SUPPORTED_ERR ctx.shadowBlur = -Infinity; @moz-todo
-    @assert throws NOT_SUPPORTED_ERR ctx.shadowBlur = NaN; @moz-todo
+    @assert throws OVERFLOW_ERR ctx.shadowBlur = Infinity; @moz-todo
+    @assert throws OVERFLOW_ERR ctx.shadowBlur = -Infinity; @moz-todo
+    @assert throws OVERFLOW_ERR ctx.shadowBlur = NaN; @moz-todo
 
 - name: 2d.shadow.attributes.shadowOffset.1
   code: |
@@ -7837,12 +7837,12 @@
 
 - name: 2d.shadow.attributes.shadowOffset.2
   code: |
-    @assert throws NOT_SUPPORTED_ERR ctx.shadowOffsetX = Infinity; @moz-todo
-    @assert throws NOT_SUPPORTED_ERR ctx.shadowOffsetX = -Infinity; @moz-todo
-    @assert throws NOT_SUPPORTED_ERR ctx.shadowOffsetX = NaN; @moz-todo
-    @assert throws NOT_SUPPORTED_ERR ctx.shadowOffsetY = Infinity; @moz-todo
-    @assert throws NOT_SUPPORTED_ERR ctx.shadowOffsetY = -Infinity; @moz-todo
-    @assert throws NOT_SUPPORTED_ERR ctx.shadowOffsetY = NaN; @moz-todo
+    @assert throws OVERFLOW_ERR ctx.shadowOffsetX = Infinity; @moz-todo
+    @assert throws OVERFLOW_ERR ctx.shadowOffsetX = -Infinity; @moz-todo
+    @assert throws OVERFLOW_ERR ctx.shadowOffsetX = NaN; @moz-todo
+    @assert throws OVERFLOW_ERR ctx.shadowOffsetY = Infinity; @moz-todo
+    @assert throws OVERFLOW_ERR ctx.shadowOffsetY = -Infinity; @moz-todo
+    @assert throws OVERFLOW_ERR ctx.shadowOffsetY = NaN; @moz-todo
 
 - name: 2d.shadow.attributes.shadowColor.1
   code: |
