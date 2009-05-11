@@ -2326,19 +2326,7 @@
     var ctx2 = canvas2.getContext('2d');
     ctx2.fillStyle = '#f00';
     ctx2.fillRect(0, 0, 100, 50);
-    var pattern = ctx.createPattern(canvas2, 'repeat');
-
-    ctx.fillStyle = '#0f0';
-    ctx.fillRect(0, 0, 100, 50);
-    ctx.fillStyle = '#f00';
-    ctx.fillStyle = pattern;
-    ctx.fillRect(0, 0, 100, 50);
-
-    @assert pixel 1,1 == 0,255,0,255; @moz-todo
-    @assert pixel 98,1 == 0,255,0,255; @moz-todo
-    @assert pixel 1,48 == 0,255,0,255; @moz-todo
-    @assert pixel 98,48 == 0,255,0,255; @moz-todo
-  expected: green
+    @assert throws INVALID_STATE_ERR ctx.createPattern(canvas2, 'repeat');
 
 - name: 2d.pattern.basic.nocontext
   testing:
