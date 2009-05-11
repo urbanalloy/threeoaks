@@ -340,7 +340,7 @@ def write_results():
 				assert ids[id] == resultset.get("id")
 			for r in resultset.tests.iterchildren():				
 				if r.name.text not in results:
-					print 'Skipping results for removed test %s' % r.name
+					print 'Skipping results for removed test %s' % r.name.text
 					continue
 				#print(objectify.dump(r))				
 				results[r.name.text][id] = (

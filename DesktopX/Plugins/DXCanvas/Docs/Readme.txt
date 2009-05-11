@@ -69,6 +69,7 @@ http://code.google.com/p/threeoaks/
     - Fixed handling of negative width&height values by drawImage
     - Fixed handling of nonfinite arguments by drawImage
     - Fixed pattern leak in drawImage
+    - rect now handles NaN and Infinity correctly
 	* Tweaked text drawing on paths	
 	* Updated box blur algorithm to use precomputed values (slightly faster)
 	* Moved support libs to a subfolder of project	

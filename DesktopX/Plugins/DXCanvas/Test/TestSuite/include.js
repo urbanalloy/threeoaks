@@ -32,6 +32,11 @@ var VALIDATION_ERR = 16;
 var TYPE_MISMATCH_ERR = 17;
 ///////////////////////////////////////////////
 
+// JS exceptions
+var OVERFLOW_ERR = 6;
+var WRONG_NUMBER_OF_ARGUMENTS_ERR = 450;
+
+
 ///////////////////////////////////////////////
 // Test Info and results
 ///////////////////////////////////////////////
@@ -148,9 +153,13 @@ function _doTest(unattended)
 
 function _valToString(val)
 {
-	if (val === undefined || val === null)
-		return '[' + typeof(val) + ']';
-	return val.toString() + '[' + typeof(val) + ']';
+  try {
+    if (val === undefined || val === null)
+      return '[' + typeof(val) + ']';
+    return val.toString() + '[' + typeof(val) + ']';
+	} catch (e) {
+     return '[' + typeof(val) + ']';
+	}
 }
 
 var _hex2dec_table = {
