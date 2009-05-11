@@ -278,11 +278,18 @@ Sub PrepareReport()
 	test_report.async = False 
 	test_report.preserveWhiteSpace = True	
 	
+	If test_report.Load(Widget.Preference("TestsFolder").Value & "/results.xml") Then
+		' The document loaded successfully.
+		Set root = test_report.selectSingleNode("/reports")
+	Else
+		' The document failed to load.
+		' Add root node	if it doesn't exit yet
+		Set root = test_report.createElement("reports")
+		test_report.appendChild root
+	End If
+
+
 	'====================================================
-	' Add root node	if it doesn't exit yet
-	Set root = test_report.createElement("reports")
-	test_report.appendChild root
-	
 	Set report = test_report.createElement("report")
 	root.appendChild report
 	
@@ -392,7 +399,7 @@ Sub CloseReport(isAbort)
 	SetNodeValue "/reports/report[@id=""" & test_id & """]/info/unknown", tests_unknown
 	
 	' Save report file
-	test_report.save(Widget.Preference("TestsFolder").Value & "/results/results.xml")
+	test_report.save(Widget.Preference("TestsFolder").Value & "/results.xml")
 	Set test_report = Nothing	
 End Sub
 
