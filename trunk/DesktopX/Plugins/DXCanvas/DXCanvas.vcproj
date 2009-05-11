@@ -428,6 +428,10 @@
 				Name="Utils"
 				>
 				<File
+					RelativePath=".\Sources\CanvasParameter.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Sources\CanvasPath.h"
 					>
 				</File>

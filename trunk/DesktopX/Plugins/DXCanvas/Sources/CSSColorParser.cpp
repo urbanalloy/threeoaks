@@ -2,7 +2,7 @@
 //
 // Canvas Plugin for DesktopX
 //
-// Copyright (c) 2008, Three Oaks Crossing
+// Copyright (c) 2008-2009, Three Oaks Crossing
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,6 +180,8 @@ CCSSColorParser::CCSSColorParser()
 		simple_colors["whitesmoke"] = "f5f5f5";
 		simple_colors["yellow"] = "ffff00";
 		simple_colors["yellowgreen"] = "9acd32";
+		// User colors
+		simple_colors["threeddarkshadow"] = "404040";
 	}
 }
 
