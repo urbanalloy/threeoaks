@@ -1258,6 +1258,9 @@ no_collinear:
 
 STDMETHODIMP CCanvasRenderingContext2D::rect(double x, double y, double width, double height)
 {
+	CHECK_INFINITY(x); CHECK_INFINITY(y); CHECK_INFINITY(width); CHECK_INFINITY(height);
+	CHECK_NAN(x); CHECK_NAN(y); CHECK_NAN(width); CHECK_NAN(height);
+
 	cairo_rectangle(canvas->context, x, y, width, height);
 
 	return S_OK;

@@ -36,12 +36,23 @@
 #include "CSSColorParser.h"
 
 #include <string>
+#include <limits>
 using namespace std;
 
+//////////////////////////////////////////////////////////////////////////
+// Parameter validation
 #define ADJUST_COORD(dimension, coord) \
 	if (dimension < 0) { \
 	dimension = abs(dimension); \
 	coord -= dimension; }
+
+#define CHECK_INFINITY(var) \
+	if (var == numeric_limits<double>::infinity() || var == -numeric_limits<double>::infinity()) \
+		return S_OK;
+
+#define CHECK_NAN(var) \
+	if (!(var == var)) \
+		return S_OK;
 
 //////////////////////////////////////////////////////////////////////////
 // Error Management
