@@ -1488,25 +1488,19 @@ pattern_loaded:
 	if (dHeight == 0 || dWidth == 0)
 		return S_OK;
 
-	// Check for negative width and height and adjust the coordinates
-#define ADJUST_COORD(dimension, coord) \
-	if (dimension < 0) { \
-		dimension = abs(dimension); \
-		coord -= dimension; }
-
-	ADJUST_COORD(sh, sy);
-	ADJUST_COORD(sw, sx);
-	ADJUST_COORD(dHeight, dy);
-	ADJUST_COORD(dWidth, dx);
+	// Check for negative width and height
+	float normalizeX, normalizeY, normalizeH, normalizeW;
+	normalizeX = min(sx, (sx + sw));
+	normalizeY = min(sy, (sy + sh));
+	normalizeW = max(sw, -sw);
+	normalizeH = max(sh, -sh);
 
 	// Check that the source rectangle is entirely within the source image,
 	// and that none of the sw or sh arguments is zero
-	if (dWidth < 0.0 || dHeight < 0.0 ||
-		sx < 0.0 || sy < 0.0 ||
-		sw <= 0.0 || sw > imgWidth ||
-		sh <= 0.0 || sh > imgHeight)
+	if (normalizeX < 0 || (normalizeX + normalizeW) > imgWidth ||
+		normalizeY < 0 || (normalizeY + normalizeH) > imgHeight ||
+		sw == 0 || sh == 0)
 		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_CanvasRenderingContext2D, _T("Out of bounds"), __FUNCTION__ ": the source rectangle should be entirely within the source image, and sw or sh should not be zero", 0, NULL);
-
 
 	// Apply the transformation to the pattern
 	cairo_matrix_t matrix;

@@ -38,6 +38,11 @@
 #include <string>
 using namespace std;
 
+#define ADJUST_COORD(dimension, coord) \
+	if (dimension < 0) { \
+	dimension = abs(dimension); \
+	coord -= dimension; }
+
 //////////////////////////////////////////////////////////////////////////
 // Error Management
 #define CHECK_POSITIVE_VALUE(value) \
