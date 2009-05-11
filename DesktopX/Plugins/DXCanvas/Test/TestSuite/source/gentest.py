@@ -99,7 +99,7 @@ except: pass # ignore if it already exists
 
 used_images = {}
 
-def expand_nonfinite(method, argstr, tail):
+def expand_nonfinite(method, argstr, tail, ignore):
 	"""
 	>>> print expand_nonfinite('f', '<0 a>, <0 b>', ';')
 	f(a, 0);
@@ -143,7 +143,10 @@ def expand_nonfinite(method, argstr, tail):
 				f(c2, i+1, depth+1)
 	f(call, 0, 0)
 
-	return '\n'.join('try { %s(%s)%s } catch (e) { _assert((e.number & 0xFFFF) == 6, "should throw exception: Overflow (6)"); }' % (method, ', '.join(c), tail) for c in calls)
+	if (ignore):
+		return '\n'.join('%s(%s)%s' % (method, ', '.join(c), tail) for c in calls)
+	else:
+		return '\n'.join('try { %s(%s)%s } catch (e) { _assert((e.number & 0xFFFF) == 6, "should throw exception: Overflow (6)"); }' % (method, ', '.join(c), tail) for c in calls)
 
 
 if len(sys.argv) > 1 and sys.argv[1] == '--test':
@@ -179,7 +182,9 @@ for i in range(len(tests)):
 	
 	code = test['code']
 	
-	code = re.sub(r'@nonfinite ([^(]+)\(([^)]+)\)(.*)', lambda m: expand_nonfinite(m.group(1), m.group(2), m.group(3)), code) # must come before '@assert throws'
+	code = re.sub(r'@nonfiniteignore ([^(]+)\(([^)]+)\)(.*)', lambda m: expand_nonfinite(m.group(1), m.group(2), m.group(3), True), code)
+	
+	code = re.sub(r'@nonfinite ([^(]+)\(([^)]+)\)(.*)', lambda m: expand_nonfinite(m.group(1), m.group(2), m.group(3), False), code) # must come before '@assert throws'
 
 	code = re.sub(r'@assert pixel (\d+,\d+) == (\d+,\d+,\d+,\d+);',
 			r'_assertPixel(_getCanvas(), \1, \2, "\1", "\2");',
@@ -334,9 +339,9 @@ def write_results():
 			else:
 				assert ids[id] == resultset.get("id")
 			for r in resultset.tests.iterchildren():				
-				#if r.name not in results:
-				#	print 'Skipping results for removed test %s' % r.name
-				#	continue
+				if r.name.text not in results:
+					print 'Skipping results for removed test %s' % r.name
+					continue
 				#print(objectify.dump(r))				
 				results[r.name.text][id] = (
 						r.status.text,
@@ -353,7 +358,7 @@ def write_results():
 		f.write('<tr><td><a href="index.html#%s" id="%s">#</a> <a href="results-detailed.html#%s">%s</a>\n' % (cat, cat, cat, cat))
 		for id in ids:
 			status, description, expected, image, details,  = results[cat].get(id, ('', '', '', '', ''))
-			f.write('<td class="r %s"><ul class="d">%s</ul>\n' % (status, details))
+			f.write('<td class="r %s"><ul class="d"><pre>%s</pre></ul>\n' % (status, details))
 			if status == 'PASS': passes[id] += 1
 	f.write('<tr><th>Passes\n')
 	for id in ids:
@@ -541,6 +546,6 @@ def write_annotated_spec():
 
 	codecs.open('../results/spec.html', 'w', 'utf-8').write(html5Serializer(doc))
 
-write_results()
 write_index()
 write_annotated_spec()
+write_results()
