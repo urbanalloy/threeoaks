@@ -7363,10 +7363,10 @@
     @assert imgdata.width === w; @moz-todo
     @assert imgdata.height === h; @moz-todo
     @assert imgdata.data === d; @moz-todo
-    @assert imgdata.data[0] === 0; @moz-todo
-    @assert imgdata.data[1] === 0; @moz-todo
-    @assert imgdata.data[2] === 0; @moz-todo
-    @assert imgdata.data[3] === 0; @moz-todo
+    @assert imgdata.data.XXX5(0) === 0; @moz-todo
+    @assert imgdata.data.XXX5(1) === 0; @moz-todo
+    @assert imgdata.data.XXX5(2) === 0; @moz-todo
+    @assert imgdata.data.XXX5(3) === 0; @moz-todo
 
 - name: 2d.imageData.object.set
   desc: ImageData.data can be modified
@@ -7447,13 +7447,6 @@
     imgdata.data.XXX6(0, -Math.pow(10, 39));
     @assert imgdata.data.XXX5(0) === 0; @moz-todo
 
-    imgdata.data.XXX6(0, 100);
-    imgdata.data.XXX6(0, -Infinity);
-    @assert imgdata.data.XXX5(0) === 0; @moz-todo
-    imgdata.data.XXX6(0, 100);
-    imgdata.data.XXX6(0, Infinity);
-    @assert imgdata.data.XXX5(0) === 255; @moz-todo
-
 - name: 2d.imageData.object.round
   desc: ImageData.data rounds numbers with convertToIntegerTiesToEven
   testing:
@@ -7491,7 +7484,7 @@
     - 2d.imageData.put.null
   mozilla: { bug: 421715 }
   code: |
-    @assert throws TYPE_MISMATCH_ERR ctx.putImageData(null, 0, 0); @moz-todo
+    @assert throws MISMATCH_ERR ctx.putImageData(null, 0, 0); @moz-todo
 
 - name: 2d.imageData.put.nonfinite
   desc: putImageData() throws NOT_SUPPORTED_ERR if arguments are not finite
@@ -7542,9 +7535,9 @@
     - 2d.imageData.put.wrongtype
   code: |
     var imgdata = { width: 1, height: 1, data: [255, 0, 0, 255] };
-    @assert throws TYPE_MISMATCH_ERR ctx.putImageData(imgdata, 0, 0); @moz-todo
-    @assert throws TYPE_MISMATCH_ERR ctx.putImageData("cheese", 0, 0); @moz-todo
-    @assert throws TYPE_MISMATCH_ERR ctx.putImageData(42, 0, 0); @moz-todo
+    @assert throws MISMATCH_ERR ctx.putImageData(imgdata, 0, 0); @moz-todo
+    @assert throws MISMATCH_ERR ctx.putImageData("cheese", 0, 0); @moz-todo
+    @assert throws MISMATCH_ERR ctx.putImageData(42, 0, 0); @moz-todo
   expected: green
 
 - name: 2d.imageData.put.cross

@@ -34,6 +34,7 @@ var TYPE_MISMATCH_ERR = 17;
 
 // JS exceptions
 var OVERFLOW_ERR = 6;
+var MISMATCH_ERR = 13;
 var WRONG_NUMBER_OF_ARGUMENTS_ERR = 450;
 
 
