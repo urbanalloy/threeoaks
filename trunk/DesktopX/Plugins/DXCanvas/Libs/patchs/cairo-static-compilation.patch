@@ -1,0 +1,54 @@
+commit c4a61bd93f83a22f22615011b1d2aed9faa93f2c
+Author: unknown <Julien@.(none)>
+Date:   Thu May 7 14:24:04 2009 -0400
+
+    Patch for static compilation into stdcall dll
+
+diff --git a/src/cairo-font-face-twin.c b/src/cairo-font-face-twin.c
+index 712ca0d..61948d5 100644
+--- a/src/cairo-font-face-twin.c
++++ b/src/cairo-font-face-twin.c
+@@ -304,7 +304,7 @@ twin_font_face_set_properties_from_toy (cairo_font_face_t *twin_face,
+ 
+     status = cairo_font_face_set_user_data (twin_face,
+ 					    &twin_properties_key,
+-					    props, free);
++					    props, free_data);
+     if (unlikely (status))
+ 	goto FREE_PROPS;
+ 
+@@ -429,7 +429,7 @@ twin_scaled_font_compute_properties (cairo_scaled_font_t *scaled_font,
+     /* Save it */
+     status = cairo_scaled_font_set_user_data (scaled_font,
+ 					      &twin_properties_key,
+-					      props, free);
++					      props, free_data);
+     if (unlikely (status))
+ 	goto FREE_PROPS;
+ 
+diff --git a/src/cairo-hull.c b/src/cairo-hull.c
+index 1fa919b..d35d893 100644
+--- a/src/cairo-hull.c
++++ b/src/cairo-hull.c
+@@ -85,7 +85,7 @@ _slope_length (cairo_slope_t *slope)
+ 			     _cairo_int32x32_64_mul (slope->dy, slope->dy));
+ }
+ 
+-static int
++static int __cdecl
+ _cairo_hull_vertex_compare (const void *av, const void *bv)
+ {
+     cairo_hull_t *a = (cairo_hull_t *) av;
+diff --git a/src/cairo-png.c b/src/cairo-png.c
+index 0e8f63d..8a5edfe 100644
+--- a/src/cairo-png.c
++++ b/src/cairo-png.c
+@@ -652,7 +652,7 @@ read_png (struct png_read_closure_t *png_closure)
+ 					  CAIRO_MIME_TYPE_PNG,
+ 					  mime_data,
+ 					  mime_data_length,
+-					  free,
++					  free_data,
+ 					  mime_data);
+     if (unlikely (status)) {
+ 	free (mime_data);

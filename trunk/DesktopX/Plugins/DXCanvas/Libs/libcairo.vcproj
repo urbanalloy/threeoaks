@@ -46,7 +46,7 @@
 				OmitFramePointers="true"
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/cairo/src&quot;;&quot;$(SolutionDir)/pixman/pixman&quot;;&quot;$(SolutionDir)/libpng&quot;;&quot;$(SolutionDir)/zlib&quot;;&quot;$(SolutionDir)/include/cairo&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;CAIRO_BUILD;CAIRO_WIN32_STATIC_BUILD;LIBCAIRO_EXPORTS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;CAIRO_BUILD;CAIRO_WIN32_STATIC_BUILD;LIBCAIRO_EXPORTS;PNGAPI=__stdcall"
 				StringPooling="true"
 				MinimalRebuild="true"
 				RuntimeLibrary="0"

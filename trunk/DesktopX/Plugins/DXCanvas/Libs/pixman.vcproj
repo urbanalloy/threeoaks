@@ -107,14 +107,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\pixman\pixman\pixman-compose-accessors.c"
-				>
-			</File>
-			<File
-				RelativePath=".\pixman\pixman\pixman-compose.c"
-				>
-			</File>
-			<File
 				RelativePath=".\pixman\pixman\pixman-compute-region.c"
 				>
 			</File>
@@ -151,23 +143,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\pixman\pixman\pixman-source.c"
-				>
-			</File>
-			<File
 				RelativePath=".\pixman\pixman\pixman-sse2.c"
 				>
 			</File>
 			<File
 				RelativePath=".\pixman\pixman\pixman-timer.c"
-				>
-			</File>
-			<File
-				RelativePath=".\pixman\pixman\pixman-transformed-accessors.c"
-				>
-			</File>
-			<File
-				RelativePath=".\pixman\pixman\pixman-transformed.c"
 				>
 			</File>
 			<File
