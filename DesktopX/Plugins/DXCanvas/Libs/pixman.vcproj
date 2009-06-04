@@ -107,7 +107,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\pixman\pixman\pixman-bits-image.c"
+				>
+			</File>
+			<File
 				RelativePath=".\pixman\pixman\pixman-compute-region.c"
+				>
+			</File>
+			<File
+				RelativePath=".\pixman\pixman\pixman-conical-gradient.c"
+				>
+			</File>
+			<File
+				RelativePath=".\pixman\pixman\pixman-cpu.c"
 				>
 			</File>
 			<File
@@ -119,7 +131,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\pixman\pixman\pixman-fast-path.c"
+				>
+			</File>
+			<File
+				RelativePath=".\pixman\pixman\pixman-general.c"
+				>
+			</File>
+			<File
+				RelativePath=".\pixman\pixman\pixman-gradient-walker.c"
+				>
+			</File>
+			<File
 				RelativePath=".\pixman\pixman\pixman-image.c"
+				>
+			</File>
+			<File
+				RelativePath=".\pixman\pixman\pixman-implementation.c"
+				>
+			</File>
+			<File
+				RelativePath=".\pixman\pixman\pixman-linear-gradient.c"
 				>
 			</File>
 			<File
@@ -135,11 +167,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\pixman\pixman\pixman-radial-gradient.c"
+				>
+			</File>
+			<File
 				RelativePath=".\pixman\pixman\pixman-region16.c"
 				>
 			</File>
 			<File
 				RelativePath=".\pixman\pixman\pixman-region32.c"
+				>
+			</File>
+			<File
+				RelativePath=".\pixman\pixman\pixman-solid-fill.c"
 				>
 			</File>
 			<File

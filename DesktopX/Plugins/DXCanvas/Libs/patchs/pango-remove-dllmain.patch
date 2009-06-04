@@ -1,0 +1,28 @@
+commit 249f2e7e2ffd23ec8965f59d48f4ed12ecca4fe3
+Author: Julien <Julien@.(none)>
+Date:   Thu Jun 4 11:33:43 2009 -0400
+
+    Remove DllMain
+
+diff --git a/pango/pango-utils.c b/pango/pango-utils.c
+index c5c4dcc..da195be 100644
+--- a/pango/pango-utils.c
++++ b/pango/pango-utils.c
+@@ -660,7 +660,7 @@ pango_config_key_get (const char *key)
+ /* DllMain function needed to tuck away the DLL handle */
+ 
+ static HMODULE pango_dll;
+-
++/*
+ BOOL WINAPI
+ DllMain (HINSTANCE hinstDLL,
+ 	 DWORD     fdwReason,
+@@ -675,7 +675,7 @@ DllMain (HINSTANCE hinstDLL,
+ 
+   return TRUE;
+ }
+-
++*/
+ #endif
+ 
+ /**
