@@ -53,7 +53,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../SDK;./Libs/cairo/src;./Libs/pango;./Libs/glib/gmodule;./Libs/glib/glib;./Libs/glib;./Libs/include/glib;./Libs/include/cairo"
+				AdditionalIncludeDirectories="../SDK;./Libs/cairo/src;./Libs/pango;./Libs/glib/gmodule;./Libs/glib/glib;./Libs/glib;./Libs/include/glib;./Libs/include/cairo;./Libs/include/pango;./Libs/include"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL;_MERGE_PROXYSTUB;ENABLE_PANGO;CAIRO_WIN32_STATIC_BUILD;LIBCAIRO_EXPORTS;HAVE_CAIRO_WIN32;PANGO_ENABLE_BACKEND;PANGO_ENABLE_ENGINE;PANGO_MODULE_PREFIX;DEFINE_PACKAGE_PANGO;DXCANVAS;PANGO_WIN32_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
