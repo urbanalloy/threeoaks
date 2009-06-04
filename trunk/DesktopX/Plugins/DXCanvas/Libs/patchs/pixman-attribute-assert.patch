@@ -1,0 +1,63 @@
+commit 3c4e1303231025e8907b8b048f65a30afedcf7ac
+Author: unknown <Julien@.(none)>
+Date:   Thu Jun 4 11:30:36 2009 -0400
+
+    Patch to disable attribute and assert only after inline var declaration (fix compilation on VS2008)
+
+diff --git a/pixman/pixman-general.c b/pixman/pixman-general.c
+index be512d5..b663592 100644
+--- a/pixman/pixman-general.c
++++ b/pixman/pixman-general.c
+@@ -55,10 +55,7 @@ general_composite_rect  (pixman_implementation_t *imp,
+ 			 int32_t                  width,
+ 			 int32_t                  height)
+ {
+-    return_if_fail (src != NULL);
+-    return_if_fail (dest != NULL);
+-    
+-    uint8_t stack_scanline_buffer[SCANLINE_BUFFER_LENGTH * 3];
++	uint8_t stack_scanline_buffer[SCANLINE_BUFFER_LENGTH * 3];
+     const pixman_format_code_t srcFormat = src->type == BITS ? src->bits.format : 0;
+     const pixman_format_code_t maskFormat = mask && mask->type == BITS ? mask->bits.format : 0;
+     const pixman_format_code_t destFormat = dest->type == BITS ? dest->bits.format : 0;
+@@ -77,6 +74,9 @@ general_composite_rect  (pixman_implementation_t *imp,
+     uint32_t *bits;
+     int32_t stride;
+     int i;
++
++	return_if_fail (src != NULL);
++	return_if_fail (dest != NULL);
+     
+     if (width * Bpp > SCANLINE_BUFFER_LENGTH)
+     {
+diff --git a/pixman/pixman-sse2.c b/pixman/pixman-sse2.c
+index 8b48b2e..da3b38a 100644
+--- a/pixman/pixman-sse2.c
++++ b/pixman/pixman-sse2.c
+@@ -4961,7 +4961,7 @@ static const FastPathInfo sse2_fast_paths[] =
+  *
+  * See https://bugs.freedesktop.org/show_bug.cgi?id=15693
+  */
+-__attribute__((__force_align_arg_pointer__))
++//__attribute__((__force_align_arg_pointer__))
+ static void
+ sse2_composite (pixman_implementation_t *imp,
+ 		pixman_op_t     op,
+@@ -4995,7 +4995,7 @@ sse2_composite (pixman_implementation_t *imp,
+ 				      width, height);
+ }
+ 
+-__attribute__((__force_align_arg_pointer__))
++//__attribute__((__force_align_arg_pointer__))
+ static pixman_bool_t
+ sse2_blt (pixman_implementation_t *imp,
+ 	  uint32_t *src_bits,
+@@ -5022,7 +5022,7 @@ sse2_blt (pixman_implementation_t *imp,
+     return TRUE;
+ }
+ 
+-__attribute__((__force_align_arg_pointer__))
++//__attribute__((__force_align_arg_pointer__))
+ static pixman_bool_t
+ sse2_fill (pixman_implementation_t *imp,
+ 	   uint32_t *bits,

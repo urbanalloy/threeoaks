@@ -1,0 +1,32 @@
+commit d7f16f64d5d6a19943aa2bb093a2a0c0f2e551be
+Author: Julien <Julien@.(none)>
+Date:   Thu Jun 4 11:37:34 2009 -0400
+
+    Patch to disable warnings in SSE2 & MMX code
+
+diff --git a/pixman/pixman-mmx.c b/pixman/pixman-mmx.c
+index 26275d6..ddd5c14 100644
+--- a/pixman/pixman-mmx.c
++++ b/pixman/pixman-mmx.c
+@@ -35,6 +35,8 @@
+ 
+ #ifdef USE_MMX
+ 
++#pragma warning(disable: 4799)
++
+ #include <mmintrin.h>
+ #include "pixman-private.h"
+ 
+diff --git a/pixman/pixman-sse2.c b/pixman/pixman-sse2.c
+index da3b38a..3f726ea 100644
+--- a/pixman/pixman-sse2.c
++++ b/pixman/pixman-sse2.c
+@@ -37,6 +37,8 @@
+ 
+ #ifdef USE_SSE2
+ 
++#pragma warning(disable: 4799)
++
+ /* -------------------------------------------------------------------------------------------------
+  * Locals
+  */
