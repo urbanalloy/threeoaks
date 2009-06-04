@@ -1,0 +1,45 @@
+commit 3ceba180539dbbb3587063fe9188cfe56c0f851f
+Author: unknown <Julien@.(none)>
+Date:   Thu Jun 4 10:19:02 2009 -0400
+
+    Patch for static compilation into stdcall dll
+
+diff --git a/pango/pango-color.c b/pango/pango-color.c
+index 271638a..79af323 100644
+--- a/pango/pango-color.c
++++ b/pango/pango-color.c
+@@ -153,7 +153,7 @@ pango_color_to_string (const PangoColor *color)
+ 
+ #include "pango-color-table.h"
+ 
+-static int
++static int __cdecl
+ compare_xcolor_entries (const void *a, const void *b)
+ {
+   return g_ascii_strcasecmp ((const char *) a, color_names + ((const ColorEntry *) b)->name_offset);
+diff --git a/pango/pango-language.c b/pango/pango-language.c
+index bfde308..ed0c497 100644
+--- a/pango/pango-language.c
++++ b/pango/pango-language.c
+@@ -371,7 +371,7 @@ pango_language_matches (PangoLanguage *language,
+   return FALSE;
+ }
+ 
+-static int
++static int __cdecl
+ lang_compare_first_component (gconstpointer pa,
+ 			      gconstpointer pb)
+ {
+diff --git a/pango/pango-renderer.c b/pango/pango-renderer.c
+index db75446..89e6ab2 100644
+--- a/pango/pango-renderer.c
++++ b/pango/pango-renderer.c
+@@ -767,7 +767,7 @@ pango_renderer_draw_rectangle (PangoRenderer   *renderer,
+   PANGO_RENDERER_GET_CLASS (renderer)->draw_rectangle (renderer, part, x, y, width, height);
+ }
+ 
+-static int
++static int __cdecl
+ compare_points (const void *a,
+ 		const void *b)
+ {
