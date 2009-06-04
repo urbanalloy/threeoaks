@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libpng", "libpng\projects\visualc9\libpng.vcproj", "{0008960E-E0DD-41A6-8265-00B31DDB4C21}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libpng", "libpng.vcproj", "{0008960E-E0DD-41A6-8265-00B31DDB4C21}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "zlib\win32\zlib.vcproj", "{2D4F8105-7D21-454C-9932-B47CAB71A5C0}"
 EndProject

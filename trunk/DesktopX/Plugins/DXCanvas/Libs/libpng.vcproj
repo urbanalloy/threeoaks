@@ -44,14 +44,14 @@
 				EnableIntrinsicFunctions="true"
 				OmitFramePointers="true"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="..\..;..\..\..\zlib"
-				PreprocessorDefinitions="PNG_NO_MMX_CODE;WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS"
+				AdditionalIncludeDirectories="zlib;libpng"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;PNGAPI=__stdcall"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="false"
 				EnableFunctionLevelLinking="false"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderThrough="png.h"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderThrough=""
 				ProgramDataBaseFileName="$(OutDir)\$(ProjectName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
@@ -98,139 +98,63 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\png.c"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release (Static)|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\pngerror.c"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release (Static)|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\pngget.c"
+				RelativePath=".\libpng\png.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngmem.c"
+				RelativePath=".\libpng\pngerror.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngpread.c"
+				RelativePath=".\libpng\pngget.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngread.c"
+				RelativePath=".\libpng\pngmem.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngrio.c"
+				RelativePath=".\libpng\pngpread.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngrtran.c"
+				RelativePath=".\libpng\pngread.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngrutil.c"
+				RelativePath=".\libpng\pngrio.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngset.c"
+				RelativePath=".\libpng\pngrtran.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngtrans.c"
+				RelativePath=".\libpng\pngrutil.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\scripts\pngw32.def"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release (Static)|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\pngwio.c"
+				RelativePath=".\libpng\pngset.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngwrite.c"
+				RelativePath=".\libpng\pngtrans.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngwtran.c"
+				RelativePath=".\libpng\pngwio.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngwutil.c"
+				RelativePath=".\libpng\pngwrite.c"
+				>
+			</File>
+			<File
+				RelativePath=".\libpng\pngwtran.c"
+				>
+			</File>
+			<File
+				RelativePath=".\libpng\pngwutil.c"
 				>
 			</File>
 		</Filter>
@@ -239,11 +163,11 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\..\png.h"
+				RelativePath=".\libpng\png.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\pngconf.h"
+				RelativePath=".\libpng\pngconf.h"
 				>
 			</File>
 		</Filter>
@@ -251,43 +175,7 @@
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
-			<File
-				RelativePath="..\..\scripts\pngw32.rc"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCResourceCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCResourceCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release (Static)|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCResourceCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
 		</Filter>
-		<File
-			RelativePath=".\PRJ0041.mak"
-			>
-		</File>
-		<File
-			RelativePath="README.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
