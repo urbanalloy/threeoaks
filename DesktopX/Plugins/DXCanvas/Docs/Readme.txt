@@ -56,6 +56,10 @@ http://code.google.com/p/threeoaks/
 ** Changelog
 ***************************************************************************
 
+2.0 Build 184:
+  - Points on edge of paths are now considered on the path (fixed in latest Cairo)
+  * Updated Cairo (HEAD), Pixman (HEAD), Pango (HEAD), Glib (2.20.3), libpng (1.2.37)
+
 2.0 Build 174:
 	+ Sync with the latest version of the Canvas specifications
 	+ Added new createImageDataFrom function to create an new ImageData instance using an existing one dimensions
@@ -75,10 +79,10 @@ http://code.google.com/p/threeoaks/
 	* Updated box blur algorithm to use precomputed values (slightly faster)
 	* Moved support libs to a subfolder of project	
 	* Moved source code from private repository to Google Code
-	* Update Cairo (HEAD), Pixman (0.15.2), Pango (1.24.2), Glib (2.20.1)
+	* Updated Cairo (HEAD), Pixman (0.15.2), Pango (1.24.2), Glib (2.20.1)
 
 1.1 Build 457:
-	* Update Cairo (HEAD), Pixman (0.14.0), Pango (1.23.0), Glib (2.18.4), libpng (1.2.35)
+	* Updated Cairo (HEAD), Pixman (0.14.0), Pango (1.23.0), Glib (2.18.4), libpng (1.2.35)
 
 1.1 Build 287:
 	+ Added manual drawing mode with suspendDrawing/resumeDrawing methods
