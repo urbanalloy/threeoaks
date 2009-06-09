@@ -1,0 +1,10 @@
+; DXTaskbar7.def : Declares the module parameters.
+
+LIBRARY      "DXTaskbar7.DLL"
+
+EXPORTS
+	DllCanUnloadNow		PRIVATE
+	DllGetClassObject	PRIVATE
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer	PRIVATE
+	SDMessage           @5
