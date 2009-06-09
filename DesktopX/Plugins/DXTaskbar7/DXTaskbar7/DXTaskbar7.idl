@@ -1,0 +1,38 @@
+// DXTaskbar7.idl : IDL source for DXTaskbar7
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (DXTaskbar7.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(C275096B-65C8-44ed-B7CE-4EC199B48506),
+	dual,
+	nonextensible,
+	helpstring("ITaskbar7 Interface"),
+	pointer_default(unique)
+]
+interface ITaskbar7 : IDispatch{
+
+};
+
+[
+	uuid(8C650B9D-E2A4-4980-9CED-3A38D91F022B),
+	version(1.0),
+	helpstring("DXTaskbar7 1.0 Type Library")
+]
+library DXTaskbar7Lib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(20BD78A3-CDA1-47f9-A505-93D1990252C9),
+		helpstring("Taskbar7 Class")
+	]
+	coclass Taskbar7
+	{
+		[default] interface ITaskbar7;
+	};
+};

@@ -1,0 +1,26 @@
+HKCR
+{
+	DXTaskbar7.Taskbar7.1 = s 'Taskbar7 Class'
+	{
+		CLSID = s '{20BD78A3-CDA1-47f9-A505-93D1990252C9}'
+	}
+	DXTaskbar7.Taskbar7 = s 'Taskbar7 Class'
+	{
+		CLSID = s '{20BD78A3-CDA1-47f9-A505-93D1990252C9}'
+		CurVer = s 'DXTaskbar7.Taskbar7.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {20BD78A3-CDA1-47f9-A505-93D1990252C9} = s 'Taskbar7 Class'
+		{
+			ProgID = s 'DXTaskbar7.Taskbar7.1'
+			VersionIndependentProgID = s 'DXTaskbar7.Taskbar7'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{8C650B9D-E2A4-4980-9CED-3A38D91F022B}'
+		}
+	}
+}
