@@ -21,13 +21,12 @@ interface ITaskbar7 : IDispatch{
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Tab management
-	[helpstring("")] HRESULT RegisterTab([in] BSTR objectName);
-	[helpstring("")] HRESULT SetTabOrder([in] BSTR objectName, [in] BSTR objectInsertBefore);
-	[helpstring("")] HRESULT SetTabActive([in] BSTR objectName);
-	[helpstring("")] HRESULT UnregisterTab([in] BSTR objectName);
+	[helpstring("")] HRESULT GetTabHwnd([out, retval] HWND* objectName);
+	[helpstring("")] HRESULT ConfigureTab([in] BSTR name, [in] BSTR icon, [in] VARIANT_BOOL visible, [in] HWND after);
+	[helpstring("")] HRESULT SetTabActive();
 
 	// Thumbnails and live preview
-	[helpstring("")] HRESULT SetIconicThumbnail([in] BSTR objectName, [in] BSTR image, [in] int flags);
+	[helpstring("")] HRESULT SetIconicThumbnail([in] BSTR image, [in] int flags);
 
 	// ThumbBar
 	[helpstring("")] HRESULT AddButton([in] int id, [in] BSTR image, [in] BSTR tooltip, [in] int flags);	
