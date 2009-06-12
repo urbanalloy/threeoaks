@@ -20,7 +20,7 @@
 			OutputDirectory="$(SolutionDir)/Builds/$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)/Builds/$(ConfigurationName)/Intermediate"
 			ConfigurationType="2"
-			UseOfATL="1"
+			UseOfATL="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
 			>
@@ -79,7 +79,7 @@
 				Name="VCLinkerTool"
 				RegisterOutput="false"
 				IgnoreImportLibrary="true"
-				AdditionalDependencies=" comsvcs.lib"
+				AdditionalDependencies=" comsvcs.lib gdiplus.lib"
 				LinkIncremental="2"
 				ModuleDefinitionFile=".\DXTaskbar7.def"
 				GenerateDebugInformation="true"
@@ -115,7 +115,7 @@
 			OutputDirectory="$(SolutionDir)/Builds/$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)/Builds/$(ConfigurationName)/Intermediate"
 			ConfigurationType="2"
-			UseOfATL="1"
+			UseOfATL="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
 			>
@@ -174,7 +174,7 @@
 				Name="VCLinkerTool"
 				RegisterOutput="false"
 				IgnoreImportLibrary="true"
-				AdditionalDependencies=" comsvcs.lib"
+				AdditionalDependencies=" comsvcs.lib gdiplus.lib"
 				LinkIncremental="1"
 				ModuleDefinitionFile=".\DXTaskbar7.def"
 				GenerateDebugInformation="true"
@@ -217,19 +217,15 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\COMError.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\dlldatax.c"
 				>
 			</File>
 			<File
 				RelativePath=".\DXTaskbar7.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DXTaskbar7.def"
-				>
-			</File>
-			<File
-				RelativePath=".\DXTaskbar7.idl"
 				>
 			</File>
 			<File
@@ -242,6 +238,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\COMError.h"
+				>
+			</File>
 			<File
 				RelativePath=".\dlldatax.h"
 				>
@@ -264,10 +264,18 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="SubWCRev.exe $(ProjectDir) &quot;$(ProjectDir)/Config.tpl&quot; &quot;$(ProjectDir)/Config.h&quot;"
+						CommandLine="SubWCRev.exe $(ProjectDir) &quot;$(ProjectDir)/Config.tpl&quot; &quot;$(ProjectDir)/Config.h&quot;&#x0D;&#x0A;"
 						Outputs="Config.h"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\DXTaskbar7.def"
+				>
+			</File>
+			<File
+				RelativePath=".\DXTaskbar7.idl"
+				>
 			</File>
 			<File
 				RelativePath=".\DXTaskbar7.rc"
@@ -315,6 +323,10 @@
 			Name="Docs"
 			>
 			<File
+				RelativePath="..\Widget\DXTaskbar7Defines.vbs"
+				>
+			</File>
+			<File
 				RelativePath="..\Docs\Readme.txt"
 				>
 			</File>
@@ -328,6 +340,10 @@
 			</File>
 			<File
 				RelativePath=".\Taskbar7.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Taskbar7Errors.h"
 				>
 			</File>
 		</Filter>
