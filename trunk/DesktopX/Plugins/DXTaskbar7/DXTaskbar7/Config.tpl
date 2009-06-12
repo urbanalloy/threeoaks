@@ -22,6 +22,6 @@
 
 #ifdef DEBUG
 #define EXPIRATION_YEAR 2009
-#define EXPIRATION_MONTH 7
+#define EXPIRATION_MONTH 10
 #define EXPIRATION_DAY 1
 #endif
