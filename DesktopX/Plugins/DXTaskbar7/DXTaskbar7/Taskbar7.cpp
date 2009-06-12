@@ -35,15 +35,66 @@
 
 #include "stdafx.h"
 #include "Taskbar7.h"
+#include "SDPlugin.h"
+#include "dwmapi.h"
 
+// HACK !
+static CTaskbar7 *pTaskbar7;
+static HHOOK messageHook;
+
+extern BOOL (__stdcall *SDHostMessage)(UINT, DWORD, DWORD);
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Initialization
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void CTaskbar7::Init()
+{
+	messageHook = NULL;
+
+	// Create an instance of ITaskbarList3
+	HRESULT hr = CoCreateInstance(CLSID_TaskbarList, 				
+		NULL, 
+		CLSCTX_INPROC_SERVER, 
+		IID_PPV_ARGS(&_pTaskbarList));
+
+	// Initialize instance
+	if (SUCCEEDED(hr))
+		hr = _pTaskbarList->HrInit();
+
+	// Get the main window handle	
+	GetMainWindowHandle();
+}
+
+void CTaskbar7::Cleanup()
+{	
+	// Remove hook
+	if (messageHook)
+		UnhookWindowsHookEx(messageHook);
+
+	// Unregister this tab
+	if (_mainHwnd)
+		_pTaskbarList->UnregisterTab(_hwnd);
+
+	SAFE_RELEASE(_pTaskbarList);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Getters & Setters
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CTaskbar7::SetHWND(HWND hwnd)
 {
 	this->_hwnd = hwnd;
 }
 
-void CTaskbar7::SetMainHWND(HWND hwnd)
+void CTaskbar7::SetMainHwnd(HWND hwnd)
 {
 	this->_mainHwnd = hwnd;
+}
+
+void CTaskbar7::SetObjectID(DWORD id)
+{
+	this->_objectID = id;
 }
 
 DWORD CTaskbar7::GetProcessID()
@@ -51,28 +102,28 @@ DWORD CTaskbar7::GetProcessID()
 	return _processID;
 }
 
-void CTaskbar7::Init()
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Main window handling
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void CTaskbar7::GetMainWindowHandle()
 {
-	// Create an instance of ITaskbarList3
-	HRESULT hr = CoCreateInstance(CLSID_TaskbarList, 				
-								  NULL, 
-								  CLSCTX_INPROC_SERVER, 
-								  IID_PPV_ARGS(&_pTaskbarList));
+	// Get the process ID	
+	GetWindowThreadProcessId(_hwnd, &_processID);
 
-	// Initialize instance
-	if (SUCCEEDED(hr))
-		hr = _pTaskbarList->HrInit();
-
-	// Get the main window handle
-	GetMainWindowHandle();
+	// Enumerate windows and get the main controller window
+	EnumWindows((WNDENUMPROC)&CTaskbar7::EnumWindowsProc, (LPARAM) this);
 }
 
-void CTaskbar7::Cleanup()
-{	
-	SAFE_RELEASE(_pTaskbarList);
+void CTaskbar7::HookMainWindowMessages()
+{
+	DWORD threadID = GetWindowThreadProcessId(_mainHwnd, NULL);
+
+	// Setup our hook
+	pTaskbar7 = this;	
+	messageHook = SetWindowsHookEx(WH_GETMESSAGE, (HOOKPROC)&CTaskbar7::WindowProc, NULL, threadID);
 }
 
-BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
+BOOL CALLBACK CTaskbar7::EnumWindowsProc(HWND hwnd, LPARAM lParam)
 {
 	CTaskbar7* taskbar = (CTaskbar7*) lParam;
 
@@ -94,21 +145,60 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
 		return true;
 
 	// this is our controller window!
-	taskbar->SetMainHWND(hwnd);
+	taskbar->SetMainHwnd(hwnd);
+	taskbar->RegisterTab();
 
 	return false;
 }
 
-
-void CTaskbar7::GetMainWindowHandle()
+LRESULT CALLBACK CTaskbar7::WindowProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-	// Get the process ID	
-	GetWindowThreadProcessId(_hwnd, &_processID);
+	if (nCode < 0)
+		return CallNextHookEx(messageHook, nCode, wParam, lParam);
 
-	// Enumerate windows and get the main controller window
-	EnumWindows(EnumWindowsProc, (LPARAM) this);
+	if (nCode == HC_ACTION)
+	{
+		PMSG msg = (PMSG) lParam;
+
+		switch(msg->message)
+		{
+			case WM_COMMAND:
+			{
+
+				if (HIWORD(msg->wParam) == THBN_CLICKED)
+				{
+					SD_SCRIPTABLE_EVENT se;
+					se.cbSize = sizeof(SD_SCRIPTABLE_EVENT);
+					lstrcpy(se.szEventName, "Taskbar_OnButtonClicked");
+					se.flags=0;
+
+					memset(&se.dp, 0, sizeof(DISPPARAMS));
+
+					se.dp.cArgs = 1;
+					VARIANT* lpvt = (VARIANT*)malloc(sizeof(VARIANT)*1);
+					VariantInit(&lpvt[0]);	
+					lpvt[0].vt = VT_I4;
+					lpvt[0].lVal = LOWORD(msg->wParam); // button id
+
+					se.dp.rgvarg = lpvt;
+
+					SDHostMessage(SD_SCRIPTABLE_PLUGIN_EVENT, pTaskbar7->_objectID, (DWORD) &se);
+
+					free(se.dp.rgvarg);	
+				}
+				break;
+			}
+		}
+
+	}
+
+	return CallNextHookEx(messageHook, nCode, wParam, lParam);
 }
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper functions for image loading
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 HRESULT CTaskbar7::LoadImage(wstring path, Bitmap** bitmap)
 {
 	char error[1000];
@@ -147,6 +237,19 @@ HRESULT CTaskbar7::LoadButton(int id, wstring path, wstring tooltip, int flags, 
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Tab Handling
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void CTaskbar7::RegisterTab()
+{
+	if (!_mainHwnd)
+		return;
+
+	_pTaskbarList->RegisterTab(_hwnd, _mainHwnd);
+	_pTaskbarList->SetTabOrder(_hwnd, NULL);
+	_pTaskbarList->SetTabActive(_hwnd, _mainHwnd, NULL);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ISupportErrorInfo
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 STDMETHODIMP CTaskbar7::InterfaceSupportsErrorInfo(REFIID riid)
@@ -171,22 +274,23 @@ STDMETHODIMP CTaskbar7::InterfaceSupportsErrorInfo(REFIID riid)
 /*************************************
 * Tab management
 *************************************/
-STDMETHODIMP CTaskbar7::RegisterTab(BSTR objectName)
+
+STDMETHODIMP CTaskbar7::GetTabHwnd(HWND* hwnd)
+{
+	if (!_mainHwnd)
+		return FALSE;
+
+	*hwnd = _mainHwnd;
+
+	return S_OK;
+}
+
+STDMETHODIMP CTaskbar7::ConfigureTab(BSTR name, BSTR icon, VARIANT_BOOL visible, HWND after)
 {
 	return S_OK;
 }
 
-STDMETHODIMP CTaskbar7::SetTabOrder(BSTR objectName, BSTR objectInsertBefore)
-{
-	return S_OK;
-}
-
-STDMETHODIMP CTaskbar7::SetTabActive(BSTR objectName)
-{
-	return S_OK;
-}
-
-STDMETHODIMP CTaskbar7::UnregisterTab(BSTR objectName)
+STDMETHODIMP CTaskbar7::SetTabActive()
 {
 	return S_OK;
 }
@@ -194,7 +298,7 @@ STDMETHODIMP CTaskbar7::UnregisterTab(BSTR objectName)
 /*************************************
 * Thumbnails and live preview
 *************************************/
-STDMETHODIMP CTaskbar7::SetIconicThumbnail(BSTR objectName, BSTR image, int flags)
+STDMETHODIMP CTaskbar7::SetIconicThumbnail(BSTR image, int flags)
 {
 	return S_OK;
 }
@@ -266,7 +370,11 @@ STDMETHODIMP CTaskbar7::SetupButtons()
 		index++;
 	}
 
-	HRESULT hr = _pTaskbarList->ThumbBarAddButtons(_mainHwnd, size, buttons);	
+	HRESULT hr = _pTaskbarList->ThumbBarAddButtons(_hwnd, size, buttons);	
+
+	// Hook messages to be able to get the command messages
+	if (SUCCEEDED(hr))
+		HookMainWindowMessages();
 
 	// Clean all buttons
 	for (int i = 0; i < size; i++) {	

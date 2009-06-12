@@ -79,7 +79,7 @@
 				Name="VCLinkerTool"
 				RegisterOutput="false"
 				IgnoreImportLibrary="true"
-				AdditionalDependencies=" comsvcs.lib gdiplus.lib"
+				AdditionalDependencies=" comsvcs.lib gdiplus.lib dwmapi.lib"
 				LinkIncremental="2"
 				ModuleDefinitionFile=".\DXTaskbar7.def"
 				GenerateDebugInformation="true"

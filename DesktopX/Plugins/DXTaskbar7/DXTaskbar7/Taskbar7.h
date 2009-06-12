@@ -69,6 +69,7 @@ public:
 
 		_pTaskbarList = NULL;
 		_hwnd = NULL;
+		_objectID = NULL;
 		_processID = NULL;
 		_mainHwnd = NULL;
 		_buttons = new vector<ThumbButton>();
@@ -109,6 +110,7 @@ END_COM_MAP()
 		
 		// Handle to the DX window
 		HWND _hwnd;
+		DWORD _objectID;
 		
 		// Main process window (the one with the taskbar icon)
 		HWND _mainHwnd;
@@ -117,19 +119,28 @@ END_COM_MAP()
 		// The list of thumbbar buttons to add
 		vector<ThumbButton>* _buttons;
 	
-		void GetMainWindowHandle();		
+		void GetMainWindowHandle();	
+		static BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam);
+		static LRESULT CALLBACK WindowProc(int nCode, WPARAM wParam, LPARAM lParam);
+
+		void RegisterTab();
+
 		HRESULT LoadImage(wstring path, Bitmap** bitmap);
 		HRESULT LoadButton(int id, wstring path, wstring tooltip, int flags, THUMBBUTTON* button);
 
 	public:
 
-		void SetHWND(HWND hwnd);
-		void SetMainHWND(HWND hwnd);
-		DWORD GetProcessID();
-
+		// Used by DXTaskbar
+		void SetHWND(HWND hwnd);				
+		void SetObjectID(DWORD id);
 		void Init();
 		void Cleanup();
 
+		// Internal use by static methods
+		void SetMainHwnd(HWND hwnd);
+		DWORD GetProcessID();
+		void HookMainWindowMessages();
+		
 		//////////////////////////////////////////////////////////////////////////
 		// ISupportErrorInfo
 		//////////////////////////////////////////////////////////////////////////
@@ -138,13 +149,12 @@ END_COM_MAP()
 		//////////////////////////////////////////////////////////////////////////
 		// ITaskbar7
 		//////////////////////////////////////////////////////////////////////////
-		STDMETHOD(RegisterTab)(BSTR objectName);
-		STDMETHOD(SetTabOrder)(BSTR objectName, BSTR objectInsertBefore);
-		STDMETHOD(SetTabActive)(BSTR objectName);
-		STDMETHOD(UnregisterTab)(BSTR objectName);
-
+		STDMETHOD(GetTabHwnd)(HWND* hwnd);
+		STDMETHOD(ConfigureTab)(BSTR name, BSTR icon, VARIANT_BOOL visible, HWND after);
+		STDMETHOD(SetTabActive)();
+		
 		// Thumbnails and live preview
-		STDMETHOD(SetIconicThumbnail)(BSTR objectName, BSTR image, int flags);
+		STDMETHOD(SetIconicThumbnail)(BSTR image, int flags);
 
 		// ThumbBar
 		STDMETHOD(AddButton)(int id, BSTR image, BSTR tooltip, int flags);	

@@ -45,6 +45,7 @@
 #include "DXTaskbar7.h"
 #include "dlldatax.h"
 #include "Taskbar7.h"
+#include "shobjidl.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DesktopX Plugin
@@ -92,6 +93,8 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 		// Create a new instance of the plugin
 		case SD_CREATE_PLUGIN:
 		{
+			*pluginIndex = NULL;
+
 #ifdef DEBUG
 			// Check for expiration date
 			struct tm now;
@@ -106,16 +109,35 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 
 			if (now.tm_year + 1900 > EXPIRATION_YEAR)
 				goto label_expiration;
-    
-      if (now.tm_year + 1900 == EXPIRATION_YEAR)
-        if (now.tm_mon > EXPIRATION_MONTH-1)
-          goto label_expiration;
 
-      if (now.tm_year + 1900 == EXPIRATION_YEAR)
-        if (now.tm_mon == EXPIRATION_MONTH-1)
-          if (now.tm_mday > EXPIRATION_DAY)
-            goto label_expiration;	
+			if (now.tm_year + 1900 == EXPIRATION_YEAR)
+				if (now.tm_mon > EXPIRATION_MONTH-1)
+					goto label_expiration;
+
+			if (now.tm_year + 1900 == EXPIRATION_YEAR)
+				if (now.tm_mon == EXPIRATION_MONTH-1)
+					if (now.tm_mday > EXPIRATION_DAY)
+						goto label_expiration;	
 #endif
+
+			DWORD *flags = (DWORD *) param1;
+			*flags = SD_FLAG_SUBCLASS | 
+					 SD_FLAG_NO_BUILDER_CONFIG|
+					 SD_FLAG_NO_USER_CONFIG;
+
+			// Check that we are running on Windows 7, otherwise, use stub instance
+			OSVERSIONINFO versionInfo;
+			versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+
+			GetVersionEx(&versionInfo);
+
+			// XP or lower
+			if (versionInfo.dwMajorVersion < 6)
+				return FALSE;
+
+			// Vista
+			if (versionInfo.dwMajorVersion == 6 && versionInfo.dwMinorVersion < 1)
+				return FALSE;
 
 	        CComObject<CTaskbar7>* pTaskbar;
 	        CComObject<CTaskbar7>::CreateInstance(&pTaskbar);	
@@ -127,17 +149,11 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 			pTaskbar->QueryInterface(IID_IUnknown, (void**)&sp.pUnk);
 			sp.pTI =  ReadTaskbar7TypeInfo(dllInstance);
 			SDHostMessage(SD_REGISTER_SCRIPTABLE_PLUGIN, objID, (DWORD)&sp);
-    
-			DWORD *flags = (DWORD *) param1;
-			*flags = SD_FLAG_NO_BUILDER_CONFIG|
-					 SD_FLAG_NO_USER_CONFIG;
 
 			return TRUE;
 
 #ifdef DEBUG
-label_expiration:
-			*pluginIndex = NULL;
-
+label_expiration:		
 			char message[2000];
 			sprintf_s(message, "This beta version of DXTaskbar7 expired on %d/%d/%d.\n\n Please check http://julien.wincustomize.com or http://www.templier.info for new versions.", EXPIRATION_MONTH, EXPIRATION_DAY, EXPIRATION_YEAR);
 			MessageBox(NULL, (char *)message, "Beta version expiration!", MB_ICONERROR|MB_OK);
@@ -178,10 +194,39 @@ label_expiration:
 			// Store our window handle
 			SD_PLUGIN_INIT* pluginInit = (SD_PLUGIN_INIT*)param1;
 			pTaskbar7->SetHWND(pluginInit->hwnd);
+			pTaskbar7->SetObjectID(objID);
 
 			pTaskbar7->Init();
 
 			return TRUE;
+		}
+
+		case SD_WINDOW_MESSAGE:
+		{
+			LPMSG msg = reinterpret_cast<LPMSG>(param1);
+
+			switch(msg->message)
+			{
+				case WM_CLOSE:
+				{
+					SD_SCRIPTABLE_EVENT se;
+					se.cbSize = sizeof(SD_SCRIPTABLE_EVENT);
+					lstrcpy(se.szEventName, "Taskbar_OnCloseTab");
+					se.flags=0;
+
+					memset(&se.dp, 0, sizeof(DISPPARAMS));
+
+					se.dp.cArgs = 0;
+
+					SDHostMessage(SD_SCRIPTABLE_PLUGIN_EVENT, objID, (DWORD) &se);
+
+					free(se.dp.rgvarg);						
+
+					return TRUE;
+				}
+			}
+
+			return FALSE;
 		}
 
 		// Save the plugin data before unload
@@ -203,7 +248,8 @@ label_expiration:
 		{
 			CComObject<CTaskbar7>* pTaskbar7 = (CComObject<CTaskbar7>*) *pluginIndex;				
 			
-			pTaskbar7->Cleanup();
+			if (pTaskbar7 != NULL)
+				pTaskbar7->Cleanup();
 
 			SAFE_RELEASE(pTaskbar7);	
 			
