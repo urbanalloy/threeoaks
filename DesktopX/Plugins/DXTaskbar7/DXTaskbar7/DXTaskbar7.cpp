@@ -281,8 +281,8 @@ END_OBJECT_MAP()
 DECLARE_DXPLUGIN_DLLFUNCTIONS(LIBID_DXTaskbar7Lib,
 							  "DXTaskbar7.dll",
 							  "{20BD78A3-CDA1-47f9-A505-93D1990252C9}", // class
-							  "DXTaskbar7.AeroColor.1",
+							  "DXTaskbar7.Taskbar7.1",
 							  "{8C650B9D-E2A4-4980-9CED-3A38D91F022B}", // type library
-							  "DXTaskbar7.AeroColor",
+							  "DXTaskbar7.Taskbar7",
 							  "1.0",
 							  "DXTaskbar7 1.0 Type Library")
