@@ -268,6 +268,15 @@
 						Outputs="Config.h"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="SubWCRev.exe $(ProjectDir) &quot;$(ProjectDir)/Config.tpl&quot; &quot;$(ProjectDir)/Config.h&quot;"
+						Outputs="Config.h"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\DXTaskbar7.def"
