@@ -29,9 +29,9 @@ interface ITaskbar7 : IDispatch{
 	[helpstring("")] HRESULT SetIconicThumbnail([in] BSTR image, [in] int flags);
 
 	// ThumbBar
-	[helpstring("")] HRESULT AddButton([in] int id, [in] BSTR image, [in] BSTR tooltip, [in] int flags);	
+	[helpstring("")] HRESULT SetupButton([in] int id, [in] BSTR image, [in] BSTR tooltip, [in] int flags);	
 	[helpstring("")] HRESULT UpdateButton([in] int id,[in] BSTR image, [in] BSTR tooltip, [in] int flags);	
-	[helpstring("")] HRESULT SetupButtons();
+	[helpstring("")] HRESULT AddButtons();
 
 	// Tasks and destinations
 	//[helpstring("")] HRESULT RemoveDestination(IUnknown *punk);
@@ -48,7 +48,7 @@ interface ITaskbar7 : IDispatch{
 	//[helpstring("")] HRESULT GetRemovedDestinations();
 
 	// Overlay
-	[helpstring("")] HRESULT SetOverlayIcon([in] BSTR path, [in] BSTR description);
+	[helpstring("Applies an overlay to a taskbar button to indicate application status or a notification to the user.")] HRESULT SetOverlayIcon([in] BSTR path, [in] BSTR description);
 
 	// Progress
 	[helpstring("Sets the type and state of the progress indicator displayed on a taskbar button.")] HRESULT SetProgressState([in] int flag);

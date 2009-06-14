@@ -306,7 +306,7 @@ STDMETHODIMP CTaskbar7::SetIconicThumbnail(BSTR image, int flags)
 /*************************************
 * ThumbBar
 *************************************/
-STDMETHODIMP CTaskbar7::AddButton(int id, BSTR image, BSTR tooltip, int flags)
+STDMETHODIMP CTaskbar7::SetupButton(int id, BSTR image, BSTR tooltip, int flags)
 {
 	if (!_pTaskbarList || _mainHwnd == NULL)
 		return S_FALSE;
@@ -345,7 +345,7 @@ STDMETHODIMP CTaskbar7::UpdateButton(int id,BSTR image, BSTR tooltip, int flags)
 	return S_OK;
 }
 
-STDMETHODIMP CTaskbar7::SetupButtons()
+STDMETHODIMP CTaskbar7::AddButtons()
 {
 	if (!_pTaskbarList || _mainHwnd == NULL)
 		return S_FALSE;

@@ -157,9 +157,9 @@ END_COM_MAP()
 		STDMETHOD(SetIconicThumbnail)(BSTR image, int flags);
 
 		// ThumbBar
-		STDMETHOD(AddButton)(int id, BSTR image, BSTR tooltip, int flags);	
+		STDMETHOD(SetupButton)(int id, BSTR image, BSTR tooltip, int flags);	
 		STDMETHOD(UpdateButton)(int id, BSTR image, BSTR tooltip, int flags);	
-		STDMETHOD(SetupButtons)();
+		STDMETHOD(AddButtons)();
 
 		// Overlay
 		STDMETHOD(SetOverlayIcon)(BSTR path, BSTR description);
