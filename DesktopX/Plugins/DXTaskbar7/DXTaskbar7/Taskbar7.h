@@ -68,10 +68,17 @@ public:
 		GdiplusStartup(&_gdiplusToken, &_gdiplusStartupInput, NULL);
 
 		_pTaskbarList = NULL;
+		_pCustomDestinationList = NULL;
+		_pApplicationDestinations = NULL;
 		_hwnd = NULL;
 		_objectID = NULL;
 		_processID = NULL;
 		_mainHwnd = NULL;
+
+		_isTabRegistered = false;
+		_isAppIdSet = false;
+		_isBeginList = false;
+
 		_buttons = new vector<ThumbButton>();
 		return S_OK;
 	}
@@ -105,8 +112,10 @@ END_COM_MAP()
 		ULONG_PTR _gdiplusToken;
 		GdiplusStartupInput _gdiplusStartupInput;
 
-		// The taskbar list
+		// The COM instances
 		ITaskbarList3* _pTaskbarList;
+		ICustomDestinationList* _pCustomDestinationList;
+		IApplicationDestinations* _pApplicationDestinations;		
 		
 		// Handle to the DX window
 		HWND _hwnd;
@@ -115,6 +124,10 @@ END_COM_MAP()
 		// Main process window (the one with the taskbar icon)
 		HWND _mainHwnd;
 		DWORD _processID;
+
+		bool _isTabRegistered;
+		bool _isAppIdSet;
+		bool _isBeginList;
 
 		// The list of thumbbar buttons to add
 		vector<ThumbButton>* _buttons;
@@ -127,7 +140,6 @@ END_COM_MAP()
 
 		HRESULT LoadImage(wstring path, Bitmap** bitmap);
 		HRESULT LoadButton(int id, wstring path, wstring tooltip, int flags, THUMBBUTTON* button);
-
 	public:
 
 		// Used by DXTaskbar
@@ -149,12 +161,11 @@ END_COM_MAP()
 		//////////////////////////////////////////////////////////////////////////
 		// ITaskbar7
 		//////////////////////////////////////////////////////////////////////////
-		STDMETHOD(GetTabHwnd)(HWND* hwnd);
-		STDMETHOD(ConfigureTab)(BSTR name, BSTR icon, VARIANT_BOOL visible, HWND after);
+		STDMETHOD(get_TabHwnd)(LONG* hwnd);
+		STDMETHOD(SetTabsIcon)(BSTR icon);
+		STDMETHOD(ConfigureTab)(BSTR name, LONG after);
 		STDMETHOD(SetTabActive)();
-		
-		// Thumbnails and live preview
-		STDMETHOD(SetIconicThumbnail)(BSTR image, int flags);
+		STDMETHOD(RemoveTab)();
 
 		// ThumbBar
 		STDMETHOD(SetupButton)(int id, BSTR image, BSTR tooltip, int flags);	
@@ -167,6 +178,19 @@ END_COM_MAP()
 		// Progress
 		STDMETHOD(SetProgressState)(int flag);
 		STDMETHOD(SetProgressValue)(ULONGLONG ullCompleted, ULONGLONG ullTotal);
+
+		// Tasks and destinations
+		STDMETHOD(SetAppID)(BSTR appID);
+		STDMETHOD(RemoveAllDestinations)();
+
+		STDMETHOD(BeginList)(int* maxSlots);		
+		STDMETHOD(CommitList)();
+		STDMETHOD(AbortList)();
+		STDMETHOD(DeleteList)(BSTR appID);
+		STDMETHOD(AddUserTask)(VARIANT tasks);
+		STDMETHOD(AppendCategory)(BSTR category, VARIANT items);	
+		STDMETHOD(AppendKnownCategory)(int knownDestCategory);
+
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(Taskbar7), CTaskbar7)
