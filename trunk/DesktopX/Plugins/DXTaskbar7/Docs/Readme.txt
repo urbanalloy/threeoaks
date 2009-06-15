@@ -19,12 +19,59 @@ under Additional Abilities, click "Add" and select the DXTaskbar7 plugin.
 ** Documentation
 *******************************************************************************************************
 
+SetTabsIcon(iconPath)
+---------------------
+	
+Set a global icon for all the tabs.
+iconPath is the path to a 16x16 image file.
+
+ConfigureTab(name, after)
+-------------------------
+
+Setup the tab name and position
+after is the tab hwnd of the tab after which the configured tab should be inserted
+
+SetTabActive()
+--------------
+
+Set the tab as active and show it in the tab list
+
+RemoveTab()
+-----------
+
+Remove the tab from the list
+
+
+SetupButton(id, image, tooltip, flags)
+--------------------------------------
+
+UpdateButton(id, image, tooltip, flags)
+---------------------------------------
+
+AddButtons()
+------------
+	
+SetOverlayIcon(path, description)
+---------------------------------
+
+Applies an overlay to a taskbar button to indicate application status or a notification to the user
+
+SetProgressState(flag)
+----------------------
+
+Sets the type and state of the progress indicator displayed on a taskbar button
+
+SetProgressValue(completed, total)
+----------------------------------
+
+Displays or updates a progress bar hosted in a taskbar button to show the specific percentage completed of the full operation
+
 
 *******************************************************************************************************
 ** Changelog
 *******************************************************************************************************
 
-Version 0.9 Build 190: First released version
+Version 1.0 Build 198: First released version
 
 *******************************************************************************************************
 ** Licence
