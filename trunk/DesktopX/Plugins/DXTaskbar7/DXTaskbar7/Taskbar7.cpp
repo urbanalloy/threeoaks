@@ -53,9 +53,9 @@ void CTaskbar7::Init()
 
 	// Create an instance of ITaskbarList3
 	HRESULT hr = CoCreateInstance(CLSID_TaskbarList, 				
-		NULL, 
-		CLSCTX_INPROC_SERVER, 
-		IID_PPV_ARGS(&_pTaskbarList));
+								  NULL, 
+								  CLSCTX_INPROC_SERVER, 
+								  IID_PPV_ARGS(&_pTaskbarList));
 
 	// Initialize instance
 	if (SUCCEEDED(hr))
@@ -63,6 +63,19 @@ void CTaskbar7::Init()
 
 	// Get the main window handle	
 	GetMainWindowHandle();
+
+	// Create instance of ICustomDestinationList  and IApplicationDestinations  
+	CoCreateInstance(CLSID_DestinationList, 				
+					 NULL, 
+					 CLSCTX_INPROC_SERVER, 
+					 IID_PPV_ARGS(&_pCustomDestinationList));
+
+	CoCreateInstance(CLSID_ApplicationDestinations, 				
+					 NULL, 
+					 CLSCTX_INPROC_SERVER, 
+					 IID_PPV_ARGS(&_pApplicationDestinations));
+
+	
 }
 
 void CTaskbar7::Cleanup()
@@ -76,6 +89,8 @@ void CTaskbar7::Cleanup()
 		_pTaskbarList->UnregisterTab(_hwnd);
 
 	SAFE_RELEASE(_pTaskbarList);
+	SAFE_RELEASE(_pCustomDestinationList);
+	SAFE_RELEASE(_pApplicationDestinations);
 }
 
 
@@ -145,8 +160,7 @@ BOOL CALLBACK CTaskbar7::EnumWindowsProc(HWND hwnd, LPARAM lParam)
 		return true;
 
 	// this is our controller window!
-	taskbar->SetMainHwnd(hwnd);
-	taskbar->RegisterTab();
+	taskbar->SetMainHwnd(hwnd);	
 
 	return false;
 }
@@ -241,12 +255,11 @@ HRESULT CTaskbar7::LoadButton(int id, wstring path, wstring tooltip, int flags, 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CTaskbar7::RegisterTab()
 {
-	if (!_mainHwnd)
+	if (_isTabRegistered)
 		return;
 
-	_pTaskbarList->RegisterTab(_hwnd, _mainHwnd);
-	_pTaskbarList->SetTabOrder(_hwnd, NULL);
-	_pTaskbarList->SetTabActive(_hwnd, _mainHwnd, NULL);
+	_pTaskbarList->RegisterTab(_hwnd, _mainHwnd);	
+	_isTabRegistered = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -275,33 +288,82 @@ STDMETHODIMP CTaskbar7::InterfaceSupportsErrorInfo(REFIID riid)
 * Tab management
 *************************************/
 
-STDMETHODIMP CTaskbar7::GetTabHwnd(HWND* hwnd)
+STDMETHODIMP CTaskbar7::get_TabHwnd(LONG* hwnd)
 {
-	if (!_mainHwnd)
-		return FALSE;
+	// Set to 0 by default -> will insert after last tab
+	*hwnd = 0;
 
-	*hwnd = _mainHwnd;
+	*hwnd = (LONG)_hwnd;
 
 	return S_OK;
 }
 
-STDMETHODIMP CTaskbar7::ConfigureTab(BSTR name, BSTR icon, VARIANT_BOOL visible, HWND after)
+STDMETHODIMP CTaskbar7::SetTabsIcon(BSTR icon)
 {
+	USES_CONVERSION;
+
+	// Remove icon
+	if (CComBSTR(icon) == CComBSTR(""))
+	{		
+		SetClassLong(_hwnd, GCL_HICON, NULL);
+		return S_OK;
+	}
+
+	Bitmap* bitmap = NULL;
+	HRESULT hr = LoadImage(OLE2W(icon), &bitmap);
+
+	// TODO add error handling
+	if (!SUCCEEDED(hr))
+		return hr;
+
+	HICON hIcon;
+	bitmap->GetHICON(&hIcon);
+	SetClassLong(_hwnd, GCL_HICON, (LONG)hIcon);
+
+	// Cleanup the HICON
+	DestroyIcon(hIcon);
+
+	return S_OK;
+}
+
+STDMETHODIMP CTaskbar7::ConfigureTab(BSTR name, LONG after)
+{
+	USES_CONVERSION;
+
+	if (!_mainHwnd)
+		return S_FALSE;
+
+	// Update name
+	SetWindowText(_hwnd, OLE2CA(name));
+
+	RegisterTab();
+	_pTaskbarList->SetTabOrder(_hwnd, (HWND)after);	
+
 	return S_OK;
 }
 
 STDMETHODIMP CTaskbar7::SetTabActive()
 {
+	if (!_mainHwnd)
+		return S_FALSE;
+
+	RegisterTab();
+	_pTaskbarList->SetTabActive(_hwnd, _mainHwnd, 0);
+
 	return S_OK;
 }
 
-/*************************************
-* Thumbnails and live preview
-*************************************/
-STDMETHODIMP CTaskbar7::SetIconicThumbnail(BSTR image, int flags)
+STDMETHODIMP CTaskbar7::RemoveTab()
 {
-	return S_OK;
+	if (!_isTabRegistered)
+		return S_FALSE;
+	
+	HRESULT hr = _pTaskbarList->UnregisterTab(_hwnd);
+	_isTabRegistered = false;
+	
+	return hr;
 }
+
 
 /*************************************
 * ThumbBar
@@ -337,7 +399,7 @@ STDMETHODIMP CTaskbar7::UpdateButton(int id,BSTR image, BSTR tooltip, int flags)
 	if (!SUCCEEDED(hr))
 		return hr;
 
-	hr = _pTaskbarList->ThumbBarUpdateButtons(_mainHwnd, 1, &button);	
+	hr = _pTaskbarList->ThumbBarUpdateButtons(_hwnd, 1, &button);	
 
 	// Cleanup the HICON
 	DestroyIcon(button.hIcon);
@@ -383,11 +445,6 @@ STDMETHODIMP CTaskbar7::AddButtons()
 
 	return hr;
 }
-
-/*************************************
-* Tasks and destinations
-*************************************/
-
 
 /*************************************
 * Overlay
@@ -448,4 +505,93 @@ STDMETHODIMP CTaskbar7::SetProgressValue(ULONGLONG completed, ULONGLONG total)
 	HRESULT hr = _pTaskbarList->SetProgressValue(_mainHwnd, completed, total);
 
 	return hr;
+}
+
+/*************************************
+* Tasks and destinations
+*************************************/
+
+STDMETHODIMP CTaskbar7::SetAppID(BSTR appID)
+{
+	USES_CONVERSION;
+
+	// check args
+
+	HRESULT hr = _pCustomDestinationList->SetAppID(OLE2W(appID));
+
+	if (FAILED(hr))
+		return hr;
+
+	hr = _pApplicationDestinations->SetAppID(OLE2W(appID));
+
+	if (FAILED(hr))
+		return hr;
+
+	_isAppIdSet = true;
+
+	return hr;
+}
+
+STDMETHODIMP CTaskbar7::RemoveAllDestinations()
+{
+	return _pApplicationDestinations->RemoveAllDestinations();
+}
+
+
+STDMETHODIMP CTaskbar7::BeginList(int* maxSlots)
+{
+	if (!_isAppIdSet)
+		return S_FALSE;
+
+	UINT uMaxSlots;
+	IObjectArray *poaRemoved;
+
+	HRESULT hr = _pCustomDestinationList->BeginList(&uMaxSlots, IID_PPV_ARGS(&poaRemoved));
+
+	if (SUCCEEDED(hr)) {
+		_isBeginList = true;
+		poaRemoved->Release();
+	}
+
+	return hr;
+}		
+
+STDMETHODIMP CTaskbar7::CommitList()
+{
+	_isBeginList = false;
+
+	return _pCustomDestinationList->CommitList();
+}
+
+STDMETHODIMP CTaskbar7::AbortList()
+{
+	_isBeginList = false;
+
+	return _pCustomDestinationList->AbortList();
+}
+
+STDMETHODIMP CTaskbar7::DeleteList(BSTR appID)
+{
+	USES_CONVERSION;
+
+	// check args
+	return _pCustomDestinationList->DeleteList(OLE2W(appID));
+}
+
+
+
+
+STDMETHODIMP CTaskbar7::AddUserTask(VARIANT tasks)
+{
+	return S_FALSE;
+}
+
+STDMETHODIMP CTaskbar7::AppendCategory(BSTR category, VARIANT items)
+{
+	return S_FALSE;
+}
+
+STDMETHODIMP CTaskbar7::AppendKnownCategory(int knownDestCategory)
+{
+	return _pCustomDestinationList->AppendKnownCategory((KNOWNDESTCATEGORY)knownDestCategory);
 }

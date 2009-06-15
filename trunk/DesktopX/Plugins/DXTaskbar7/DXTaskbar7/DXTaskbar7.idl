@@ -17,35 +17,25 @@ import "ocidl.idl";
 ]
 interface ITaskbar7 : IDispatch{
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Properties
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	[propget, id(1), helpstring("Get the handle for this tab")] HRESULT TabHwnd([out, retval] LONG* objectName);
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Methods
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Tab management
-	[helpstring("")] HRESULT GetTabHwnd([out, retval] HWND* objectName);
-	[helpstring("")] HRESULT ConfigureTab([in] BSTR name, [in] BSTR icon, [in] VARIANT_BOOL visible, [in] HWND after);
-	[helpstring("")] HRESULT SetTabActive();
-
-	// Thumbnails and live preview
-	[helpstring("")] HRESULT SetIconicThumbnail([in] BSTR image, [in] int flags);
+	
+	[id(2), helpstring("Set a global icon for all the tabs")] HRESULT SetTabsIcon([in] BSTR icon);
+	[helpstring("Setup the tab name and position")] HRESULT ConfigureTab([in] BSTR name, [in] LONG after);
+	[helpstring("Set the tab as active and show it in the tab list")] HRESULT SetTabActive();
+	[helpstring("Remove the tab from the list")] HRESULT RemoveTab();
 
 	// ThumbBar
 	[helpstring("")] HRESULT SetupButton([in] int id, [in] BSTR image, [in] BSTR tooltip, [in] int flags);	
 	[helpstring("")] HRESULT UpdateButton([in] int id,[in] BSTR image, [in] BSTR tooltip, [in] int flags);	
 	[helpstring("")] HRESULT AddButtons();
-
-	// Tasks and destinations
-	//[helpstring("")] HRESULT RemoveDestination(IUnknown *punk);
-	//[helpstring("")] HRESULT RemoveAllDestinations();
-	//[helpstring("")] HRESULT AddUserTask();
-	//[helpstring("")] HRESULT AddToRecentDocs();
-	//[helpstring("")] HRESULT SetAppID();
-	//[helpstring("")] HRESULT BeginList();
-	//[helpstring("")] HRESULT DeleteList();
-	//[helpstring("")] HRESULT CommitList();
-	//[helpstring("")] HRESULT AbortList();
-	//[helpstring("")] HRESULT AppendCategory();
-	//[helpstring("")] HRESULT AppendKnownCategory();
-	//[helpstring("")] HRESULT GetRemovedDestinations();
 
 	// Overlay
 	[helpstring("Applies an overlay to a taskbar button to indicate application status or a notification to the user.")] HRESULT SetOverlayIcon([in] BSTR path, [in] BSTR description);
@@ -53,6 +43,20 @@ interface ITaskbar7 : IDispatch{
 	// Progress
 	[helpstring("Sets the type and state of the progress indicator displayed on a taskbar button.")] HRESULT SetProgressState([in] int flag);
 	[helpstring("Displays or updates a progress bar hosted in a taskbar button to show the specific percentage completed of the full operation.")] HRESULT SetProgressValue([in] ULONGLONG completed, [in] ULONGLONG total);
+
+	// Tasks and destinations
+	[helpstring("Specifies a unique Application User Model ID (AppID)")] HRESULT SetAppID([in] BSTR appID);
+	//[helpstring("")] HRESULT RemoveDestination(IUnknown *punk);
+	[helpstring("")] HRESULT RemoveAllDestinations();
+	
+	[helpstring("Initiates a building session for a custom Jump List.")] HRESULT BeginList([out, retval] int* maxSlots);
+	[helpstring("Declares that the Jump List initiated by a call to BeginList is complete and ready for display")] HRESULT CommitList();
+	[helpstring("Discontinues a Jump List building session initiated by BeginList  without committing any changes")] HRESULT AbortList();
+	[helpstring("Deletes a custom Jump List for a specified application.")] HRESULT DeleteList([in] BSTR appID);
+	[helpstring("")] HRESULT AddUserTask(VARIANT tasks);
+	[helpstring("")] HRESULT AppendCategory(BSTR category, VARIANT items);	
+	[helpstring("")] HRESULT AppendKnownCategory([in] int knownDestCategory);
+	//[helpstring("")] HRESULT AddToRecentDocs();	
 };
 
 [
