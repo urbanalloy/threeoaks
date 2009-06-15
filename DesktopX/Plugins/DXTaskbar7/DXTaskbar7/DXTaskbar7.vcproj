@@ -26,6 +26,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				CommandLine="del $(ProjectDir)Config.h"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -273,7 +274,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="SubWCRev.exe $(ProjectDir) &quot;$(ProjectDir)/Config.tpl&quot; &quot;$(ProjectDir)/Config.h&quot;"
+						CommandLine="SubWCRev.exe $(ProjectDir) &quot;$(ProjectDir)/Config.tpl&quot; &quot;$(ProjectDir)/Config.h&quot;&#x0D;&#x0A;"
 						Outputs="Config.h"
 					/>
 				</FileConfiguration>
