@@ -65,29 +65,38 @@ public:
 
 	HRESULT FinalConstruct()
 	{
-		GdiplusStartup(&_gdiplusToken, &_gdiplusStartupInput, NULL);
+		GdiplusStartup(&m_gdiplusToken, &m_gdiplusStartupInput, NULL);
 
-		_pTaskbarList = NULL;
-		_pCustomDestinationList = NULL;
-		_pApplicationDestinations = NULL;
-		_hwnd = NULL;
-		_objectID = NULL;
-		_processID = NULL;
-		_mainHwnd = NULL;
+		m_pTaskbarList = NULL;
+		m_pCustomDestinationList = NULL;
+		m_pApplicationDestinations = NULL;
+		m_hwnd = NULL;
+		m_objectID = NULL;
+		m_processID = NULL;
+		m_parentHwnd = NULL;
 
-		_isTabRegistered = false;
-		_isAppIdSet = false;
-		_isBeginList = false;
+		m_isTabRegistered = false;
+		m_isAppIdSet = false;
+		m_isBeginList = false;
 
-		_buttons = new vector<ThumbButton>();
+		m_buttons = new vector<ThumbButton>();
+		
+		// Check that we are running on Windows 7
+		OSVERSIONINFO versionInfo;
+		versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+
+		GetVersionEx(&versionInfo);
+		if (versionInfo.dwMajorVersion == 6 && versionInfo.dwMinorVersion == 1)
+			m_isWindows7 = true;		
+
 		return S_OK;
 	}
 
 	void FinalRelease() 
 	{
-		GdiplusShutdown(_gdiplusToken);
+		GdiplusShutdown(m_gdiplusToken);
 
-		delete _buttons;
+		delete m_buttons;
 	}
 
 DECLARE_REGISTRY_RESOURCEID(IDR_TASKBAR7)
@@ -109,28 +118,31 @@ END_COM_MAP()
 			int flags;
 		};
 
-		ULONG_PTR _gdiplusToken;
-		GdiplusStartupInput _gdiplusStartupInput;
+		ULONG_PTR m_gdiplusToken;
+		GdiplusStartupInput m_gdiplusStartupInput;
 
 		// The COM instances
-		ITaskbarList3* _pTaskbarList;
-		ICustomDestinationList* _pCustomDestinationList;
-		IApplicationDestinations* _pApplicationDestinations;		
+		ITaskbarList3* m_pTaskbarList;
+		ICustomDestinationList* m_pCustomDestinationList;
+		IApplicationDestinations* m_pApplicationDestinations;		
 		
 		// Handle to the DX window
-		HWND _hwnd;
-		DWORD _objectID;
+		HWND m_hwnd;
+		DWORD m_objectID;
 		
 		// Main process window (the one with the taskbar icon)
-		HWND _mainHwnd;
-		DWORD _processID;
+		HWND m_parentHwnd;
+		DWORD m_processID;
 
-		bool _isTabRegistered;
-		bool _isAppIdSet;
-		bool _isBeginList;
+		bool m_isWindows7;
+		bool m_isTabRegistered;
+		bool m_isAppIdSet;
+		bool m_isBeginList; // check that we called BeginList before add/commit/abort
 
 		// The list of thumbbar buttons to add
-		vector<ThumbButton>* _buttons;
+		vector<ThumbButton>* m_buttons;
+
+		bool IsWindows7();
 	
 		void GetMainWindowHandle();	
 		static BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam);
@@ -138,7 +150,7 @@ END_COM_MAP()
 
 		void RegisterTab();
 
-		HRESULT LoadImage(wstring path, Bitmap** bitmap);
+		HRESULT LoadImageFromFile(wstring path, Bitmap** bitmap);
 		HRESULT LoadButton(int id, wstring path, wstring tooltip, int flags, THUMBBUTTON* button);
 	public:
 

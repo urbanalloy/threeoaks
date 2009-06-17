@@ -125,28 +125,14 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 					 SD_FLAG_NO_BUILDER_CONFIG|
 					 SD_FLAG_NO_USER_CONFIG;
 
-			// Check that we are running on Windows 7, otherwise, use stub instance
-			OSVERSIONINFO versionInfo;
-			versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+			CComObject<CTaskbar7>* pTaskbar;
+			CComObject<CTaskbar7>::CreateInstance(&pTaskbar);	
 
-			GetVersionEx(&versionInfo);
-
-			// XP or lower
-			if (versionInfo.dwMajorVersion < 6)
-				return FALSE;
-
-			// Vista
-			if (versionInfo.dwMajorVersion == 6 && versionInfo.dwMinorVersion < 1)
-				return FALSE;
-
-	        CComObject<CTaskbar7>* pTaskbar;
-	        CComObject<CTaskbar7>::CreateInstance(&pTaskbar);	
-			
-	        *pluginIndex = (DWORD)pTaskbar;
+			*pluginIndex = (DWORD)pTaskbar;
 
 			SCRIPTABLEPLUGIN sp;
 			strcpy_s(sp.szName, "Taskbar");
-			pTaskbar->QueryInterface(IID_IUnknown, (void**)&sp.pUnk);
+			pTaskbar->QueryInterface(IID_IUnknown, (void**)&sp.pUnk);	        
 			sp.pTI =  ReadTaskbar7TypeInfo(dllInstance);
 			SDHostMessage(SD_REGISTER_SCRIPTABLE_PLUGIN, objID, (DWORD)&sp);
 
@@ -186,6 +172,7 @@ label_expiration:
 		// Start running this instance of the plugin
 		case SD_INITIALIZE_PLUGIN:
 		{
+
 			CComObject<CTaskbar7>* pTaskbar7 = (CComObject<CTaskbar7>*) *pluginIndex;	
 
 			if (pTaskbar7 == NULL)
@@ -245,7 +232,7 @@ label_expiration:
 
 		// Destroy this instance of the plugin
 		case SD_DESTROY_PLUGIN:
-		{
+		{			
 			CComObject<CTaskbar7>* pTaskbar7 = (CComObject<CTaskbar7>*) *pluginIndex;				
 			
 			if (pTaskbar7 != NULL)
@@ -272,7 +259,7 @@ label_expiration:
 CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
-	OBJECT_ENTRY(CLSID_Taskbar7, CTaskbar7)
+	OBJECT_ENTRY(CLSID_Taskbar7, CTaskbar7)	
 END_OBJECT_MAP()
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

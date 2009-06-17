@@ -51,15 +51,19 @@ void CTaskbar7::Init()
 {
 	messageHook = NULL;
 
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return;
+
 	// Create an instance of ITaskbarList3
 	HRESULT hr = CoCreateInstance(CLSID_TaskbarList, 				
 								  NULL, 
 								  CLSCTX_INPROC_SERVER, 
-								  IID_PPV_ARGS(&_pTaskbarList));
+								  IID_PPV_ARGS(&m_pTaskbarList));
 
 	// Initialize instance
 	if (SUCCEEDED(hr))
-		hr = _pTaskbarList->HrInit();
+		hr = m_pTaskbarList->HrInit();
 
 	// Get the main window handle	
 	GetMainWindowHandle();
@@ -68,14 +72,12 @@ void CTaskbar7::Init()
 	CoCreateInstance(CLSID_DestinationList, 				
 					 NULL, 
 					 CLSCTX_INPROC_SERVER, 
-					 IID_PPV_ARGS(&_pCustomDestinationList));
+					 IID_PPV_ARGS(&m_pCustomDestinationList));
 
 	CoCreateInstance(CLSID_ApplicationDestinations, 				
 					 NULL, 
 					 CLSCTX_INPROC_SERVER, 
-					 IID_PPV_ARGS(&_pApplicationDestinations));
-
-	
+					 IID_PPV_ARGS(&m_pApplicationDestinations));
 }
 
 void CTaskbar7::Cleanup()
@@ -85,12 +87,12 @@ void CTaskbar7::Cleanup()
 		UnhookWindowsHookEx(messageHook);
 
 	// Unregister this tab
-	if (_mainHwnd)
-		_pTaskbarList->UnregisterTab(_hwnd);
+	if (m_parentHwnd)
+		m_pTaskbarList->UnregisterTab(m_hwnd);
 
-	SAFE_RELEASE(_pTaskbarList);
-	SAFE_RELEASE(_pCustomDestinationList);
-	SAFE_RELEASE(_pApplicationDestinations);
+	SAFE_RELEASE(m_pTaskbarList);
+	SAFE_RELEASE(m_pCustomDestinationList);
+	SAFE_RELEASE(m_pApplicationDestinations);
 }
 
 
@@ -99,22 +101,22 @@ void CTaskbar7::Cleanup()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CTaskbar7::SetHWND(HWND hwnd)
 {
-	this->_hwnd = hwnd;
+	this->m_hwnd = hwnd;
 }
 
 void CTaskbar7::SetMainHwnd(HWND hwnd)
 {
-	this->_mainHwnd = hwnd;
+	this->m_parentHwnd = hwnd;
 }
 
 void CTaskbar7::SetObjectID(DWORD id)
 {
-	this->_objectID = id;
+	this->m_objectID = id;
 }
 
 DWORD CTaskbar7::GetProcessID()
 {
-	return _processID;
+	return m_processID;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,7 +125,7 @@ DWORD CTaskbar7::GetProcessID()
 void CTaskbar7::GetMainWindowHandle()
 {
 	// Get the process ID	
-	GetWindowThreadProcessId(_hwnd, &_processID);
+	GetWindowThreadProcessId(m_hwnd, &m_processID);
 
 	// Enumerate windows and get the main controller window
 	EnumWindows((WNDENUMPROC)&CTaskbar7::EnumWindowsProc, (LPARAM) this);
@@ -131,7 +133,7 @@ void CTaskbar7::GetMainWindowHandle()
 
 void CTaskbar7::HookMainWindowMessages()
 {
-	DWORD threadID = GetWindowThreadProcessId(_mainHwnd, NULL);
+	DWORD threadID = GetWindowThreadProcessId(m_parentHwnd, NULL);
 
 	// Setup our hook
 	pTaskbar7 = this;	
@@ -196,7 +198,7 @@ LRESULT CALLBACK CTaskbar7::WindowProc(int nCode, WPARAM wParam, LPARAM lParam)
 
 					se.dp.rgvarg = lpvt;
 
-					SDHostMessage(SD_SCRIPTABLE_PLUGIN_EVENT, pTaskbar7->_objectID, (DWORD) &se);
+					SDHostMessage(SD_SCRIPTABLE_PLUGIN_EVENT, pTaskbar7->m_objectID, (DWORD) &se);
 
 					free(se.dp.rgvarg);	
 				}
@@ -213,7 +215,7 @@ LRESULT CALLBACK CTaskbar7::WindowProc(int nCode, WPARAM wParam, LPARAM lParam)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper functions for image loading
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-HRESULT CTaskbar7::LoadImage(wstring path, Bitmap** bitmap)
+HRESULT CTaskbar7::LoadImageFromFile(wstring path, Bitmap** bitmap)
 {
 	char error[1000];
 
@@ -236,7 +238,7 @@ HRESULT CTaskbar7::LoadImage(wstring path, Bitmap** bitmap)
 HRESULT CTaskbar7::LoadButton(int id, wstring path, wstring tooltip, int flags, THUMBBUTTON* button)
 {
 	Bitmap* bitmap = NULL;
-	HRESULT hr = LoadImage(path, &bitmap);
+	HRESULT hr = LoadImageFromFile(path, &bitmap);
 
 	if (!SUCCEEDED(hr))
 		return hr;
@@ -246,6 +248,8 @@ HRESULT CTaskbar7::LoadButton(int id, wstring path, wstring tooltip, int flags, 
 	bitmap->GetHICON(&button->hIcon);
 	wcscpy_s((wchar_t *)&button->szTip, 260, tooltip.c_str());
 	button->dwFlags = (THUMBBUTTONFLAGS)flags;
+	
+	delete bitmap;
 
 	return S_OK;
 }
@@ -255,11 +259,11 @@ HRESULT CTaskbar7::LoadButton(int id, wstring path, wstring tooltip, int flags, 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CTaskbar7::RegisterTab()
 {
-	if (_isTabRegistered)
+	if (m_isTabRegistered)
 		return;
 
-	_pTaskbarList->RegisterTab(_hwnd, _mainHwnd);	
-	_isTabRegistered = true;
+	m_pTaskbarList->RegisterTab(m_hwnd, m_parentHwnd);	
+	m_isTabRegistered = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -290,76 +294,95 @@ STDMETHODIMP CTaskbar7::InterfaceSupportsErrorInfo(REFIID riid)
 
 STDMETHODIMP CTaskbar7::get_TabHwnd(LONG* hwnd)
 {
-	// Set to 0 by default -> will insert after last tab
-	*hwnd = 0;
-
-	*hwnd = (LONG)_hwnd;
+	*hwnd = (LONG)m_hwnd;
 
 	return S_OK;
 }
 
 STDMETHODIMP CTaskbar7::SetTabsIcon(BSTR icon)
 {
-	USES_CONVERSION;
-
-	// Remove icon
+	// Remove icon if icon path is empty
 	if (CComBSTR(icon) == CComBSTR(""))
-	{		
-		SetClassLong(_hwnd, GCL_HICON, NULL);
+	{	
+		if (m_isWindows7)
+			SetClassLong(m_hwnd, GCL_HICON, NULL);
+
 		return S_OK;
 	}
 
+	USES_CONVERSION;
 	Bitmap* bitmap = NULL;
-	HRESULT hr = LoadImage(OLE2W(icon), &bitmap);
+	HRESULT hr = LoadImageFromFile(OLE2W(icon), &bitmap);
 
-	// TODO add error handling
+	// return a proper error
 	if (!SUCCEEDED(hr))
 		return hr;
 
+	// Do nothing on XP & Vista
+	if (!m_isWindows7) {
+		delete bitmap;
+		return S_OK;
+	}
+
 	HICON hIcon;
 	bitmap->GetHICON(&hIcon);
-	SetClassLong(_hwnd, GCL_HICON, (LONG)hIcon);
+	SetClassLong(m_hwnd, GCL_HICON, (LONG)hIcon);
 
-	// Cleanup the HICON
-	DestroyIcon(hIcon);
+	// Cleanup the HICON & Bitmap
+	DestroyIcon(hIcon); 
+	delete bitmap;
 
 	return S_OK;
 }
 
 STDMETHODIMP CTaskbar7::ConfigureTab(BSTR name, LONG after)
 {
-	USES_CONVERSION;
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return S_OK;
 
-	if (!_mainHwnd)
-		return S_FALSE;
+	// If running anything other than a gadget, do nothing
+	if (!m_parentHwnd)
+		return S_OK;
 
 	// Update name
-	SetWindowText(_hwnd, OLE2CA(name));
+	USES_CONVERSION;
+	SetWindowText(m_hwnd, OLE2CA(name));
 
 	RegisterTab();
-	_pTaskbarList->SetTabOrder(_hwnd, (HWND)after);	
+	HRESULT hr = m_pTaskbarList->SetTabOrder(m_hwnd, (HWND)after);	
 
-	return S_OK;
+	return hr;
 }
 
 STDMETHODIMP CTaskbar7::SetTabActive()
 {
-	if (!_mainHwnd)
-		return S_FALSE;
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return S_OK;
+
+	// Do nothing if we don't have the main hwnd
+	if (!m_parentHwnd)
+		return S_OK;
 
 	RegisterTab();
-	_pTaskbarList->SetTabActive(_hwnd, _mainHwnd, 0);
+	HRESULT hr = m_pTaskbarList->SetTabActive(m_hwnd, m_parentHwnd, 0);
 
-	return S_OK;
+	return hr;
 }
 
 STDMETHODIMP CTaskbar7::RemoveTab()
 {
-	if (!_isTabRegistered)
-		return S_FALSE;
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return S_OK;
+
+	// Do nothing if we don't have the main hwnd
+	if (!m_isTabRegistered)
+		return S_OK;
 	
-	HRESULT hr = _pTaskbarList->UnregisterTab(_hwnd);
-	_isTabRegistered = false;
+	HRESULT hr = m_pTaskbarList->UnregisterTab(m_hwnd);
+	m_isTabRegistered = false;
 	
 	return hr;
 }
@@ -370,27 +393,32 @@ STDMETHODIMP CTaskbar7::RemoveTab()
 *************************************/
 STDMETHODIMP CTaskbar7::SetupButton(int id, BSTR image, BSTR tooltip, int flags)
 {
-	if (!_pTaskbarList || _mainHwnd == NULL)
-		return S_FALSE;
-
 	// TODO check args!
-	USES_CONVERSION;
+	if (m_buttons->size() == 7)
+		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_Taskbar7, _T("Error setting up buttons!"), "You cannot have more than 7 buttons on a thumbbar.", 0, NULL);
 
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return S_OK;
+
+	USES_CONVERSION;
 	ThumbButton button;
 	button.id = id;
 	button.image = OLE2W(image);
 	button.tooltip = OLE2W(tooltip);
 	button.flags = flags;
 
-	_buttons->push_back(button);
+	m_buttons->push_back(button);
 
 	return S_OK;
 }
 
 STDMETHODIMP CTaskbar7::UpdateButton(int id,BSTR image, BSTR tooltip, int flags)
 {
-	if (!_pTaskbarList || _mainHwnd == NULL)
-		return S_FALSE;
+	// TODO check args! (id exists...)
+
+	if (!m_pTaskbarList)
+		return S_OK;
 	
 	USES_CONVERSION;
 
@@ -399,27 +427,30 @@ STDMETHODIMP CTaskbar7::UpdateButton(int id,BSTR image, BSTR tooltip, int flags)
 	if (!SUCCEEDED(hr))
 		return hr;
 
-	hr = _pTaskbarList->ThumbBarUpdateButtons(_hwnd, 1, &button);	
+	// Do nothing on XP & Vista
+	if (m_isWindows7)
+		hr = m_pTaskbarList->ThumbBarUpdateButtons(m_hwnd, 1, &button);	
 
 	// Cleanup the HICON
 	DestroyIcon(button.hIcon);
 
-	return S_OK;
+	return hr;
 }
 
 STDMETHODIMP CTaskbar7::AddButtons()
 {
-	if (!_pTaskbarList || _mainHwnd == NULL)
-		return S_FALSE;
+	int size = m_buttons->size();
 
-	int size = _buttons->size();
-
-	// TODO check for number of buttons before adding!
+	// Size > 7 is forbidden by AddButton
 	if (size == 0)
-		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_Taskbar7, _T("Error setting up buttons!"), "You need to add at least one button before setting up buttons.", 0, NULL);
+		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_Taskbar7, _T("Error adding buttons!"), "You need to setup at least one button before adding buttons to the thumbbar.", 0, NULL);	
 
-	if (size > 7)
-		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_Taskbar7, _T("Error setting up buttons!"), "You cannot have more than 7 buttons on a thumbbar.", 0, NULL);
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return S_OK;
+
+	if (!m_pTaskbarList)
+		return S_OK;
 
 	// Create buttons array
 	LPTHUMBBUTTON buttons;
@@ -427,12 +458,12 @@ STDMETHODIMP CTaskbar7::AddButtons()
 
 	// Load all buttons
 	int index = 0;
-	for (vector<ThumbButton>::iterator it = _buttons->begin(); it != _buttons->end(); ++it) {			
+	for (vector<ThumbButton>::iterator it = m_buttons->begin(); it != m_buttons->end(); ++it) {			
 		LoadButton(((ThumbButton)*it).id, ((ThumbButton)*it).image, ((ThumbButton)*it).tooltip, ((ThumbButton)*it).flags, &buttons[index]);
 		index++;
 	}
 
-	HRESULT hr = _pTaskbarList->ThumbBarAddButtons(_hwnd, size, buttons);	
+	HRESULT hr = m_pTaskbarList->ThumbBarAddButtons(m_hwnd, size, buttons);	
 
 	// Hook messages to be able to get the command messages
 	if (SUCCEEDED(hr))
@@ -451,8 +482,8 @@ STDMETHODIMP CTaskbar7::AddButtons()
 *************************************/
 STDMETHODIMP CTaskbar7::SetOverlayIcon(BSTR path, BSTR description)
 {
-	if (!_pTaskbarList || _mainHwnd == NULL)
-		return S_FALSE;
+	if (!m_pTaskbarList || m_parentHwnd == NULL)
+		return S_OK;
 
 	USES_CONVERSION;
 	wstring image(OLE2W(path));
@@ -461,22 +492,33 @@ STDMETHODIMP CTaskbar7::SetOverlayIcon(BSTR path, BSTR description)
 	// if no path is given, we remove the overlay
 	if (image.empty())
 	{
-		return _pTaskbarList->SetOverlayIcon(_mainHwnd, NULL, L"");
+		if (m_isWindows7)
+			return m_pTaskbarList->SetOverlayIcon(m_parentHwnd, NULL, L"");
+		
+		return S_OK;
 	}
 
 	Bitmap* bitmap = NULL;
-	HRESULT hr = LoadImage(image, &bitmap);
+	HRESULT hr = LoadImageFromFile(image, &bitmap);
 
 	if (!SUCCEEDED(hr))
 		return hr;
+
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+	{
+		delete bitmap;
+		return S_OK;
+	}
 
 	HICON pIcon;
 	bitmap->GetHICON(&pIcon);
 
 	// Sets the overlay icon
-	hr = _pTaskbarList->SetOverlayIcon(_mainHwnd, pIcon, desc.c_str());
+	hr = m_pTaskbarList->SetOverlayIcon(m_parentHwnd, pIcon, desc.c_str());
 
 	DestroyIcon(pIcon);
+	delete bitmap;
 
 	return hr;
 }
@@ -487,22 +529,30 @@ STDMETHODIMP CTaskbar7::SetOverlayIcon(BSTR path, BSTR description)
 
 STDMETHODIMP CTaskbar7::SetProgressState(int flag)
 {
-	if (!_pTaskbarList || _mainHwnd == NULL)
-		return S_FALSE;
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return S_OK;
 
-	HRESULT hr = _pTaskbarList->SetProgressState(_mainHwnd, (TBPFLAG) flag);
+	if (!m_pTaskbarList || m_parentHwnd == NULL)
+		return S_OK;
+
+	HRESULT hr = m_pTaskbarList->SetProgressState(m_parentHwnd, (TBPFLAG) flag);
 
 	return hr;
 }
 
 STDMETHODIMP CTaskbar7::SetProgressValue(ULONGLONG completed, ULONGLONG total)
 {
-	if (!_pTaskbarList || _mainHwnd == NULL)
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return S_OK;
+
+	if (!m_pTaskbarList || m_parentHwnd == NULL)
 		return S_FALSE;
 
 	// Update the progress. This call to SetProgressValue cancels the
 	// current state and puts the button into normal progress mode.
-	HRESULT hr = _pTaskbarList->SetProgressValue(_mainHwnd, completed, total);
+	HRESULT hr = m_pTaskbarList->SetProgressValue(m_parentHwnd, completed, total);
 
 	return hr;
 }
@@ -513,43 +563,59 @@ STDMETHODIMP CTaskbar7::SetProgressValue(ULONGLONG completed, ULONGLONG total)
 
 STDMETHODIMP CTaskbar7::SetAppID(BSTR appID)
 {
+	// Check appID is valid
+	if (CComBSTR(appID) == CComBSTR(""))
+		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_Taskbar7, _T("Error setting Application ID!"), "appID cannot be NULL or empty", 0, NULL);	
+
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return S_OK;
+
 	USES_CONVERSION;
-
-	// check args
-
-	HRESULT hr = _pCustomDestinationList->SetAppID(OLE2W(appID));
+	HRESULT hr = m_pCustomDestinationList->SetAppID(OLE2W(appID));
 
 	if (FAILED(hr))
 		return hr;
 
-	hr = _pApplicationDestinations->SetAppID(OLE2W(appID));
+	hr = m_pApplicationDestinations->SetAppID(OLE2W(appID));
 
 	if (FAILED(hr))
 		return hr;
 
-	_isAppIdSet = true;
+	m_isAppIdSet = true;
 
 	return hr;
 }
 
 STDMETHODIMP CTaskbar7::RemoveAllDestinations()
 {
-	return _pApplicationDestinations->RemoveAllDestinations();
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return S_OK;
+
+	return m_pApplicationDestinations->RemoveAllDestinations();
 }
 
 
 STDMETHODIMP CTaskbar7::BeginList(int* maxSlots)
 {
-	if (!_isAppIdSet)
-		return S_FALSE;
+	// Default is 10
+	*maxSlots = 10;
+
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return S_OK;
+
+	if (!m_isAppIdSet)
+		return S_OK;
 
 	UINT uMaxSlots;
 	IObjectArray *poaRemoved;
 
-	HRESULT hr = _pCustomDestinationList->BeginList(&uMaxSlots, IID_PPV_ARGS(&poaRemoved));
+	HRESULT hr = m_pCustomDestinationList->BeginList(&uMaxSlots, IID_PPV_ARGS(&poaRemoved));
 
 	if (SUCCEEDED(hr)) {
-		_isBeginList = true;
+		m_isBeginList = true;
 		poaRemoved->Release();
 	}
 
@@ -558,24 +624,37 @@ STDMETHODIMP CTaskbar7::BeginList(int* maxSlots)
 
 STDMETHODIMP CTaskbar7::CommitList()
 {
-	_isBeginList = false;
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return S_OK;
 
-	return _pCustomDestinationList->CommitList();
+	m_isBeginList = false;
+
+	return m_pCustomDestinationList->CommitList();
 }
 
 STDMETHODIMP CTaskbar7::AbortList()
 {
-	_isBeginList = false;
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return S_OK;
 
-	return _pCustomDestinationList->AbortList();
+	m_isBeginList = false;
+
+	return m_pCustomDestinationList->AbortList();
 }
 
 STDMETHODIMP CTaskbar7::DeleteList(BSTR appID)
 {
-	USES_CONVERSION;
+	if (CComBSTR(appID) == CComBSTR(""))
+		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_Taskbar7, _T("Error deleting list!"), "appID cannot be NULL or empty", 0, NULL);	
 
-	// check args
-	return _pCustomDestinationList->DeleteList(OLE2W(appID));
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return S_OK;
+
+	USES_CONVERSION;
+	return m_pCustomDestinationList->DeleteList(OLE2W(appID));
 }
 
 
@@ -583,15 +662,27 @@ STDMETHODIMP CTaskbar7::DeleteList(BSTR appID)
 
 STDMETHODIMP CTaskbar7::AddUserTask(VARIANT tasks)
 {
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return S_OK;
+
 	return S_FALSE;
 }
 
 STDMETHODIMP CTaskbar7::AppendCategory(BSTR category, VARIANT items)
 {
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return S_OK;
+
 	return S_FALSE;
 }
 
 STDMETHODIMP CTaskbar7::AppendKnownCategory(int knownDestCategory)
 {
-	return _pCustomDestinationList->AppendKnownCategory((KNOWNDESTCATEGORY)knownDestCategory);
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return S_OK;
+
+	return m_pCustomDestinationList->AppendKnownCategory((KNOWNDESTCATEGORY)knownDestCategory);
 }
