@@ -658,8 +658,6 @@ STDMETHODIMP CTaskbar7::DeleteList(BSTR appID)
 }
 
 
-
-
 STDMETHODIMP CTaskbar7::AddUserTask(VARIANT tasks)
 {
 	// Do nothing on XP & Vista
