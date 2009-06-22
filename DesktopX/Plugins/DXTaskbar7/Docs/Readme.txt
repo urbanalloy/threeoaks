@@ -71,6 +71,10 @@ Displays or updates a progress bar hosted in a taskbar button to show the specif
 ** Changelog
 *******************************************************************************************************
 
+Version 1.0 Build 205:
+  * Added parameter checking in most functions
+  * Fix for Vista and XP: all functions calls are ignored on those systems but are still available to scripts, so you should not get any script error
+
 Version 1.0 Build 198: First released version
 
 *******************************************************************************************************
