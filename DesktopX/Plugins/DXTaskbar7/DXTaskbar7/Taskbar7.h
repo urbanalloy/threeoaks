@@ -78,6 +78,7 @@ public:
 		m_isTabRegistered = false;
 		m_isAppIdSet = false;
 		m_isBeginList = false;
+		m_isWindows7 = false;
 
 		m_buttons = new vector<ThumbButton>();
 		
