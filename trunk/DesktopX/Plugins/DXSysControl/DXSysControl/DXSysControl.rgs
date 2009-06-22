@@ -1,0 +1,26 @@
+HKCR
+{
+	DXSysControl.SysControl.1 = s 'SysControl Class'
+	{
+		CLSID = s '{65C94091-C8AE-4423-99A2-CEAE94F91E62}'
+	}
+	DXSysControl.SysControl = s 'SysControl Class'
+	{
+		CLSID = s '{65C94091-C8AE-4423-99A2-CEAE94F91E62}'
+		CurVer = s 'DXSysControl.SysControl.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {65C94091-C8AE-4423-99A2-CEAE94F91E62} = s 'SysControl Class'
+		{
+			ProgID = s 'DXSysControl.SysControl.1'
+			VersionIndependentProgID = s 'DXSysControl.SysControl'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{9F3FB81B-658E-4853-82BA-1A263630CFA5}'
+		}
+	}
+}
