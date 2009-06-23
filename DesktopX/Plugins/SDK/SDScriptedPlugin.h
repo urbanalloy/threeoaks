@@ -40,7 +40,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv) \
     return _Module.GetClassObject(rclsid, riid, ppv); \
 } \
  \
-STDAPI DllRegisterServer(void) \
+STDAPI DllRegisterServerInternal(HKEY root) \
 { \
 	TCHAR szModFileName[MAX_PATH] = ""; \
 	GetModuleFileName(GetModuleHandle(dllName), szModFileName, MAX_PATH); \
@@ -48,7 +48,7 @@ STDAPI DllRegisterServer(void) \
 		TCHAR szRegKey[] = "SOFTWARE\\Classes"; \
 	     \
 		HKEY hkey0 = NULL; \
-		RegOpenKeyEx(HKEY_CURRENT_USER, szRegKey, 0, KEY_ALL_ACCESS, &hkey0); \
+		RegOpenKeyEx(root, szRegKey, 0, KEY_ALL_ACCESS, &hkey0); \
 		 \
 		if (hkey0) \
 		{ \
@@ -96,7 +96,7 @@ STDAPI DllRegisterServer(void) \
 		TCHAR szRegKey[] = "SOFTWARE\\Classes"; \
 		 \
 		HKEY hkey00 = NULL; \
-		RegOpenKeyEx(HKEY_CURRENT_USER, szRegKey, 0, KEY_ALL_ACCESS, &hkey00); \
+		RegOpenKeyEx(root, szRegKey, 0, KEY_ALL_ACCESS, &hkey00); \
 		 \
 		if (hkey00) \
 		{ \
@@ -148,4 +148,12 @@ STDAPI DllRegisterServer(void) \
 STDAPI DllUnregisterServer(void) \
 { \
 	return _Module.UnregisterServer(TRUE); \
+} \
+\
+STDAPI DllRegisterServer() \
+{ \
+	DllRegisterServerInternal(HKEY_CURRENT_USER); \
+	DllRegisterServerInternal(HKEY_LOCAL_MACHINE); \
+	\
+	return 1; \
 }
