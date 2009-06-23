@@ -17,7 +17,7 @@ standalone: |
 index: |
     <!DOCTYPE HTML>
     <title>DXCanvas Tests :: Index</title>
-    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="css/index.css">
     <script>
     function expand(obj) {
         obj.parentNode.className = obj.parentNode.className ? "" : "expand";
@@ -39,7 +39,7 @@ index.category.item: |
 results: |
     <!DOCTYPE HTML>
     <title>DXCanvas Tests :: Results</title>
-    <link rel="stylesheet" href="../css/results.css">
+    <link rel="stylesheet" href="css/results.css">
     <table>
     <col id="col1">
     <tr>
