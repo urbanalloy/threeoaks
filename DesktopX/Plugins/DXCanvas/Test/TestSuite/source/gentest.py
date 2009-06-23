@@ -304,7 +304,7 @@ for i in range(len(tests)):
 
 
 def write_index():
-	f = open('../results/index.html', 'w')
+	f = open('../index.html', 'w')
 	f.write(templates['index'] % { 'updated':time.strftime('%Y-%m-%d', time.gmtime()) })
 	f.write('\n<ul class="testlist">\n')
 	depth = 1
@@ -324,7 +324,7 @@ def write_results():
 	ids = []	
 	for item in category_contents_all['.']: results[item] = {}
 
-	f = open('../results/results.html', 'w')
+	f = open('../results.html', 'w')
 	f.write(templates['results'])
 
 	if not os.path.exists('../results.xml'):
@@ -433,7 +433,7 @@ def write_annotated_spec():
 	# Insert our new stylesheet
 	n = doc.getElementsByTagName('head')[0].appendChild(doc.createElement('link'))
 	n.setAttribute('rel', 'stylesheet')
-	n.setAttribute('href', '../css/spectest.css')
+	n.setAttribute('href', 'css/spectest.css')
 	n.setAttribute('type', 'text/css')
 
 	spec_assertion_patterns = []
@@ -544,7 +544,7 @@ def write_annotated_spec():
 	head = doc.documentElement.getElementsByTagName('head')[0]
 	head.insertBefore(doc.createElement('meta'), head.firstChild).setAttribute('charset', 'UTF-8')
 
-	codecs.open('../results/spec.html', 'w', 'utf-8').write(html5Serializer(doc))
+	codecs.open('../spec.html', 'w', 'utf-8').write(html5Serializer(doc))
 
 write_index()
 write_annotated_spec()

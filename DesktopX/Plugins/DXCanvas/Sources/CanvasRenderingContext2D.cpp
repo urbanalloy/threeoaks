@@ -1132,35 +1132,9 @@ STDMETHODIMP CCanvasRenderingContext2D::arcTo(float x1, float y1, float x2, floa
 	if (!cairo_has_current_point(canvas->context))
 		return S_OK;
 
-#define DIRECTION_FORWARD 1
-#define DIRECTION_REVERSE 0
 
-   /**
-	* Adds to the current path straight lines from (@x0,@y0) towards
-	* (@x1,@y1) and from there to (@x2,@y2), but connecting the two
-	* line segments by an arc of specified @radius or less if no such
-	* arc fits.
-	*	
-	*	(x1,y1) + --------+------------------------+ (x0,y0)
-	*		 \       .-`
-	*		  \     /
-	*		   \   /
-	*		    \ |       + (xc,yc)
-	*		     \|
-	*		      \
-	*		       +
-	*		 	    \
-	*			     \
-	*		 	      \
-	*			       \
-	*			        \
-	*		     (x2,y2) +
-	**/
-
-	// Adapted patch from Behdad Esfahbod
-	// cairo_arc_with_handle
-
-	double angle0, angle1, angle2, angled;
+	double dir, a2, b2, c2, cosx, sinx, d, anx, any, bnx, bny, x3, y3, x4, y4, cx, cy, angle0, angle1;
+	bool anticlockwise;
 
 	double x0, y0; 
 	cairo_get_current_point(canvas->context, &x0, &y0);	
@@ -1176,83 +1150,45 @@ STDMETHODIMP CCanvasRenderingContext2D::arcTo(float x1, float y1, float x2, floa
 	//////////////////////////////////////////////////////////////////////////
 	// collinearity
 	// check for area of the triangle determined by the three points
-	float d = (float)x0 * (y1 - y2) + x1 * (y2 - (float)y0) + x2 * ((float)y0 - y1);
+	dir = (x2 - x1) * (y0 - y1) + (y2 - y1) * (x1 - x0);
 
-	if (d != 0)
-		goto no_collinear;
-
-	// connect new point (x1,y1) to (x0,y0) by a straight line
-	cairo_line_to(canvas->context, x1, y1);
-	return S_OK;
-
-no_collinear:
+	if (dir == 0) {
+		// connect new point (x1,y1) to (x0,y0) by a straight line
+		cairo_line_to(canvas->context, x1, y1);
+		return S_OK;
+	}
 
 	//////////////////////////////////////////////////////////////////////////
-	// Calculate angles between points
-	angle0 = atan2 (y0 - y1, x0 - x1);		// angle from (x1,y1) to (x0,y0) 
-	angle2 = atan2 (y2 - y1, x2 - x1);		// angle from (x1,y1) to (x2,y2)
-	angle1 = (angle0 + angle2) / 2;			// angle from (x1,y1) to (xc,yc)
+	a2 = (x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1);
+	b2 = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
+	c2 = (x0 - x2) * (x0 - x2) + (y0 - y2) * (y0 - y2);
+	cosx = (a2 + b2 - c2) / (2 * sqrt(a2 * b2));
 
-	angled = angle2 - angle0;				// the angle (x0,y0)--(x1,y1)--(x2,y2)
+	sinx = sqrt(1 - cosx * cosx);
+	d = radius / ((1 - cosx) / sinx);
 
-	//////////////////////////////////////////////////////////////////////////		
-	// Shall we go forward or backward?
-	int direction;
-	if (angled > M_PI || (angled < 0 && angled > -M_PI)) {
-		angle1 += M_PI;
-		angled = 2 * M_PI - angled;
-		direction = DIRECTION_FORWARD;
-	} else {
-		double tmp;
-		tmp = angle0;
-		angle0 = angle2;
-		angle2 = tmp;
-		direction = DIRECTION_REVERSE;
-	}
+	anx = (x1 - x0) / sqrt(a2);
+	any = (y1 - y0) / sqrt(a2);
+	bnx = (x1 - x2) / sqrt(b2);
+	bny = (y1 - y2) / sqrt(b2);
+	x3 = x1 - anx * d;
+	y3 = y1 - any * d;
+	x4 = x1 - bnx * d;
+	y4 = y1 - bny * d;
+	anticlockwise = (dir < 0);
+	cx = x3 + any * radius * (anticlockwise ? 1 : -1);
+	cy = y3 - anx * radius * (anticlockwise ? 1 : -1);
+	angle0 = atan2((y3 - cy), (x3 - cx));
+	angle1 = atan2((y4 - cy), (x4 - cx));
 
-	angle0 += M_PI_2;	// angle from (xc,yc) to (x0,y0)
-	angle2 -= M_PI_2;	// angle from (xc,yc) to (x2,y2)
-	angled /= 2;		// the angle (x0,y0)--(x1,y1)--(xc,yc)
-
-	// distance from (x1,y1) to (x0,y0)
-	double d0 = sqrt ((x0-x1)*(x0-x1)+(y0-y1)*(y0-y1));
-
-	// distance from (x2,y2) to (x0,y0)
-	double d2 = sqrt ((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
-
-	double dc   = -1;
-	double sin_ = sin(angled);
-	double cos_ = cos(angled);
-
-	if (fabs(cos_) >= 1e-5) { // the arc may not fit
-		
-		// min distance of end-points from corner
-		double min_d = d0 < d2 ? d0 : d2;
-		
-		// max radius of an arc that fits 
-		double max_r = min_d * sin_ / cos_;
-
-		// arc with requested radius doesn't fit
-		if (radius > max_r) {
-			radius = (float)max_r;
-			dc = min_d / cos_;  // distance of (xc,yc) from (x1,y1)
-		}
-	}
-
-	if (dc < 0)
-		dc = radius / sin_; // distance of (xc,yc) from (x1,y1)
-
-	double cx0 = x1 + cos(angle1) * dc;
-	double cy0 = y1 + sin(angle1) * dc;
+	cairo_line_to(canvas->context, x3, y3);
 
 	// the arc operation draws the line from current point (xc, yc) to arc center too.
-	if (direction == DIRECTION_FORWARD)
-		cairo_arc(canvas->context, cx0, cy0, radius, angle0, angle2);
+	if (anticlockwise)
+		cairo_arc_negative(canvas->context, cx, cy, radius, angle0, angle1);
 	else
-		cairo_arc_negative(canvas->context, cx0, cy0, radius, angle2, angle0);
-
-	cairo_line_to(canvas->context, x2, y2);
-
+		cairo_arc(canvas->context, cx, cy, radius, angle0, angle1);
+	
 	return S_OK;
 }
 

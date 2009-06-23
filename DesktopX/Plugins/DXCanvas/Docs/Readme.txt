@@ -56,6 +56,9 @@ http://code.google.com/p/threeoaks/
 ** Changelog
 ***************************************************************************
 
+2.0 Build xxx"
+  - Modified arcTo to fix the "2d.path.arcTo.shape.end" test (Mozilla patch) 
+
 2.0 Build 184:
   - Points on edge of paths are now considered on the path (fixed in latest Cairo)
   * Updated Cairo (HEAD), Pixman (HEAD), Pango (HEAD), Glib (2.20.3), libpng (1.2.37)
