@@ -20,7 +20,7 @@
 			OutputDirectory="$(SolutionDir)/Builds/$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)/Builds/$(ConfigurationName)/Intermediate"
 			ConfigurationType="2"
-			UseOfATL="0"
+			UseOfATL="1"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
 			>
@@ -117,7 +117,7 @@
 			OutputDirectory="$(SolutionDir)/Builds/$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)/Builds/$(ConfigurationName)/Intermediate"
 			ConfigurationType="2"
-			UseOfATL="0"
+			UseOfATL="1"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
 			>
