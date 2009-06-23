@@ -28,9 +28,6 @@ Tests that do not pass:
 2d.path.arcTo.collinear.2
 2d.path.arcTo.collinear.3
 
-2d.path.arcTo.shape.curve1
-2d.path.arcTo.shape.end
-
 2d.path.isPointInPath.edge  -- origin point of rectangle is not included in path  => FIXED IN TRUNK
 2d.path.isPointInPath.transform.* -- transformations not handled correctly
 
