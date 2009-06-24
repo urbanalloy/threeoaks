@@ -33,72 +33,42 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include "stdafx.h"
-#include <comsvcs.h>
 
-#include "COMError.h"
-#include "DXSystemEx.h"
-#include "resource.h"
+#include <windows.h>
+#include "VersionCheck.h"
 
-#include <string>
-#include <vector>
-using namespace std;
-
-// CAeroColor
-class ATL_NO_VTABLE CMonitorInfo :
-	public CComObjectRootEx<CComSingleThreadModel>,
-	public CComCoClass<CMonitorInfo, &CLSID_MonitorInfo>,
-	public IDispatchImpl<IMonitorInfo, &IID_IMonitorInfo, &LIBID_DXSystemExLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
-    public ISupportErrorInfo
+BOOL Is_WinVista_or_Later() 
 {
-public:
-	CMonitorInfo() {}
+	OSVERSIONINFOEX osvi;
+	DWORDLONG dwlConditionMask = 0;
 
-	DECLARE_PROTECT_FINAL_CONSTRUCT()
+	// Initialize the OSVERSIONINFOEX structure.
+	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+	osvi.dwMajorVersion = 6;
 
-	HRESULT FinalConstruct()
-	{		
-		return S_OK;
-	}
+	// Initialize the condition mask.
+	VER_SET_CONDITION(dwlConditionMask, VER_MAJORVERSION, VER_GREATER_EQUAL);
 
-	void FinalRelease() 
-	{
-	}
+	// Perform the test.
+	return VerifyVersionInfo(&osvi, VER_MAJORVERSION, dwlConditionMask);
+}
 
-DECLARE_REGISTRY_RESOURCEID(IDR_MONITORINFO)
+BOOL Is_Win7() 
+{
+	OSVERSIONINFOEX osvi;
+	DWORDLONG dwlConditionMask = 0;
 
-DECLARE_NOT_AGGREGATABLE(CMonitorInfo)
+	// Initialize the OSVERSIONINFOEX structure.
+	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+	osvi.dwMajorVersion = 6;
+	osvi.dwMinorVersion = 1;
 
-BEGIN_COM_MAP(CMonitorInfo)
-	COM_INTERFACE_ENTRY(IMonitorInfo)
-    COM_INTERFACE_ENTRY(ISupportErrorInfo)
-	COM_INTERFACE_ENTRY(IDispatch)
-END_COM_MAP()
+	// Initialize the condition mask.
+	VER_SET_CONDITION(dwlConditionMask, VER_MAJORVERSION|VER_MINORVERSION, VER_EQUAL);
 
-	private:
-		RECT m_rect;
-		bool m_primary;
-		
-	public:
-		void Init(pair<RECT, bool> info);
-		
-		//////////////////////////////////////////////////////////////////////////
-		// ISupportErrorInfo
-		//////////////////////////////////////////////////////////////////////////
-		STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);	
-
-		//////////////////////////////////////////////////////////////////////////
-		// ISystemEx
-		//////////////////////////////////////////////////////////////////////////
-		STDMETHOD(get_IsPrimary)(VARIANT_BOOL* isPrimary);
-		STDMETHOD(get_Left)(int* left);
-		STDMETHOD(get_Top)(int* top);
-		STDMETHOD(get_Bottom)(int* bottom);
-		STDMETHOD(get_Right)(int* right);
-		STDMETHOD(get_Width)(int* width);
-		STDMETHOD(get_Height)(int* height);
-};
-
-OBJECT_ENTRY_AUTO(__uuidof(MonitorInfo), CMonitorInfo)
+	// Perform the test.
+	return VerifyVersionInfo(&osvi, VER_MAJORVERSION|VER_MINORVERSION, dwlConditionMask);
+}

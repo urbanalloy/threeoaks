@@ -43,31 +43,22 @@
 #include "resource.h"
 
 #include "MonitorInfo.h"
+#include "Volume/IVolumeEventsConnectionPoint.h"
 
 #include <string>
 #include <vector>
 using namespace std;
 
-#define ACQUIRE_MUTEX(mutex) \
-	DWORD dwWaitMutex = WaitForSingleObject(mutex, INFINITE); \
-	switch (dwWaitMutex) \
-{ \
-	case WAIT_OBJECT_0: \
-{
 
-#define RELEASE_MUTEX(mutex) \
-	ReleaseMutex(mutex); \
-	break; \
-} \
-	default: \
-	break; \
-}
 
 // CAeroColor
 class ATL_NO_VTABLE CSystemEx :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSystemEx, &CLSID_SystemEx>,
 	public IDispatchImpl<ISystemEx, &IID_ISystemEx, &LIBID_DXSystemExLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
+	public IConnectionPointContainerImpl<CSystemEx>,
+	public CProxy_IVolumeEvents<CSystemEx>,
+	public IProvideClassInfo2Impl<&CLSID_SystemEx, &DIID_IVolumeEvents, &LIBID_DXSystemExLib>,
     public ISupportErrorInfo
 {
 public:
@@ -77,18 +68,20 @@ public:
 
 	HRESULT FinalConstruct()
 	{
-		hConfigMutex = NULL;
+		m_hConfigMutex = NULL;
+		m_hwnd = NULL;
+		m_objID = NULL;
 
 		return S_OK;
 	}
 
 	void FinalRelease() 
 	{
-		if (hConfigMutex != NULL)
-			CloseHandle(hConfigMutex);
+		if (m_hConfigMutex != NULL)
+			CloseHandle(m_hConfigMutex);
 	}
 
-DECLARE_REGISTRY_RESOURCEID(IDR_SystemEx)
+DECLARE_REGISTRY_RESOURCEID(IDR_SYSTEMEX)
 
 DECLARE_NOT_AGGREGATABLE(CSystemEx)
 
@@ -96,15 +89,48 @@ BEGIN_COM_MAP(CSystemEx)
 	COM_INTERFACE_ENTRY(ISystemEx)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
 	COM_INTERFACE_ENTRY(IDispatch)
+	COM_INTERFACE_ENTRY(IConnectionPointContainer)
+	COM_INTERFACE_ENTRY(IProvideClassInfo2)
+	COM_INTERFACE_ENTRY_IMPL(IConnectionPointContainer)
 END_COM_MAP()
 
+BEGIN_CONNECTION_POINT_MAP(CSystemEx)
+	CONNECTION_POINT_ENTRY(__uuidof(IVolumeEvents))
+END_CONNECTION_POINT_MAP()
+
+	//////////////////////////////////////////////////////////////////////////
 	private:	
-		HANDLE hConfigMutex;
+		DWORD m_objID;
+		HWND m_hwnd;
+
+		HANDLE m_hConfigMutex;
 		vector<pair<RECT, bool>> m_monitors;	
 
-		static BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData);
+		static BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData);	
 
-		
+		//////////////////////////////////////////////////////////////////////////
+		// Volume
+		//////////////////////////////////////////////////////////////////////////
+
+		// Vista
+		HRESULT Vista_get_Volume(int *volume);
+		HRESULT Vista_put_Volume(int volume);
+
+		HRESULT Vista_get_Mute(VARIANT *isMuted);
+		HRESULT Vista_put_Mute(BOOL isMuted);
+
+		HRESULT Vista_get_PeakValue(int *level);
+
+		// XP
+		HRESULT XP_get_Volume(int *volume);
+		HRESULT XP_put_Volume(int volume);
+
+		HRESULT XP_get_Mute(VARIANT *isMuted);
+		HRESULT XP_put_Mute(BOOL isMuted);
+
+		HRESULT XP_get_PeakValue(int *level);
+
+	//////////////////////////////////////////////////////////////////////////
 	public:
 
 		void Init(DWORD objID, HWND hwnd);
@@ -120,9 +146,29 @@ END_COM_MAP()
 		//////////////////////////////////////////////////////////////////////////
 		// ISystemEx
 		//////////////////////////////////////////////////////////////////////////
-		STDMETHOD(get_NumberOfScreens)(int* numberOfScreens);
-		STDMETHOD(get_Screens)(VARIANT* screens);
-		STDMETHOD(GetScreen)(int index, IMonitorInfo** info);
+
+		/************************************************************************/
+		/* Monitor                                                              */
+		/************************************************************************/
+
+		STDMETHOD(get_NumberOfMonitors)(int* numberOfMonitors);
+		STDMETHOD(get_Monitors)(VARIANT* monitors);
+		STDMETHOD(GetMonitor)(int index, IMonitorInfo** info);
+
+		/************************************************************************/
+		/* Volume                                                               */
+		/************************************************************************/
+
+		// Master Volume
+		STDMETHOD(get_Volume)(int *volume);
+		STDMETHOD(put_Volume)(int volume);
+
+		// Muting state
+		STDMETHOD(get_Mute)(VARIANT *isMuted);
+		STDMETHOD(put_Mute)(BOOL isMuted);
+
+		// Peak level
+		STDMETHOD(get_PeakValue)(int *level);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(SystemEx), CSystemEx)

@@ -46,6 +46,9 @@
 #include "dlldatax.h"
 #include "SystemEx.h"
 
+#include "VersionCheck.h"
+#include "Volume/VistaCallBackSetup.h"
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DesktopX Plugin
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,6 +121,9 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 		{
 			dllInstance = (HINSTANCE) param2;
 			SDHostMessage = (BOOL (__stdcall *)(UINT, DWORD, DWORD)) param1;
+
+			if (Is_WinVista_or_Later())
+				RegisterCallBack();
 
 			return TRUE;
 		}
@@ -212,6 +218,9 @@ label_expiration:
 				return FALSE;
 
 			pSystemEx->Init(objID, pluginInit->hwnd);
+
+			if (Is_WinVista_or_Later())
+				pVistaVolumeCallback->addID(objID);
 
 			return TRUE;
 		}
@@ -424,6 +433,9 @@ label_expiration:
 		// Stop running this instance of the plugin
 		case SD_TERMINATE_PLUGIN:
 		{
+			if (Is_WinVista_or_Later())
+				pVistaVolumeCallback->removeID(objID);
+
 			return TRUE;
 		}
 
@@ -436,15 +448,21 @@ label_expiration:
 			if (pSystemEx != NULL)
 				pSystemEx->Cleanup();
 
-			SAFE_RELEASE(pSystemEx);	
-			
+			SAFE_RELEASE(pSystemEx);
+
 			return TRUE;
 		}
 
 
 		// Unload the plugin dll
 		case SD_TERMINATE_MODULE:
+		{
+			if (Is_WinVista_or_Later())
+				UnregisterCallBack();
+
 			return TRUE;
+		}
+			
 	}
 
 	return FALSE;
