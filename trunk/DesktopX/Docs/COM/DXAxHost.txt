@@ -1,0 +1,1672 @@
+// typelib filename: C:\Program Files (x86)\Stardock\DesktopX\SDPlugins\DXAxHost.dll
+
+// uid: 
+// version: 4545976.1637728
+// helpstring: DXAxHost 1.0 Type Library
+// helpfile: 
+
+unit DXAXHOSTLib;
+
+interface
+
+uses Windows, ActiveX, Classes;
+
+type
+  // _IObjectEvents Interface
+  // Flags: (4096) dispatchable
+  _IObjectEventsDisp = dispinterface
+     ['{E3019507-B532-46E0-B6BF-AB5589B458C5}']
+  end;
+
+type
+  // IDesktopX Interface
+  // Flags: (4160) dual,dispatchable
+  IDesktopXDisp = dispinterface
+     ['{6B3BDC6E-6413-40A8-B44C-C3DFB4B767E6}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // property ScriptObject
+    function Get_ScriptObject(bstrObjectName: WideString): IDispatch; dispid 1;
+    // property Object
+    function Get_Object(bstrObjectName: WideString): IDispatch; dispid 2;
+    // property IsObject
+    function Get_IsObject(bstrObjectName: WideString): WordBool; dispid 3;
+    // Returns the directory of the executable that loaded the object.
+    function Get_ExecutableDirectory: WideString; dispid 4;
+    // Returns the collection of all objects
+    function Get_Objects: IDispatch; dispid 5;
+    // Returns the collection of all objects of a group
+    function Get_GroupObjects(bstrGroupName: WideString): IDispatch; dispid 6;
+    function Get_CreatePopupMenu: IDispatch; dispid 7;
+    // Register a script object as main controller
+    procedure RegisterController(bstrObjName: WideString); dispid 8;
+    function Get_HostType: LongInt; dispid 9;
+    // Returns/sets the global mute setting for DesktopX or widgets
+    function Get_Mute: LongInt; dispid 10;
+    // Returns/sets the global mute setting for DesktopX or widgets
+    procedure Set_Mute(const Param1: LongInt); dispid 10;
+    function Get_CreateForm: IDispatch; dispid 11;
+    // Frees unused memory
+    procedure GarbageCollection; dispid 12;
+    // Unloads DesktopX or widget/gadget
+    procedure Exit(const exitParam: LongInt); dispid 13;
+    // method MsgBox
+    function Get_MsgBox(bstrMessage: WideString; flags: LongInt; const bstrTitle: WideString; const bstrOwner: WideString): LongInt; dispid 14;
+    // Sets a language definition
+    procedure SetLanguageDefinition(bstrItem: WideString; itm: LongInt); dispid 15;
+  end;
+
+type
+  // IDesktopX Interface
+  // Flags: (4160) dual,dispatchable
+  IDesktopX = interface(IDispatch)
+     ['{6B3BDC6E-6413-40A8-B44C-C3DFB4B767E6}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // property ScriptObject
+    function Get_ScriptObject(bstrObjectName: WideString): IDispatch; dispid 1;
+    // property Object
+    function Get_Object(bstrObjectName: WideString): IDispatch; dispid 2;
+    // property IsObject
+    function Get_IsObject(bstrObjectName: WideString): WordBool; dispid 3;
+    // Returns the directory of the executable that loaded the object.
+    function Get_ExecutableDirectory: WideString; dispid 4;
+    // Returns the collection of all objects
+    function Get_Objects: IDispatch; dispid 5;
+    // Returns the collection of all objects of a group
+    function Get_GroupObjects(bstrGroupName: WideString): IDispatch; dispid 6;
+    function Get_CreatePopupMenu: IDispatch; dispid 7;
+    // Register a script object as main controller
+    procedure RegisterController(bstrObjName: WideString); dispid 8;
+    function Get_HostType: LongInt; dispid 9;
+    // Returns/sets the global mute setting for DesktopX or widgets
+    function Get_Mute: LongInt; dispid 10;
+    // Returns/sets the global mute setting for DesktopX or widgets
+    procedure Set_Mute(const Param1: LongInt); dispid 10;
+    function Get_CreateForm: IDispatch; dispid 11;
+    // Frees unused memory
+    procedure GarbageCollection; dispid 12;
+    // Unloads DesktopX or widget/gadget
+    procedure Exit(const exitParam: LongInt); dispid 13;
+    // method MsgBox
+    function Get_MsgBox(bstrMessage: WideString; flags: LongInt; const bstrTitle: WideString; const bstrOwner: WideString): LongInt; dispid 14;
+    // Sets a language definition
+    procedure SetLanguageDefinition(bstrItem: WideString; itm: LongInt); dispid 15;
+  end;
+
+type
+  // Object Class
+  // CLSID: {D59CF868-3464-49D3-9A96-3E6890EDC7E8}
+  // Flags: (2) cancreate
+  TObject = class(TAutoObject, IObject, _IObjectEvents);
+
+type
+  // IObject Interface
+  // Flags: (4160) dual,dispatchable
+  IObjectDisp = dispinterface
+     ['{A9749998-DFAB-4158-AFF6-5F20CA2722E2}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Returns/sets the distance between the left edge of an object and the left edge of its container.
+    function Get_Left: LongInt; dispid 1;
+    // Returns/sets the distance between the left edge of an object and the left edge of its container.
+    procedure Set_Left(const Param1: LongInt); dispid 1;
+    // Returns/sets the distance between the top edge of an object and the top edge of its container.
+    function Get_Top: LongInt; dispid 2;
+    // Returns/sets the distance between the top edge of an object and the top edge of its container.
+    procedure Set_Top(const Param1: LongInt); dispid 2;
+    // Returns/sets the distance between the bottom edge of an object and the top edge of its container.
+    function Get_Bottom: LongInt; dispid 3;
+    // Returns/sets the distance between the bottom edge of an object and the top edge of its container.
+    procedure Set_Bottom(const Param1: LongInt); dispid 3;
+    // Returns/sets the distance between the right edge of an object and the left edge of its container.
+    function Get_Right: LongInt; dispid 4;
+    // Returns/sets the distance between the right edge of an object and the left edge of its container.
+    procedure Set_Right(const Param1: LongInt); dispid 4;
+    // Returns/sets the object state.
+    function Get_State: WideString; dispid 5;
+    // Returns/sets the object state.
+    procedure Set_State(const Param1: WideString); dispid 5;
+    // Used to create a timer.
+    procedure SetTimer(id: Integer; ims: Integer); dispid 6;
+    // Used to destroy a timer.
+    procedure KillTimer(id: Integer); dispid 7;
+    // Returns/sets data saved with the object.
+    function Get_PersistStorage(KeyName: WideString): WideString; dispid 8;
+    // Returns/sets data saved with the object.
+    procedure Set_PersistStorage(KeyName: WideString; const Param2: WideString); dispid 8;
+    // Returns/sets data saved only on the current machine.
+    function Get_LocalStorage(KeyName: WideString): WideString; dispid 9;
+    // Returns/sets data saved only on the current machine.
+    procedure Set_LocalStorage(KeyName: WideString; const Param2: WideString); dispid 9;
+    // Returns/sets the state of another object.
+    function Get_ObjectState(bstrObject: WideString): WideString; dispid 10;
+    // Returns/sets the state of another object.
+    procedure Set_ObjectState(bstrObject: WideString; const Param2: WideString); dispid 10;
+    // Returns/sets the visibility of the object.
+    function Get_Visible: WordBool; dispid 11;
+    // Returns/sets the visibility of the object.
+    procedure Set_Visible(const Param1: WordBool); dispid 11;
+    // Causes the script to sleep for the specified number of milliseconds.
+    procedure Sleep(iCount: DWORD); dispid 12;
+    // Returns/sets the text of the object.
+    function Get_Text: WideString; dispid 13;
+    // Returns/sets the text of the object.
+    procedure Set_Text(const Param1: WideString); dispid 13;
+    // Returns/sets the text color of the object.
+    function Get_TextColor: LongInt; dispid 14;
+    // Returns/sets the text color of the object.
+    procedure Set_TextColor(const Param1: LongInt); dispid 14;
+    // Sets the state of the object without allowing the current state to complete.
+    procedure Set_StatePreempt(const Param1: WideString); dispid 15;
+    // Returns/sets the object name.
+    function Get_Name: WideString; dispid 16;
+    // Returns/sets the object name.
+    procedure Set_Name(const Param1: WideString); dispid 16;
+    // Returns/sets the object width.
+    function Get_Width: LongInt; dispid 17;
+    // Returns/sets the object width.
+    procedure Set_Width(const Param1: LongInt); dispid 17;
+    // Returns/sets the object height.
+    function Get_Height: LongInt; dispid 18;
+    // Returns/sets the object height.
+    procedure Set_Height(const Param1: LongInt); dispid 18;
+    // Returns/sets the hue of the current object state.
+    function Get_Hue: LongInt; dispid 19;
+    // Returns/sets the hue of the current object state.
+    procedure Set_Hue(const Param1: LongInt); dispid 19;
+    // Returns the object interface of the parent object. You can only change parent of a parented object to another valid parent object.
+    function Get_Parent: IDispatch; dispid 20;
+    // Returns the object interface of the parent object. You can only change parent of a parented object to another valid parent object.
+    procedure Set_Parent(const Param1: IDispatch); dispid 20;
+    // Returns/sets the brightness of the current object state.
+    function Get_Brightness: LongInt; dispid 21;
+    // Returns/sets the brightness of the current object state.
+    procedure Set_Brightness(const Param1: LongInt); dispid 21;
+    // Returns/sets the rotation of the current object state.
+    function Get_Rotation: LongInt; dispid 22;
+    // Returns/sets the rotation of the current object state.
+    procedure Set_Rotation(const Param1: LongInt); dispid 22;
+    // Creates a clone of the DesktopX object.
+    procedure Clone(const bstrNewObject: WideString; const x: Integer; const y: Integer); dispid 23;
+    // Deletes the object.
+    procedure Delete; dispid 24;
+    // Moves the object.
+    procedure Move(const x: LongInt; const y: LongInt); dispid 25;
+    // Puts the object on top.
+    procedure OnTop; dispid 26;
+    // Returns/sets the text border color of the object.
+    function Get_TextBorderColor: LongInt; dispid 27;
+    // Returns/sets the text border color of the object.
+    procedure Set_TextBorderColor(const Param1: LongInt); dispid 27;
+    // Returns/sets if the text border is enabled.
+    function Get_TextBorder: WordBool; dispid 28;
+    // Returns/sets if the text border is enabled.
+    procedure Set_TextBorder(const Param1: WordBool); dispid 28;
+    // Returns/sets the tooltip text of the object.
+    function Get_ToolTipText: WideString; dispid 29;
+    // Returns/sets the tooltip text of the object.
+    procedure Set_ToolTipText(const Param1: WideString); dispid 29;
+    // Returns/sets the opacity of the current object state.
+    function Get_Opacity: LongInt; dispid 30;
+    // Returns/sets the opacity of the current object state.
+    procedure Set_Opacity(const Param1: LongInt); dispid 30;
+    // Sets the keyboard focus to the object.
+    procedure SetFocus; dispid 31;
+    // Returns/sets the appbar mode of the object. 0=disabled 1=standard 2=autohide. Only top-level unparented objects can be appbar.
+    function Get_AppbarMode: LongInt; dispid 32;
+    // Returns/sets the appbar mode of the object. 0=disabled 1=standard 2=autohide. Only top-level unparented objects can be appbar.
+    procedure Set_AppbarMode(const Param1: LongInt); dispid 32;
+    // Returns the object data directory.
+    function Get_Directory: WideString; dispid 33;
+    // Resizes the object.
+    procedure Resize(const Width: LongInt; const Height: LongInt); dispid 34;
+    // property Object
+    function Get_States(bstrStateName: WideString): IDispatch; dispid 35;
+    // Returns/sets the contrast of the current object state.
+    function Get_Contrast: LongInt; dispid 36;
+    // Returns/sets the contrast of the current object state.
+    procedure Set_Contrast(const Param1: LongInt); dispid 36;
+    // Internal use
+    function Get_PRIVATE__ID: LongInt; dispid 37;
+    // Returns/sets the image of the current state.
+    function Get_Picture: WideString; dispid 38;
+    // Returns/sets the image of the current state.
+    procedure Set_Picture(const Param1: WideString); dispid 38;
+    // Loads the control. Set "Delay loaded" in the menu options.
+    procedure LoadControl; dispid 39;
+    // Unloads the control.
+    procedure UnloadControl; dispid 40;
+    // Cache state.
+    procedure CacheState; dispid 41;
+    // Clears the state cache.
+    procedure ClearStateCache; dispid 42;
+    // Executes the command associated to the object.
+    procedure ExecuteCommand; dispid 43;
+    // Returns/sets the object volume.
+    function Get_Volume: LongInt; dispid 44;
+    // Returns/sets the object volume.
+    procedure Set_Volume(const Param1: LongInt); dispid 44;
+    // Returns/sets the sound of the current state.
+    function Get_Sound: WideString; dispid 45;
+    // Returns/sets the sound of the current state.
+    procedure Set_Sound(const Param1: WideString); dispid 45;
+    // Returns the collection of all children
+    function Get_Children: IDispatch; dispid 46;
+    // Sets the image of the current state and its attributes.
+    procedure SetPicture(const newVal: WideString; const frames: LongInt; const interval: LongInt; const flags: LongInt); dispid 47;
+    // Returns/sets the object's current frame. You have to configure the current state animation to be scripted.
+    function Get_CurrentFrame: LongInt; dispid 48;
+    // Returns/sets the object's current frame. You have to configure the current state animation to be scripted.
+    procedure Set_CurrentFrame(const Param1: LongInt); dispid 48;
+    // Returns true if the object is a contained children. If it returns false and it has a parent, it is an owned child.
+    function Get_Child: WordBool; dispid 49;
+    // Returns/sets the parent name.
+    function Get_ParentName: WideString; dispid 50;
+    // Sets the image margins and tile/stretch settings.
+    procedure SetMargins(const Left: LongInt; const Top: LongInt; const Right: LongInt; const Bottom: LongInt; const bStretchX: WordBool; const bStretchY: WordBool); dispid 51;
+    // Returns/sets the command path or URL of the object.
+    function Get_Command: WideString; dispid 52;
+    // Returns/sets the command path or URL of the object.
+    procedure Set_Command(const Param1: WideString); dispid 52;
+    // Returns/sets the commant parameters of the object.
+    function Get_CommandParams: WideString; dispid 53;
+    // Returns/sets the commant parameters of the object.
+    procedure Set_CommandParams(const Param1: WideString); dispid 53;
+    // Returns/sets the object group name.
+    function Get_Group: WideString; dispid 54;
+    // Returns/sets the object group name.
+    procedure Set_Group(const Param1: WideString); dispid 54;
+    procedure RegisterHotkey(const id: LongInt; const vItem: Variant); dispid 55;
+    procedure UnregisterHotkey(const id: LongInt); dispid 56;
+    // Returns/sets the object description.
+    function Get_Comments: WideString; dispid 57;
+    // Returns/sets the object description.
+    procedure Set_Comments(const Param1: WideString); dispid 57;
+    // Sets the font settings for all states
+    procedure SetFont(const fontName: WideString; const size: LongInt; const bBold: WordBool; const bItalic: WordBool; const bUnderline: WordBool; const bStrikeOut: WordBool; const lfCharSet: Byte); dispid 58;
+    // Returns the font data
+    function Get_fontName: WideString; dispid 59;
+    // Returns the font data
+    function Get_FontBold: WordBool; dispid 60;
+    // Returns the font data
+    function Get_FontItalic: WordBool; dispid 61;
+    // Returns the font data
+    function Get_FontUnderline: WordBool; dispid 62;
+    // Returns the font data
+    function Get_FontStrikeout: WordBool; dispid 63;
+    // Returns the font data
+    function Get_FontSize: LongInt; dispid 64;
+    // Sets the image shadow settings.
+    procedure SetShadow(const bEnabled: WordBool; const sharpness: LongInt; const darkness: LongInt; const offsetX: LongInt; const offsetY: LongInt; const sdwColor: OLE_COLOR); dispid 65;
+    // Sets the external script file.
+    procedure SetScript(const scriptName: WideString); dispid 66;
+    // Returns/sets the object's cursor.
+    function Get_Cursor: LongInt; dispid 67;
+    // Returns/sets the object's cursor.
+    procedure Set_Cursor(const Param1: LongInt); dispid 67;
+  end;
+
+type
+  // IObject Interface
+  // Flags: (4160) dual,dispatchable
+  IObject = interface(IDispatch)
+     ['{A9749998-DFAB-4158-AFF6-5F20CA2722E2}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Returns/sets the distance between the left edge of an object and the left edge of its container.
+    function Get_Left: LongInt; dispid 1;
+    // Returns/sets the distance between the left edge of an object and the left edge of its container.
+    procedure Set_Left(const Param1: LongInt); dispid 1;
+    // Returns/sets the distance between the top edge of an object and the top edge of its container.
+    function Get_Top: LongInt; dispid 2;
+    // Returns/sets the distance between the top edge of an object and the top edge of its container.
+    procedure Set_Top(const Param1: LongInt); dispid 2;
+    // Returns/sets the distance between the bottom edge of an object and the top edge of its container.
+    function Get_Bottom: LongInt; dispid 3;
+    // Returns/sets the distance between the bottom edge of an object and the top edge of its container.
+    procedure Set_Bottom(const Param1: LongInt); dispid 3;
+    // Returns/sets the distance between the right edge of an object and the left edge of its container.
+    function Get_Right: LongInt; dispid 4;
+    // Returns/sets the distance between the right edge of an object and the left edge of its container.
+    procedure Set_Right(const Param1: LongInt); dispid 4;
+    // Returns/sets the object state.
+    function Get_State: WideString; dispid 5;
+    // Returns/sets the object state.
+    procedure Set_State(const Param1: WideString); dispid 5;
+    // Used to create a timer.
+    procedure SetTimer(id: Integer; ims: Integer); dispid 6;
+    // Used to destroy a timer.
+    procedure KillTimer(id: Integer); dispid 7;
+    // Returns/sets data saved with the object.
+    function Get_PersistStorage(KeyName: WideString): WideString; dispid 8;
+    // Returns/sets data saved with the object.
+    procedure Set_PersistStorage(KeyName: WideString; const Param2: WideString); dispid 8;
+    // Returns/sets data saved only on the current machine.
+    function Get_LocalStorage(KeyName: WideString): WideString; dispid 9;
+    // Returns/sets data saved only on the current machine.
+    procedure Set_LocalStorage(KeyName: WideString; const Param2: WideString); dispid 9;
+    // Returns/sets the state of another object.
+    function Get_ObjectState(bstrObject: WideString): WideString; dispid 10;
+    // Returns/sets the state of another object.
+    procedure Set_ObjectState(bstrObject: WideString; const Param2: WideString); dispid 10;
+    // Returns/sets the visibility of the object.
+    function Get_Visible: WordBool; dispid 11;
+    // Returns/sets the visibility of the object.
+    procedure Set_Visible(const Param1: WordBool); dispid 11;
+    // Causes the script to sleep for the specified number of milliseconds.
+    procedure Sleep(iCount: DWORD); dispid 12;
+    // Returns/sets the text of the object.
+    function Get_Text: WideString; dispid 13;
+    // Returns/sets the text of the object.
+    procedure Set_Text(const Param1: WideString); dispid 13;
+    // Returns/sets the text color of the object.
+    function Get_TextColor: LongInt; dispid 14;
+    // Returns/sets the text color of the object.
+    procedure Set_TextColor(const Param1: LongInt); dispid 14;
+    // Sets the state of the object without allowing the current state to complete.
+    procedure Set_StatePreempt(const Param1: WideString); dispid 15;
+    // Returns/sets the object name.
+    function Get_Name: WideString; dispid 16;
+    // Returns/sets the object name.
+    procedure Set_Name(const Param1: WideString); dispid 16;
+    // Returns/sets the object width.
+    function Get_Width: LongInt; dispid 17;
+    // Returns/sets the object width.
+    procedure Set_Width(const Param1: LongInt); dispid 17;
+    // Returns/sets the object height.
+    function Get_Height: LongInt; dispid 18;
+    // Returns/sets the object height.
+    procedure Set_Height(const Param1: LongInt); dispid 18;
+    // Returns/sets the hue of the current object state.
+    function Get_Hue: LongInt; dispid 19;
+    // Returns/sets the hue of the current object state.
+    procedure Set_Hue(const Param1: LongInt); dispid 19;
+    // Returns the object interface of the parent object. You can only change parent of a parented object to another valid parent object.
+    function Get_Parent: IDispatch; dispid 20;
+    // Returns the object interface of the parent object. You can only change parent of a parented object to another valid parent object.
+    procedure Set_Parent(const Param1: IDispatch); dispid 20;
+    // Returns/sets the brightness of the current object state.
+    function Get_Brightness: LongInt; dispid 21;
+    // Returns/sets the brightness of the current object state.
+    procedure Set_Brightness(const Param1: LongInt); dispid 21;
+    // Returns/sets the rotation of the current object state.
+    function Get_Rotation: LongInt; dispid 22;
+    // Returns/sets the rotation of the current object state.
+    procedure Set_Rotation(const Param1: LongInt); dispid 22;
+    // Creates a clone of the DesktopX object.
+    procedure Clone(const bstrNewObject: WideString; const x: Integer; const y: Integer); dispid 23;
+    // Deletes the object.
+    procedure Delete; dispid 24;
+    // Moves the object.
+    procedure Move(const x: LongInt; const y: LongInt); dispid 25;
+    // Puts the object on top.
+    procedure OnTop; dispid 26;
+    // Returns/sets the text border color of the object.
+    function Get_TextBorderColor: LongInt; dispid 27;
+    // Returns/sets the text border color of the object.
+    procedure Set_TextBorderColor(const Param1: LongInt); dispid 27;
+    // Returns/sets if the text border is enabled.
+    function Get_TextBorder: WordBool; dispid 28;
+    // Returns/sets if the text border is enabled.
+    procedure Set_TextBorder(const Param1: WordBool); dispid 28;
+    // Returns/sets the tooltip text of the object.
+    function Get_ToolTipText: WideString; dispid 29;
+    // Returns/sets the tooltip text of the object.
+    procedure Set_ToolTipText(const Param1: WideString); dispid 29;
+    // Returns/sets the opacity of the current object state.
+    function Get_Opacity: LongInt; dispid 30;
+    // Returns/sets the opacity of the current object state.
+    procedure Set_Opacity(const Param1: LongInt); dispid 30;
+    // Sets the keyboard focus to the object.
+    procedure SetFocus; dispid 31;
+    // Returns/sets the appbar mode of the object. 0=disabled 1=standard 2=autohide. Only top-level unparented objects can be appbar.
+    function Get_AppbarMode: LongInt; dispid 32;
+    // Returns/sets the appbar mode of the object. 0=disabled 1=standard 2=autohide. Only top-level unparented objects can be appbar.
+    procedure Set_AppbarMode(const Param1: LongInt); dispid 32;
+    // Returns the object data directory.
+    function Get_Directory: WideString; dispid 33;
+    // Resizes the object.
+    procedure Resize(const Width: LongInt; const Height: LongInt); dispid 34;
+    // property Object
+    function Get_States(bstrStateName: WideString): IDispatch; dispid 35;
+    // Returns/sets the contrast of the current object state.
+    function Get_Contrast: LongInt; dispid 36;
+    // Returns/sets the contrast of the current object state.
+    procedure Set_Contrast(const Param1: LongInt); dispid 36;
+    // Internal use
+    function Get_PRIVATE__ID: LongInt; dispid 37;
+    // Returns/sets the image of the current state.
+    function Get_Picture: WideString; dispid 38;
+    // Returns/sets the image of the current state.
+    procedure Set_Picture(const Param1: WideString); dispid 38;
+    // Loads the control. Set "Delay loaded" in the menu options.
+    procedure LoadControl; dispid 39;
+    // Unloads the control.
+    procedure UnloadControl; dispid 40;
+    // Cache state.
+    procedure CacheState; dispid 41;
+    // Clears the state cache.
+    procedure ClearStateCache; dispid 42;
+    // Executes the command associated to the object.
+    procedure ExecuteCommand; dispid 43;
+    // Returns/sets the object volume.
+    function Get_Volume: LongInt; dispid 44;
+    // Returns/sets the object volume.
+    procedure Set_Volume(const Param1: LongInt); dispid 44;
+    // Returns/sets the sound of the current state.
+    function Get_Sound: WideString; dispid 45;
+    // Returns/sets the sound of the current state.
+    procedure Set_Sound(const Param1: WideString); dispid 45;
+    // Returns the collection of all children
+    function Get_Children: IDispatch; dispid 46;
+    // Sets the image of the current state and its attributes.
+    procedure SetPicture(const newVal: WideString; const frames: LongInt; const interval: LongInt; const flags: LongInt); dispid 47;
+    // Returns/sets the object's current frame. You have to configure the current state animation to be scripted.
+    function Get_CurrentFrame: LongInt; dispid 48;
+    // Returns/sets the object's current frame. You have to configure the current state animation to be scripted.
+    procedure Set_CurrentFrame(const Param1: LongInt); dispid 48;
+    // Returns true if the object is a contained children. If it returns false and it has a parent, it is an owned child.
+    function Get_Child: WordBool; dispid 49;
+    // Returns/sets the parent name.
+    function Get_ParentName: WideString; dispid 50;
+    // Sets the image margins and tile/stretch settings.
+    procedure SetMargins(const Left: LongInt; const Top: LongInt; const Right: LongInt; const Bottom: LongInt; const bStretchX: WordBool; const bStretchY: WordBool); dispid 51;
+    // Returns/sets the command path or URL of the object.
+    function Get_Command: WideString; dispid 52;
+    // Returns/sets the command path or URL of the object.
+    procedure Set_Command(const Param1: WideString); dispid 52;
+    // Returns/sets the commant parameters of the object.
+    function Get_CommandParams: WideString; dispid 53;
+    // Returns/sets the commant parameters of the object.
+    procedure Set_CommandParams(const Param1: WideString); dispid 53;
+    // Returns/sets the object group name.
+    function Get_Group: WideString; dispid 54;
+    // Returns/sets the object group name.
+    procedure Set_Group(const Param1: WideString); dispid 54;
+    procedure RegisterHotkey(const id: LongInt; const vItem: Variant); dispid 55;
+    procedure UnregisterHotkey(const id: LongInt); dispid 56;
+    // Returns/sets the object description.
+    function Get_Comments: WideString; dispid 57;
+    // Returns/sets the object description.
+    procedure Set_Comments(const Param1: WideString); dispid 57;
+    // Sets the font settings for all states
+    procedure SetFont(const fontName: WideString; const size: LongInt; const bBold: WordBool; const bItalic: WordBool; const bUnderline: WordBool; const bStrikeOut: WordBool; const lfCharSet: Byte); dispid 58;
+    // Returns the font data
+    function Get_fontName: WideString; dispid 59;
+    // Returns the font data
+    function Get_FontBold: WordBool; dispid 60;
+    // Returns the font data
+    function Get_FontItalic: WordBool; dispid 61;
+    // Returns the font data
+    function Get_FontUnderline: WordBool; dispid 62;
+    // Returns the font data
+    function Get_FontStrikeout: WordBool; dispid 63;
+    // Returns the font data
+    function Get_FontSize: LongInt; dispid 64;
+    // Sets the image shadow settings.
+    procedure SetShadow(const bEnabled: WordBool; const sharpness: LongInt; const darkness: LongInt; const offsetX: LongInt; const offsetY: LongInt; const sdwColor: OLE_COLOR); dispid 65;
+    // Sets the external script file.
+    procedure SetScript(const scriptName: WideString); dispid 66;
+    // Returns/sets the object's cursor.
+    function Get_Cursor: LongInt; dispid 67;
+    // Returns/sets the object's cursor.
+    procedure Set_Cursor(const Param1: LongInt); dispid 67;
+  end;
+
+type
+  // DesktopX Class
+  // CLSID: {75328D64-87CF-4848-A831-35DEAFE27822}
+  // Flags: (2) cancreate
+  TDesktopX = class(TAutoObject, IDesktopX);
+
+type
+  // _IScriptEvents Interface
+  // Flags: (4096) dispatchable
+  _IScriptEventsDisp = dispinterface
+     ['{541D379A-8525-4679-BD95-7762A35EB4A3}']
+  end;
+
+type
+  // IScript Interface
+  // Flags: (4160) dual,dispatchable
+  IScriptDisp = dispinterface
+     ['{4BD637D4-7497-43D2-8DD2-8A338CADFC01}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // method MsgBox
+    procedure MsgBox(bstrMessage: WideString); dispid 1;
+    // property MsgBoxEx
+    function Get_MsgBoxEx(bstrText: WideString; bstrTitle: WideString; flags: LongInt): LongInt; dispid 2;
+    // property InputBox
+    function Get_InputBox(bstrQuestion: WideString): WideString; dispid 3;
+    // property InputBoxEx
+    function Get_InputBoxEx(bstrQuestion: WideString; flags: LongInt): WideString; dispid 4;
+    // method MsgDbg
+    procedure MsgDbg(bstrDebug: WideString); dispid 5;
+  end;
+
+type
+  // IScript Interface
+  // Flags: (4160) dual,dispatchable
+  IScript = interface(IDispatch)
+     ['{4BD637D4-7497-43D2-8DD2-8A338CADFC01}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // method MsgBox
+    procedure MsgBox(bstrMessage: WideString); dispid 1;
+    // property MsgBoxEx
+    function Get_MsgBoxEx(bstrText: WideString; bstrTitle: WideString; flags: LongInt): LongInt; dispid 2;
+    // property InputBox
+    function Get_InputBox(bstrQuestion: WideString): WideString; dispid 3;
+    // property InputBoxEx
+    function Get_InputBoxEx(bstrQuestion: WideString; flags: LongInt): WideString; dispid 4;
+    // method MsgDbg
+    procedure MsgDbg(bstrDebug: WideString); dispid 5;
+  end;
+
+type
+  // ISystem Interface
+  // Flags: (4160) dual,dispatchable
+  ISystemDisp = dispinterface
+     ['{16278BAF-9809-47F5-BE03-F725BC499E5E}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // property ScreenWidth
+    function Get_ScreenWidth: LongInt; dispid 1;
+    // property ScreenHeight
+    function Get_ScreenHeight: LongInt; dispid 2;
+    // property VScreenWidth
+    function Get_VScreenWidth: LongInt; dispid 3;
+    // property VScreenHeight
+    function Get_VScreenHeight: LongInt; dispid 4;
+    // property InternetConnected
+    function Get_InternetConnected: WordBool; dispid 5;
+    // Returns the leftmost pixel of the virtual screen(for multimon support)
+    function Get_VScreenLeft: LongInt; dispid 6;
+    // Returns the topmost pixel of the virtual screen(for multimon support)
+    function Get_VScreenTop: LongInt; dispid 7;
+    // Returns the horizontal position of the mouse cursor
+    function Get_CursorX: LongInt; dispid 8;
+    // Returns the vertical position of the mouse cursor
+    function Get_CursorY: LongInt; dispid 9;
+    // Pings a specified host and returns the number of milliseconds elapsed.
+    function Get_Ping(bstrHost: WideString): LongInt; dispid 10;
+    // Gets the color of a pixel on the screen from a specified coordinate.
+    function Get_PixelColor(x: LongInt; y: LongInt): OLE_COLOR; dispid 11;
+    // Returns the leftmost pixel of the workarea
+    function Get_WorkareaLeft: LongInt; dispid 12;
+    // Returns the topmost pixel of the workarea
+    function Get_WorkareaTop: LongInt; dispid 13;
+    // Returns the rightmost pixel of the workarea
+    function Get_WorkareaRight: LongInt; dispid 14;
+    // Returns the bottommost pixel of the workarea
+    function Get_WorkareaBottom: LongInt; dispid 15;
+    // Sets the current wallpaper: 1=centered, 2=tiled, 3=resize
+    procedure SetWallpaper(const newVal: WideString; const opt: LongInt); dispid 16;
+    // Browse for folder
+    function Get_FolderDialog(const bstrTitle: WideString; const bstrRootDir: WideString; const flags: Cardinal): WideString; dispid 17;
+    // Browse for file (open)
+    function Get_FileOpenDialog(const bstrTitle: WideString; const bstrDefaultFile: WideString; const bstrInitialDir: WideString; const bstrExtensions: WideString; const flags: Cardinal): WideString; dispid 18;
+    // Browse for file (save)
+    function Get_FileSaveDialog(const bstrTitle: WideString; const bstrDefaultFile: WideString; const bstrInitialDir: WideString; const bstrExtensions: WideString; const flags: Cardinal): WideString; dispid 19;
+    // Get the virtual key state. It can be a combination of: 1=Pressed and 2=toggled (i.e. CAPS LOCK key)
+    function Get_KeyState(const vkey: LongInt): LongInt; dispid 20;
+    // Returns the CPU activity in percentage
+    function Get_CpuActivity: LongInt; dispid 21;
+    // Returns/sets the text content of the clipboard
+    function Get_Clipboard: WideString; dispid 22;
+    // Returns/sets the text content of the clipboard
+    procedure Set_Clipboard(const Param1: WideString); dispid 22;
+    // Returns/sets the text content of the clipboard
+    function Get_Mute: LongInt; dispid 23;
+    // Returns/sets the text content of the clipboard
+    procedure Set_Mute(const Param1: LongInt); dispid 23;
+    // Returns/sets the text content of the clipboard
+    function Get_Volume: LongInt; dispid 24;
+    // Returns/sets the text content of the clipboard
+    procedure Set_Volume(const Param1: LongInt); dispid 24;
+    // Sets the current desktop color. Option =1 for reset
+    procedure SetDesktopColor(const crDesk: OLE_COLOR; const opt: LongInt); dispid 25;
+    // Downloads the selected remote file from an http location to the specified location
+    procedure DownloadFile(const remoteUrl: WideString; const localPath: WideString; const bAsync: WordBool); dispid 26;
+    // Downloads the selected remote file from an http location to the specified location
+    function Get_SendRequest(const remoteUrl: WideString; const postParams: WideString; const bAsync: WordBool): WideString; dispid 27;
+    procedure SimpleWrite(const filePath: WideString; const Content: WideString; const writeMode: LongInt); dispid 28;
+    function Get_SimpleRead(filePath: WideString; writeMode: LongInt): WideString; dispid 29;
+  end;
+
+type
+  // ISystem Interface
+  // Flags: (4160) dual,dispatchable
+  ISystem = interface(IDispatch)
+     ['{16278BAF-9809-47F5-BE03-F725BC499E5E}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // property ScreenWidth
+    function Get_ScreenWidth: LongInt; dispid 1;
+    // property ScreenHeight
+    function Get_ScreenHeight: LongInt; dispid 2;
+    // property VScreenWidth
+    function Get_VScreenWidth: LongInt; dispid 3;
+    // property VScreenHeight
+    function Get_VScreenHeight: LongInt; dispid 4;
+    // property InternetConnected
+    function Get_InternetConnected: WordBool; dispid 5;
+    // Returns the leftmost pixel of the virtual screen(for multimon support)
+    function Get_VScreenLeft: LongInt; dispid 6;
+    // Returns the topmost pixel of the virtual screen(for multimon support)
+    function Get_VScreenTop: LongInt; dispid 7;
+    // Returns the horizontal position of the mouse cursor
+    function Get_CursorX: LongInt; dispid 8;
+    // Returns the vertical position of the mouse cursor
+    function Get_CursorY: LongInt; dispid 9;
+    // Pings a specified host and returns the number of milliseconds elapsed.
+    function Get_Ping(bstrHost: WideString): LongInt; dispid 10;
+    // Gets the color of a pixel on the screen from a specified coordinate.
+    function Get_PixelColor(x: LongInt; y: LongInt): OLE_COLOR; dispid 11;
+    // Returns the leftmost pixel of the workarea
+    function Get_WorkareaLeft: LongInt; dispid 12;
+    // Returns the topmost pixel of the workarea
+    function Get_WorkareaTop: LongInt; dispid 13;
+    // Returns the rightmost pixel of the workarea
+    function Get_WorkareaRight: LongInt; dispid 14;
+    // Returns the bottommost pixel of the workarea
+    function Get_WorkareaBottom: LongInt; dispid 15;
+    // Sets the current wallpaper: 1=centered, 2=tiled, 3=resize
+    procedure SetWallpaper(const newVal: WideString; const opt: LongInt); dispid 16;
+    // Browse for folder
+    function Get_FolderDialog(const bstrTitle: WideString; const bstrRootDir: WideString; const flags: Cardinal): WideString; dispid 17;
+    // Browse for file (open)
+    function Get_FileOpenDialog(const bstrTitle: WideString; const bstrDefaultFile: WideString; const bstrInitialDir: WideString; const bstrExtensions: WideString; const flags: Cardinal): WideString; dispid 18;
+    // Browse for file (save)
+    function Get_FileSaveDialog(const bstrTitle: WideString; const bstrDefaultFile: WideString; const bstrInitialDir: WideString; const bstrExtensions: WideString; const flags: Cardinal): WideString; dispid 19;
+    // Get the virtual key state. It can be a combination of: 1=Pressed and 2=toggled (i.e. CAPS LOCK key)
+    function Get_KeyState(const vkey: LongInt): LongInt; dispid 20;
+    // Returns the CPU activity in percentage
+    function Get_CpuActivity: LongInt; dispid 21;
+    // Returns/sets the text content of the clipboard
+    function Get_Clipboard: WideString; dispid 22;
+    // Returns/sets the text content of the clipboard
+    procedure Set_Clipboard(const Param1: WideString); dispid 22;
+    // Returns/sets the text content of the clipboard
+    function Get_Mute: LongInt; dispid 23;
+    // Returns/sets the text content of the clipboard
+    procedure Set_Mute(const Param1: LongInt); dispid 23;
+    // Returns/sets the text content of the clipboard
+    function Get_Volume: LongInt; dispid 24;
+    // Returns/sets the text content of the clipboard
+    procedure Set_Volume(const Param1: LongInt); dispid 24;
+    // Sets the current desktop color. Option =1 for reset
+    procedure SetDesktopColor(const crDesk: OLE_COLOR; const opt: LongInt); dispid 25;
+    // Downloads the selected remote file from an http location to the specified location
+    procedure DownloadFile(const remoteUrl: WideString; const localPath: WideString; const bAsync: WordBool); dispid 26;
+    // Downloads the selected remote file from an http location to the specified location
+    function Get_SendRequest(const remoteUrl: WideString; const postParams: WideString; const bAsync: WordBool): WideString; dispid 27;
+    procedure SimpleWrite(const filePath: WideString; const Content: WideString; const writeMode: LongInt); dispid 28;
+    function Get_SimpleRead(filePath: WideString; writeMode: LongInt): WideString; dispid 29;
+  end;
+
+type
+  // Script Class
+  // CLSID: {E745B262-93B6-4630-B26E-4E0CD4C435EC}
+  // Flags: (2) cancreate
+  TScript = class(TAutoObject, IScript);
+
+type
+  // _ISystemEvents Interface
+  // Flags: (4096) dispatchable
+  _ISystemEventsDisp = dispinterface
+     ['{EA219B20-4DA3-433E-988B-88BF291A8110}']
+  end;
+
+type
+  // IRoot Interface
+  // Flags: (4160) dual,dispatchable
+  IRootDisp = dispinterface
+     ['{A7162C35-5EC6-4F66-BEED-D933DF855282}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // property DesktopX
+    function Get_DesktopX: IDispatch; dispid 1;
+    // property Script
+    function Get_Script: IDispatch; dispid 2;
+    // property System
+    function Get_System: IDispatch; dispid 3;
+    // property Control
+    function Get_Control: IDispatch; dispid 4;
+    // property Object
+    function Get_Object: IDispatch; dispid 5;
+  end;
+
+type
+  // IRoot Interface
+  // Flags: (4160) dual,dispatchable
+  IRoot = interface(IDispatch)
+     ['{A7162C35-5EC6-4F66-BEED-D933DF855282}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // property DesktopX
+    function Get_DesktopX: IDispatch; dispid 1;
+    // property Script
+    function Get_Script: IDispatch; dispid 2;
+    // property System
+    function Get_System: IDispatch; dispid 3;
+    // property Control
+    function Get_Control: IDispatch; dispid 4;
+    // property Object
+    function Get_Object: IDispatch; dispid 5;
+  end;
+
+type
+  // IAxWinAmbientDispatch Interface
+  // Flags: (4160) dual,dispatchable
+  IAxWinAmbientDispatchDisp = dispinterface
+     ['{B6EA2051-048A-11D1-82B9-00C04FB9942E}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Enable or disable windowless activation
+    procedure Set_AllowWindowlessActivation(const Param1: WordBool); dispid 1610743808;
+    // Enable or disable windowless activation
+    function Get_AllowWindowlessActivation: WordBool; dispid 1610743808;
+    // Set the background color
+    procedure Set_BackColor(const Param1: OLE_COLOR); dispid -701;
+    // Set the background color
+    function Get_BackColor: OLE_COLOR; dispid -701;
+    // Set the ambient foreground color
+    procedure Set_ForeColor(const Param1: OLE_COLOR); dispid -704;
+    // Set the ambient foreground color
+    function Get_ForeColor: OLE_COLOR; dispid -704;
+    // Set the ambient locale
+    procedure Set_LocaleID(const Param1: Cardinal); dispid -705;
+    // Set the ambient locale
+    function Get_LocaleID: Cardinal; dispid -705;
+    // Set the ambient user mode
+    procedure Set_UserMode(const Param1: WordBool); dispid -709;
+    // Set the ambient user mode
+    function Get_UserMode: WordBool; dispid -709;
+    // Enable or disable the control as default
+    procedure Set_DisplayAsDefault(const Param1: WordBool); dispid -713;
+    // Enable or disable the control as default
+    function Get_DisplayAsDefault: WordBool; dispid -713;
+    // Set the ambient font
+    procedure Set_Font(const Param1: IFontDisp); dispid -703;
+    // Set the ambient font
+    function Get_Font: IFontDisp; dispid -703;
+    // Enable or disable message reflection
+    procedure Set_MessageReflect(const Param1: WordBool); dispid -706;
+    // Enable or disable message reflection
+    function Get_MessageReflect: WordBool; dispid -706;
+    // Show or hide grab handles
+    function Get_ShowGrabHandles: WordBool; dispid -711;
+    // Are grab handles enabled
+    function Get_ShowHatching: WordBool; dispid -712;
+    // Set the DOCHOSTUIFLAG flags
+    procedure Set_DocHostFlags(const Param1: Cardinal); dispid 1610743826;
+    // Set the DOCHOSTUIFLAG flags
+    function Get_DocHostFlags: Cardinal; dispid 1610743826;
+    // Set the DOCHOSTUIDBLCLK flags
+    procedure Set_DocHostDoubleClickFlags(const Param1: Cardinal); dispid 1610743828;
+    // Set the DOCHOSTUIDBLCLK flags
+    function Get_DocHostDoubleClickFlags: Cardinal; dispid 1610743828;
+    // Enable or disable context menus
+    procedure Set_AllowContextMenu(const Param1: WordBool); dispid 1610743830;
+    // Enable or disable context menus
+    function Get_AllowContextMenu: WordBool; dispid 1610743830;
+    // Enable or disable UI
+    procedure Set_AllowShowUI(const Param1: WordBool); dispid 1610743832;
+    // Enable or disable UI
+    function Get_AllowShowUI: WordBool; dispid 1610743832;
+    // Set the option key path
+    procedure Set_OptionKeyPath(const Param1: WideString); dispid 1610743834;
+    // Set the option key path
+    function Get_OptionKeyPath: WideString; dispid 1610743834;
+  end;
+
+type
+  // IAxWinAmbientDispatch Interface
+  // Flags: (4160) dual,dispatchable
+  IAxWinAmbientDispatch = interface(IDispatch)
+     ['{B6EA2051-048A-11D1-82B9-00C04FB9942E}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Enable or disable windowless activation
+    procedure Set_AllowWindowlessActivation(const Param1: WordBool); dispid 1610743808;
+    // Enable or disable windowless activation
+    function Get_AllowWindowlessActivation: WordBool; dispid 1610743808;
+    // Set the background color
+    procedure Set_BackColor(const Param1: OLE_COLOR); dispid -701;
+    // Set the background color
+    function Get_BackColor: OLE_COLOR; dispid -701;
+    // Set the ambient foreground color
+    procedure Set_ForeColor(const Param1: OLE_COLOR); dispid -704;
+    // Set the ambient foreground color
+    function Get_ForeColor: OLE_COLOR; dispid -704;
+    // Set the ambient locale
+    procedure Set_LocaleID(const Param1: Cardinal); dispid -705;
+    // Set the ambient locale
+    function Get_LocaleID: Cardinal; dispid -705;
+    // Set the ambient user mode
+    procedure Set_UserMode(const Param1: WordBool); dispid -709;
+    // Set the ambient user mode
+    function Get_UserMode: WordBool; dispid -709;
+    // Enable or disable the control as default
+    procedure Set_DisplayAsDefault(const Param1: WordBool); dispid -713;
+    // Enable or disable the control as default
+    function Get_DisplayAsDefault: WordBool; dispid -713;
+    // Set the ambient font
+    procedure Set_Font(const Param1: IFontDisp); dispid -703;
+    // Set the ambient font
+    function Get_Font: IFontDisp; dispid -703;
+    // Enable or disable message reflection
+    procedure Set_MessageReflect(const Param1: WordBool); dispid -706;
+    // Enable or disable message reflection
+    function Get_MessageReflect: WordBool; dispid -706;
+    // Show or hide grab handles
+    function Get_ShowGrabHandles: WordBool; dispid -711;
+    // Are grab handles enabled
+    function Get_ShowHatching: WordBool; dispid -712;
+    // Set the DOCHOSTUIFLAG flags
+    procedure Set_DocHostFlags(const Param1: Cardinal); dispid 1610743826;
+    // Set the DOCHOSTUIFLAG flags
+    function Get_DocHostFlags: Cardinal; dispid 1610743826;
+    // Set the DOCHOSTUIDBLCLK flags
+    procedure Set_DocHostDoubleClickFlags(const Param1: Cardinal); dispid 1610743828;
+    // Set the DOCHOSTUIDBLCLK flags
+    function Get_DocHostDoubleClickFlags: Cardinal; dispid 1610743828;
+    // Enable or disable context menus
+    procedure Set_AllowContextMenu(const Param1: WordBool); dispid 1610743830;
+    // Enable or disable context menus
+    function Get_AllowContextMenu: WordBool; dispid 1610743830;
+    // Enable or disable UI
+    procedure Set_AllowShowUI(const Param1: WordBool); dispid 1610743832;
+    // Enable or disable UI
+    function Get_AllowShowUI: WordBool; dispid 1610743832;
+    // Set the option key path
+    procedure Set_OptionKeyPath(const Param1: WideString); dispid 1610743834;
+    // Set the option key path
+    function Get_OptionKeyPath: WideString; dispid 1610743834;
+  end;
+
+type
+  // IAxWinAmbientDispatch Interface
+  // Flags: (4160) dual,dispatchable
+  IAxWinAmbientDispatchExDisp = dispinterface
+     ['{B2D0778B-AC99-4C58-A5C8-E7724E5316B5}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Enable or disable windowless activation
+    procedure Set_AllowWindowlessActivation(const Param1: WordBool); dispid 1610743808;
+    // Enable or disable windowless activation
+    function Get_AllowWindowlessActivation: WordBool; dispid 1610743808;
+    // Set the background color
+    procedure Set_BackColor(const Param1: OLE_COLOR); dispid -701;
+    // Set the background color
+    function Get_BackColor: OLE_COLOR; dispid -701;
+    // Set the ambient foreground color
+    procedure Set_ForeColor(const Param1: OLE_COLOR); dispid -704;
+    // Set the ambient foreground color
+    function Get_ForeColor: OLE_COLOR; dispid -704;
+    // Set the ambient locale
+    procedure Set_LocaleID(const Param1: Cardinal); dispid -705;
+    // Set the ambient locale
+    function Get_LocaleID: Cardinal; dispid -705;
+    // Set the ambient user mode
+    procedure Set_UserMode(const Param1: WordBool); dispid -709;
+    // Set the ambient user mode
+    function Get_UserMode: WordBool; dispid -709;
+    // Enable or disable the control as default
+    procedure Set_DisplayAsDefault(const Param1: WordBool); dispid -713;
+    // Enable or disable the control as default
+    function Get_DisplayAsDefault: WordBool; dispid -713;
+    // Set the ambient font
+    procedure Set_Font(const Param1: IFontDisp); dispid -703;
+    // Set the ambient font
+    function Get_Font: IFontDisp; dispid -703;
+    // Enable or disable message reflection
+    procedure Set_MessageReflect(const Param1: WordBool); dispid -706;
+    // Enable or disable message reflection
+    function Get_MessageReflect: WordBool; dispid -706;
+    // Show or hide grab handles
+    function Get_ShowGrabHandles: WordBool; dispid -711;
+    // Are grab handles enabled
+    function Get_ShowHatching: WordBool; dispid -712;
+    // Set the DOCHOSTUIFLAG flags
+    procedure Set_DocHostFlags(const Param1: Cardinal); dispid 1610743826;
+    // Set the DOCHOSTUIFLAG flags
+    function Get_DocHostFlags: Cardinal; dispid 1610743826;
+    // Set the DOCHOSTUIDBLCLK flags
+    procedure Set_DocHostDoubleClickFlags(const Param1: Cardinal); dispid 1610743828;
+    // Set the DOCHOSTUIDBLCLK flags
+    function Get_DocHostDoubleClickFlags: Cardinal; dispid 1610743828;
+    // Enable or disable context menus
+    procedure Set_AllowContextMenu(const Param1: WordBool); dispid 1610743830;
+    // Enable or disable context menus
+    function Get_AllowContextMenu: WordBool; dispid 1610743830;
+    // Enable or disable UI
+    procedure Set_AllowShowUI(const Param1: WordBool); dispid 1610743832;
+    // Enable or disable UI
+    function Get_AllowShowUI: WordBool; dispid 1610743832;
+    // Set the option key path
+    procedure Set_OptionKeyPath(const Param1: WideString); dispid 1610743834;
+    // Set the option key path
+    function Get_OptionKeyPath: WideString; dispid 1610743834;
+    procedure SetAmbientDispatch(const pDispatch: IDispatch); dispid 100;
+  end;
+
+type
+  // IAxWinAmbientDispatch Interface
+  // Flags: (4160) dual,dispatchable
+  IAxWinAmbientDispatchEx = interface(IDispatch)
+     ['{B2D0778B-AC99-4C58-A5C8-E7724E5316B5}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Enable or disable windowless activation
+    procedure Set_AllowWindowlessActivation(const Param1: WordBool); dispid 1610743808;
+    // Enable or disable windowless activation
+    function Get_AllowWindowlessActivation: WordBool; dispid 1610743808;
+    // Set the background color
+    procedure Set_BackColor(const Param1: OLE_COLOR); dispid -701;
+    // Set the background color
+    function Get_BackColor: OLE_COLOR; dispid -701;
+    // Set the ambient foreground color
+    procedure Set_ForeColor(const Param1: OLE_COLOR); dispid -704;
+    // Set the ambient foreground color
+    function Get_ForeColor: OLE_COLOR; dispid -704;
+    // Set the ambient locale
+    procedure Set_LocaleID(const Param1: Cardinal); dispid -705;
+    // Set the ambient locale
+    function Get_LocaleID: Cardinal; dispid -705;
+    // Set the ambient user mode
+    procedure Set_UserMode(const Param1: WordBool); dispid -709;
+    // Set the ambient user mode
+    function Get_UserMode: WordBool; dispid -709;
+    // Enable or disable the control as default
+    procedure Set_DisplayAsDefault(const Param1: WordBool); dispid -713;
+    // Enable or disable the control as default
+    function Get_DisplayAsDefault: WordBool; dispid -713;
+    // Set the ambient font
+    procedure Set_Font(const Param1: IFontDisp); dispid -703;
+    // Set the ambient font
+    function Get_Font: IFontDisp; dispid -703;
+    // Enable or disable message reflection
+    procedure Set_MessageReflect(const Param1: WordBool); dispid -706;
+    // Enable or disable message reflection
+    function Get_MessageReflect: WordBool; dispid -706;
+    // Show or hide grab handles
+    function Get_ShowGrabHandles: WordBool; dispid -711;
+    // Are grab handles enabled
+    function Get_ShowHatching: WordBool; dispid -712;
+    // Set the DOCHOSTUIFLAG flags
+    procedure Set_DocHostFlags(const Param1: Cardinal); dispid 1610743826;
+    // Set the DOCHOSTUIFLAG flags
+    function Get_DocHostFlags: Cardinal; dispid 1610743826;
+    // Set the DOCHOSTUIDBLCLK flags
+    procedure Set_DocHostDoubleClickFlags(const Param1: Cardinal); dispid 1610743828;
+    // Set the DOCHOSTUIDBLCLK flags
+    function Get_DocHostDoubleClickFlags: Cardinal; dispid 1610743828;
+    // Enable or disable context menus
+    procedure Set_AllowContextMenu(const Param1: WordBool); dispid 1610743830;
+    // Enable or disable context menus
+    function Get_AllowContextMenu: WordBool; dispid 1610743830;
+    // Enable or disable UI
+    procedure Set_AllowShowUI(const Param1: WordBool); dispid 1610743832;
+    // Enable or disable UI
+    function Get_AllowShowUI: WordBool; dispid 1610743832;
+    // Set the option key path
+    procedure Set_OptionKeyPath(const Param1: WideString); dispid 1610743834;
+    // Set the option key path
+    function Get_OptionKeyPath: WideString; dispid 1610743834;
+    procedure SetAmbientDispatch(const pDispatch: IDispatch); dispid 100;
+  end;
+
+type
+  // System Class
+  // CLSID: {3591BCCA-6D3A-4C9E-9890-5EB6561D903E}
+  // Flags: (2) cancreate
+  TSystem = class(TAutoObject, ISystem, _ISystemEvents);
+
+type
+  // Root Class
+  // CLSID: {AB9FA086-83C4-4F56-B614-77CA8C349270}
+  // Flags: (2) cancreate
+  TRoot = class(TAutoObject, IRoot);
+
+type
+  // State Class
+  // CLSID: {871E56B6-59E6-48D9-AB00-85F66765ABC2}
+  // Flags: (2) cancreate
+  TState = class(TAutoObject, IState);
+
+type
+  // IState Interface
+  // Flags: (4288) dual,nonextensible,dispatchable
+  IStateDisp = dispinterface
+     ['{FA76F502-7B28-4BFC-8055-B0977FBD3BC9}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Returns/sets the image of the state.
+    function Get_Picture: WideString; dispid 1;
+    // Returns/sets the image of the state.
+    procedure Set_Picture(const Param1: WideString); dispid 1;
+    // Returns/sets the hue of the state.
+    function Get_Hue: LongInt; dispid 2;
+    // Returns/sets the hue of the state.
+    procedure Set_Hue(const Param1: LongInt); dispid 2;
+    // Returns/sets the opacity of the state.
+    function Get_Opacity: LongInt; dispid 3;
+    // Returns/sets the opacity of the state.
+    procedure Set_Opacity(const Param1: LongInt); dispid 3;
+    // Returns/sets the brightness of the state.
+    function Get_Brightness: LongInt; dispid 4;
+    // Returns/sets the brightness of the state.
+    procedure Set_Brightness(const Param1: LongInt); dispid 4;
+    // Returns/sets the rotation of the state.
+    function Get_Rotation: LongInt; dispid 5;
+    // Returns/sets the rotation of the state.
+    procedure Set_Rotation(const Param1: LongInt); dispid 5;
+    // Returns/sets the contrast of the state.
+    function Get_Contrast: LongInt; dispid 6;
+    // Returns/sets the contrast of the state.
+    procedure Set_Contrast(const Param1: LongInt); dispid 6;
+    // Returns/sets the text color of the state.
+    function Get_TextColor: LongInt; dispid 7;
+    // Returns/sets the text color of the state.
+    procedure Set_TextColor(const Param1: LongInt); dispid 7;
+    // Returns/sets if the text border is enabled.
+    function Get_TextBorder: WordBool; dispid 8;
+    // Returns/sets if the text border is enabled.
+    procedure Set_TextBorder(const Param1: WordBool); dispid 8;
+    // Returns/sets the text border color of the object.
+    function Get_TextBorderColor: LongInt; dispid 9;
+    // Returns/sets the text border color of the object.
+    procedure Set_TextBorderColor(const Param1: LongInt); dispid 9;
+    // Returns/sets the text of the object.
+    function Get_Text: WideString; dispid 10;
+    // Returns/sets the text of the object.
+    procedure Set_Text(const Param1: WideString); dispid 10;
+    // Cache state.
+    procedure CacheState; dispid 11;
+    // Clears the state cache.
+    procedure ClearStateCache; dispid 12;
+    // Returns/sets the sound of the current state.
+    function Get_Sound: WideString; dispid 13;
+    // Returns/sets the sound of the current state.
+    procedure Set_Sound(const Param1: WideString); dispid 13;
+    // Sets the image of the current state and its attributes.
+    procedure SetPicture(const newVal: WideString; const frames: LongInt; const interval: LongInt; const flags: LongInt); dispid 14;
+    // Sets the image margins and tile/stretch settings.
+    procedure SetMargins(const Left: LongInt; const Top: LongInt; const Right: LongInt; const Bottom: LongInt; const bStretchX: WordBool; const bStretchY: WordBool); dispid 15;
+    // Sets the image shadow settings.
+    procedure SetShadow(const bEnabled: WordBool; const sharpness: LongInt; const darkness: LongInt; const offsetX: LongInt; const offsetY: LongInt; const sdwColor: OLE_COLOR); dispid 16;
+    // Sets the font settings
+    procedure SetFont(const fontName: WideString; const size: LongInt; const bBold: WordBool; const bItalic: WordBool; const bUnderline: WordBool; const bStrikeOut: WordBool; const lfCharSet: Byte); dispid 17;
+    // Returns the font data
+    function Get_fontName: WideString; dispid 59;
+    // Returns the font data
+    function Get_FontBold: WordBool; dispid 60;
+    // Returns the font data
+    function Get_FontItalic: WordBool; dispid 61;
+    // Returns the font data
+    function Get_FontUnderline: WordBool; dispid 62;
+    // Returns the font data
+    function Get_FontStrikeout: WordBool; dispid 63;
+    // Returns the font data
+    function Get_FontSize: LongInt; dispid 64;
+  end;
+
+type
+  // IState Interface
+  // Flags: (4288) dual,nonextensible,dispatchable
+  IState = interface(IDispatch)
+     ['{FA76F502-7B28-4BFC-8055-B0977FBD3BC9}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Returns/sets the image of the state.
+    function Get_Picture: WideString; dispid 1;
+    // Returns/sets the image of the state.
+    procedure Set_Picture(const Param1: WideString); dispid 1;
+    // Returns/sets the hue of the state.
+    function Get_Hue: LongInt; dispid 2;
+    // Returns/sets the hue of the state.
+    procedure Set_Hue(const Param1: LongInt); dispid 2;
+    // Returns/sets the opacity of the state.
+    function Get_Opacity: LongInt; dispid 3;
+    // Returns/sets the opacity of the state.
+    procedure Set_Opacity(const Param1: LongInt); dispid 3;
+    // Returns/sets the brightness of the state.
+    function Get_Brightness: LongInt; dispid 4;
+    // Returns/sets the brightness of the state.
+    procedure Set_Brightness(const Param1: LongInt); dispid 4;
+    // Returns/sets the rotation of the state.
+    function Get_Rotation: LongInt; dispid 5;
+    // Returns/sets the rotation of the state.
+    procedure Set_Rotation(const Param1: LongInt); dispid 5;
+    // Returns/sets the contrast of the state.
+    function Get_Contrast: LongInt; dispid 6;
+    // Returns/sets the contrast of the state.
+    procedure Set_Contrast(const Param1: LongInt); dispid 6;
+    // Returns/sets the text color of the state.
+    function Get_TextColor: LongInt; dispid 7;
+    // Returns/sets the text color of the state.
+    procedure Set_TextColor(const Param1: LongInt); dispid 7;
+    // Returns/sets if the text border is enabled.
+    function Get_TextBorder: WordBool; dispid 8;
+    // Returns/sets if the text border is enabled.
+    procedure Set_TextBorder(const Param1: WordBool); dispid 8;
+    // Returns/sets the text border color of the object.
+    function Get_TextBorderColor: LongInt; dispid 9;
+    // Returns/sets the text border color of the object.
+    procedure Set_TextBorderColor(const Param1: LongInt); dispid 9;
+    // Returns/sets the text of the object.
+    function Get_Text: WideString; dispid 10;
+    // Returns/sets the text of the object.
+    procedure Set_Text(const Param1: WideString); dispid 10;
+    // Cache state.
+    procedure CacheState; dispid 11;
+    // Clears the state cache.
+    procedure ClearStateCache; dispid 12;
+    // Returns/sets the sound of the current state.
+    function Get_Sound: WideString; dispid 13;
+    // Returns/sets the sound of the current state.
+    procedure Set_Sound(const Param1: WideString); dispid 13;
+    // Sets the image of the current state and its attributes.
+    procedure SetPicture(const newVal: WideString; const frames: LongInt; const interval: LongInt; const flags: LongInt); dispid 14;
+    // Sets the image margins and tile/stretch settings.
+    procedure SetMargins(const Left: LongInt; const Top: LongInt; const Right: LongInt; const Bottom: LongInt; const bStretchX: WordBool; const bStretchY: WordBool); dispid 15;
+    // Sets the image shadow settings.
+    procedure SetShadow(const bEnabled: WordBool; const sharpness: LongInt; const darkness: LongInt; const offsetX: LongInt; const offsetY: LongInt; const sdwColor: OLE_COLOR); dispid 16;
+    // Sets the font settings
+    procedure SetFont(const fontName: WideString; const size: LongInt; const bBold: WordBool; const bItalic: WordBool; const bUnderline: WordBool; const bStrikeOut: WordBool; const lfCharSet: Byte); dispid 17;
+    // Returns the font data
+    function Get_fontName: WideString; dispid 59;
+    // Returns the font data
+    function Get_FontBold: WordBool; dispid 60;
+    // Returns the font data
+    function Get_FontItalic: WordBool; dispid 61;
+    // Returns the font data
+    function Get_FontUnderline: WordBool; dispid 62;
+    // Returns the font data
+    function Get_FontStrikeout: WordBool; dispid 63;
+    // Returns the font data
+    function Get_FontSize: LongInt; dispid 64;
+  end;
+
+type
+  // Widget Class
+  // CLSID: {1251C89E-C28B-4523-934C-B8C25550AF8B}
+  // Flags: (2) cancreate
+  TWidget = class(TAutoObject, IWidget);
+
+type
+  // IWidget Interface
+  // Flags: (4288) dual,nonextensible,dispatchable
+  IWidgetDisp = dispinterface
+     ['{460BBE8F-28F6-4214-A35C-9E11EFB50996}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Restores/shows the widget.
+    procedure Restore; dispid 1;
+    // Minimizes/hides the widget.
+    procedure Minimize; dispid 2;
+    // Closes the widget.
+    procedure Close; dispid 3;
+    // Sets the widget caption.
+    procedure Set_Caption(const Param1: WideString); dispid 4;
+    // Returns/sets the autorun setting.
+    function Get_Autorun: WordBool; dispid 5;
+    // Returns/sets the autorun setting.
+    procedure Set_Autorun(const Param1: WordBool); dispid 5;
+    // Adds a new preference to the widget
+    procedure AddPreference(const newVal: WideString); dispid 6;
+    // Access a preference namespace
+    function Get_Preference(bstrPrefName: WideString): IDispatch; dispid 7;
+    // Opens the widget properties.
+    procedure OpenProperties; dispid 8;
+    // Register a script object as main widget controller
+    procedure RegisterController(bstrObjName: WideString); dispid 9;
+    // Sets the widget's standard preferences.
+    procedure Set_StandardPreferencesOptions(const Param1: LongInt); dispid 10;
+    // Puts the widget on top of the zorder.
+    procedure OnTop; dispid 11;
+  end;
+
+type
+  // IWidget Interface
+  // Flags: (4288) dual,nonextensible,dispatchable
+  IWidget = interface(IDispatch)
+     ['{460BBE8F-28F6-4214-A35C-9E11EFB50996}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Restores/shows the widget.
+    procedure Restore; dispid 1;
+    // Minimizes/hides the widget.
+    procedure Minimize; dispid 2;
+    // Closes the widget.
+    procedure Close; dispid 3;
+    // Sets the widget caption.
+    procedure Set_Caption(const Param1: WideString); dispid 4;
+    // Returns/sets the autorun setting.
+    function Get_Autorun: WordBool; dispid 5;
+    // Returns/sets the autorun setting.
+    procedure Set_Autorun(const Param1: WordBool); dispid 5;
+    // Adds a new preference to the widget
+    procedure AddPreference(const newVal: WideString); dispid 6;
+    // Access a preference namespace
+    function Get_Preference(bstrPrefName: WideString): IDispatch; dispid 7;
+    // Opens the widget properties.
+    procedure OpenProperties; dispid 8;
+    // Register a script object as main widget controller
+    procedure RegisterController(bstrObjName: WideString); dispid 9;
+    // Sets the widget's standard preferences.
+    procedure Set_StandardPreferencesOptions(const Param1: LongInt); dispid 10;
+    // Puts the widget on top of the zorder.
+    procedure OnTop; dispid 11;
+  end;
+
+type
+  // ObjectCollection Class
+  // CLSID: {0CB13FC5-EFA6-400F-9F32-235193A2D8C1}
+  // Flags: (2) cancreate
+  TObjectCollection = class(TAutoObject, IObjectCollection);
+
+type
+  // Interfaccia IObjectCollection
+  // Flags: (4288) dual,nonextensible,dispatchable
+  IObjectCollectionDisp = dispinterface
+     ['{753CB499-E958-4301-8A89-E8EDE84F25F7}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Adds a member to a collection
+    procedure Add(const vItem: Variant; const optional vkey: Variant); dispid 1;
+    // Removes a member from a collection
+    procedure Remove(const vIndex: Variant); dispid 2;
+    // Returns the number of members in a collection
+    function Get_Count: LongInt; dispid 3;
+    // Returns a specific member of a collection either by position or key
+    function Get_Item(const vIndex: Variant): Variant; dispid 0;
+    // Method _NewEnum
+    function Get__NewEnum: IUnknown; dispid -4;
+  end;
+
+type
+  // Interfaccia IObjectCollection
+  // Flags: (4288) dual,nonextensible,dispatchable
+  IObjectCollection = interface(IDispatch)
+     ['{753CB499-E958-4301-8A89-E8EDE84F25F7}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Adds a member to a collection
+    procedure Add(const vItem: Variant; const optional vkey: Variant); dispid 1;
+    // Removes a member from a collection
+    procedure Remove(const vIndex: Variant); dispid 2;
+    // Returns the number of members in a collection
+    function Get_Count: LongInt; dispid 3;
+    // Returns a specific member of a collection either by position or key
+    function Get_Item(const vIndex: Variant): Variant; dispid 0;
+    // Method _NewEnum
+    function Get__NewEnum: IUnknown; dispid -4;
+  end;
+
+type
+  // ObjectEnumVariant Class
+  // CLSID: {372DD1BF-B553-4759-945B-852C3CE31C0C}
+  // Flags: (2) cancreate
+  TObjectEnumVariant = class(TAutoObject, IEnumVARIANT);
+
+type
+  // DesktopSecurity Class
+  // CLSID: {26FFF08B-B907-4C59-9D19-B98ECDD65DFA}
+  // Flags: (2) cancreate
+  TDesktopSecurity = class(TAutoObject, IDesktopSecurity);
+
+type
+  // Interfaccia IDesktopSecurity
+  // Flags: (4288) dual,nonextensible,dispatchable
+  IDesktopSecurityDisp = dispinterface
+     ['{657B52CB-9D1F-45EB-AF6E-0A4E7C09FB52}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Enables the security locks via a standard UI
+    function EnableUI: WordBool; dispid 1;
+    // Disables the security locks via a standard UI
+    function DisableUI: WordBool; dispid 2;
+    // Enables the security locks programmatically
+    function Enable(const adminName: WideString; const adminPass: WideString): WordBool; dispid 3;
+    // Disables the security locks programmatically
+    function Disable(const adminName: WideString; const adminPass: WideString): WordBool; dispid 4;
+    // Opens the security options.
+    function SetOptionsUI: WordBool; dispid 5;
+    // Opens the security options.
+    function SetOptions(const newVal: LongInt; const adminName: WideString; const adminPass: WideString): WordBool; dispid 6;
+    // Returns the security lock status.
+    function Get_Enabled: WordBool; dispid 7;
+  end;
+
+type
+  // Interfaccia IDesktopSecurity
+  // Flags: (4288) dual,nonextensible,dispatchable
+  IDesktopSecurity = interface(IDispatch)
+     ['{657B52CB-9D1F-45EB-AF6E-0A4E7C09FB52}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Enables the security locks via a standard UI
+    function EnableUI: WordBool; dispid 1;
+    // Disables the security locks via a standard UI
+    function DisableUI: WordBool; dispid 2;
+    // Enables the security locks programmatically
+    function Enable(const adminName: WideString; const adminPass: WideString): WordBool; dispid 3;
+    // Disables the security locks programmatically
+    function Disable(const adminName: WideString; const adminPass: WideString): WordBool; dispid 4;
+    // Opens the security options.
+    function SetOptionsUI: WordBool; dispid 5;
+    // Opens the security options.
+    function SetOptions(const newVal: LongInt; const adminName: WideString; const adminPass: WideString): WordBool; dispid 6;
+    // Returns the security lock status.
+    function Get_Enabled: WordBool; dispid 7;
+  end;
+
+type
+  // DXMenu Class
+  // CLSID: {80A21AA6-7EFA-496F-8369-2E813E25B97B}
+  // Flags: (2) cancreate
+  TDXMenu = class(TAutoObject, IDXMenu);
+
+type
+  // Interfaccia IDXMenu
+  // Flags: (4288) dual,nonextensible,dispatchable
+  IDXMenuDisp = dispinterface
+     ['{4E797275-634E-48E3-B016-EE4626247362}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Appends a menu item
+    procedure AppendMenu(const type: LongInt; const menuid: LongInt; const bstrText: WideString); dispid 1;
+    function TrackPopupMenu(const flags: LongInt; const x: LongInt; const y: LongInt): LongInt; dispid 2;
+    function Get_menuid: LongInt; dispid 3;
+  end;
+
+type
+  // Interfaccia IDXMenu
+  // Flags: (4288) dual,nonextensible,dispatchable
+  IDXMenu = interface(IDispatch)
+     ['{4E797275-634E-48E3-B016-EE4626247362}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Appends a menu item
+    procedure AppendMenu(const type: LongInt; const menuid: LongInt; const bstrText: WideString); dispid 1;
+    function TrackPopupMenu(const flags: LongInt; const x: LongInt; const y: LongInt): LongInt; dispid 2;
+    function Get_menuid: LongInt; dispid 3;
+  end;
+
+type
+  // Preference Class
+  // CLSID: {D8650B19-884F-43B6-A1F4-23A3156F7671}
+  // Flags: (2) cancreate
+  TPreference = class(TAutoObject, IPreference);
+
+type
+  // Interfaccia IPreference
+  // Flags: (4288) dual,nonextensible,dispatchable
+  IPreferenceDisp = dispinterface
+     ['{D4FF1D76-F7E7-4695-8133-4A7C385F39FF}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Returns/sets preference value
+    function Get_Value: WideString; dispid 1;
+    // Returns/sets preference value
+    procedure Set_Value(const Param1: WideString); dispid 1;
+    // Sets the preference description
+    procedure Set_Description(const Param1: WideString); dispid 2;
+    // Sets the preference type
+    procedure Set_type(const Param1: WideString); dispid 3;
+    // Adds a item choice (for combo boxes)
+    procedure AddValue(const newVal: WideString); dispid 4;
+    // Sets the preference minimum value (for sliders)
+    procedure Set_MinValue(const Param1: LongInt); dispid 5;
+    // Sets the preference maximum value (for sliders)
+    procedure Set_MaxValue(const Param1: LongInt); dispid 6;
+    // Sets the preference default value
+    procedure Set_DefaultValue(const Param1: Variant); dispid 7;
+    // Sets the preference caption
+    procedure Set_Caption(const Param1: WideString); dispid 8;
+    // Enables slider ticks and sets their distance
+    procedure Set_Ticks(const Param1: LongInt); dispid 9;
+    // Resets the predefined values list
+    procedure ResetList; dispid 10;
+  end;
+
+type
+  // Interfaccia IPreference
+  // Flags: (4288) dual,nonextensible,dispatchable
+  IPreference = interface(IDispatch)
+     ['{D4FF1D76-F7E7-4695-8133-4A7C385F39FF}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Returns/sets preference value
+    function Get_Value: WideString; dispid 1;
+    // Returns/sets preference value
+    procedure Set_Value(const Param1: WideString); dispid 1;
+    // Sets the preference description
+    procedure Set_Description(const Param1: WideString); dispid 2;
+    // Sets the preference type
+    procedure Set_type(const Param1: WideString); dispid 3;
+    // Adds a item choice (for combo boxes)
+    procedure AddValue(const newVal: WideString); dispid 4;
+    // Sets the preference minimum value (for sliders)
+    procedure Set_MinValue(const Param1: LongInt); dispid 5;
+    // Sets the preference maximum value (for sliders)
+    procedure Set_MaxValue(const Param1: LongInt); dispid 6;
+    // Sets the preference default value
+    procedure Set_DefaultValue(const Param1: Variant); dispid 7;
+    // Sets the preference caption
+    procedure Set_Caption(const Param1: WideString); dispid 8;
+    // Enables slider ticks and sets their distance
+    procedure Set_Ticks(const Param1: LongInt); dispid 9;
+    // Resets the predefined values list
+    procedure ResetList; dispid 10;
+  end;
+
+type
+  // DXForm Class
+  // CLSID: {7A233969-A455-4641-90B7-23F904A0AF2A}
+  // Flags: (2) cancreate
+  TDXForm = class(TAutoObject, IDXForm);
+
+type
+  // Interfaccia IDXForm
+  // Flags: (4288) dual,nonextensible,dispatchable
+  IDXFormDisp = dispinterface
+     ['{42AAD1BE-542A-4F2D-8C39-1EC77ECE4A54}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Adds a new preference to the widget
+    procedure AddPreference(const newVal: WideString); dispid 1;
+    // Access a preference namespace
+    function Get_Preference(bstrPrefName: WideString): IDispatch; dispid 2;
+    // Opens the widget properties.
+    function Prompt: WordBool; dispid 3;
+    // Sets the form caption
+    procedure Set_Caption(const Param1: WideString); dispid 4;
+    // Sets the form caption
+    function Get_Caption: WideString; dispid 4;
+    // Sets the form Ok button label
+    procedure Set_OkButtonLabel(const Param1: WideString); dispid 5;
+    // Sets the form Ok button label
+    function Get_OkButtonLabel: WideString; dispid 5;
+    // Sets the form Cancel button label
+    procedure Set_CancelButtonLabel(const Param1: WideString); dispid 6;
+    // Sets the form Cancel button label
+    function Get_CancelButtonLabel: WideString; dispid 6;
+  end;
+
+type
+  // Interfaccia IDXForm
+  // Flags: (4288) dual,nonextensible,dispatchable
+  IDXForm = interface(IDispatch)
+     ['{42AAD1BE-542A-4F2D-8C39-1EC77ECE4A54}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Adds a new preference to the widget
+    procedure AddPreference(const newVal: WideString); dispid 1;
+    // Access a preference namespace
+    function Get_Preference(bstrPrefName: WideString): IDispatch; dispid 2;
+    // Opens the widget properties.
+    function Prompt: WordBool; dispid 3;
+    // Sets the form caption
+    procedure Set_Caption(const Param1: WideString); dispid 4;
+    // Sets the form caption
+    function Get_Caption: WideString; dispid 4;
+    // Sets the form Ok button label
+    procedure Set_OkButtonLabel(const Param1: WideString); dispid 5;
+    // Sets the form Ok button label
+    function Get_OkButtonLabel: WideString; dispid 5;
+    // Sets the form Cancel button label
+    procedure Set_CancelButtonLabel(const Param1: WideString); dispid 6;
+    // Sets the form Cancel button label
+    function Get_CancelButtonLabel: WideString; dispid 6;
+  end;
+
+
+implementation
+
+end.

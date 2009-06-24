@@ -1,0 +1,634 @@
+// typelib filename: C:\Program Files (x86)\Stardock\DesktopX\SDCtrls.dll
+
+// uid: 
+// version: 4545976.1637728
+// helpstring: SDCtrls 1.0 Type Library
+// helpfile: 
+
+unit SDCTRLSLib;
+
+interface
+
+uses Windows, ActiveX, Classes;
+
+type
+  // _IEditEvents Interface
+  // Flags: (4096) dispatchable
+  _IEditEventsDisp = dispinterface
+     ['{F657B2A5-F97E-49EC-BE60-D6ABC3777C7C}']
+    // method OnKeyPress
+    procedure OnKeyPress(Key: Word): HRESULT; dispid 1;
+    // method OnKeyDown
+    procedure OnKeyDown(Key: LongInt; extended: LongInt): HRESULT; dispid 2;
+    // method OnKeyUp
+    procedure OnKeyUp(Key: LongInt; extended: LongInt): HRESULT; dispid 3;
+  end;
+
+type
+  // IPushButton Interface
+  // Flags: (4160) dual,dispatchable
+  IPushButtonDisp = dispinterface
+     ['{D7509789-5260-42BE-9FB4-D7E56CEEC49F}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // property Caption
+    function Get_Caption: WideString; dispid 1;
+    // property Caption
+    procedure Set_Caption(const Param1: WideString); dispid 1;
+    // property Enabled
+    function Get_Enabled: WordBool; dispid 2;
+    // property Enabled
+    procedure Set_Enabled(const Param1: WordBool); dispid 2;
+  end;
+
+type
+  // IPushButton Interface
+  // Flags: (4160) dual,dispatchable
+  IPushButton = interface(IDispatch)
+     ['{D7509789-5260-42BE-9FB4-D7E56CEEC49F}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // property Caption
+    function Get_Caption: WideString; dispid 1;
+    // property Caption
+    procedure Set_Caption(const Param1: WideString); dispid 1;
+    // property Enabled
+    function Get_Enabled: WordBool; dispid 2;
+    // property Enabled
+    procedure Set_Enabled(const Param1: WordBool); dispid 2;
+  end;
+
+type
+  // DesktopX Edit Control
+  // CLSID: {BC149E72-D422-4745-B674-01AB3DD160EB}
+  // Flags: (2) cancreate
+  TEdit = class(TAutoObject, IEdit, _IEditEvents);
+
+type
+  // IEdit Interface
+  // Flags: (4160) dual,dispatchable
+  IEditDisp = dispinterface
+     ['{800DEFE0-4A58-44AA-B748-C4CF20024D33}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // property Text
+    function Get_Text: WideString; dispid 1;
+    // property Text
+    procedure Set_Text(const Param1: WideString); dispid 1;
+    // property MultiLine
+    function Get_MultiLine: WordBool; dispid 2;
+    // property MultiLine
+    procedure Set_MultiLine(const Param1: WordBool); dispid 2;
+    // property ClientEdge
+    function Get_ClientEdge: WordBool; dispid 3;
+    // property ClientEdge
+    procedure Set_ClientEdge(const Param1: WordBool); dispid 3;
+    // property Border
+    function Get_Border: WordBool; dispid 4;
+    // property Border
+    procedure Set_Border(const Param1: WordBool); dispid 4;
+    // method ScrollToEnd
+    procedure ScrollToEnd; dispid 5;
+    // property BGColor
+    function Get_BGColor: OLE_COLOR; dispid 6;
+    // property BGColor
+    procedure Set_BGColor(const Param1: OLE_COLOR); dispid 6;
+    // property TextColor
+    function Get_TextColor: OLE_COLOR; dispid 7;
+    // property TextColor
+    procedure Set_TextColor(const Param1: OLE_COLOR); dispid 7;
+    // property Enabled
+    function Get_Enabled: WordBool; dispid 8;
+    // property Enabled
+    procedure Set_Enabled(const Param1: WordBool); dispid 8;
+    // property WrapText
+    function Get_WrapText: WordBool; dispid 9;
+    // property WrapText
+    procedure Set_WrapText(const Param1: WordBool); dispid 9;
+    // property FontName
+    function Get_FontName: WideString; dispid 10;
+    // property FontName
+    procedure Set_FontName(const Param1: WideString); dispid 10;
+    function Get_FontSize: LongInt; dispid 11;
+    procedure Set_FontSize(const Param1: LongInt); dispid 11;
+    function Get_FontItalic: WordBool; dispid 12;
+    procedure Set_FontItalic(const Param1: WordBool); dispid 12;
+    function Get_FontBold: WordBool; dispid 13;
+    procedure Set_FontBold(const Param1: WordBool); dispid 13;
+    function Get_FontAntialiased: WordBool; dispid 14;
+    procedure Set_FontAntialiased(const Param1: WordBool); dispid 14;
+  end;
+
+type
+  // IEdit Interface
+  // Flags: (4160) dual,dispatchable
+  IEdit = interface(IDispatch)
+     ['{800DEFE0-4A58-44AA-B748-C4CF20024D33}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // property Text
+    function Get_Text: WideString; dispid 1;
+    // property Text
+    procedure Set_Text(const Param1: WideString); dispid 1;
+    // property MultiLine
+    function Get_MultiLine: WordBool; dispid 2;
+    // property MultiLine
+    procedure Set_MultiLine(const Param1: WordBool); dispid 2;
+    // property ClientEdge
+    function Get_ClientEdge: WordBool; dispid 3;
+    // property ClientEdge
+    procedure Set_ClientEdge(const Param1: WordBool); dispid 3;
+    // property Border
+    function Get_Border: WordBool; dispid 4;
+    // property Border
+    procedure Set_Border(const Param1: WordBool); dispid 4;
+    // method ScrollToEnd
+    procedure ScrollToEnd; dispid 5;
+    // property BGColor
+    function Get_BGColor: OLE_COLOR; dispid 6;
+    // property BGColor
+    procedure Set_BGColor(const Param1: OLE_COLOR); dispid 6;
+    // property TextColor
+    function Get_TextColor: OLE_COLOR; dispid 7;
+    // property TextColor
+    procedure Set_TextColor(const Param1: OLE_COLOR); dispid 7;
+    // property Enabled
+    function Get_Enabled: WordBool; dispid 8;
+    // property Enabled
+    procedure Set_Enabled(const Param1: WordBool); dispid 8;
+    // property WrapText
+    function Get_WrapText: WordBool; dispid 9;
+    // property WrapText
+    procedure Set_WrapText(const Param1: WordBool); dispid 9;
+    // property FontName
+    function Get_FontName: WideString; dispid 10;
+    // property FontName
+    procedure Set_FontName(const Param1: WideString); dispid 10;
+    function Get_FontSize: LongInt; dispid 11;
+    procedure Set_FontSize(const Param1: LongInt); dispid 11;
+    function Get_FontItalic: WordBool; dispid 12;
+    procedure Set_FontItalic(const Param1: WordBool); dispid 12;
+    function Get_FontBold: WordBool; dispid 13;
+    procedure Set_FontBold(const Param1: WordBool); dispid 13;
+    function Get_FontAntialiased: WordBool; dispid 14;
+    procedure Set_FontAntialiased(const Param1: WordBool); dispid 14;
+  end;
+
+type
+  // _IPushButtonEvents Interface
+  // Flags: (4096) dispatchable
+  _IPushButtonEventsDisp = dispinterface
+     ['{DC0337E6-4B83-483B-9B51-02EFCE46C2C5}']
+    // method OnClick
+    procedure OnClick: HRESULT; dispid 1;
+    // method OnKeyDown
+    procedure OnKeyDown(Key: LongInt; extended: LongInt): HRESULT; dispid 2;
+    // method OnKeyUp
+    procedure OnKeyUp(Key: LongInt; extended: LongInt): HRESULT; dispid 3;
+  end;
+
+type
+  // ICheckBox Interface
+  // Flags: (4160) dual,dispatchable
+  ICheckBoxDisp = dispinterface
+     ['{742251E4-D433-4381-9F75-54620A984CC4}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // property Enabled
+    function Get_Enabled: WordBool; dispid 1;
+    // property Enabled
+    procedure Set_Enabled(const Param1: WordBool); dispid 1;
+    // property Caption
+    function Get_Caption: WideString; dispid 2;
+    // property Caption
+    procedure Set_Caption(const Param1: WideString); dispid 2;
+    // property Checked
+    function Get_Checked: WordBool; dispid 3;
+    // property Checked
+    procedure Set_Checked(const Param1: WordBool); dispid 3;
+    // property BackColor
+    function Get_BackColor: OLE_COLOR; dispid 4;
+    // property BackColor
+    procedure Set_BackColor(const Param1: OLE_COLOR); dispid 4;
+  end;
+
+type
+  // ICheckBox Interface
+  // Flags: (4160) dual,dispatchable
+  ICheckBox = interface(IDispatch)
+     ['{742251E4-D433-4381-9F75-54620A984CC4}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // property Enabled
+    function Get_Enabled: WordBool; dispid 1;
+    // property Enabled
+    procedure Set_Enabled(const Param1: WordBool); dispid 1;
+    // property Caption
+    function Get_Caption: WideString; dispid 2;
+    // property Caption
+    procedure Set_Caption(const Param1: WideString); dispid 2;
+    // property Checked
+    function Get_Checked: WordBool; dispid 3;
+    // property Checked
+    procedure Set_Checked(const Param1: WordBool); dispid 3;
+    // property BackColor
+    function Get_BackColor: OLE_COLOR; dispid 4;
+    // property BackColor
+    procedure Set_BackColor(const Param1: OLE_COLOR); dispid 4;
+  end;
+
+type
+  // DesktopX PushButton Control
+  // CLSID: {F3A8BE7C-B00C-4CDD-AB7B-6777A56B46B2}
+  // Flags: (2) cancreate
+  TPushButton = class(TAutoObject, IPushButton, _IPushButtonEvents);
+
+type
+  // _ICheckBoxEvents Interface
+  // Flags: (4096) dispatchable
+  _ICheckBoxEventsDisp = dispinterface
+     ['{4E02D843-C398-48FD-85A7-32C9AE28474E}']
+    // method OnCheck
+    procedure OnCheck(Checked: WordBool): HRESULT; dispid 1;
+    // method OnKeyDown
+    procedure OnKeyDown(Key: LongInt; extended: LongInt): HRESULT; dispid 2;
+    // method OnKeyUp
+    procedure OnKeyUp(Key: LongInt; extended: LongInt): HRESULT; dispid 3;
+  end;
+
+type
+  // IComboBox Interface
+  // Flags: (4160) dual,dispatchable
+  IComboBoxDisp = dispinterface
+     ['{79471445-14F1-49D9-8030-4BA9FCD972D6}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Background Color
+    procedure Set_BackColor(const Param1: OLE_COLOR); dispid -501;
+    // Background Color
+    function Get_BackColor: OLE_COLOR; dispid -501;
+    // Foreground (text) Color
+    procedure Set_ForeColor(const Param1: OLE_COLOR); dispid -513;
+    // Foreground (text) Color
+    function Get_ForeColor: OLE_COLOR; dispid -513;
+    // Sets or queries whether or not the ComboBox is enabled
+    procedure Set_Enabled(const Param1: WordBool); dispid -514;
+    // Sets or queries whether or not the ComboBox is enabled
+    function Get_Enabled: WordBool; dispid -514;
+    // Sets or queries whether or not the border of the ComboBox is visible
+    procedure Set_BorderVisible(const Param1: WordBool); dispid -519;
+    // Sets or queries whether or not the border of the ComboBox is visible
+    function Get_BorderVisible: WordBool; dispid -519;
+    // Sets or queries the background color of the selected item in the ComboBox
+    function Get_SelectionBackColor: OLE_COLOR; dispid 1;
+    // Sets or queries the background color of the selected item in the ComboBox
+    procedure Set_SelectionBackColor(const Param1: OLE_COLOR); dispid 1;
+    // Sets or queries the foreground or text color of the selected item in the ComboBox
+    function Get_SelectionForeColor: OLE_COLOR; dispid 2;
+    // Sets or queries the foreground or text color of the selected item in the ComboBox
+    procedure Set_SelectionForeColor(const Param1: OLE_COLOR); dispid 2;
+    // Sets or queries the currently selected item in the ComboBox
+    function Get_ListIndex: LongInt; dispid 3;
+    // Sets or queries the currently selected item in the ComboBox
+    procedure Set_ListIndex(const Param1: LongInt); dispid 3;
+    // Clears the ComboBox
+    procedure ResetList; dispid 4;
+    // Inserts an item into the ComboBox
+    procedure AddItem(bstrItem: WideString); dispid 5;
+    // Sets the text of the currently selected item in the ComboBox
+    function Get_Text: WideString; dispid 6;
+    // Sets the text of the currently selected item in the ComboBox
+    procedure Set_Text(const Param1: WideString); dispid 6;
+    // Sets the text of a specific item in the ComboBox
+    function Get_Item(Item: LongInt): WideString; dispid 7;
+    // Sets the text of a specific item in the ComboBox
+    procedure Set_Item(Item: LongInt; const Param2: WideString); dispid 7;
+    // Queries the number of items in the ComboBox
+    function Get_ItemCount: LongInt; dispid 8;
+    // Sets or queries the height of the ComboBox drop-down list
+    function Get_DropDownHeight: LongInt; dispid 9;
+    // Sets or queries the height of the ComboBox drop-down list
+    procedure Set_DropDownHeight(const Param1: LongInt); dispid 9;
+    // Sets or queries whether the ComboBox drop-down list is visible
+    function Get_ListVisible: WordBool; dispid 10;
+    // Sets or queries whether the ComboBox drop-down list is visible
+    procedure Set_ListVisible(const Param1: WordBool); dispid 10;
+  end;
+
+type
+  // IComboBox Interface
+  // Flags: (4160) dual,dispatchable
+  IComboBox = interface(IDispatch)
+     ['{79471445-14F1-49D9-8030-4BA9FCD972D6}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Background Color
+    procedure Set_BackColor(const Param1: OLE_COLOR); dispid -501;
+    // Background Color
+    function Get_BackColor: OLE_COLOR; dispid -501;
+    // Foreground (text) Color
+    procedure Set_ForeColor(const Param1: OLE_COLOR); dispid -513;
+    // Foreground (text) Color
+    function Get_ForeColor: OLE_COLOR; dispid -513;
+    // Sets or queries whether or not the ComboBox is enabled
+    procedure Set_Enabled(const Param1: WordBool); dispid -514;
+    // Sets or queries whether or not the ComboBox is enabled
+    function Get_Enabled: WordBool; dispid -514;
+    // Sets or queries whether or not the border of the ComboBox is visible
+    procedure Set_BorderVisible(const Param1: WordBool); dispid -519;
+    // Sets or queries whether or not the border of the ComboBox is visible
+    function Get_BorderVisible: WordBool; dispid -519;
+    // Sets or queries the background color of the selected item in the ComboBox
+    function Get_SelectionBackColor: OLE_COLOR; dispid 1;
+    // Sets or queries the background color of the selected item in the ComboBox
+    procedure Set_SelectionBackColor(const Param1: OLE_COLOR); dispid 1;
+    // Sets or queries the foreground or text color of the selected item in the ComboBox
+    function Get_SelectionForeColor: OLE_COLOR; dispid 2;
+    // Sets or queries the foreground or text color of the selected item in the ComboBox
+    procedure Set_SelectionForeColor(const Param1: OLE_COLOR); dispid 2;
+    // Sets or queries the currently selected item in the ComboBox
+    function Get_ListIndex: LongInt; dispid 3;
+    // Sets or queries the currently selected item in the ComboBox
+    procedure Set_ListIndex(const Param1: LongInt); dispid 3;
+    // Clears the ComboBox
+    procedure ResetList; dispid 4;
+    // Inserts an item into the ComboBox
+    procedure AddItem(bstrItem: WideString); dispid 5;
+    // Sets the text of the currently selected item in the ComboBox
+    function Get_Text: WideString; dispid 6;
+    // Sets the text of the currently selected item in the ComboBox
+    procedure Set_Text(const Param1: WideString); dispid 6;
+    // Sets the text of a specific item in the ComboBox
+    function Get_Item(Item: LongInt): WideString; dispid 7;
+    // Sets the text of a specific item in the ComboBox
+    procedure Set_Item(Item: LongInt; const Param2: WideString); dispid 7;
+    // Queries the number of items in the ComboBox
+    function Get_ItemCount: LongInt; dispid 8;
+    // Sets or queries the height of the ComboBox drop-down list
+    function Get_DropDownHeight: LongInt; dispid 9;
+    // Sets or queries the height of the ComboBox drop-down list
+    procedure Set_DropDownHeight(const Param1: LongInt); dispid 9;
+    // Sets or queries whether the ComboBox drop-down list is visible
+    function Get_ListVisible: WordBool; dispid 10;
+    // Sets or queries whether the ComboBox drop-down list is visible
+    procedure Set_ListVisible(const Param1: WordBool); dispid 10;
+  end;
+
+type
+  // DesktopX CheckBox Control
+  // CLSID: {34FFA8DB-350A-41D8-9F3B-23D1DC06F5D1}
+  // Flags: (2) cancreate
+  TCheckBox = class(TAutoObject, ICheckBox, _ICheckBoxEvents);
+
+type
+  // _IComboBoxEvents Interface
+  // Flags: (4096) dispatchable
+  _IComboBoxEventsDisp = dispinterface
+     ['{85EB10AD-4013-494A-B692-8BAA2A9DA139}']
+    // method OnSelect
+    procedure OnSelect(Item: LongInt; string: WideString): HRESULT; dispid 1;
+    // method OnDropDown
+    procedure OnDropDown: HRESULT; dispid 2;
+    // method OnCloseUp
+    procedure OnCloseUp: HRESULT; dispid 3;
+    // method OnKeyDown
+    procedure OnKeyDown(Key: LongInt; extended: LongInt): HRESULT; dispid 4;
+    // method OnKeyUp
+    procedure OnKeyUp(Key: LongInt; extended: LongInt): HRESULT; dispid 5;
+  end;
+
+type
+  // IListBox Interface
+  // Flags: (4160) dual,dispatchable
+  IListBoxDisp = dispinterface
+     ['{82170AF6-E9A1-49DC-8B25-060F28942607}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Background Color
+    procedure Set_BackColor(const Param1: OLE_COLOR); dispid -501;
+    // Background Color
+    function Get_BackColor: OLE_COLOR; dispid -501;
+    // Foreground (text) Color
+    procedure Set_ForeColor(const Param1: OLE_COLOR); dispid -513;
+    // Foreground (text) Color
+    function Get_ForeColor: OLE_COLOR; dispid -513;
+    // Sets or queries whether or not the ListBox is enabled
+    procedure Set_Enabled(const Param1: WordBool); dispid -514;
+    // Sets or queries whether or not the ListBox is enabled
+    function Get_Enabled: WordBool; dispid -514;
+    // Sets or queries whether or not the border of the ListBox is visible
+    procedure Set_BorderVisible(const Param1: WordBool); dispid -519;
+    // Sets or queries whether or not the border of the ListBox is visible
+    function Get_BorderVisible: WordBool; dispid -519;
+    // Sets or queries the background color of the selected item in the ListBox
+    function Get_SelectionBackColor: OLE_COLOR; dispid 1;
+    // Sets or queries the background color of the selected item in the ListBox
+    procedure Set_SelectionBackColor(const Param1: OLE_COLOR); dispid 1;
+    // Sets or queries the foreground or text color of the selected item in the ListBox
+    function Get_SelectionForeColor: OLE_COLOR; dispid 2;
+    // Sets or queries the foreground or text color of the selected item in the ListBox
+    procedure Set_SelectionForeColor(const Param1: OLE_COLOR); dispid 2;
+    // Sets or queries the currently selected item in the ListBox
+    function Get_ListIndex: LongInt; dispid 3;
+    // Sets or queries the currently selected item in the ListBox
+    procedure Set_ListIndex(const Param1: LongInt); dispid 3;
+    // Clears the ListBox
+    procedure ResetList; dispid 4;
+    // Inserts an item into the ListBox
+    procedure AddItem(bstrItem: WideString); dispid 5;
+    // Sets the text of the currently selected item in the ListBox
+    function Get_Text: WideString; dispid 6;
+    // Sets the text of the currently selected item in the ListBox
+    procedure Set_Text(const Param1: WideString); dispid 6;
+    // Sets the text of a specific item in the ListBox
+    function Get_Item(Item: LongInt): WideString; dispid 7;
+    // Sets the text of a specific item in the ListBox
+    procedure Set_Item(Item: LongInt; const Param2: WideString); dispid 7;
+    // Queries the number of items in the ListBox
+    function Get_ItemCount: LongInt; dispid 8;
+    // Sets or queries the height of items in the ListBox
+    function Get_ItemHeight: LongInt; dispid 9;
+    // Sets or queries the height of items in the ListBox
+    procedure Set_ItemHeight(const Param1: LongInt); dispid 9;
+    // property ListBackColor
+    function Get_ListBackColor: OLE_COLOR; dispid 10;
+    // property ListBackColor
+    procedure Set_ListBackColor(const Param1: OLE_COLOR); dispid 10;
+    // Inserts an item into the ListBox
+    procedure RemoveItem(const newVal: LongInt); dispid 11;
+    // property FontName
+    function Get_FontName: WideString; dispid 12;
+    // property FontName
+    procedure Set_FontName(const Param1: WideString); dispid 12;
+    function Get_FontSize: LongInt; dispid 13;
+    procedure Set_FontSize(const Param1: LongInt); dispid 13;
+    function Get_FontItalic: WordBool; dispid 14;
+    procedure Set_FontItalic(const Param1: WordBool); dispid 14;
+    function Get_FontBold: WordBool; dispid 15;
+    procedure Set_FontBold(const Param1: WordBool); dispid 15;
+    function Get_FontAntialiased: WordBool; dispid 16;
+    procedure Set_FontAntialiased(const Param1: WordBool); dispid 16;
+    // property Sorted
+    function Get_Sorted: WordBool; dispid 17;
+    // property Sorted
+    procedure Set_Sorted(const Param1: WordBool); dispid 17;
+  end;
+
+type
+  // IListBox Interface
+  // Flags: (4160) dual,dispatchable
+  IListBox = interface(IDispatch)
+     ['{82170AF6-E9A1-49DC-8B25-060F28942607}']
+    procedure QueryInterface(const riid: GUID; var ppvObj: out); dispid 1610612736;
+    function AddRef: Cardinal; dispid 1610612737;
+    function Release: Cardinal; dispid 1610612738;
+    procedure GetTypeInfoCount(var pctinfo: DWORD); dispid 1610678272;
+    procedure GetTypeInfo(const itinfo: DWORD; const lcid: Cardinal; var pptinfo: out); dispid 1610678273;
+    procedure GetIDsOfNames(const riid: GUID; const rgszNames: ShortInt; const cNames: DWORD; const lcid: Cardinal; var rgdispid: LongInt); dispid 1610678274;
+    procedure Invoke(const dispidMember: LongInt; const riid: GUID; const lcid: Cardinal; const wFlags: Word; const pdispparams: DISPPARAMS; var pvarResult: Variant; var pexcepinfo: EXCEPINFO; var puArgErr: DWORD); dispid 1610678275;
+    // Background Color
+    procedure Set_BackColor(const Param1: OLE_COLOR); dispid -501;
+    // Background Color
+    function Get_BackColor: OLE_COLOR; dispid -501;
+    // Foreground (text) Color
+    procedure Set_ForeColor(const Param1: OLE_COLOR); dispid -513;
+    // Foreground (text) Color
+    function Get_ForeColor: OLE_COLOR; dispid -513;
+    // Sets or queries whether or not the ListBox is enabled
+    procedure Set_Enabled(const Param1: WordBool); dispid -514;
+    // Sets or queries whether or not the ListBox is enabled
+    function Get_Enabled: WordBool; dispid -514;
+    // Sets or queries whether or not the border of the ListBox is visible
+    procedure Set_BorderVisible(const Param1: WordBool); dispid -519;
+    // Sets or queries whether or not the border of the ListBox is visible
+    function Get_BorderVisible: WordBool; dispid -519;
+    // Sets or queries the background color of the selected item in the ListBox
+    function Get_SelectionBackColor: OLE_COLOR; dispid 1;
+    // Sets or queries the background color of the selected item in the ListBox
+    procedure Set_SelectionBackColor(const Param1: OLE_COLOR); dispid 1;
+    // Sets or queries the foreground or text color of the selected item in the ListBox
+    function Get_SelectionForeColor: OLE_COLOR; dispid 2;
+    // Sets or queries the foreground or text color of the selected item in the ListBox
+    procedure Set_SelectionForeColor(const Param1: OLE_COLOR); dispid 2;
+    // Sets or queries the currently selected item in the ListBox
+    function Get_ListIndex: LongInt; dispid 3;
+    // Sets or queries the currently selected item in the ListBox
+    procedure Set_ListIndex(const Param1: LongInt); dispid 3;
+    // Clears the ListBox
+    procedure ResetList; dispid 4;
+    // Inserts an item into the ListBox
+    procedure AddItem(bstrItem: WideString); dispid 5;
+    // Sets the text of the currently selected item in the ListBox
+    function Get_Text: WideString; dispid 6;
+    // Sets the text of the currently selected item in the ListBox
+    procedure Set_Text(const Param1: WideString); dispid 6;
+    // Sets the text of a specific item in the ListBox
+    function Get_Item(Item: LongInt): WideString; dispid 7;
+    // Sets the text of a specific item in the ListBox
+    procedure Set_Item(Item: LongInt; const Param2: WideString); dispid 7;
+    // Queries the number of items in the ListBox
+    function Get_ItemCount: LongInt; dispid 8;
+    // Sets or queries the height of items in the ListBox
+    function Get_ItemHeight: LongInt; dispid 9;
+    // Sets or queries the height of items in the ListBox
+    procedure Set_ItemHeight(const Param1: LongInt); dispid 9;
+    // property ListBackColor
+    function Get_ListBackColor: OLE_COLOR; dispid 10;
+    // property ListBackColor
+    procedure Set_ListBackColor(const Param1: OLE_COLOR); dispid 10;
+    // Inserts an item into the ListBox
+    procedure RemoveItem(const newVal: LongInt); dispid 11;
+    // property FontName
+    function Get_FontName: WideString; dispid 12;
+    // property FontName
+    procedure Set_FontName(const Param1: WideString); dispid 12;
+    function Get_FontSize: LongInt; dispid 13;
+    procedure Set_FontSize(const Param1: LongInt); dispid 13;
+    function Get_FontItalic: WordBool; dispid 14;
+    procedure Set_FontItalic(const Param1: WordBool); dispid 14;
+    function Get_FontBold: WordBool; dispid 15;
+    procedure Set_FontBold(const Param1: WordBool); dispid 15;
+    function Get_FontAntialiased: WordBool; dispid 16;
+    procedure Set_FontAntialiased(const Param1: WordBool); dispid 16;
+    // property Sorted
+    function Get_Sorted: WordBool; dispid 17;
+    // property Sorted
+    procedure Set_Sorted(const Param1: WordBool); dispid 17;
+  end;
+
+type
+  // DesktopX ComboBox
+  // CLSID: {1C94A05E-ED29-4760-B9BC-134593EEE7C3}
+  // Flags: (2) cancreate
+  TComboBox = class(TAutoObject, IComboBox, _IComboBoxEvents);
+
+type
+  // _IListBoxEvents Interface
+  // Flags: (4096) dispatchable
+  _IListBoxEventsDisp = dispinterface
+     ['{5D8988E9-08F6-41B5-BB1F-BC2C1F779456}']
+    // method OnSelect
+    procedure OnSelect(Item: LongInt; string: WideString): HRESULT; dispid 1;
+    // method OnKeyDown
+    procedure OnKeyDown(Key: LongInt; extended: LongInt): HRESULT; dispid 2;
+    // method OnKeyUp
+    procedure OnKeyUp(Key: LongInt; extended: LongInt): HRESULT; dispid 3;
+    // method OnButtonDblClk
+    procedure OnButtonDblClk(wParam: LongInt; lParam: LongInt): HRESULT; dispid 4;
+  end;
+
+type
+  // DesktopX ListBox
+  // CLSID: {286DD289-BFFF-4E23-87D4-F31EC94345D0}
+  // Flags: (2) cancreate
+  TListBox = class(TAutoObject, IListBox, _IListBoxEvents);
+
+
+implementation
+
+end.
