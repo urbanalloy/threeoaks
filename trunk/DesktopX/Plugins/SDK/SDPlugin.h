@@ -125,7 +125,7 @@ typedef struct SD_PLUGIN_INFO_
 #define SD_GET_PLUGINS_DIRECTORY	2
 #define SD_REDRAW					3
 #define SD_SET_STATE				4
-#define SD_MOVE						5
+#define SD_MOVE						5	// Deprecated
 #define SD_GET_RELATIVE_RECT		6
 #define SD_GET_ABSOLUTE_RECT		7
 #define SD_SET_OBJECT_POS			8
