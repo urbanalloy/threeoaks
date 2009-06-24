@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //
-// DXSysControl - Extended System Information
+// DXSystemEx - Extended System Information
 //
 // Copyright (c) 2009, Julien Templier
 // All rights reserved.
@@ -39,7 +39,7 @@
 #include <comsvcs.h>
 
 #include "COMError.h"
-#include "DXSysControl.h"
+#include "DXSystemEx.h"
 #include "resource.h"
 
 #include <string>
@@ -50,7 +50,7 @@ using namespace std;
 class ATL_NO_VTABLE CMonitorInfo :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMonitorInfo, &CLSID_MonitorInfo>,
-	public IDispatchImpl<IMonitorInfo, &IID_IMonitorInfo, &LIBID_DXSysControlLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
+	public IDispatchImpl<IMonitorInfo, &IID_IMonitorInfo, &LIBID_DXSystemExLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
     public ISupportErrorInfo
 {
 public:
@@ -67,7 +67,7 @@ public:
 	{
 	}
 
-DECLARE_REGISTRY_RESOURCEID(IDR_SYSCONTROL)
+DECLARE_REGISTRY_RESOURCEID(IDR_SystemEx)
 
 DECLARE_NOT_AGGREGATABLE(CMonitorInfo)
 
@@ -90,7 +90,7 @@ END_COM_MAP()
 		STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);	
 
 		//////////////////////////////////////////////////////////////////////////
-		// ISysControl
+		// ISystemEx
 		//////////////////////////////////////////////////////////////////////////
 		STDMETHOD(get_IsPrimary)(VARIANT_BOOL* isPrimary);
 		STDMETHOD(get_Left)(int* left);

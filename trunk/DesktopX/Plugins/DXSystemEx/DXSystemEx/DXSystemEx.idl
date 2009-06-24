@@ -1,4 +1,4 @@
-// IDL source for DXSysControl
+// IDL source for DXSystemEx
 
 // This file will be processed by the MIDL tool to
 // produce the type library and marshalling code.
@@ -37,10 +37,10 @@ interface IMonitorInfo : IDispatch{
 	uuid(1EA1FEB9-07DF-4080-A578-9B5A15294146),
 	dual,
 	nonextensible,
-	helpstring("ISysControl Interface"),
+	helpstring("ISystemEx Interface"),
 	pointer_default(unique)
 ]
-interface ISysControl : IDispatch{
+interface ISystemEx : IDispatch{
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Properties
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,18 +57,18 @@ interface ISysControl : IDispatch{
 [
 	uuid(9F3FB81B-658E-4853-82BA-1A263630CFA5),
 	version(1.0),
-	helpstring("DXSysControl 1.0 Type Library")
+	helpstring("DXSystemEx 1.0 Type Library")
 ]
-library DXSysControlLib
+library DXSystemExLib
 {
 	importlib("stdole2.tlb");
 	[
 		uuid(65C94091-C8AE-4423-99A2-CEAE94F91E62),
-		helpstring("SysControl Class")
+		helpstring("SystemEx Class")
 	]
-	coclass SysControl
+	coclass SystemEx
 	{
-		[default] interface ISysControl;
+		[default] interface ISystemEx;
 		interface ISupportErrorInfo;
 	};
 

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //
-// DXSysControl - Extended System Information
+// DXSystemEx - Extended System Information
 //
 // Copyright (c) 2009, Julien Templier
 // All rights reserved.
@@ -34,51 +34,51 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "SysControl.h"
+#include "SystemEx.h"
 
 // HACK !
-static CSysControl *pSysControl;
+static CSystemEx *pSystemEx;
 static HANDLE configMutex;
 
-void CSysControl::Init(DWORD objID, HWND hwnd)
+void CSystemEx::Init(DWORD objID, HWND hwnd)
 {
 	// init the config mutex
 	if (hConfigMutex == NULL) {
 		char name[MAX_PATH];
-		sprintf_s(name, "DXSysControlMutex-%d", objID);
+		sprintf_s(name, "DXSystemExMutex-%d", objID);
 		hConfigMutex = CreateMutex(NULL, false, name);
 	}
 
-	pSysControl = this;	
+	pSystemEx = this;	
 	configMutex = hConfigMutex;
 
 	UpdateMonitorInfo();
 }
 
-void CSysControl::Cleanup()
+void CSystemEx::Cleanup()
 {
 
 }
 
-void CSysControl::UpdateMonitorInfo()
+void CSystemEx::UpdateMonitorInfo()
 {
 	ACQUIRE_MUTEX(hConfigMutex)
 	m_monitors.clear();
 	RELEASE_MUTEX(hConfigMutex)
 
-	EnumDisplayMonitors(NULL, NULL, (MONITORENUMPROC)&CSysControl::MonitorEnumProc, NULL);
+	EnumDisplayMonitors(NULL, NULL, (MONITORENUMPROC)&CSystemEx::MonitorEnumProc, NULL);
 }
 
 //////////////////////////////////////////////////////////////////////////
 // Enumerate monitors
-BOOL CALLBACK CSysControl::MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData)
+BOOL CALLBACK CSystemEx::MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData)
 {
 	MONITORINFO info;
 	info.cbSize = sizeof(MONITORINFO);
 	GetMonitorInfo(hMonitor, &info);
 
 	ACQUIRE_MUTEX(configMutex)
-	pSysControl->m_monitors.push_back(pair<RECT, bool>(info.rcMonitor, (info.dwFlags == MONITORINFOF_PRIMARY) ? true : false));
+	pSystemEx->m_monitors.push_back(pair<RECT, bool>(info.rcMonitor, (info.dwFlags == MONITORINFOF_PRIMARY) ? true : false));
 	RELEASE_MUTEX(configMutex)
 
 	return true;
@@ -87,11 +87,11 @@ BOOL CALLBACK CSysControl::MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LP
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ISupportErrorInfo
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CSysControl::InterfaceSupportsErrorInfo(REFIID riid)
+STDMETHODIMP CSystemEx::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
 	{
-		&IID_ISysControl
+		&IID_ISystemEx
 	};
 
 	for (int i=0; i < sizeof(arr) / sizeof(arr[0]); i++)
@@ -103,10 +103,10 @@ STDMETHODIMP CSysControl::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ISysControl
+// ISystemEx
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-STDMETHODIMP CSysControl::get_NumberOfScreens(int* numberOfScreens)
+STDMETHODIMP CSystemEx::get_NumberOfScreens(int* numberOfScreens)
 {
 	ACQUIRE_MUTEX(hConfigMutex)
 	*numberOfScreens = m_monitors.size();
@@ -115,7 +115,7 @@ STDMETHODIMP CSysControl::get_NumberOfScreens(int* numberOfScreens)
 	return S_OK;
 }
 
-STDMETHODIMP CSysControl::get_Screens(VARIANT* screens)
+STDMETHODIMP CSystemEx::get_Screens(VARIANT* screens)
 {
 	ACQUIRE_MUTEX(hConfigMutex)
 
@@ -165,10 +165,10 @@ STDMETHODIMP CSysControl::get_Screens(VARIANT* screens)
 	return S_OK;
 }
 
-STDMETHODIMP CSysControl::GetScreen(int index, IMonitorInfo** info)
+STDMETHODIMP CSystemEx::GetScreen(int index, IMonitorInfo** info)
 {
 	if (index < 0 || index > (signed)m_monitors.size() - 1)		
-		return CCOMError::DispatchError(1, CLSID_SysControl, _T("Error getting monitor info!"), "Monitor index is invalid.", 0, NULL);	
+		return CCOMError::DispatchError(1, CLSID_SystemEx, _T("Error getting monitor info!"), "Monitor index is invalid.", 0, NULL);	
 
 	ACQUIRE_MUTEX(hConfigMutex)
 

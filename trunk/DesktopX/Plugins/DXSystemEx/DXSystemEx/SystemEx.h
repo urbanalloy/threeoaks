@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //
-// DXSysControl - Extended System Information
+// DXSystemEx - Extended System Information
 //
 // Copyright (c) 2009, Julien Templier
 // All rights reserved.
@@ -39,7 +39,7 @@
 #include <comsvcs.h>
 
 #include "COMError.h"
-#include "DXSysControl.h"
+#include "DXSystemEx.h"
 #include "resource.h"
 
 #include "MonitorInfo.h"
@@ -64,14 +64,14 @@ using namespace std;
 }
 
 // CAeroColor
-class ATL_NO_VTABLE CSysControl :
+class ATL_NO_VTABLE CSystemEx :
 	public CComObjectRootEx<CComSingleThreadModel>,
-	public CComCoClass<CSysControl, &CLSID_SysControl>,
-	public IDispatchImpl<ISysControl, &IID_ISysControl, &LIBID_DXSysControlLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
+	public CComCoClass<CSystemEx, &CLSID_SystemEx>,
+	public IDispatchImpl<ISystemEx, &IID_ISystemEx, &LIBID_DXSystemExLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
     public ISupportErrorInfo
 {
 public:
-	CSysControl() {}
+	CSystemEx() {}
 
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -88,12 +88,12 @@ public:
 			CloseHandle(hConfigMutex);
 	}
 
-DECLARE_REGISTRY_RESOURCEID(IDR_SYSCONTROL)
+DECLARE_REGISTRY_RESOURCEID(IDR_SystemEx)
 
-DECLARE_NOT_AGGREGATABLE(CSysControl)
+DECLARE_NOT_AGGREGATABLE(CSystemEx)
 
-BEGIN_COM_MAP(CSysControl)
-	COM_INTERFACE_ENTRY(ISysControl)
+BEGIN_COM_MAP(CSystemEx)
+	COM_INTERFACE_ENTRY(ISystemEx)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
@@ -118,11 +118,11 @@ END_COM_MAP()
 		STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);	
 
 		//////////////////////////////////////////////////////////////////////////
-		// ISysControl
+		// ISystemEx
 		//////////////////////////////////////////////////////////////////////////
 		STDMETHOD(get_NumberOfScreens)(int* numberOfScreens);
 		STDMETHOD(get_Screens)(VARIANT* screens);
 		STDMETHOD(GetScreen)(int index, IMonitorInfo** info);
 };
 
-OBJECT_ENTRY_AUTO(__uuidof(SysControl), CSysControl)
+OBJECT_ENTRY_AUTO(__uuidof(SystemEx), CSystemEx)

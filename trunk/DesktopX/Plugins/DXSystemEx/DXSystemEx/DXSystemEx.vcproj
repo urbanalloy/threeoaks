@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="DXSysControl"
+	Name="DXSystemEx"
 	ProjectGUID="{46131C74-7C47-49E2-ACE4-F705CA2B575E}"
-	RootNamespace="DXSysControl"
+	RootNamespace="DXSystemEx"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -20,7 +20,7 @@
 			OutputDirectory="$(SolutionDir)/Builds/$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)/Builds/$(ConfigurationName)/Intermediate"
 			ConfigurationType="2"
-			UseOfMFC="1"
+			UseOfMFC="0"
 			UseOfATL="1"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -44,11 +44,11 @@
 				MkTypLibCompatible="false"
 				TargetEnvironment="1"
 				GenerateStublessProxies="true"
-				TypeLibraryName="$(IntDir)/DXSysControl.tlb"
-				HeaderFileName="DXSysControl.h"
+				TypeLibraryName="$(IntDir)/DXSystemEx.tlb"
+				HeaderFileName="DXSystemEx.h"
 				DLLDataFileName=""
-				InterfaceIdentifierFileName="DXSysControl_i.c"
-				ProxyFileName="DXSysControl_p.c"
+				InterfaceIdentifierFileName="DXSystemEx_i.c"
+				ProxyFileName="DXSystemEx_p.c"
 				ValidateParameters="false"
 			/>
 			<Tool
@@ -84,7 +84,7 @@
 				IgnoreImportLibrary="true"
 				AdditionalDependencies="comsvcs.lib"
 				LinkIncremental="2"
-				ModuleDefinitionFile=".\DXSysControl.def"
+				ModuleDefinitionFile=".\DXSystemEx.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
@@ -140,11 +140,11 @@
 				MkTypLibCompatible="false"
 				TargetEnvironment="1"
 				GenerateStublessProxies="true"
-				TypeLibraryName="$(IntDir)/DXSysControl.tlb"
-				HeaderFileName="DXSysControl.h"
+				TypeLibraryName="$(IntDir)/DXSystemEx.tlb"
+				HeaderFileName="DXSystemEx.h"
 				DLLDataFileName=""
-				InterfaceIdentifierFileName="DXSysControl_i.c"
-				ProxyFileName="DXSysControl_p.c"
+				InterfaceIdentifierFileName="DXSystemEx_i.c"
+				ProxyFileName="DXSystemEx_p.c"
 				ValidateParameters="false"
 			/>
 			<Tool
@@ -179,7 +179,7 @@
 				IgnoreImportLibrary="true"
 				AdditionalDependencies="comsvcs.lib"
 				LinkIncremental="1"
-				ModuleDefinitionFile=".\DXSysControl.def"
+				ModuleDefinitionFile=".\DXSystemEx.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -228,7 +228,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\DXSysControl.cpp"
+				RelativePath=".\DXSystemEx.cpp"
 				>
 			</File>
 			<File
@@ -282,19 +282,19 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\DXSysControl.def"
+				RelativePath=".\DXSystemEx.def"
 				>
 			</File>
 			<File
-				RelativePath=".\DXSysControl.idl"
+				RelativePath=".\DXSystemEx.idl"
 				>
 			</File>
 			<File
-				RelativePath=".\DXSysControl.rc"
+				RelativePath=".\DXSystemEx.rc"
 				>
 			</File>
 			<File
-				RelativePath=".\DXSysControl.rgs"
+				RelativePath=".\DXSystemEx.rgs"
 				>
 			</File>
 			<File
@@ -311,11 +311,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\DXSysControl.h"
+				RelativePath=".\DXSystemEx.h"
 				>
 			</File>
 			<File
-				RelativePath=".\DXSysControl_i.c"
+				RelativePath=".\DXSystemEx_i.c"
 				>
 			</File>
 		</Filter>
@@ -340,24 +340,40 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="COM"
+			Name="COM/Functions"
 			>
 			<File
-				RelativePath=".\MonitorInfo.cpp"
+				RelativePath=".\SystemEx.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\MonitorInfo.h"
+				RelativePath=".\SystemEx.h"
 				>
 			</File>
-			<File
-				RelativePath=".\SysControl.cpp"
+			<Filter
+				Name="Monitor"
 				>
-			</File>
-			<File
-				RelativePath=".\SysControl.h"
+				<File
+					RelativePath=".\MonitorInfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\MonitorInfo.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Mouse"
 				>
-			</File>
+				<File
+					RelativePath=".\MouseWheel.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\MouseWheel.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

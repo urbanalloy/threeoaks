@@ -1,6 +1,6 @@
 ; Declares the module parameters.
 
-LIBRARY      "DXSysControl.DLL"
+LIBRARY      "DXSystemEx.DLL"
 
 EXPORTS
 	DllCanUnloadNow		PRIVATE

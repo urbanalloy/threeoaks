@@ -40,7 +40,7 @@ END
 
 3 TEXTINCLUDE 
 BEGIN
-    "1 TYPELIB ""DXSysControl.tlb""\r\n"
+    "1 TYPELIB ""DXSystemEx.tlb""\r\n"
     "\0"
 END
 
@@ -72,10 +72,10 @@ BEGIN
             VALUE "CompanyName", "Julien Templier"
             VALUE "FileDescription", "DesktopX plugin : Extended System Control"
             VALUE "FileVersion", "1.0.0.1"
-            VALUE "InternalName", "DXSysControl.dll"
+            VALUE "InternalName", "DXSystemEx.dll"
             VALUE "LegalCopyright", "(c) 2009 Julien Templier.  All rights reserved."
-            VALUE "OriginalFilename", "DXSysControl.dll"
-            VALUE "ProductName", "DXSysControl"
+            VALUE "OriginalFilename", "DXSystemEx.dll"
+            VALUE "ProductName", "DXSystemEx"
             VALUE "ProductVersion", "1.0.0.1"
         END
     END
@@ -90,7 +90,7 @@ END
 // REGISTRY
 //
 
-IDR_SYSCONTROL         REGISTRY                "DXSysControl.rgs"
+IDR_SystemEx         REGISTRY                "DXSystemEx.rgs"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -99,7 +99,7 @@ IDR_SYSCONTROL         REGISTRY                "DXSysControl.rgs"
 
 STRINGTABLE 
 BEGIN
-    IDS_PROJNAME            "DXSysControl"
+    IDS_PROJNAME            "DXSystemEx"
 END
 
 #endif    // English (U.S.) resources
@@ -112,7 +112,7 @@ END
 //
 // Generated from the TEXTINCLUDE 3 resource.
 //
-1 TYPELIB "DXSysControl.tlb"
+1 TYPELIB "DXSystemEx.tlb"
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
