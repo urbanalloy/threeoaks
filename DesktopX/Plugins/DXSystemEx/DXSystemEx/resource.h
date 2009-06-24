@@ -2,7 +2,7 @@
 // Microsoft Visual C++ generated include file.
 //
 #define IDS_PROJNAME                    100
-#define IDR_SYSCONTROL                  102
+#define IDR_SystemEx                  102
 
 
 // Next default values for new objects

@@ -13,6 +13,6 @@
 #define ENTRY_PREFIX	Prx
 
 #include "dlldata.c"
-#include "DXSysControl_p.c"
+#include "DXSystemEx_p.c"
 
 #endif //_MERGE_PROXYSTUB

@@ -1,20 +1,20 @@
 HKCR
 {
-	DXSysControl.SysControl.1 = s 'SysControl Class'
+	DXSystemEx.SystemEx.1 = s 'SystemEx Class'
 	{
 		CLSID = s '{65C94091-C8AE-4423-99A2-CEAE94F91E62}'
 	}
-	DXSysControl.SysControl = s 'SysControl Class'
+	DXSystemEx.SystemEx = s 'SystemEx Class'
 	{
 		CLSID = s '{65C94091-C8AE-4423-99A2-CEAE94F91E62}'
-		CurVer = s 'DXSysControl.SysControl.1'
+		CurVer = s 'DXSystemEx.SystemEx.1'
 	}
 	NoRemove CLSID
 	{
-		ForceRemove {65C94091-C8AE-4423-99A2-CEAE94F91E62} = s 'SysControl Class'
+		ForceRemove {65C94091-C8AE-4423-99A2-CEAE94F91E62} = s 'SystemEx Class'
 		{
-			ProgID = s 'DXSysControl.SysControl.1'
-			VersionIndependentProgID = s 'DXSysControl.SysControl'
+			ProgID = s 'DXSystemEx.SystemEx.1'
+			VersionIndependentProgID = s 'DXSystemEx.SystemEx'
 			ForceRemove 'Programmable'
 			InprocServer32 = s '%MODULE%'
 			{
