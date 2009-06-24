@@ -33,72 +33,62 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include "stdafx.h"
-#include <comsvcs.h>
+#include "VistaCallBackSetup.h"
+#include <wtypes.h>
+#include <winerror.h>
 
-#include "COMError.h"
-#include "DXSystemEx.h"
-#include "resource.h"
+#include <ks.h>
+#include <mmreg.h>
+#include <mmdeviceapi.h>
+#include <Audioclient.h>
+#include <Endpointvolume.h>
 
-#include <string>
-#include <vector>
-using namespace std;
+CVistaVolumeCallback* pVistaVolumeCallback = NULL;
+static IAudioEndpointVolume* pClient = NULL;
 
-// CAeroColor
-class ATL_NO_VTABLE CMonitorInfo :
-	public CComObjectRootEx<CComSingleThreadModel>,
-	public CComCoClass<CMonitorInfo, &CLSID_MonitorInfo>,
-	public IDispatchImpl<IMonitorInfo, &IID_IMonitorInfo, &LIBID_DXSystemExLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
-    public ISupportErrorInfo
-{
-public:
-	CMonitorInfo() {}
+void RegisterCallBack() {
 
-	DECLARE_PROTECT_FINAL_CONSTRUCT()
+	if (pVistaVolumeCallback != NULL)
+		return;
 
-	HRESULT FinalConstruct()
-	{		
-		return S_OK;
-	}
+	IMMDeviceEnumerator* pEnumerator = NULL;
+    HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator),
+								  NULL,
+								  CLSCTX_INPROC_SERVER,
+                                  __uuidof(IMMDeviceEnumerator), // IID_IMMDeviceEnumerator,
+                                  (void**)&pEnumerator);
+    EXIT_ON_ERROR(hr)
 
-	void FinalRelease() 
-	{
-	}
+	IMMDevice* pDevice = NULL;
+    hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &pDevice);
+    EXIT_ON_ERROR(hr)
 
-DECLARE_REGISTRY_RESOURCEID(IDR_MONITORINFO)
+    hr = pDevice->Activate(__uuidof(IAudioEndpointVolume), // IID_IAudioClient
+                           CLSCTX_INPROC_SERVER, NULL, (void **)&pClient);
+    EXIT_ON_ERROR(hr);
 
-DECLARE_NOT_AGGREGATABLE(CMonitorInfo)
+	// Register Callback	
+	pVistaVolumeCallback = new CVistaVolumeCallback();
+	hr = pClient->RegisterControlChangeNotify(pVistaVolumeCallback);
+	if (FAILED(hr))
+		SAFE_RELEASE(pVistaVolumeCallback);
 
-BEGIN_COM_MAP(CMonitorInfo)
-	COM_INTERFACE_ENTRY(IMonitorInfo)
-    COM_INTERFACE_ENTRY(ISupportErrorInfo)
-	COM_INTERFACE_ENTRY(IDispatch)
-END_COM_MAP()
+	return;
 
-	private:
-		RECT m_rect;
-		bool m_primary;
-		
-	public:
-		void Init(pair<RECT, bool> info);
-		
-		//////////////////////////////////////////////////////////////////////////
-		// ISupportErrorInfo
-		//////////////////////////////////////////////////////////////////////////
-		STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);	
+Exit:
+	SAFE_RELEASE(pEnumerator)
+    SAFE_RELEASE(pDevice)
+}
 
-		//////////////////////////////////////////////////////////////////////////
-		// ISystemEx
-		//////////////////////////////////////////////////////////////////////////
-		STDMETHOD(get_IsPrimary)(VARIANT_BOOL* isPrimary);
-		STDMETHOD(get_Left)(int* left);
-		STDMETHOD(get_Top)(int* top);
-		STDMETHOD(get_Bottom)(int* bottom);
-		STDMETHOD(get_Right)(int* right);
-		STDMETHOD(get_Width)(int* width);
-		STDMETHOD(get_Height)(int* height);
-};
+void UnregisterCallBack() {
+	if (pVistaVolumeCallback == NULL)
+		goto Exit;
 
-OBJECT_ENTRY_AUTO(__uuidof(MonitorInfo), CMonitorInfo)
+	// Unregister Callback
+	pClient->UnregisterControlChangeNotify(pVistaVolumeCallback);
+
+Exit:
+	SAFE_RELEASE(pVistaVolumeCallback);
+    SAFE_RELEASE(pClient)
+}

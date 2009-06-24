@@ -36,21 +36,38 @@
 #include "stdafx.h"
 #include "SystemEx.h"
 
+#include <wtypes.h>
+#include <winerror.h>
+#include <math.h>
+
+// Volume
+#include <ks.h>
+#include <mmreg.h>
+#include <mmdeviceapi.h>
+#include <Audioclient.h>
+#include <EndpointVolume.h>
+
+#include "Volume/MixerAPI.h"
+#include "VersionCheck.h"
+
 // HACK !
 static CSystemEx *pSystemEx;
 static HANDLE configMutex;
 
 void CSystemEx::Init(DWORD objID, HWND hwnd)
 {
+	m_objID = objID;
+	m_hwnd = hwnd;
+
 	// init the config mutex
-	if (hConfigMutex == NULL) {
+	if (m_hConfigMutex == NULL) {
 		char name[MAX_PATH];
 		sprintf_s(name, "DXSystemExMutex-%d", objID);
-		hConfigMutex = CreateMutex(NULL, false, name);
+		m_hConfigMutex = CreateMutex(NULL, false, name);
 	}
 
 	pSystemEx = this;	
-	configMutex = hConfigMutex;
+	configMutex = m_hConfigMutex;
 
 	UpdateMonitorInfo();
 }
@@ -62,16 +79,16 @@ void CSystemEx::Cleanup()
 
 void CSystemEx::UpdateMonitorInfo()
 {
-	ACQUIRE_MUTEX(hConfigMutex)
+	ACQUIRE_MUTEX(m_hConfigMutex)
 	m_monitors.clear();
-	RELEASE_MUTEX(hConfigMutex)
+	RELEASE_MUTEX(m_hConfigMutex)
 
 	EnumDisplayMonitors(NULL, NULL, (MONITORENUMPROC)&CSystemEx::MonitorEnumProc, NULL);
 }
 
 //////////////////////////////////////////////////////////////////////////
 // Enumerate monitors
-BOOL CALLBACK CSystemEx::MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData)
+BOOL CALLBACK CSystemEx::MonitorEnumProc(HMONITOR hMonitor, HDC, LPRECT, LPARAM)
 {
 	MONITORINFO info;
 	info.cbSize = sizeof(MONITORINFO);
@@ -106,18 +123,23 @@ STDMETHODIMP CSystemEx::InterfaceSupportsErrorInfo(REFIID riid)
 // ISystemEx
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-STDMETHODIMP CSystemEx::get_NumberOfScreens(int* numberOfScreens)
+/************************************************************************/
+/* Monitors                                                             */
+/************************************************************************/
+
+
+STDMETHODIMP CSystemEx::get_NumberOfMonitors(int* numberOfMonitors)
 {
-	ACQUIRE_MUTEX(hConfigMutex)
-	*numberOfScreens = m_monitors.size();
-	RELEASE_MUTEX(hConfigMutex)
+	ACQUIRE_MUTEX(m_hConfigMutex)
+	*numberOfMonitors = m_monitors.size();
+	RELEASE_MUTEX(m_hConfigMutex)
 
 	return S_OK;
 }
 
-STDMETHODIMP CSystemEx::get_Screens(VARIANT* screens)
+STDMETHODIMP CSystemEx::get_Monitors(VARIANT* monitors)
 {
-	ACQUIRE_MUTEX(hConfigMutex)
+	ACQUIRE_MUTEX(m_hConfigMutex)
 
 	// Create SafeArray of MonitorInfos
 	SAFEARRAY *pSA;
@@ -148,7 +170,7 @@ STDMETHODIMP CSystemEx::get_Screens(VARIANT* screens)
 				VariantClear(&vOut);
 				SafeArrayDestroy(pSA); // does a deep destroy of source VARIANT
 
-				ReleaseMutex(hConfigMutex);
+				ReleaseMutex(m_hConfigMutex);
 				return hr;
 			}
 			
@@ -157,28 +179,387 @@ STDMETHODIMP CSystemEx::get_Screens(VARIANT* screens)
 	}
 
 	// return SafeArray as VARIANT
-	V_VT(screens) = VT_ARRAY | VT_VARIANT;
-	V_ARRAY(screens)= pSA;
+	V_VT(monitors) = VT_ARRAY | VT_VARIANT;
+	V_ARRAY(monitors)= pSA;
 
-	RELEASE_MUTEX(hConfigMutex)
+	RELEASE_MUTEX(m_hConfigMutex)
 
 	return S_OK;
 }
 
-STDMETHODIMP CSystemEx::GetScreen(int index, IMonitorInfo** info)
+STDMETHODIMP CSystemEx::GetMonitor(int index, IMonitorInfo** info)
 {
 	if (index < 0 || index > (signed)m_monitors.size() - 1)		
 		return CCOMError::DispatchError(1, CLSID_SystemEx, _T("Error getting monitor info!"), "Monitor index is invalid.", 0, NULL);	
 
-	ACQUIRE_MUTEX(hConfigMutex)
+	ACQUIRE_MUTEX(m_hConfigMutex)
 
 	CComObject<CMonitorInfo>* pMonitorInfo;
 	CComObject<CMonitorInfo>::CreateInstance(&pMonitorInfo);
 	pMonitorInfo->Init(m_monitors[index]);
 	pMonitorInfo->QueryInterface(IID_IMonitorInfo, (void**)info);
 
-	RELEASE_MUTEX(hConfigMutex)
+	RELEASE_MUTEX(m_hConfigMutex)
 
 	return S_OK;
+}
 
+/************************************************************************/
+/* Volume                                                             */
+/************************************************************************/
+
+// Master volume
+STDMETHODIMP CSystemEx::put_Volume(int volume)
+{
+	// volume should be between 0 and 100
+	if (volume < 0)
+		volume = 0;
+	if (volume > 100)
+		volume = 100;
+
+	if (Is_WinVista_or_Later())
+		return Vista_put_Volume(volume);
+	else
+		return XP_put_Volume(volume);
+}
+
+STDMETHODIMP CSystemEx::get_Volume(int *volume)
+{
+	if (Is_WinVista_or_Later())
+		return Vista_get_Volume(volume);
+	else
+		return XP_get_Volume(volume);
+}
+
+
+// Muting state
+STDMETHODIMP CSystemEx::put_Mute(BOOL isMuted)
+{
+	// We are getting a VBScript BOOL, convert it to a C++ BOOL
+	BOOL muted = TRUE;
+	isMuted == VARIANT_FALSE ? muted = FALSE : muted = TRUE;
+
+	if (Is_WinVista_or_Later())
+		return Vista_put_Mute(muted);
+	else
+		return XP_put_Mute(muted);
+
+}
+
+STDMETHODIMP CSystemEx::get_Mute(VARIANT *isMuted)
+{
+	if (Is_WinVista_or_Later())
+		return Vista_get_Mute(isMuted);
+	else
+		return XP_get_Mute(isMuted);
+
+}
+
+
+// Peak level
+STDMETHODIMP CSystemEx::get_PeakValue(int *value)
+{
+	if (Is_WinVista_or_Later())
+		return Vista_get_PeakValue(value);
+	else
+		return XP_get_PeakValue(value);
+
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Vista
+//////////////////////////////////////////////////////////////////////////
+
+// Master volume
+HRESULT CSystemEx::Vista_put_Volume(int volume)
+{
+	IMMDeviceEnumerator* pEnumerator = NULL;
+
+	HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER,
+		__uuidof(IMMDeviceEnumerator), // IID_IMMDeviceEnumerator,
+		(void**)&pEnumerator);
+	EXIT_ON_ERROR(hr)
+
+		IMMDevice* pDevice = NULL;
+
+	hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &pDevice);
+	EXIT_ON_ERROR(hr)
+
+		IAudioEndpointVolume* pClient = NULL;
+
+	hr = pDevice->Activate(__uuidof(IAudioEndpointVolume), // IID_IAudioClient
+		CLSCTX_INPROC_SERVER, NULL, (void **)&pClient);
+	EXIT_ON_ERROR(hr)
+
+		// set volume
+		pClient->SetMasterVolumeLevelScalar((float) volume/100, NULL);
+
+Exit:
+	SAFE_RELEASE(pEnumerator)
+		SAFE_RELEASE(pDevice)
+		SAFE_RELEASE(pClient)
+
+		return S_OK;
+}
+
+HRESULT CSystemEx::Vista_get_Volume(int *volume)
+{
+	IMMDeviceEnumerator* pEnumerator = NULL;
+
+	HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER,
+		__uuidof(IMMDeviceEnumerator), // IID_IMMDeviceEnumerator,
+		(void**)&pEnumerator);
+	EXIT_ON_ERROR(hr)
+
+		IMMDevice* pDevice = NULL;
+
+	hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &pDevice);
+	EXIT_ON_ERROR(hr)
+
+		IAudioEndpointVolume* pClient = NULL;
+
+	hr = pDevice->Activate(__uuidof(IAudioEndpointVolume), // IID_IAudioClient
+		CLSCTX_INPROC_SERVER, NULL, (void **)&pClient);
+	EXIT_ON_ERROR(hr)
+
+		// get volume
+		float volumeLevel = NULL;
+	hr = pClient->GetMasterVolumeLevelScalar(&volumeLevel);
+	EXIT_ON_ERROR(hr)
+
+		int scaledVolume = (int) ceil(volumeLevel*100);
+	*volume = scaledVolume;
+
+Exit:
+	SAFE_RELEASE(pEnumerator)
+		SAFE_RELEASE(pDevice)
+		SAFE_RELEASE(pClient)
+
+		return S_OK;
+}
+
+
+// Muting state
+HRESULT CSystemEx::Vista_put_Mute(BOOL isMuted)
+{
+	IMMDeviceEnumerator* pEnumerator = NULL;
+
+	HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER,
+		__uuidof(IMMDeviceEnumerator), // IID_IMMDeviceEnumerator,
+		(void**)&pEnumerator);
+	EXIT_ON_ERROR(hr)
+
+		IMMDevice* pDevice = NULL;
+
+	hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &pDevice);
+	EXIT_ON_ERROR(hr)
+
+		IAudioEndpointVolume* pClient = NULL;
+
+	hr = pDevice->Activate(__uuidof(IAudioEndpointVolume), // IID_IAudioClient
+		CLSCTX_INPROC_SERVER, NULL, (void **)&pClient);
+	EXIT_ON_ERROR(hr)
+
+		// set mute
+		pClient->SetMute(isMuted, NULL);
+
+Exit:
+	SAFE_RELEASE(pEnumerator)
+		SAFE_RELEASE(pDevice)
+		SAFE_RELEASE(pClient)
+
+		return S_OK;
+}
+
+HRESULT CSystemEx::Vista_get_Mute(VARIANT *isMuted)
+{
+	IMMDeviceEnumerator* pEnumerator = NULL;
+
+	HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER,
+		__uuidof(IMMDeviceEnumerator), // IID_IMMDeviceEnumerator,
+		(void**)&pEnumerator);
+	EXIT_ON_ERROR(hr)
+
+		IMMDevice* pDevice = NULL;
+
+	hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &pDevice);
+	EXIT_ON_ERROR(hr)
+
+		IAudioEndpointVolume* pClient = NULL;
+
+	hr = pDevice->Activate(__uuidof(IAudioEndpointVolume), // IID_IAudioClient
+		CLSCTX_INPROC_SERVER, NULL, (void **)&pClient);
+	EXIT_ON_ERROR(hr)
+
+		// Get the muting state
+		BOOL mutingState = NULL;
+	hr = pClient->GetMute(&mutingState);
+	EXIT_ON_ERROR(hr)
+
+		if (mutingState == TRUE) 
+		{
+			TO_I4_VARIANT(isMuted, VARIANT_TRUE)
+		}
+		else
+		{
+			TO_I4_VARIANT(isMuted, VARIANT_FALSE)
+		}
+
+Exit:	
+		SAFE_RELEASE(pEnumerator)
+			SAFE_RELEASE(pDevice)
+			SAFE_RELEASE(pClient)
+
+			return S_OK;
+}
+
+
+// Peak level
+HRESULT CSystemEx::Vista_get_PeakValue(int *value)
+{
+	IMMDeviceEnumerator* pEnumerator = NULL;
+
+	HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER,
+		__uuidof(IMMDeviceEnumerator), // IID_IMMDeviceEnumerator,
+		(void**)&pEnumerator);
+	EXIT_ON_ERROR(hr)
+
+		IMMDevice* pDevice = NULL;
+
+	hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &pDevice);
+	EXIT_ON_ERROR(hr)
+
+		IAudioMeterInformation* pClient = NULL;
+
+	hr = pDevice->Activate(__uuidof(IAudioMeterInformation), // IID_IAudioClient
+		CLSCTX_INPROC_SERVER, NULL, (void **)&pClient);
+	EXIT_ON_ERROR(hr)
+
+		// Get the peak value
+		float peak = NULL;
+	hr = pClient->GetPeakValue(&peak);
+	EXIT_ON_ERROR(hr)
+
+		int scaledValue = (int) ceil(peak*100);
+	*value = scaledValue;
+
+Exit:	
+	SAFE_RELEASE(pEnumerator)
+		SAFE_RELEASE(pDevice)
+		SAFE_RELEASE(pClient)
+
+		return S_OK;
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+// XP
+//////////////////////////////////////////////////////////////////////////
+
+// Master Volume
+HRESULT CSystemEx::XP_put_Volume(int volume)
+{
+	MixerAPI mixer(MIXERLINE_COMPONENTTYPE_DST_SPEAKERS,
+		NO_SOURCE,
+		MIXERCONTROL_CONTROLTYPE_VOLUME);
+
+	if (!mixer.IsOk()) 
+		return S_FALSE;
+
+	// Volume should be between 0 and 0xFFFF
+	DWORD vol = (volume*0xFFFF)/100;
+	mixer.SetControlValue(&vol);
+
+	return S_OK;
+}
+
+
+HRESULT CSystemEx::XP_get_Volume(int *volume)
+{
+	MixerAPI mixer(MIXERLINE_COMPONENTTYPE_DST_SPEAKERS,
+		NO_SOURCE,
+		MIXERCONTROL_CONTROLTYPE_VOLUME);
+
+	if (!mixer.IsOk()) 
+		return S_FALSE;
+
+	DWORD* results;
+	mixer.GetControlValue(&results);
+
+	// Volume is between 0 and 0xFFF
+	double value = (double)*results;
+	int scaledVolume = (int) ceil(value*100/0xFFFF);
+	*volume = scaledVolume;
+
+	// cleanup
+	delete[] results;
+
+	return S_OK;
+}
+
+
+// Muting state
+HRESULT CSystemEx::XP_put_Mute(BOOL isMuted)
+{
+	MixerAPI mixer(MIXERLINE_COMPONENTTYPE_DST_SPEAKERS,
+		NO_SOURCE,
+		MIXERCONTROL_CONTROLTYPE_MUTE);
+
+	if (!mixer.IsOk()) 
+		return S_FALSE;
+
+	if (isMuted)
+		mixer.Off();
+	else
+		mixer.On();
+
+	return S_OK;
+}
+
+HRESULT CSystemEx::XP_get_Mute(VARIANT *isMuted)
+{
+	MixerAPI mixer(MIXERLINE_COMPONENTTYPE_DST_SPEAKERS,
+		NO_SOURCE,
+		MIXERCONTROL_CONTROLTYPE_MUTE);
+
+	if (!mixer.IsOk()) 
+		return S_FALSE;
+
+	LONG results;
+	BOOL ret = mixer.GetMuteValue(&results);
+	if (ret == FALSE)
+		return S_FALSE;
+
+	if (results == 1) 
+	{
+		TO_I4_VARIANT(isMuted, VARIANT_TRUE)
+	}
+	else
+	{
+		TO_I4_VARIANT(isMuted, VARIANT_FALSE)
+	}
+
+	return S_OK;
+}
+
+
+// Peak level
+HRESULT CSystemEx::XP_get_PeakValue(int *level)
+{
+	MixerAPI mixer(MIXERLINE_COMPONENTTYPE_SRC_WAVEOUT,
+		NO_SOURCE,
+		MIXERCONTROL_CONTROLTYPE_PEAKMETER);
+
+	if (!mixer.IsOk())
+	{
+		*level = 100;
+		return S_FALSE;
+	}
+
+	DWORD* results;
+	mixer.GetControlValue(&results);
+
+	*level = (int)*results;
+
+	return S_OK;
 }

@@ -54,7 +54,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../SDK/"
+				AdditionalIncludeDirectories="../../SDK/;&quot;$(ProjectDir)&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL;_MERGE_PROXYSTUB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -82,7 +82,7 @@
 				Name="VCLinkerTool"
 				RegisterOutput="false"
 				IgnoreImportLibrary="true"
-				AdditionalDependencies="comsvcs.lib"
+				AdditionalDependencies="comsvcs.lib Winmm.lib"
 				LinkIncremental="2"
 				ModuleDefinitionFile=".\DXSystemEx.def"
 				GenerateDebugInformation="true"
@@ -152,7 +152,7 @@
 				Optimization="1"
 				FavorSizeOrSpeed="2"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="../../SDK/"
+				AdditionalIncludeDirectories="../../SDK/;&quot;$(ProjectDir)&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL;_MERGE_PROXYSTUB"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -177,7 +177,7 @@
 				Name="VCLinkerTool"
 				RegisterOutput="false"
 				IgnoreImportLibrary="true"
-				AdditionalDependencies="comsvcs.lib"
+				AdditionalDependencies="comsvcs.lib Winmm.lib"
 				LinkIncremental="1"
 				ModuleDefinitionFile=".\DXSystemEx.def"
 				GenerateDebugInformation="true"
@@ -250,6 +250,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\HelperMacros.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
@@ -283,10 +287,6 @@
 			</File>
 			<File
 				RelativePath=".\DXSystemEx.def"
-				>
-			</File>
-			<File
-				RelativePath=".\DXSystemEx.idl"
 				>
 			</File>
 			<File
@@ -343,6 +343,10 @@
 			Name="COM/Functions"
 			>
 			<File
+				RelativePath=".\DXSystemEx.idl"
+				>
+			</File>
+			<File
 				RelativePath=".\SystemEx.cpp"
 				>
 			</File>
@@ -363,14 +367,46 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Mouse"
+				Name="Volume"
 				>
 				<File
-					RelativePath=".\MouseWheel.cpp"
+					RelativePath=".\Volume\IVolumeEventsConnectionPoint.h"
 					>
 				</File>
 				<File
-					RelativePath=".\MouseWheel.h"
+					RelativePath=".\Volume\MixerAPI.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Volume\MixerAPI.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Volume\VistaCallBackSetup.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Volume\VistaCallBackSetup.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Volume\VistaVolumeCallback.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Volume\VistaVolumeCallback.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Utils"
+				>
+				<File
+					RelativePath=".\VersionCheck.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\VersionCheck.h"
 					>
 				</File>
 			</Filter>

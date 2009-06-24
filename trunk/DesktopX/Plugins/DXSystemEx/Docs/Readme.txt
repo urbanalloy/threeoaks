@@ -50,6 +50,11 @@ Gets the number of active screens on the machine
 ** Changelog
 *******************************************************************************************************
 
+Version 1.0 Build xxx:
+  + Renamed to DXSystemEX (plugin namespace is now SystemEX)
+  + Added MouseWheel and Middle button click callbacks (merged from DXMouseWheel)
+  + Added Master volume control / Mute / Peak (merged from DXVolumeControl)
+
 Version 1.0 Build 204: First released version
 
 *******************************************************************************************************

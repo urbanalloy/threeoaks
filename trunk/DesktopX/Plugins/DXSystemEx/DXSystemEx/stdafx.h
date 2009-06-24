@@ -29,15 +29,12 @@
 
 
 #include "resource.h"
-#include <atlbase.h>
-#include <atlcom.h>
 #include <windows.h>
 #include <windowsx.h>
 
+#include <atlbase.h>
+#include <atlcom.h>
 using namespace ATL;
 
-//////////////////////////////////////////////////////////////////////////
-// Macros
-#define SAFE_DELETE(_p)			{ if(_p) { delete _p;		_p=NULL; } }
-#define SAFE_DELETE_ARRAY(_p)	{ if(_p) { delete [] _p;	_p=NULL; } }
-#define SAFE_RELEASE(_p)		{ if(_p) { _p->Release();	_p=NULL; } }
+#include "HelperMacros.h"
+

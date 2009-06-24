@@ -44,13 +44,23 @@ interface ISystemEx : IDispatch{
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Properties
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	[propget, id(1), helpstring("Get the number of active screens on this machine")] HRESULT NumberOfScreens([out, retval] int* numberOfScreens);
-	[propget, id(2), helpstring("Get the active screens on this machine")] HRESULT Screens([out, retval] VARIANT* screens);
+
+	// Volume
+	[propput, id(1), helpstring("Set Master Volume. Pass volume between 0 and 100. You can get volume change notification with the VistaVolume_OnVolumeEvent event.")] HRESULT Volume([in] int volume);
+	[propget, id(1), helpstring("Get Master Volume. Return an number between 0 and 100.")] HRESULT Volume([out, retval] int* volume);
+	[propput, id(2), helpstring("Set the muting state of the audio stream. You can get muting state change notification with the VistaVolume_OnMuteEvent event.")] HRESULT Mute([in] BOOL isMuted);
+	[propget, id(2), helpstring("Get the muting state of the audio stream. True is the sound is muted, False otherwise.")] HRESULT Mute([out, retval] VARIANT* isMuted);
+	[propget, id(3), helpstring("Get the peak value. Value is between 0 and 100.")] HRESULT PeakValue([out, retval] int* value);
+
+
+	// Monitors
+	[propget, id(4), helpstring("Get the number of active screens on this machine")] HRESULT NumberOfMonitors([out, retval] int* numberOfMonitors);
+	[propget, id(5), helpstring("Get the active screens on this machine")] HRESULT Monitors([out, retval] VARIANT* monitors);
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Methods
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	[id(3), helpstring("")] HRESULT GetScreen([in] int index, [out, retval] IMonitorInfo** info);
+	[id(6), helpstring("")] HRESULT GetMonitor([in] int index, [out, retval] IMonitorInfo** info);
 
 };
 
@@ -61,6 +71,20 @@ interface ISystemEx : IDispatch{
 ]
 library DXSystemExLib
 {
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+	[
+		uuid(6BF576DE-C4CE-4be5-B21A-B84EC58C9D08),
+		helpstring("IVolumeEvents Interface")
+	]
+	dispinterface IVolumeEvents
+	{
+		properties:
+		methods:
+		[id(1), helpstring("Fired as a result of a volume change. volume is the master volume (between 0 and 100).")] HRESULT OnVolumeEvent(int volume);
+		[id(2), helpstring("Fired as a result of a muting state change. isMuted is True is the volume is muted, False otherwise.")] HRESULT OnMuteEvent(BOOL isMuted);
+	};
+
 	importlib("stdole2.tlb");
 	[
 		uuid(65C94091-C8AE-4423-99A2-CEAE94F91E62),
@@ -69,6 +93,7 @@ library DXSystemExLib
 	coclass SystemEx
 	{
 		[default] interface ISystemEx;
+		[default, source] dispinterface IVolumeEvents;
 		interface ISupportErrorInfo;
 	};
 
