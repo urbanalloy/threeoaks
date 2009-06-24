@@ -1,17 +1,17 @@
-DXSysControl plugin for DesktopX
+DXSystemEx plugin for DesktopX
  (c) 2009 Julien TEMPLIER (Littleboy)
 -------------------------------------------------------------------------------------------------------
 
-The DXSysControl plugin is a scripting plugin that exposes extended system information to DesktopX plugins
+The DXSystemEx plugin is a scripting plugin that exposes extended system information to DesktopX plugins
 
 *******************************************************************************************************
 ** Installation
 *******************************************************************************************************
 
-Extract the DXSysControl.dll file in your DesktopX/SDPlugin folder.
+Extract the DXSystemEx.dll file in your DesktopX/SDPlugin folder.
 
 You can now add the new ability to your objects: in the Object Properties,
-under Additional Abilities, click "Add" and select the DXSysControl plugin.
+under Additional Abilities, click "Add" and select the DXSystemEx plugin.
 (should appears as Extended System Control).
 
 *******************************************************************************************************
@@ -27,19 +27,19 @@ MonitorInfo object:
 
 
 
-SysControl.Screens
+SystemEx.Screens
 ------------------
 
 Gets an array of MonitorInfo objects
 
 
-SysControl.GetScreen(index)
+SystemEx.GetScreen(index)
 ---------------------------
 
 Returns the MonitorInfo for the given screen
 
 
-SysControl.NumberOfScreens
+SystemEx.NumberOfScreens
 --------------------------
 
 Gets the number of active screens on the machine

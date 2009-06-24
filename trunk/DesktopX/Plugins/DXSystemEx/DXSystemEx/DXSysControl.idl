@@ -1,0 +1,85 @@
+// IDL source for DXSysControl
+
+// This file will be processed by the MIDL tool to
+// produce the type library and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(9D1E1F8B-3D11-466e-956A-CC86AC9658D8),
+	dual,
+	nonextensible,
+	helpstring("IMonitorInfo Interface"),
+	pointer_default(unique)
+]
+interface IMonitorInfo : IDispatch{
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Properties
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	[propget, id(1), helpstring("")] HRESULT IsPrimary([out, retval] VARIANT_BOOL* isPrimary);
+	[propget, id(2), helpstring("")] HRESULT Left([out, retval] int* left);
+	[propget, id(3), helpstring("")] HRESULT Top([out, retval] int* top);
+	[propget, id(4), helpstring("")] HRESULT Bottom([out, retval] int* bottom);
+	[propget, id(5), helpstring("")] HRESULT Right([out, retval] int* right);
+	[propget, id(6), helpstring("")] HRESULT Width([out, retval] int* width);
+	[propget, id(7), helpstring("")] HRESULT Height([out, retval] int* height);
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Methods
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+};
+
+[
+	object,
+	uuid(1EA1FEB9-07DF-4080-A578-9B5A15294146),
+	dual,
+	nonextensible,
+	helpstring("ISysControl Interface"),
+	pointer_default(unique)
+]
+interface ISysControl : IDispatch{
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Properties
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	[propget, id(1), helpstring("Get the number of active screens on this machine")] HRESULT NumberOfScreens([out, retval] int* numberOfScreens);
+	[propget, id(2), helpstring("Get the active screens on this machine")] HRESULT Screens([out, retval] VARIANT* screens);
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Methods
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	[id(3), helpstring("")] HRESULT GetScreen([in] int index, [out, retval] IMonitorInfo** info);
+
+};
+
+[
+	uuid(9F3FB81B-658E-4853-82BA-1A263630CFA5),
+	version(1.0),
+	helpstring("DXSysControl 1.0 Type Library")
+]
+library DXSysControlLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(65C94091-C8AE-4423-99A2-CEAE94F91E62),
+		helpstring("SysControl Class")
+	]
+	coclass SysControl
+	{
+		[default] interface ISysControl;
+		interface ISupportErrorInfo;
+	};
+
+	importlib("stdole2.tlb");
+	[
+		uuid(71A818BD-456F-44cd-95B3-5B5338F63E1D),
+		helpstring("MonitorInfo Class")
+	]
+	coclass MonitorInfo
+	{
+		[default] interface IMonitorInfo;
+		interface ISupportErrorInfo;
+	};
+};
