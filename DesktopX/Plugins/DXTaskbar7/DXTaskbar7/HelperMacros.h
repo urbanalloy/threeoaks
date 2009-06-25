@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //
-// DXTaskbar7 - Extended Taskbar Support for Windows 7
+// Helper macros
 //
 // Copyright (c) 2009, Julien Templier
 // All rights reserved.
@@ -33,20 +33,32 @@
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-#define INDEX_SIZE_ERR				1
-//#define DOMSTRING_SIZE_ERR			2
-//#define HIERARCHY_REQUEST_ERR		3
-//#define WRONG_DOCUMENT_ERR			4
-//#define INVALID_CHARACTER_ERR		5
-//#define NO_DATA_ALLOWED_ERR			6
-//#define NO_MODIFICATION_ALLOWED_ERR 7
-#define NOT_FOUND_ERR				8
-#define NOT_SUPPORTED_ERR			9
-//#define INUSE_ATTRIBUTE_ERR			10
-//#define INVALID_STATE_ERR			11
-#define SYNTAX_ERR					12
-#define INVALID_MODIFICATION_ERR    13
-//#define NAMESPACE_ERR				14
-//#define INVALID_ACCESS_ERR			15
-#define VALIDATION_ERR				16
-#define TYPE_MISMATCH_ERR			17
+#pragma once
+
+//////////////////////////////////////////////////////////////////////////
+// Macros
+#define SAFE_DELETE(_p)			{ if(_p) { delete _p;		_p=NULL; } }
+#define SAFE_DELETE_ARRAY(_p)	{ if(_p) { delete [] _p;	_p=NULL; } }
+#define SAFE_RELEASE(_p)		{ if(_p) { _p->Release();	_p=NULL; } }
+
+#define ACQUIRE_MUTEX(mutex) \
+	DWORD dwWaitMutex = WaitForSingleObject(mutex, INFINITE); \
+	switch (dwWaitMutex) \
+{ \
+	case WAIT_OBJECT_0: \
+{
+
+#define RELEASE_MUTEX(mutex) \
+	ReleaseMutex(mutex); \
+	break; \
+} \
+	default: \
+	break; \
+}
+
+#define EXIT_ON_ERROR(hres)\
+	if (FAILED(hres)) { goto Exit; }
+
+#define TO_I4_VARIANT(var, value)\
+	var->vt = VT_I4;\
+	var->lVal = value;
