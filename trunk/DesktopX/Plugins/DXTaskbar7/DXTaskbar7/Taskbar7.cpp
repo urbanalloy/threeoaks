@@ -36,7 +36,6 @@
 #include "stdafx.h"
 #include "Taskbar7.h"
 #include "SDPlugin.h"
-#include "dwmapi.h"
 
 // HACK !
 static CTaskbar7 *pTaskbar7;
@@ -221,7 +220,7 @@ HRESULT CTaskbar7::LoadImageFromFile(wstring path, Bitmap** bitmap)
 
 	if (path.empty()) {		
 		sprintf_s(error, "Path is not valid: %S", path.c_str());		
-		return CCOMError::DispatchError(PATH_NOT_FOUND_ERR, CLSID_Taskbar7, _T("Path is not valid"), error, 0, NULL);
+		return CCOMError::DispatchError(NOT_FOUND_ERR, CLSID_Taskbar7, _T("Path is not valid"), error, 0, NULL);
 	}
 
 	*bitmap = Bitmap::FromFile(path.c_str(), TRUE);
@@ -366,9 +365,9 @@ STDMETHODIMP CTaskbar7::SetTabActive()
 		return S_OK;
 
 	RegisterTab();
-	HRESULT hr = m_pTaskbarList->SetTabActive(m_hwnd, m_parentHwnd, 0);
+	m_pTaskbarList->SetTabActive(m_hwnd, m_parentHwnd, 0);
 
-	return hr;
+	return S_OK;
 }
 
 STDMETHODIMP CTaskbar7::RemoveTab()
@@ -377,14 +376,15 @@ STDMETHODIMP CTaskbar7::RemoveTab()
 	if (!m_isWindows7)
 		return S_OK;
 
-	// Do nothing if we don't have the main hwnd
+	// Do nothing if we didn't previously register the tab
 	if (!m_isTabRegistered)
 		return S_OK;
 	
-	HRESULT hr = m_pTaskbarList->UnregisterTab(m_hwnd);
+	// nothing we can do if we fail to unregister -> simply mark as unregistered and return
+	m_pTaskbarList->UnregisterTab(m_hwnd);
 	m_isTabRegistered = false;
 	
-	return hr;
+	return S_OK;
 }
 
 
@@ -393,14 +393,15 @@ STDMETHODIMP CTaskbar7::RemoveTab()
 *************************************/
 STDMETHODIMP CTaskbar7::SetupButton(int id, BSTR image, BSTR tooltip, int flags)
 {
-	// TODO check args!
-	if (m_buttons->size() == 7)
+	// No more than 7 buttons are permitted
+	if (m_buttons.size() == 7)
 		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_Taskbar7, _T("Error setting up buttons!"), "You cannot have more than 7 buttons on a thumbbar.", 0, NULL);
 
 	// Do nothing on XP & Vista
 	if (!m_isWindows7)
 		return S_OK;
 
+	// All parameters are optional, apart from id
 	USES_CONVERSION;
 	ThumbButton button;
 	button.id = id;
@@ -408,20 +409,15 @@ STDMETHODIMP CTaskbar7::SetupButton(int id, BSTR image, BSTR tooltip, int flags)
 	button.tooltip = OLE2W(tooltip);
 	button.flags = flags;
 
-	m_buttons->push_back(button);
+	m_buttons.push_back(button);
 
 	return S_OK;
 }
 
-STDMETHODIMP CTaskbar7::UpdateButton(int id,BSTR image, BSTR tooltip, int flags)
+STDMETHODIMP CTaskbar7::UpdateButton(int id, BSTR image, BSTR tooltip, int flags)
 {
-	// TODO check args! (id exists...)
-
-	if (!m_pTaskbarList)
-		return S_OK;
-	
+	// All parameters are optional, apart from id
 	USES_CONVERSION;
-
 	THUMBBUTTON button;
 	HRESULT hr = LoadButton(id, OLE2W(image), OLE2W(tooltip), flags, &button);
 	if (!SUCCEEDED(hr))
@@ -429,17 +425,17 @@ STDMETHODIMP CTaskbar7::UpdateButton(int id,BSTR image, BSTR tooltip, int flags)
 
 	// Do nothing on XP & Vista
 	if (m_isWindows7)
-		hr = m_pTaskbarList->ThumbBarUpdateButtons(m_hwnd, 1, &button);	
+		m_pTaskbarList->ThumbBarUpdateButtons(m_hwnd, 1, &button);	
 
 	// Cleanup the HICON
 	DestroyIcon(button.hIcon);
 
-	return hr;
+	return S_OK;
 }
 
 STDMETHODIMP CTaskbar7::AddButtons()
 {
-	int size = m_buttons->size();
+	int size = m_buttons.size();
 
 	// Size > 7 is forbidden by AddButton
 	if (size == 0)
@@ -458,7 +454,7 @@ STDMETHODIMP CTaskbar7::AddButtons()
 
 	// Load all buttons
 	int index = 0;
-	for (vector<ThumbButton>::iterator it = m_buttons->begin(); it != m_buttons->end(); ++it) {			
+	for (vector<ThumbButton>::iterator it = m_buttons.begin(); it != m_buttons.end(); ++it) {			
 		LoadButton(((ThumbButton)*it).id, ((ThumbButton)*it).image, ((ThumbButton)*it).tooltip, ((ThumbButton)*it).flags, &buttons[index]);
 		index++;
 	}
@@ -563,6 +559,8 @@ STDMETHODIMP CTaskbar7::SetProgressValue(ULONGLONG completed, ULONGLONG total)
 
 STDMETHODIMP CTaskbar7::SetAppID(BSTR appID)
 {
+	USES_CONVERSION;
+
 	// Check appID is valid
 	if (CComBSTR(appID) == CComBSTR(""))
 		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_Taskbar7, _T("Error setting Application ID!"), "appID cannot be NULL or empty", 0, NULL);	
@@ -571,20 +569,25 @@ STDMETHODIMP CTaskbar7::SetAppID(BSTR appID)
 	if (!m_isWindows7)
 		return S_OK;
 
-	USES_CONVERSION;
-	HRESULT hr = m_pCustomDestinationList->SetAppID(OLE2W(appID));
+	//HRESULT hr = SetCurrentProcessExplicitAppUserModelID(OLE2W(appID));
+	//if (FAILED(hr))
+	//	return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_Taskbar7, _T("Error setting Application ID!"), "You should call SetAppId before starting to build a list!", 0, NULL);	
 
-	if (FAILED(hr))
-		return hr;
+	//// Custom list
+	//hr = m_pCustomDestinationList->SetAppID(OLE2W(appID));
+	//if (FAILED(hr))
+	//	if (hr == E_UNEXPECTED)
+	//		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_Taskbar7, _T("Error setting Application ID!"), "You should call SetAppId before starting to build a list!", 0, NULL);	
 
-	hr = m_pApplicationDestinations->SetAppID(OLE2W(appID));
-
-	if (FAILED(hr))
-		return hr;
+	//// Application list (recent, etc.)
+	//hr = m_pApplicationDestinations->SetAppID(OLE2W(appID));
+	//if (FAILED(hr))
+	//	if (hr == E_UNEXPECTED)
+	//		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_Taskbar7, _T("Error setting Application ID!"), "You should call SetAppId before starting to build a list!", 0, NULL);	
 
 	m_isAppIdSet = true;
 
-	return hr;
+	return S_OK;
 }
 
 STDMETHODIMP CTaskbar7::RemoveAllDestinations()
@@ -593,44 +596,23 @@ STDMETHODIMP CTaskbar7::RemoveAllDestinations()
 	if (!m_isWindows7)
 		return S_OK;
 
-	return m_pApplicationDestinations->RemoveAllDestinations();
+	m_pApplicationDestinations->RemoveAllDestinations();
+
+	return S_OK;
 }
 
-
-STDMETHODIMP CTaskbar7::BeginList(int* maxSlots)
-{
-	// Default is 10
-	*maxSlots = 10;
-
-	// Do nothing on XP & Vista
-	if (!m_isWindows7)
-		return S_OK;
-
-	if (!m_isAppIdSet)
-		return S_OK;
-
-	UINT uMaxSlots;
-	IObjectArray *poaRemoved;
-
-	HRESULT hr = m_pCustomDestinationList->BeginList(&uMaxSlots, IID_PPV_ARGS(&poaRemoved));
-
-	if (SUCCEEDED(hr)) {
-		m_isBeginList = true;
-		poaRemoved->Release();
-	}
-
-	return hr;
-}		
-
-STDMETHODIMP CTaskbar7::CommitList()
+STDMETHODIMP CTaskbar7::AppendKnownCategory(int knownDestCategory)
 {
 	// Do nothing on XP & Vista
 	if (!m_isWindows7)
 		return S_OK;
 
-	m_isBeginList = false;
+	HRESULT hr = m_pCustomDestinationList->AppendKnownCategory((KNOWNDESTCATEGORY)knownDestCategory);
 
-	return m_pCustomDestinationList->CommitList();
+	if (FAILED(hr))
+		return CCOMError::DispatchError(NOT_SUPPORTED_ERR, CLSID_Taskbar7, _T("Error appending known list!"), "There was an unknown error when trying to append the list.", 0, NULL);	
+
+	return S_OK;
 }
 
 STDMETHODIMP CTaskbar7::AbortList()
@@ -639,9 +621,12 @@ STDMETHODIMP CTaskbar7::AbortList()
 	if (!m_isWindows7)
 		return S_OK;
 
-	m_isBeginList = false;
+	if (!destinations.empty())
+		m_pCustomDestinationList->AbortList();
 
-	return m_pCustomDestinationList->AbortList();
+	destinations.clear();
+
+	return S_OK;
 }
 
 STDMETHODIMP CTaskbar7::DeleteList(BSTR appID)
@@ -654,33 +639,228 @@ STDMETHODIMP CTaskbar7::DeleteList(BSTR appID)
 		return S_OK;
 
 	USES_CONVERSION;
-	return m_pCustomDestinationList->DeleteList(OLE2W(appID));
+	HRESULT hr = m_pCustomDestinationList->DeleteList(OLE2W(appID));
+
+	return S_OK;
 }
 
 
-STDMETHODIMP CTaskbar7::AddUserTask(VARIANT tasks)
+STDMETHODIMP CTaskbar7::AddUserTask(BSTR name, BSTR path, BSTR arguments, BSTR icon, int iconIndex, BSTR workingFolder)
 {
 	// Do nothing on XP & Vista
 	if (!m_isWindows7)
 		return S_OK;
 
-	return S_FALSE;
+	USES_CONVERSION;
+	AddCustomDestination(Task, L"", OLE2W(name), OLE2W(path), OLE2W(arguments), OLE2W(icon), iconIndex, OLE2W(workingFolder));
+
+	return S_OK;
 }
 
-STDMETHODIMP CTaskbar7::AppendCategory(BSTR category, VARIANT items)
+STDMETHODIMP CTaskbar7::AddDestination(BSTR category, BSTR name, BSTR path, BSTR arguments, BSTR icon, int iconIndex, BSTR workingFolder)
+{
+	if (CComBSTR(category) == CComBSTR(""))
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_Taskbar7, _T("Invalid category!"), "You must specify a category!", 0, NULL);	
+
+	if (CComBSTR(category) == CComBSTR("Tasks"))
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_Taskbar7, _T("Invalid category!"), "Tasks is a reserved category. Use AddUserTask instead!", 0, NULL);	
+
+	// Do nothing on XP & Vista
+	if (!m_isWindows7)
+		return S_OK;
+
+	USES_CONVERSION;
+	AddCustomDestination(Custom, OLE2W(category), OLE2W(name), OLE2W(path), OLE2W(arguments), OLE2W(icon), iconIndex, OLE2W(workingFolder));
+
+	return S_OK;
+}
+
+STDMETHODIMP CTaskbar7::AddSeparator(BSTR category)
 {
 	// Do nothing on XP & Vista
 	if (!m_isWindows7)
 		return S_OK;
 
-	return S_FALSE;
+	USES_CONVERSION;
+	AddCustomDestination(Separator, OLE2W(category), NULL, NULL, NULL, NULL, NULL, NULL);
+
+	return S_OK;
 }
 
-STDMETHODIMP CTaskbar7::AppendKnownCategory(int knownDestCategory)
+
+
+STDMETHODIMP CTaskbar7::CommitList()
 {
 	// Do nothing on XP & Vista
 	if (!m_isWindows7)
 		return S_OK;
 
-	return m_pCustomDestinationList->AppendKnownCategory((KNOWNDESTCATEGORY)knownDestCategory);
+	UINT uMaxSlots = 10;
+	IObjectArray *poaRemoved;
+
+	HRESULT hr = m_pCustomDestinationList->BeginList(&uMaxSlots, IID_PPV_ARGS(&poaRemoved));
+
+	// Iterate over the lists to create
+	map<wstring, vector<Destination>>::iterator iterator = destinations.begin();
+	while (iterator != destinations.end())
+	{
+
+		// Create a collection of IShellLink
+		IObjectCollection *poc;
+		hr = CoCreateInstance(CLSID_EnumerableObjectCollection, NULL, CLSCTX_INPROC, IID_PPV_ARGS(&poc));
+
+		if (FAILED(hr)) // Should not happen
+			continue;
+
+		vector<Destination>::iterator destinationIterator = (*iterator).second.begin();
+		while (destinationIterator != (*iterator).second.end())
+		{
+			IShellLink *link;
+			if ((*destinationIterator).type == Separator)
+				hr = CreateSeparatorLink(&link);
+			else
+				hr = CreateShellLink(*destinationIterator, &link);
+
+			if (SUCCEEDED(hr))
+			{
+				poc->AddObject(link);
+				link->Release();
+			}
+
+			++destinationIterator;
+		}
+		
+		//  category
+		wstring category = (*iterator).first;
+
+		IObjectArray * poa;
+		hr = poc->QueryInterface(IID_PPV_ARGS(&poa));
+		if (SUCCEEDED(hr))
+		{
+			// Special treatment for tasks
+			if (category.compare(DESTINATION_TASKS) == 0)
+				hr = m_pCustomDestinationList->AddUserTasks(poa);
+			else
+				hr = m_pCustomDestinationList->AppendCategory(category.c_str(), poa);				
+
+			poa->Release();
+		}
+
+		poc->Release();
+
+		++iterator;
+	}
+
+	// Commit the list!
+	hr = m_pCustomDestinationList->CommitList();
+
+	SAFE_RELEASE(poaRemoved);
+
+	destinations.clear();
+
+	return S_OK;
+}
+
+void CTaskbar7::AddCustomDestination(Category type, wstring category, wstring name, wstring path, wstring arguments, wstring icon, int iconIndex, wstring workingFolder)
+{
+	// Check name and path!
+
+	if (type == Task)
+		category = wstring(DESTINATION_TASKS);
+
+	map<wstring, vector<Destination>>::iterator iter = destinations.find(category);
+	
+	// add a new entry for this category
+	if (iter == destinations.end()) {
+		vector<Destination> destVector;
+		destinations.insert( pair<wstring, vector<Destination>>(category, destVector) );
+	}
+
+	Destination destination(type, name, path, arguments, icon, iconIndex, workingFolder);
+	destinations[category].push_back(destination);
+}
+
+
+HRESULT CTaskbar7::CreateSeparatorLink(IShellLink **ppsl)
+{
+	IPropertyStore *pps;
+	HRESULT hr = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pps));
+	if (SUCCEEDED(hr))
+	{
+		PROPVARIANT propvar;
+		hr = InitPropVariantFromBoolean(TRUE, &propvar);
+		if (SUCCEEDED(hr))
+		{
+			hr = pps->SetValue(PKEY_AppUserModel_IsDestListSeparator, propvar);
+			if (SUCCEEDED(hr))
+			{
+				hr = pps->Commit();
+				if (SUCCEEDED(hr))
+				{
+					hr = pps->QueryInterface(IID_PPV_ARGS(ppsl));
+				}
+			}
+			PropVariantClear(&propvar);
+		}
+		pps->Release();
+	}
+	return hr;
+}
+
+
+HRESULT CTaskbar7::CreateShellLink(Destination destination, IShellLink **ppShellLink)
+{
+	USES_CONVERSION;
+
+	IShellLink *pShellLink;
+	HRESULT hr = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pShellLink));
+	EXIT_ON_ERROR(hr);
+
+	// Path
+	hr = pShellLink->SetPath(CW2A(destination.path.c_str()));
+	EXIT_ON_ERROR(hr);
+
+	// Arguments
+	hr = pShellLink->SetArguments(CW2A(destination.arguments.c_str()));
+	EXIT_ON_ERROR(hr);
+
+	// Working Directory
+	if (!destination.workingFolder.empty())
+	{
+		hr = pShellLink->SetWorkingDirectory(CW2A(destination.workingFolder.c_str()));
+		EXIT_ON_ERROR(hr);
+	}
+
+	// Icon Location
+	if (!destination.icon.empty())
+	{
+		hr = pShellLink->SetIconLocation(CW2A(destination.icon.c_str()), destination.iconIndex);
+		EXIT_ON_ERROR(hr);
+	}
+	
+	IPropertyStore *pPropertyStore;
+	hr = pShellLink->QueryInterface(IID_PPV_ARGS(&pPropertyStore));
+	EXIT_ON_ERROR(hr);
+					
+	// Name
+	PROPVARIANT propVariant;
+	hr = InitPropVariantFromString(destination.name.c_str(), &propVariant);
+	EXIT_ON_ERROR(hr);
+	
+	hr = pPropertyStore->SetValue(PKEY_Title, propVariant);
+	EXIT_ON_ERROR(hr);
+
+	hr = pPropertyStore->Commit();
+	EXIT_ON_ERROR(hr);
+
+	hr = pShellLink->QueryInterface(IID_PPV_ARGS(ppShellLink));
+
+Exit:
+
+	PropVariantClear(&propVariant);
+
+	SAFE_RELEASE(pPropertyStore);
+	SAFE_RELEASE(pShellLink);
+	 
+	return hr;
 }

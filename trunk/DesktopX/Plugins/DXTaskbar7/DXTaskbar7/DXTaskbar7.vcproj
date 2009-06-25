@@ -249,6 +249,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\HelperMacros.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
@@ -282,10 +286,6 @@
 			</File>
 			<File
 				RelativePath=".\DXTaskbar7.def"
-				>
-			</File>
-			<File
-				RelativePath=".\DXTaskbar7.idl"
 				>
 			</File>
 			<File
@@ -345,6 +345,10 @@
 		<Filter
 			Name="COM"
 			>
+			<File
+				RelativePath=".\DXTaskbar7.idl"
+				>
+			</File>
 			<File
 				RelativePath=".\Taskbar7.cpp"
 				>

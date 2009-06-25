@@ -33,9 +33,9 @@ interface ITaskbar7 : IDispatch{
 	[helpstring("Remove the tab from the list")] HRESULT RemoveTab();
 
 	// ThumbBar
-	[helpstring("")] HRESULT SetupButton([in] int id, [in] BSTR image, [in] BSTR tooltip, [in] int flags);	
-	[helpstring("")] HRESULT UpdateButton([in] int id,[in] BSTR image, [in] BSTR tooltip, [in] int flags);	
-	[helpstring("")] HRESULT AddButtons();
+	[helpstring("Setup a new tab button")] HRESULT SetupButton([in] int id, [in] BSTR image, [in] BSTR tooltip, [in] int flags);	
+	[helpstring("Update an existing tab button")] HRESULT UpdateButton([in] int id,[in] BSTR image, [in] BSTR tooltip, [in] int flags);	
+	[helpstring("Add all defined buttons (will only be able to update the existing ones afterwards)")] HRESULT AddButtons();
 
 	// Overlay
 	[helpstring("Applies an overlay to a taskbar button to indicate application status or a notification to the user.")] HRESULT SetOverlayIcon([in] BSTR path, [in] BSTR description);
@@ -45,18 +45,16 @@ interface ITaskbar7 : IDispatch{
 	[helpstring("Displays or updates a progress bar hosted in a taskbar button to show the specific percentage completed of the full operation.")] HRESULT SetProgressValue([in] ULONGLONG completed, [in] ULONGLONG total);
 
 	// Tasks and destinations
-	[helpstring("Specifies a unique Application User Model ID (AppID)")] HRESULT SetAppID([in] BSTR appID);
-	//[helpstring("")] HRESULT RemoveDestination(IUnknown *punk);
-	[helpstring("")] HRESULT RemoveAllDestinations();
-	
-	[helpstring("Initiates a building session for a custom Jump List.")] HRESULT BeginList([out, retval] int* maxSlots);
+	[helpstring("Specifies a unique Application User Model ID (AppID)")] HRESULT SetAppID([in] BSTR appID);	
+	[helpstring("Remove all destinations from the destinations jump list")] HRESULT RemoveAllDestinations();
+		
 	[helpstring("Declares that the Jump List initiated by a call to BeginList is complete and ready for display")] HRESULT CommitList();
 	[helpstring("Discontinues a Jump List building session initiated by BeginList  without committing any changes")] HRESULT AbortList();
 	[helpstring("Deletes a custom Jump List for a specified application.")] HRESULT DeleteList([in] BSTR appID);
-	[helpstring("")] HRESULT AddUserTask(VARIANT tasks);
-	[helpstring("")] HRESULT AppendCategory(BSTR category, VARIANT items);	
-	[helpstring("")] HRESULT AppendKnownCategory([in] int knownDestCategory);
-	//[helpstring("")] HRESULT AddToRecentDocs();	
+	[helpstring("Add a new user tasks (typically static links)")] HRESULT AddUserTask([in] BSTR name, [in] BSTR path, [in] BSTR arguments, [in] BSTR icon, [in] int iconIndex, [in] BSTR workingFolder);
+	[helpstring("Add a new destination in the selected category")] HRESULT AddDestination([in] BSTR category, [in] BSTR name, [in] BSTR path, [in] BSTR arguments, [in] BSTR icon, [in] int iconIndex, [in] BSTR workingFolder);	
+	[helpstring("Add a separator (use category Tasks to add to the user tasks)")] HRESULT AddSeparator([in] BSTR category);	
+	[helpstring("Add a known category")] HRESULT AppendKnownCategory([in] int knownDestCategory);	
 };
 
 [

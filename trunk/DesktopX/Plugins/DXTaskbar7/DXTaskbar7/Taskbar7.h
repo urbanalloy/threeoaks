@@ -42,13 +42,22 @@
 #include "DXTaskbar7.h"
 #include "Taskbar7Errors.h"
 #include "resource.h"
-#include "shobjidl.h"
+
+// Header Files for Jump List features
+#include <objectarray.h>
+#include <shobjidl.h>
+#include <propkey.h>
+#include <propvarutil.h>
+#include <shlobj.h>
+
+#define DESTINATION_TASKS L"Tasks"
 
 #include <gdiplus.h>
 using namespace Gdiplus;
 
 #include <string>
 #include <vector>
+#include <map>
 using namespace std;
 
 // CAeroColor
@@ -77,11 +86,8 @@ public:
 
 		m_isTabRegistered = false;
 		m_isAppIdSet = false;
-		m_isBeginList = false;
 		m_isWindows7 = false;
 
-		m_buttons = new vector<ThumbButton>();
-		
 		// Check that we are running on Windows 7
 		OSVERSIONINFO versionInfo;
 		versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -96,8 +102,6 @@ public:
 	void FinalRelease() 
 	{
 		GdiplusShutdown(m_gdiplusToken);
-
-		delete m_buttons;
 	}
 
 DECLARE_REGISTRY_RESOURCEID(IDR_TASKBAR7)
@@ -110,13 +114,41 @@ BEGIN_COM_MAP(CTaskbar7)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-	private:	
+	private:
+		enum Category {
+			Task = 1,
+			Custom = 2,
+			Separator = 3
+		};
+
 		struct ThumbButton
 		{
 			int id;
 			wstring image;
 			wstring tooltip;
 			int flags;
+		};
+
+		struct Destination
+		{
+			Category type;
+			wstring name;
+			wstring path;
+			wstring arguments;
+			wstring icon;
+			int iconIndex;
+			wstring workingFolder;
+
+			Destination() {};
+			Destination(Category type, wstring name, wstring path, wstring arguments, wstring icon, int iconIndex, wstring workingFolder) :
+						type(type),
+						name(name),
+						path(path),
+						arguments(arguments),
+						icon(icon),
+						iconIndex(iconIndex),						
+						workingFolder(workingFolder) {};
+			~Destination() {};
 		};
 
 		ULONG_PTR m_gdiplusToken;
@@ -138,10 +170,10 @@ END_COM_MAP()
 		bool m_isWindows7;
 		bool m_isTabRegistered;
 		bool m_isAppIdSet;
-		bool m_isBeginList; // check that we called BeginList before add/commit/abort
 
 		// The list of thumbbar buttons to add
-		vector<ThumbButton>* m_buttons;
+		vector<ThumbButton> m_buttons;
+		map<wstring, vector<Destination>> destinations;
 
 		bool IsWindows7();
 	
@@ -150,6 +182,10 @@ END_COM_MAP()
 		static LRESULT CALLBACK WindowProc(int nCode, WPARAM wParam, LPARAM lParam);
 
 		void RegisterTab();
+
+		void AddCustomDestination(Category type, wstring name, wstring category, wstring path, wstring arguments, wstring icon, int iconIndex, wstring workingFolder);
+		HRESULT CreateShellLink(Destination destination, IShellLink **ppShellLink);
+		HRESULT CreateSeparatorLink(IShellLink **ppShellLink);
 
 		HRESULT LoadImageFromFile(wstring path, Bitmap** bitmap);
 		HRESULT LoadButton(int id, wstring path, wstring tooltip, int flags, THUMBBUTTON* button);
@@ -195,13 +231,13 @@ END_COM_MAP()
 		// Tasks and destinations
 		STDMETHOD(SetAppID)(BSTR appID);
 		STDMETHOD(RemoveAllDestinations)();
-
-		STDMETHOD(BeginList)(int* maxSlots);		
+	
 		STDMETHOD(CommitList)();
 		STDMETHOD(AbortList)();
 		STDMETHOD(DeleteList)(BSTR appID);
-		STDMETHOD(AddUserTask)(VARIANT tasks);
-		STDMETHOD(AppendCategory)(BSTR category, VARIANT items);	
+		STDMETHOD(AddUserTask)(BSTR name, BSTR path, BSTR arguments, BSTR icon, int iconIndex, BSTR workingFolder);
+		STDMETHOD(AddDestination)(BSTR category, BSTR name, BSTR path, BSTR arguments, BSTR icon, int iconIndex, BSTR workingFolder);
+		STDMETHOD(AddSeparator)(BSTR category);
 		STDMETHOD(AppendKnownCategory)(int knownDestCategory);
 
 };
