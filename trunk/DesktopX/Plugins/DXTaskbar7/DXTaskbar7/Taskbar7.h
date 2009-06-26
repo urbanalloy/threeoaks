@@ -50,7 +50,9 @@
 #include <propvarutil.h>
 #include <shlobj.h>
 
-#define DESTINATION_TASKS L"Tasks"
+#define DESTINATION_TASKS    L"Tasks"
+#define DESTINATION_FREQUENT L"DESTINATION_FREQUENT"
+#define DESTINATION_RECENT   L"DESTINATION_RECENT"
 
 #include <gdiplus.h>
 using namespace Gdiplus;
@@ -118,7 +120,9 @@ END_COM_MAP()
 		enum Category {
 			Task = 1,
 			Custom = 2,
-			Separator = 3
+			Separator = 3,
+			Frequent = 4,
+			Recent = 5
 		};
 
 		struct ThumbButton
@@ -229,12 +233,11 @@ END_COM_MAP()
 		STDMETHOD(SetProgressValue)(ULONGLONG ullCompleted, ULONGLONG ullTotal);
 
 		// Tasks and destinations
-		STDMETHOD(SetAppID)(BSTR appID);
 		STDMETHOD(RemoveAllDestinations)();
+		STDMETHOD(DeleteList)(BSTR appID);
 	
 		STDMETHOD(CommitList)();
-		STDMETHOD(AbortList)();
-		STDMETHOD(DeleteList)(BSTR appID);
+		STDMETHOD(AbortList)();		
 		STDMETHOD(AddUserTask)(BSTR name, BSTR path, BSTR arguments, BSTR icon, int iconIndex, BSTR workingFolder);
 		STDMETHOD(AddDestination)(BSTR category, BSTR name, BSTR path, BSTR arguments, BSTR icon, int iconIndex, BSTR workingFolder);
 		STDMETHOD(AddSeparator)(BSTR category);

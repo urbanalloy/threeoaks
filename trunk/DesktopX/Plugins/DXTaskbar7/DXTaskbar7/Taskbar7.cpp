@@ -557,39 +557,6 @@ STDMETHODIMP CTaskbar7::SetProgressValue(ULONGLONG completed, ULONGLONG total)
 * Tasks and destinations
 *************************************/
 
-STDMETHODIMP CTaskbar7::SetAppID(BSTR appID)
-{
-	USES_CONVERSION;
-
-	// Check appID is valid
-	if (CComBSTR(appID) == CComBSTR(""))
-		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_Taskbar7, _T("Error setting Application ID!"), "appID cannot be NULL or empty", 0, NULL);	
-
-	// Do nothing on XP & Vista
-	if (!m_isWindows7)
-		return S_OK;
-
-	//HRESULT hr = SetCurrentProcessExplicitAppUserModelID(OLE2W(appID));
-	//if (FAILED(hr))
-	//	return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_Taskbar7, _T("Error setting Application ID!"), "You should call SetAppId before starting to build a list!", 0, NULL);	
-
-	//// Custom list
-	//hr = m_pCustomDestinationList->SetAppID(OLE2W(appID));
-	//if (FAILED(hr))
-	//	if (hr == E_UNEXPECTED)
-	//		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_Taskbar7, _T("Error setting Application ID!"), "You should call SetAppId before starting to build a list!", 0, NULL);	
-
-	//// Application list (recent, etc.)
-	//hr = m_pApplicationDestinations->SetAppID(OLE2W(appID));
-	//if (FAILED(hr))
-	//	if (hr == E_UNEXPECTED)
-	//		return CCOMError::DispatchError(INDEX_SIZE_ERR, CLSID_Taskbar7, _T("Error setting Application ID!"), "You should call SetAppId before starting to build a list!", 0, NULL);	
-
-	m_isAppIdSet = true;
-
-	return S_OK;
-}
-
 STDMETHODIMP CTaskbar7::RemoveAllDestinations()
 {
 	// Do nothing on XP & Vista
@@ -607,11 +574,22 @@ STDMETHODIMP CTaskbar7::AppendKnownCategory(int knownDestCategory)
 	if (!m_isWindows7)
 		return S_OK;
 
-	HRESULT hr = m_pCustomDestinationList->AppendKnownCategory((KNOWNDESTCATEGORY)knownDestCategory);
+	switch (knownDestCategory)
+	{
+		case KDC_FREQUENT:
+			AddCustomDestination(Frequent, wstring(DESTINATION_FREQUENT), L"", L"", L"", L"", 0, L"");
+			break;
 
-	if (FAILED(hr))
-		return CCOMError::DispatchError(NOT_SUPPORTED_ERR, CLSID_Taskbar7, _T("Error appending known list!"), "There was an unknown error when trying to append the list.", 0, NULL);	
+		case KDC_RECENT:
+			AddCustomDestination(Recent, wstring(DESTINATION_RECENT), L"", L"", L"", L"", 0, L"");
+			break;
 
+		default:
+			return CCOMError::DispatchError(NOT_SUPPORTED_ERR, CLSID_Taskbar7, _T("Error appending a known list!"), "The type of list you asked for is invalid!", 0, NULL);	
+			break;
+
+	}
+	
 	return S_OK;
 }
 
@@ -682,7 +660,7 @@ STDMETHODIMP CTaskbar7::AddSeparator(BSTR category)
 		return S_OK;
 
 	USES_CONVERSION;
-	AddCustomDestination(Separator, OLE2W(category), NULL, NULL, NULL, NULL, NULL, NULL);
+	AddCustomDestination(Separator, OLE2W(category), L"", L"", L"", L"", 0, L"");
 
 	return S_OK;
 }
@@ -695,7 +673,7 @@ STDMETHODIMP CTaskbar7::CommitList()
 	if (!m_isWindows7)
 		return S_OK;
 
-	UINT uMaxSlots = 10;
+	UINT uMaxSlots = 20;
 	IObjectArray *poaRemoved;
 
 	HRESULT hr = m_pCustomDestinationList->BeginList(&uMaxSlots, IID_PPV_ARGS(&poaRemoved));
@@ -704,6 +682,21 @@ STDMETHODIMP CTaskbar7::CommitList()
 	map<wstring, vector<Destination>>::iterator iterator = destinations.begin();
 	while (iterator != destinations.end())
 	{
+		//  category
+		wstring category = (*iterator).first;
+
+		// Special case for known categories
+		if (category.compare(DESTINATION_FREQUENT) == 0 || category.compare(DESTINATION_RECENT) == 0)
+		{
+
+			KNOWNDESTCATEGORY knownDestination;
+			category.compare(DESTINATION_FREQUENT) == 0 ? knownDestination = KDC_FREQUENT : knownDestination = KDC_RECENT;
+
+			HRESULT hr = m_pCustomDestinationList->AppendKnownCategory(knownDestination);
+
+			iterator++;
+			continue;
+		}
 
 		// Create a collection of IShellLink
 		IObjectCollection *poc;
@@ -730,8 +723,7 @@ STDMETHODIMP CTaskbar7::CommitList()
 			++destinationIterator;
 		}
 		
-		//  category
-		wstring category = (*iterator).first;
+		
 
 		IObjectArray * poa;
 		hr = poc->QueryInterface(IID_PPV_ARGS(&poa));
@@ -741,7 +733,9 @@ STDMETHODIMP CTaskbar7::CommitList()
 			if (category.compare(DESTINATION_TASKS) == 0)
 				hr = m_pCustomDestinationList->AddUserTasks(poa);
 			else
-				hr = m_pCustomDestinationList->AppendCategory(category.c_str(), poa);				
+				hr = m_pCustomDestinationList->AppendCategory(category.c_str(), poa);	
+
+			int err = GetLastError();
 
 			poa->Release();
 		}
