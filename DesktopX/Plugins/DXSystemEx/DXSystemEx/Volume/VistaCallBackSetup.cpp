@@ -53,6 +53,8 @@ void RegisterCallBack() {
 		return;
 
 	IMMDeviceEnumerator* pEnumerator = NULL;
+	IMMDevice* pDevice = NULL;
+
     HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator),
 								  NULL,
 								  CLSCTX_INPROC_SERVER,
@@ -60,7 +62,6 @@ void RegisterCallBack() {
                                   (void**)&pEnumerator);
     EXIT_ON_ERROR(hr)
 
-	IMMDevice* pDevice = NULL;
     hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &pDevice);
     EXIT_ON_ERROR(hr)
 
