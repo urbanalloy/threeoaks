@@ -62,7 +62,7 @@ void CSystemEx::Init(DWORD objID, string guiId, HWND hwnd)
 	m_guiID = guiId;
 	m_hwnd = hwnd;
 
-	// Init instnace information
+	// Init instance information
 	UpdateInstanceInfo();
 
 	// Init the config mutex

@@ -50,9 +50,7 @@
 #include <vector>
 using namespace std;
 
-
-
-// CAeroColor
+// CSystemEx
 class ATL_NO_VTABLE CSystemEx :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSystemEx, &CLSID_SystemEx>,
@@ -75,6 +73,8 @@ public:
 
 		m_executableDirectory = L"";
 		m_executableName = L"";
+		
+		m_singleInstance = NULL;
 
 		return S_OK;
 	}

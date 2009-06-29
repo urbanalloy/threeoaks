@@ -34,19 +34,54 @@ const int SI_DESKTOP_UNIQUE		= 0x0002;	// Allow only one instance on current des
 const int SI_TRUSTEE_UNIQUE		= 0x0004;	// Allow only one instance for current user
 const int SI_SYSTEM_UNIQUE		= 0x0000;	// Allow only one instance at all (on the whole system)
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Instance Data
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Class which is used as a static to ensure that we
+// only close the file mapping at the very last chance
+class INSTANCE_DATA
+{
+public:
+	// Constructors / Destructors
+	INSTANCE_DATA() : hInstanceData(NULL)
+	{
+
+	}
+	~INSTANCE_DATA()
+	{
+		if (hInstanceData != NULL)
+		{
+			CloseHandle(hInstanceData);
+			hInstanceData = NULL;
+		}
+	}
+
+protected:
+	// Member variables
+	HANDLE hInstanceData;
+
+	friend class CSingleInstance;
+};
+
+
+
 class CSingleInstance
 {
 
 private:
 	// Mutexes & Lock	
-	CComCriticalSection* m_pExecuteLock;
+	DWORD  m_mutexWait;
+	HANDLE m_hExecuteLock;
 	HANDLE m_hInstanceDataMutex;
 	
 	// Data
 	string m_name;	// used for the memory mapped file & mutexes
 	string m_mmfilename;
+	INSTANCE_DATA m_instanceData;
 
 	bool m_isFirstInstance;
+	void ReleaseLock();
 
 	///////////////////////////////////////////////////////////////////////////////
 	// LPTSTR CreateUniqueName( pszGUID, pszBuffer, nMode )

@@ -26,41 +26,6 @@
 #include <CrtDbg.h>
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Instance Data
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// Class which is used as a static to ensure that we
-// only close the file mapping at the very last chance
-class INSTANCE_DATA
-{
-public:
-	// Constructors / Destructors
-	INSTANCE_DATA();
-	~INSTANCE_DATA();
-
-protected:
-	// Member variables
-	HANDLE hInstanceData;
-
-	friend class CSingleInstance;
-};
-
-INSTANCE_DATA::INSTANCE_DATA() : hInstanceData(NULL)
-{
-}
-
-INSTANCE_DATA::~INSTANCE_DATA()
-{
-	if (hInstanceData != NULL)
-	{
-		CloseHandle(hInstanceData);
-		hInstanceData = NULL;
-	}
-}
-
-static INSTANCE_DATA g_instanceData;
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Constructors / Destructors
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 CSingleInstance::CSingleInstance(const string& name)
@@ -68,22 +33,23 @@ CSingleInstance::CSingleInstance(const string& name)
 	// Init vars
 	char buffer[MAX_PATH];
 	m_name = string(CreateUniqueName(name.c_str(), (char*)&buffer, SI_SESSION_UNIQUE));
-	m_mmfilename = name + "_MMF";
+	m_mmfilename = name + "_SingleInstance_MMF";
 	m_isFirstInstance = false;
 
-	// Only one object of type CSingleInstance should be created
-	_ASSERT(g_instanceData.hInstanceData == NULL);
-
 	m_hInstanceDataMutex = CreateMutex(NULL, false, "CSingleInstanceDataMutex");
-	m_pExecuteLock = NULL;
+	m_hExecuteLock = NULL;
 }
 
 CSingleInstance::~CSingleInstance()
 {
-	CloseHandle(m_hInstanceDataMutex);
-	SAFE_DELETE(m_pExecuteLock);
+	if (m_hInstanceDataMutex) {
+		CloseHandle(m_hInstanceDataMutex);
+		m_hInstanceDataMutex= NULL;
+	}
 
-	g_instanceData.~INSTANCE_DATA();
+	ReleaseLock();
+
+	m_instanceData.~INSTANCE_DATA();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,12 +58,23 @@ CSingleInstance::~CSingleInstance()
 
 void CSingleInstance::ActivateInstance()
 {
-	_ASSERT(m_pExecuteLock == NULL);
+	_ASSERT(m_hExecuteLock == NULL);
 
 	// Ensure there is only ever one CSingleInstance instance 
 	// active at any one time throughout the system
-	m_pExecuteLock = new CComCriticalSection();
-	m_pExecuteLock->Lock();
+	m_hExecuteLock = CreateMutex(NULL, false, "CSingleInstanceExecuteMutex");
+	m_mutexWait = WaitForSingleObject(m_hExecuteLock, INFINITE);
+}
+
+void CSingleInstance::ReleaseLock()
+{
+	if (m_hExecuteLock) {
+		if (m_mutexWait == WAIT_OBJECT_0)
+			ReleaseMutex(m_hExecuteLock);
+
+		CloseHandle(m_hExecuteLock);
+		m_hExecuteLock = NULL;
+	}
 }
 
 bool CSingleInstance::IsFirstInstance()
@@ -129,18 +106,18 @@ bool CSingleInstance::CreateFirstInstanceData(HWND hwnd)
 
 	// Create our memory mapped file
 	int size = sizeof(SingleInstanceData);
-	g_instanceData.hInstanceData = CreateFileMapping(INVALID_HANDLE_VALUE,
+	m_instanceData.hInstanceData = CreateFileMapping(INVALID_HANDLE_VALUE,
 													 NULL,
 													 PAGE_READWRITE,
 													 0,
 													 size,
 													 m_mmfilename.c_str());
 
-	if (g_instanceData.hInstanceData == NULL)
+	if (m_instanceData.hInstanceData == NULL)
 		return false;
 
 	// Open the memory mapped file
-	SingleInstanceData* pInstanceData = static_cast<SingleInstanceData*>(MapViewOfFile(g_instanceData.hInstanceData,
+	SingleInstanceData* pInstanceData = static_cast<SingleInstanceData*>(MapViewOfFile(m_instanceData.hInstanceData,
 																					   FILE_MAP_READ | FILE_MAP_WRITE,
 																					   0,
 																					   0,
@@ -165,8 +142,7 @@ bool CSingleInstance::CreateFirstInstanceData(HWND hwnd)
 
 	// Since this will be the last function that will be called 
 	// when this is the first instance we can release the lock
-	m_pExecuteLock->Unlock();
-	SAFE_DELETE(m_pExecuteLock);
+	ReleaseLock();
 
 	return true;
 }
@@ -255,10 +231,8 @@ bool CSingleInstance::NotifyFirstInstance(HWND hwndSender, LPCTSTR commandLine)
 	}
 
 	// When we have activated the previous instance, we can release the lock
-	if (success) {
-		m_pExecuteLock->Unlock();
-		SAFE_DELETE(m_pExecuteLock);
-	}
+	if (success)
+		ReleaseLock();
 
 	return success;
 }
