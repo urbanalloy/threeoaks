@@ -44,6 +44,7 @@
 
 #include "MonitorInfo.h"
 #include "Volume/IVolumeEventsConnectionPoint.h"
+#include "CSingleInstance.h"
 
 #include <string>
 #include <vector>
@@ -72,13 +73,14 @@ public:
 		m_hwnd = NULL;
 		m_objID = NULL;
 
+		m_executableDirectory = L"";
+		m_executableName = L"";
+
 		return S_OK;
 	}
 
 	void FinalRelease() 
-	{
-		if (m_hConfigMutex != NULL)
-			CloseHandle(m_hConfigMutex);
+	{		
 	}
 
 DECLARE_REGISTRY_RESOURCEID(IDR_SYSTEMEX)
@@ -101,12 +103,20 @@ END_CONNECTION_POINT_MAP()
 	//////////////////////////////////////////////////////////////////////////
 	private:	
 		DWORD m_objID;
+		string m_guiID;
 		HWND m_hwnd;
+
+		// Single instance
+		CSingleInstance* m_singleInstance;
+		wstring m_executableDirectory;
+		wstring m_executableName;
 
 		HANDLE m_hConfigMutex;
 		vector<pair<RECT, bool>> m_monitors;	
 
+		void UpdateInstanceInfo();
 		static BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData);	
+		static bool hasEnding(wstring const &fullString, wstring const &ending);
 
 		//////////////////////////////////////////////////////////////////////////
 		// Volume
@@ -133,10 +143,11 @@ END_CONNECTION_POINT_MAP()
 	//////////////////////////////////////////////////////////////////////////
 	public:
 
-		void Init(DWORD objID, HWND hwnd);
+		void Init(DWORD objID, string guiID, HWND hwnd);
 		void Cleanup();
 
 		void UpdateMonitorInfo();
+		HRESULT ExtractCommandLine(LPWSTR commandLine, VARIANT* pArgs, bool extractArgs); 
 		
 		//////////////////////////////////////////////////////////////////////////
 		// ISupportErrorInfo
@@ -146,6 +157,15 @@ END_CONNECTION_POINT_MAP()
 		//////////////////////////////////////////////////////////////////////////
 		// ISystemEx
 		//////////////////////////////////////////////////////////////////////////
+
+		/************************************************************************/
+		/* Command line and single instance                                     */
+		/************************************************************************/
+		STDMETHOD(get_CommandLine)(BSTR* commandLine);
+		STDMETHOD(get_CommandLineArgs)(VARIANT* pArgs);
+		STDMETHOD(get_IsFirstInstance)(VARIANT_BOOL* isFirstInstance);
+		STDMETHOD(get_ExecutableDirectory)(BSTR* executableDirectory);
+		STDMETHOD(get_ExecutableName)(BSTR* executableName);
 
 		/************************************************************************/
 		/* Monitor                                                              */
