@@ -39,6 +39,8 @@
 #include <wtypes.h>
 #include <winerror.h>
 #include <math.h>
+#include <comdef.h>
+#include <Shellapi.h>
 
 // Volume
 #include <ks.h>
@@ -46,20 +48,24 @@
 #include <mmdeviceapi.h>
 #include <Audioclient.h>
 #include <EndpointVolume.h>
-
 #include "Volume/MixerAPI.h"
+
 #include "VersionCheck.h"
 
 // HACK !
 static CSystemEx *pSystemEx;
 static HANDLE configMutex;
 
-void CSystemEx::Init(DWORD objID, HWND hwnd)
+void CSystemEx::Init(DWORD objID, string guiId, HWND hwnd)
 {
 	m_objID = objID;
+	m_guiID = guiId;
 	m_hwnd = hwnd;
 
-	// init the config mutex
+	// Init instnace information
+	UpdateInstanceInfo();
+
+	// Init the config mutex
 	if (m_hConfigMutex == NULL) {
 		char name[MAX_PATH];
 		sprintf_s(name, "DXSystemExMutex-%d", objID);
@@ -74,7 +80,29 @@ void CSystemEx::Init(DWORD objID, HWND hwnd)
 
 void CSystemEx::Cleanup()
 {
+	SAFE_DELETE(m_singleInstance);
 
+	if (m_hConfigMutex != NULL)
+		CloseHandle(m_hConfigMutex);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Helper functions
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void CSystemEx::UpdateInstanceInfo()
+{
+	m_singleInstance = new CSingleInstance(m_guiID);
+	m_singleInstance->ActivateInstance();
+
+	// Notify the first instance
+	if (!m_singleInstance->IsFirstInstance())
+	{
+		m_singleInstance->NotifyFirstInstance(m_hwnd, GetCommandLine());
+		return;
+	}
+
+	// This is the first instance, initialize data
+	m_singleInstance->CreateFirstInstanceData(m_hwnd);
 }
 
 void CSystemEx::UpdateMonitorInfo()
@@ -101,6 +129,99 @@ BOOL CALLBACK CSystemEx::MonitorEnumProc(HMONITOR hMonitor, HDC, LPRECT, LPARAM)
 	return true;
 }
 
+// Extract command line info
+HRESULT CSystemEx::ExtractCommandLine(LPWSTR commandLine, VARIANT* pArgs, bool extractArgs) 
+{
+	USES_CONVERSION;
+	HRESULT hr = S_OK;
+
+	// Get command line
+	int numArgs = 0;
+	LPWSTR* args = CommandLineToArgvW(commandLine, &numArgs);
+
+	// ignore the first element (exe)
+	int startIndex = 1;
+
+	// Check for single-exe gadgets
+	wstring path((PWSTR)args[0]);
+	bool isSingleExe = false;
+	size_t slash = path.find_last_of('\\', (size_t)-1);
+	if (slash != -1)
+	{
+		wstring exe = path.substr(slash);
+
+		for (int i = 1; i < numArgs; i++)
+		{
+			if (hasEnding(wstring((PWSTR)args[i]), exe)) {
+				isSingleExe = true;
+				startIndex++;
+			}
+		}
+	}
+
+	// Extract exe name and folder
+	if (m_executableDirectory.empty()) {
+		wstring exeCommand;
+		isSingleExe ? exeCommand = wstring((PWSTR)args[1]) : exeCommand = wstring((PWSTR)args[0]);
+
+		size_t slash_end = exeCommand.find_last_of('\\', (size_t)-1);
+
+		m_executableName = wstring(exeCommand.substr(slash_end + 1));
+		m_executableDirectory = wstring(exeCommand.substr(0, slash_end + 1));
+	}
+
+	if (!extractArgs)
+		return S_OK;
+
+	// Create SafeArray of VARIANT BSTRs
+	SAFEARRAY *pSA;
+	SAFEARRAYBOUND aDim[1];
+
+	aDim[0].lLbound = 0;
+	aDim[0].cElements = numArgs - startIndex;	
+
+	pSA = SafeArrayCreate(VT_VARIANT, 1, aDim);
+
+	if (pSA != NULL) {
+		variant_t vOut;
+
+		for (long l = aDim[0].lLbound; l < (signed)(aDim[0].cElements + aDim[0].lLbound); l++) {			
+			vOut = args[l + startIndex];
+
+			HRESULT hr = SafeArrayPutElement(pSA, &l, &vOut);
+
+			if (FAILED(hr)) {
+				SafeArrayDestroy(pSA); // does a deep destroy
+				return hr;
+			}
+		}
+	}
+
+	// return SafeArray as VARIANT
+	V_VT(pArgs) = VT_ARRAY | VT_VARIANT;
+	V_ARRAY(pArgs)= pSA;
+
+	return hr;
+}
+
+bool CSystemEx::hasEnding(std::wstring const &fullString, std::wstring const &ending)
+{
+	unsigned int lastMatchPos = fullString.rfind(ending); // Find the last occurrence of ending
+	bool isEnding = lastMatchPos != std::string::npos; // Make sure it's found at least once
+
+	// If the string was found, make sure that any characters that follow it are the ones we're trying to ignore
+	for( int i = lastMatchPos + ending.length(); (i < (signed)fullString.length()) && isEnding; i++)
+	{
+		if( (fullString[i] != '\n') &&
+			(fullString[i] != '\r') )
+		{
+			isEnding = false;
+		}
+	}
+
+	return isEnding;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ISupportErrorInfo
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,9 +245,62 @@ STDMETHODIMP CSystemEx::InterfaceSupportsErrorInfo(REFIID riid)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /************************************************************************/
-/* Monitors                                                             */
+/* Command line and single instance                                     */
 /************************************************************************/
 
+STDMETHODIMP CSystemEx::get_IsFirstInstance(VARIANT_BOOL* isFirstInstance)
+{
+	if (m_singleInstance->IsFirstInstance())
+		*isFirstInstance = VARIANT_TRUE;
+	else
+		*isFirstInstance = VARIANT_FALSE;
+
+	return S_OK;
+}
+
+/*************************************
+* Command Line
+*************************************/
+STDMETHODIMP CSystemEx::get_CommandLine(BSTR* commandLine)
+{
+	LPSTR str = GetCommandLine();
+
+	CComBSTR bstr(str);
+	*commandLine = bstr.Detach();
+
+	return S_OK;
+}
+
+STDMETHODIMP CSystemEx::get_CommandLineArgs(VARIANT* pArgs)
+{
+	return ExtractCommandLine(GetCommandLineW(), pArgs, true);
+}
+
+STDMETHODIMP CSystemEx::get_ExecutableDirectory(BSTR* directory)
+{
+	if (m_executableDirectory.empty())
+		ExtractCommandLine(GetCommandLineW(), NULL, false);	
+
+	CComBSTR bstr(m_executableDirectory.c_str());
+	*directory = bstr.Detach();
+
+	return S_OK;
+}
+
+STDMETHODIMP CSystemEx::get_ExecutableName(BSTR* name)
+{
+	if (m_executableName.empty())
+		ExtractCommandLine(GetCommandLineW(), NULL, false);	
+
+	CComBSTR bstr(m_executableName.c_str());
+	*name = bstr.Detach();
+
+	return S_OK;
+}
+
+/************************************************************************/
+/* Monitors                                                             */
+/************************************************************************/
 
 STDMETHODIMP CSystemEx::get_NumberOfMonitors(int* numberOfMonitors)
 {
@@ -274,68 +448,67 @@ STDMETHODIMP CSystemEx::get_PeakValue(int *value)
 HRESULT CSystemEx::Vista_put_Volume(int volume)
 {
 	IMMDeviceEnumerator* pEnumerator = NULL;
+	IAudioEndpointVolume* pClient = NULL;
+	IMMDevice* pDevice = NULL;
 
 	HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER,
-		__uuidof(IMMDeviceEnumerator), // IID_IMMDeviceEnumerator,
-		(void**)&pEnumerator);
-	EXIT_ON_ERROR(hr)
-
-		IMMDevice* pDevice = NULL;
+								  __uuidof(IMMDeviceEnumerator), // IID_IMMDeviceEnumerator,
+								  (void**)&pEnumerator);
+	EXIT_ON_ERROR(hr);
 
 	hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &pDevice);
-	EXIT_ON_ERROR(hr)
-
-		IAudioEndpointVolume* pClient = NULL;
+	EXIT_ON_ERROR(hr);
 
 	hr = pDevice->Activate(__uuidof(IAudioEndpointVolume), // IID_IAudioClient
-		CLSCTX_INPROC_SERVER, NULL, (void **)&pClient);
-	EXIT_ON_ERROR(hr)
+						   CLSCTX_INPROC_SERVER,
+						   NULL,
+						   (void **)&pClient);
+	EXIT_ON_ERROR(hr);
 
-		// set volume
-		pClient->SetMasterVolumeLevelScalar((float) volume/100, NULL);
+	// set volume
+	pClient->SetMasterVolumeLevelScalar((float) volume/100, NULL);
 
 Exit:
 	SAFE_RELEASE(pEnumerator)
-		SAFE_RELEASE(pDevice)
-		SAFE_RELEASE(pClient)
+	SAFE_RELEASE(pDevice)
+	SAFE_RELEASE(pClient)
 
-		return S_OK;
+	return S_OK;
 }
 
 HRESULT CSystemEx::Vista_get_Volume(int *volume)
 {
 	IMMDeviceEnumerator* pEnumerator = NULL;
+	IMMDevice* pDevice = NULL;
+	IAudioEndpointVolume* pClient = NULL;
 
 	HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER,
-		__uuidof(IMMDeviceEnumerator), // IID_IMMDeviceEnumerator,
-		(void**)&pEnumerator);
-	EXIT_ON_ERROR(hr)
-
-		IMMDevice* pDevice = NULL;
+								  __uuidof(IMMDeviceEnumerator), // IID_IMMDeviceEnumerator,
+								  (void**)&pEnumerator);
+	EXIT_ON_ERROR(hr);
 
 	hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &pDevice);
-	EXIT_ON_ERROR(hr)
-
-		IAudioEndpointVolume* pClient = NULL;
+	EXIT_ON_ERROR(hr);
 
 	hr = pDevice->Activate(__uuidof(IAudioEndpointVolume), // IID_IAudioClient
-		CLSCTX_INPROC_SERVER, NULL, (void **)&pClient);
-	EXIT_ON_ERROR(hr)
+						   CLSCTX_INPROC_SERVER, NULL,
+						   (void **)&pClient);
+	EXIT_ON_ERROR(hr);
 
-		// get volume
-		float volumeLevel = NULL;
+	// get volume
+	float volumeLevel = NULL;
 	hr = pClient->GetMasterVolumeLevelScalar(&volumeLevel);
-	EXIT_ON_ERROR(hr)
+	EXIT_ON_ERROR(hr);
 
-		int scaledVolume = (int) ceil(volumeLevel*100);
+	int scaledVolume = (int) ceil(volumeLevel*100);
 	*volume = scaledVolume;
 
 Exit:
 	SAFE_RELEASE(pEnumerator)
-		SAFE_RELEASE(pDevice)
-		SAFE_RELEASE(pClient)
+	SAFE_RELEASE(pDevice)
+	SAFE_RELEASE(pClient)
 
-		return S_OK;
+	return S_OK;
 }
 
 
@@ -343,74 +516,72 @@ Exit:
 HRESULT CSystemEx::Vista_put_Mute(BOOL isMuted)
 {
 	IMMDeviceEnumerator* pEnumerator = NULL;
+	IAudioEndpointVolume* pClient = NULL;
+	IMMDevice* pDevice = NULL;
 
 	HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER,
-		__uuidof(IMMDeviceEnumerator), // IID_IMMDeviceEnumerator,
-		(void**)&pEnumerator);
-	EXIT_ON_ERROR(hr)
-
-		IMMDevice* pDevice = NULL;
+								  __uuidof(IMMDeviceEnumerator), // IID_IMMDeviceEnumerator,
+								  (void**)&pEnumerator);
+	EXIT_ON_ERROR(hr);
 
 	hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &pDevice);
-	EXIT_ON_ERROR(hr)
-
-		IAudioEndpointVolume* pClient = NULL;
+	EXIT_ON_ERROR(hr);
 
 	hr = pDevice->Activate(__uuidof(IAudioEndpointVolume), // IID_IAudioClient
-		CLSCTX_INPROC_SERVER, NULL, (void **)&pClient);
-	EXIT_ON_ERROR(hr)
+						   CLSCTX_INPROC_SERVER, NULL,
+						   (void **)&pClient);
+	EXIT_ON_ERROR(hr);
 
-		// set mute
-		pClient->SetMute(isMuted, NULL);
+	// set mute
+	pClient->SetMute(isMuted, NULL);
 
 Exit:
 	SAFE_RELEASE(pEnumerator)
-		SAFE_RELEASE(pDevice)
-		SAFE_RELEASE(pClient)
+	SAFE_RELEASE(pDevice)
+	SAFE_RELEASE(pClient)
 
-		return S_OK;
+	return S_OK;
 }
 
 HRESULT CSystemEx::Vista_get_Mute(VARIANT *isMuted)
 {
 	IMMDeviceEnumerator* pEnumerator = NULL;
+	IMMDevice* pDevice = NULL;
+	IAudioEndpointVolume* pClient = NULL;
 
 	HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER,
-		__uuidof(IMMDeviceEnumerator), // IID_IMMDeviceEnumerator,
-		(void**)&pEnumerator);
-	EXIT_ON_ERROR(hr)
-
-		IMMDevice* pDevice = NULL;
+								  __uuidof(IMMDeviceEnumerator), // IID_IMMDeviceEnumerator,
+								  (void**)&pEnumerator);
+	EXIT_ON_ERROR(hr);
 
 	hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &pDevice);
-	EXIT_ON_ERROR(hr)
-
-		IAudioEndpointVolume* pClient = NULL;
+	EXIT_ON_ERROR(hr);
 
 	hr = pDevice->Activate(__uuidof(IAudioEndpointVolume), // IID_IAudioClient
-		CLSCTX_INPROC_SERVER, NULL, (void **)&pClient);
-	EXIT_ON_ERROR(hr)
+						   CLSCTX_INPROC_SERVER, NULL,
+						   (void **)&pClient);
+	EXIT_ON_ERROR(hr);
 
-		// Get the muting state
-		BOOL mutingState = NULL;
+	// Get the muting state
+	BOOL mutingState = NULL;
 	hr = pClient->GetMute(&mutingState);
-	EXIT_ON_ERROR(hr)
+	EXIT_ON_ERROR(hr);
 
-		if (mutingState == TRUE) 
-		{
-			TO_I4_VARIANT(isMuted, VARIANT_TRUE)
-		}
-		else
-		{
-			TO_I4_VARIANT(isMuted, VARIANT_FALSE)
-		}
+	if (mutingState == TRUE) 
+	{
+		TO_I4_VARIANT(isMuted, VARIANT_TRUE)
+	}
+	else
+	{
+		TO_I4_VARIANT(isMuted, VARIANT_FALSE)
+	}
 
 Exit:	
-		SAFE_RELEASE(pEnumerator)
-			SAFE_RELEASE(pDevice)
-			SAFE_RELEASE(pClient)
+	SAFE_RELEASE(pEnumerator)
+	SAFE_RELEASE(pDevice)
+	SAFE_RELEASE(pClient)
 
-			return S_OK;
+	return S_OK;
 }
 
 
@@ -418,37 +589,37 @@ Exit:
 HRESULT CSystemEx::Vista_get_PeakValue(int *value)
 {
 	IMMDeviceEnumerator* pEnumerator = NULL;
+	IMMDevice* pDevice = NULL;
+	IAudioMeterInformation* pClient = NULL;
 
 	HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), NULL, CLSCTX_INPROC_SERVER,
-		__uuidof(IMMDeviceEnumerator), // IID_IMMDeviceEnumerator,
-		(void**)&pEnumerator);
-	EXIT_ON_ERROR(hr)
-
-		IMMDevice* pDevice = NULL;
+								  __uuidof(IMMDeviceEnumerator), // IID_IMMDeviceEnumerator,
+								 (void**)&pEnumerator);
+	EXIT_ON_ERROR(hr);
 
 	hr = pEnumerator->GetDefaultAudioEndpoint(eRender, eConsole, &pDevice);
-	EXIT_ON_ERROR(hr)
-
-		IAudioMeterInformation* pClient = NULL;
+	EXIT_ON_ERROR(hr);
 
 	hr = pDevice->Activate(__uuidof(IAudioMeterInformation), // IID_IAudioClient
-		CLSCTX_INPROC_SERVER, NULL, (void **)&pClient);
-	EXIT_ON_ERROR(hr)
+						   CLSCTX_INPROC_SERVER,
+						   NULL,
+						   (void **)&pClient);
+	EXIT_ON_ERROR(hr);
 
-		// Get the peak value
-		float peak = NULL;
+	// Get the peak value
+	float peak = NULL;
 	hr = pClient->GetPeakValue(&peak);
-	EXIT_ON_ERROR(hr)
+	EXIT_ON_ERROR(hr);
 
-		int scaledValue = (int) ceil(peak*100);
+	int scaledValue = (int) ceil(peak*100);
 	*value = scaledValue;
 
 Exit:	
 	SAFE_RELEASE(pEnumerator)
-		SAFE_RELEASE(pDevice)
-		SAFE_RELEASE(pClient)
+	SAFE_RELEASE(pDevice)
+	SAFE_RELEASE(pClient)
 
-		return S_OK;
+	return S_OK;
 }
 
 

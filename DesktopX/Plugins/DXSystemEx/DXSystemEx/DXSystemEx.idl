@@ -52,15 +52,21 @@ interface ISystemEx : IDispatch{
 	[propget, id(2), helpstring("Get the muting state of the audio stream. True is the sound is muted, False otherwise.")] HRESULT Mute([out, retval] VARIANT* isMuted);
 	[propget, id(3), helpstring("Get the peak value. Value is between 0 and 100.")] HRESULT PeakValue([out, retval] int* value);
 
-
 	// Monitors
 	[propget, id(4), helpstring("Get the number of active screens on this machine")] HRESULT NumberOfMonitors([out, retval] int* numberOfMonitors);
 	[propget, id(5), helpstring("Get the active screens on this machine")] HRESULT Monitors([out, retval] VARIANT* monitors);
 
+	// Command line and instance
+	[propget, id(6), helpstring("Get the full command line")] HRESULT CommandLine([out, retval] BSTR* commandLine);
+	[propget, id(7), helpstring("Get an array of command line arguments")] HRESULT CommandLineArgs([out, retval] VARIANT* pArgs);	
+	[propget, id(8), helpstring("Check if this instance is the first instance")]HRESULT IsFirstInstance([out, retval] VARIANT_BOOL* isFirstInstance);
+	[propget, id(9), helpstring("Get the executable directory")] HRESULT ExecutableDirectory([out, retval] BSTR* directory);
+	[propget, id(10), helpstring("Get the executable name")] HRESULT ExecutableName([out, retval] BSTR* name);
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Methods
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	[id(6), helpstring("")] HRESULT GetMonitor([in] int index, [out, retval] IMonitorInfo** info);
+	[id(11), helpstring("Get the specific monitor info identified by index")] HRESULT GetMonitor([in] int index, [out, retval] IMonitorInfo** info);
 
 };
 

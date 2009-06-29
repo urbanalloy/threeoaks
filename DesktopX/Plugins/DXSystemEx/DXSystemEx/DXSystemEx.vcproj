@@ -410,6 +410,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Instance"
+				>
+				<File
+					RelativePath=".\CSingleInstance.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CSingleInstance.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

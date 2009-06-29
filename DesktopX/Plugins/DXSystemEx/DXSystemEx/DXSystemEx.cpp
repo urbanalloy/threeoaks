@@ -217,7 +217,11 @@ label_expiration:
 			if (pSystemEx == NULL)
 				return FALSE;
 
-			pSystemEx->Init(objID, pluginInit->hwnd);
+			// Get object GUIID (used to compute lock name)
+			char guiid[100];
+			SDHostMessage(SD_GUIID_FROM_OBJID, objID, (DWORD)&guiid);
+
+			pSystemEx->Init(objID, string(guiid), pluginInit->hwnd);
 
 			if (Is_WinVista_or_Later())
 				pVistaVolumeCallback->addID(objID);
@@ -227,8 +231,11 @@ label_expiration:
 
 		case SD_WINDOW_MESSAGE:
 		{
-			LPMSG msg = reinterpret_cast<LPMSG>(param1);
+			CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;	
+			if (pSystemEx == NULL)
+				return FALSE;
 
+			LPMSG msg = reinterpret_cast<LPMSG>(param1);
 			switch(msg->message)
 			{
 				// Monitor information
@@ -415,8 +422,35 @@ label_expiration:
 					free(se.dp.rgvarg);	
 
 					return TRUE;
+				}
 
-					break;
+				case WM_COPYDATA:
+				{
+					COPYDATASTRUCT* pCDS = reinterpret_cast<COPYDATASTRUCT*>(msg->lParam);
+					char* commandLine = static_cast<char*>(pCDS->lpData);
+
+					// Call script: Instance_OnNewInstance
+					SD_SCRIPTABLE_EVENT se;
+					memset(&se.dp, 0, sizeof(DISPPARAMS));	
+					se.cbSize = sizeof(SD_SCRIPTABLE_EVENT);
+					se.flags=0;
+
+					lstrcpy(se.szEventName, "SystemEx_OnNewInstance");
+
+					se.dp.cArgs = 1;
+					VARIANT* lpvt = (VARIANT*)malloc(sizeof(VARIANT));
+
+					// Get command line args
+					USES_CONVERSION;
+					pSystemEx->ExtractCommandLine(A2W(commandLine), &lpvt[0], true); 
+
+					se.dp.rgvarg = lpvt;
+
+					SDHostMessage(SD_SCRIPTABLE_PLUGIN_EVENT, objID, (DWORD) &se);
+
+					free(se.dp.rgvarg);						
+
+					return TRUE;
 				}
 			}
 
