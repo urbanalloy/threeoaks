@@ -69,7 +69,7 @@ public:
 	void addID(DWORD objID);
 	void removeID(DWORD objID);
 
-	HRESULT STDMETHODCALLTYPE QueryInterface( REFIID iid, void** ppvObject );
+	HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void** ppvObject);
 	ULONG STDMETHODCALLTYPE AddRef();
 	ULONG STDMETHODCALLTYPE Release();
 

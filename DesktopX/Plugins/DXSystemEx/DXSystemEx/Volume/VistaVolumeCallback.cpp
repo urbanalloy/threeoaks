@@ -97,17 +97,18 @@ HRESULT STDMETHODCALLTYPE CVistaVolumeCallback::OnNotify(PAUDIO_VOLUME_NOTIFICAT
 				se.dp.cArgs = 1;
 				VARIANT* lpvt = (VARIANT*)malloc(sizeof(VARIANT)*1);
 				VariantInit(&lpvt[0]);							
-				lpvt[0].vt = VT_I4;
-
+				
 				// Mute event
 				if (pNotify->bMuted == TRUE)
 				{
 					lstrcpy(se.szEventName, "VistaVolume_OnMuteEvent");
-					lpvt[0].lVal = 0;
+					lpvt[0].vt = VT_BOOL;
+					lpvt[0].lVal = VARIANT_TRUE;
 				}
 				else // Standard volume event
 				{
 					lstrcpy(se.szEventName, "VistaVolume_OnVolumeEvent");
+					lpvt[0].vt = VT_I4;
 					lpvt[0].lVal = (long) ceil(pNotify->fMasterVolume*100);				
 				}
 				
