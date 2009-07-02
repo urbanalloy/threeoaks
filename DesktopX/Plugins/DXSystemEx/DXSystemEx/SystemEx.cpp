@@ -261,18 +261,110 @@ STDMETHODIMP CSystemEx::VerifySignature(BSTR path, BSTR signature, int type, VAR
 	if (type != 0)
 		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid signature type"), "Signature type is invalid!", 0, NULL);	
 
+	USES_CONVERSION;
 	
+	HCRYPTPROV hProv = NULL;
+	HCRYPTHASH hHash = NULL;
+	HANDLE hFile = INVALID_HANDLE_VALUE;  
+	
+	BYTE *pbHash = NULL;
+	string hashValue;
+	const int BUFFER_SIZE = 4096;
+	BYTE pbBuffer[BUFFER_SIZE];
+	
+	DWORD dwBytesRead, dwCount;
+	DWORD dwHashLen;
 
+	BOOL fResult;
+	BOOL fFinished = FALSE;
 
+	// Open file to verify
+	hFile = CreateFile(OLE2A(path), 
+		GENERIC_READ, 
+		0, 
+		NULL, 
+		OPEN_EXISTING, 
+		FILE_ATTRIBUTE_NORMAL, 
+		NULL);
 
+	if (hFile == INVALID_HANDLE_VALUE)
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid file path"), "File cannot be opened. Check that the path entered is valid.", 0, NULL);	
 
+	// Get CryptoAPI context
+	if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))			
+		goto INTERNAL_ERROR;
 
+	// Create hash
+	if(!CryptCreateHash(hProv, CALG_SHA1, 0, 0, &hHash))
+		goto INTERNAL_ERROR;
 
+	// Loop through file and hash file contents
+	do
+	{
+		dwBytesRead = 0;
 
+		fResult = ReadFile(hFile, pbBuffer, BUFFER_SIZE, &dwBytesRead, NULL);
 
-	*isValid = VARIANT_TRUE;
+		if (dwBytesRead == 0) break;
+
+		if (!fResult)
+			goto INTERNAL_ERROR;
+
+		fFinished = (dwBytesRead < BUFFER_SIZE);
+
+		fResult = CryptHashData(hHash, pbBuffer, dwBytesRead, 0);
+		if (!fResult)
+			goto INTERNAL_ERROR;
+
+	} while (fFinished == FALSE);
+
+	// Get the hash value
+	dwCount = sizeof(DWORD);
+	if(!CryptGetHashParam(hHash, HP_HASHSIZE, (BYTE *)&dwHashLen, &dwCount, 0)) 
+		goto INTERNAL_ERROR;
+
+	if ((pbHash = (unsigned char*)malloc(dwHashLen)) == NULL)
+		goto INTERNAL_ERROR;
+
+	memset(pbHash, 0, dwHashLen);
+
+	if(!CryptGetHashParam(hHash, HP_HASHVAL, pbHash, &dwHashLen, 0))
+		goto INTERNAL_ERROR;
+
+	// Convert to string
+	char ch[3];
+	for(int i = 0; i < dwHashLen; ++i)
+	{
+		sprintf_s(ch, 3, "%02x", pbHash[i]);
+		hashValue += ch;
+	}
+
+	// Check hash against signature
+	if (hashValue.compare(string(OLE2A(signature))) == 0)
+		*isValid = VARIANT_TRUE;
+	else
+		*isValid = VARIANT_FALSE;
+
+	// Cleanup
+	free(pbHash);
+	CloseHandle(hFile);
+	CryptDestroyHash(hHash);  
+	CryptReleaseContext(hProv, 0);
 
 	return S_OK;
+
+INTERNAL_ERROR:
+	// Clean up
+	if (hFile != INVALID_HANDLE_VALUE)
+		CloseHandle(hFile);
+	if (hHash)
+		CryptDestroyHash(hHash);  
+	if (hProv)
+		CryptReleaseContext(hProv, 0);
+	if (pbHash != NULL)
+		free(pbHash);
+
+	return CCOMError::DispatchError(INTERNAL_ERR, CLSID_SystemEx, _T("Internal error"), "Internal error while checking signature.", 0, NULL);	
 }
 
 /************************************************************************/
