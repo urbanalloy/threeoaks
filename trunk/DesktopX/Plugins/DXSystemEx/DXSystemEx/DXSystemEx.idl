@@ -48,8 +48,8 @@ interface ISystemEx : IDispatch{
 	// Volume
 	[propput, id(1), helpstring("Set Master Volume. Pass volume between 0 and 100. You can get volume change notification with the VistaVolume_OnVolumeEvent event.")] HRESULT Volume([in] int volume);
 	[propget, id(1), helpstring("Get Master Volume. Return an number between 0 and 100.")] HRESULT Volume([out, retval] int* volume);
-	[propput, id(2), helpstring("Set the muting state of the audio stream. You can get muting state change notification with the VistaVolume_OnMuteEvent event.")] HRESULT Mute([in] BOOL isMuted);
-	[propget, id(2), helpstring("Get the muting state of the audio stream. True is the sound is muted, False otherwise.")] HRESULT Mute([out, retval] VARIANT* isMuted);
+	[propput, id(2), helpstring("Set the muting state of the audio stream. You can get muting state change notification with the VistaVolume_OnMuteEvent event.")] HRESULT Mute([in] VARIANT_BOOL isMuted);
+	[propget, id(2), helpstring("Get the muting state of the audio stream. True is the sound is muted, False otherwise.")] HRESULT Mute([out, retval] VARIANT_BOOL* isMuted);
 	[propget, id(3), helpstring("Get the peak value. Value is between 0 and 100.")] HRESULT PeakValue([out, retval] int* value);
 
 	// Monitors
@@ -60,13 +60,19 @@ interface ISystemEx : IDispatch{
 	[propget, id(6), helpstring("Get the full command line")] HRESULT CommandLine([out, retval] BSTR* commandLine);
 	[propget, id(7), helpstring("Get an array of command line arguments")] HRESULT CommandLineArgs([out, retval] VARIANT* pArgs);	
 	[propget, id(8), helpstring("Check if this instance is the first instance")]HRESULT IsFirstInstance([out, retval] VARIANT_BOOL* isFirstInstance);
-	[propget, id(9), helpstring("Get the executable directory")] HRESULT ExecutableDirectory([out, retval] BSTR* directory);
+	[propget, id(9), helpstring("Get the executable folder")] HRESULT ExecutableFolder([out, retval] BSTR* directory);
 	[propget, id(10), helpstring("Get the executable name")] HRESULT ExecutableName([out, retval] BSTR* name);
+
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Methods
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Monitors
 	[id(11), helpstring("Get the specific monitor info identified by index")] HRESULT GetMonitor([in] int index, [out, retval] IMonitorInfo** info);
+
+	// Signature
+	[helpstring("Verify the file signature")] HRESULT VerifySignature([in] BSTR path, [in] BSTR signature, [in] int type, [out, retval] VARIANT_BOOL* isValid);
 
 };
 

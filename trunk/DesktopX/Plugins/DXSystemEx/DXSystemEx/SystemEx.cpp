@@ -245,6 +245,37 @@ STDMETHODIMP CSystemEx::InterfaceSupportsErrorInfo(REFIID riid)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /************************************************************************/
+/* Signature                                                            */
+/************************************************************************/
+
+STDMETHODIMP CSystemEx::VerifySignature(BSTR path, BSTR signature, int type, VARIANT_BOOL* isValid)
+{
+	// Check input
+	if (CComBSTR(path) == CComBSTR(""))
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid file path"), "File path is empty!", 0, NULL);	
+
+	if (CComBSTR(signature) == CComBSTR(""))
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid signature"), "Signature is empty!", 0, NULL);	
+
+	// Only allow SHA1 signature type at this moment
+	if (type != 0)
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid signature type"), "Signature type is invalid!", 0, NULL);	
+
+	
+
+
+
+
+
+
+
+
+	*isValid = VARIANT_TRUE;
+
+	return S_OK;
+}
+
+/************************************************************************/
 /* Command line and single instance                                     */
 /************************************************************************/
 
@@ -276,7 +307,7 @@ STDMETHODIMP CSystemEx::get_CommandLineArgs(VARIANT* pArgs)
 	return ExtractCommandLine(GetCommandLineW(), pArgs, true);
 }
 
-STDMETHODIMP CSystemEx::get_ExecutableDirectory(BSTR* directory)
+STDMETHODIMP CSystemEx::get_ExecutableFolder(BSTR* directory)
 {
 	if (m_executableDirectory.empty())
 		ExtractCommandLine(GetCommandLineW(), NULL, false);	
@@ -364,7 +395,7 @@ STDMETHODIMP CSystemEx::get_Monitors(VARIANT* monitors)
 STDMETHODIMP CSystemEx::GetMonitor(int index, IMonitorInfo** info)
 {
 	if (index < 0 || index > (signed)m_monitors.size() - 1)		
-		return CCOMError::DispatchError(1, CLSID_SystemEx, _T("Error getting monitor info!"), "Monitor index is invalid.", 0, NULL);	
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Error getting monitor info!"), "Monitor index is invalid.", 0, NULL);	
 
 	ACQUIRE_MUTEX(m_hConfigMutex)
 
@@ -407,20 +438,16 @@ STDMETHODIMP CSystemEx::get_Volume(int *volume)
 
 
 // Muting state
-STDMETHODIMP CSystemEx::put_Mute(BOOL isMuted)
+STDMETHODIMP CSystemEx::put_Mute(VARIANT_BOOL isMuted)
 {
-	// We are getting a VBScript BOOL, convert it to a C++ BOOL
-	BOOL muted = TRUE;
-	isMuted == VARIANT_FALSE ? muted = FALSE : muted = TRUE;
-
 	if (Is_WinVista_or_Later())
-		return Vista_put_Mute(muted);
+		return Vista_put_Mute(isMuted);
 	else
-		return XP_put_Mute(muted);
+		return XP_put_Mute(isMuted);
 
 }
 
-STDMETHODIMP CSystemEx::get_Mute(VARIANT *isMuted)
+STDMETHODIMP CSystemEx::get_Mute(VARIANT_BOOL *isMuted)
 {
 	if (Is_WinVista_or_Later())
 		return Vista_get_Mute(isMuted);
@@ -513,7 +540,7 @@ Exit:
 
 
 // Muting state
-HRESULT CSystemEx::Vista_put_Mute(BOOL isMuted)
+HRESULT CSystemEx::Vista_put_Mute(VARIANT_BOOL isMuted)
 {
 	IMMDeviceEnumerator* pEnumerator = NULL;
 	IAudioEndpointVolume* pClient = NULL;
@@ -533,7 +560,7 @@ HRESULT CSystemEx::Vista_put_Mute(BOOL isMuted)
 	EXIT_ON_ERROR(hr);
 
 	// set mute
-	pClient->SetMute(isMuted, NULL);
+	pClient->SetMute(isMuted == VARIANT_TRUE ? TRUE : FALSE, NULL);
 
 Exit:
 	SAFE_RELEASE(pEnumerator)
@@ -543,7 +570,7 @@ Exit:
 	return S_OK;
 }
 
-HRESULT CSystemEx::Vista_get_Mute(VARIANT *isMuted)
+HRESULT CSystemEx::Vista_get_Mute(VARIANT_BOOL *isMuted)
 {
 	IMMDeviceEnumerator* pEnumerator = NULL;
 	IMMDevice* pDevice = NULL;
@@ -567,14 +594,7 @@ HRESULT CSystemEx::Vista_get_Mute(VARIANT *isMuted)
 	hr = pClient->GetMute(&mutingState);
 	EXIT_ON_ERROR(hr);
 
-	if (mutingState == TRUE) 
-	{
-		TO_I4_VARIANT(isMuted, VARIANT_TRUE)
-	}
-	else
-	{
-		TO_I4_VARIANT(isMuted, VARIANT_FALSE)
-	}
+	(mutingState == TRUE) ? *isMuted = VARIANT_TRUE : *isMuted = VARIANT_FALSE;
 
 Exit:	
 	SAFE_RELEASE(pEnumerator)
@@ -670,7 +690,7 @@ HRESULT CSystemEx::XP_get_Volume(int *volume)
 
 
 // Muting state
-HRESULT CSystemEx::XP_put_Mute(BOOL isMuted)
+HRESULT CSystemEx::XP_put_Mute(VARIANT_BOOL isMuted)
 {
 	MixerAPI mixer(MIXERLINE_COMPONENTTYPE_DST_SPEAKERS,
 		NO_SOURCE,
@@ -679,7 +699,7 @@ HRESULT CSystemEx::XP_put_Mute(BOOL isMuted)
 	if (!mixer.IsOk()) 
 		return S_FALSE;
 
-	if (isMuted)
+	if (isMuted == VARIANT_TRUE)
 		mixer.Off();
 	else
 		mixer.On();
@@ -687,7 +707,7 @@ HRESULT CSystemEx::XP_put_Mute(BOOL isMuted)
 	return S_OK;
 }
 
-HRESULT CSystemEx::XP_get_Mute(VARIANT *isMuted)
+HRESULT CSystemEx::XP_get_Mute(VARIANT_BOOL *isMuted)
 {
 	MixerAPI mixer(MIXERLINE_COMPONENTTYPE_DST_SPEAKERS,
 		NO_SOURCE,
@@ -701,14 +721,7 @@ HRESULT CSystemEx::XP_get_Mute(VARIANT *isMuted)
 	if (ret == FALSE)
 		return S_FALSE;
 
-	if (results == 1) 
-	{
-		TO_I4_VARIANT(isMuted, VARIANT_TRUE)
-	}
-	else
-	{
-		TO_I4_VARIANT(isMuted, VARIANT_FALSE)
-	}
+	(results == 1) ? *isMuted = VARIANT_TRUE : *isMuted = VARIANT_FALSE;
 
 	return S_OK;
 }

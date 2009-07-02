@@ -101,7 +101,12 @@ BEGIN_CONNECTION_POINT_MAP(CSystemEx)
 END_CONNECTION_POINT_MAP()
 
 	//////////////////////////////////////////////////////////////////////////
-	private:	
+	private:
+		enum SignatureType
+		{
+			SHA1 = 0
+		};
+
 		DWORD m_objID;
 		string m_guiID;
 		HWND m_hwnd;
@@ -126,8 +131,8 @@ END_CONNECTION_POINT_MAP()
 		HRESULT Vista_get_Volume(int *volume);
 		HRESULT Vista_put_Volume(int volume);
 
-		HRESULT Vista_get_Mute(VARIANT *isMuted);
-		HRESULT Vista_put_Mute(BOOL isMuted);
+		HRESULT Vista_get_Mute(VARIANT_BOOL *isMuted);
+		HRESULT Vista_put_Mute(VARIANT_BOOL isMuted);
 
 		HRESULT Vista_get_PeakValue(int *level);
 
@@ -135,8 +140,8 @@ END_CONNECTION_POINT_MAP()
 		HRESULT XP_get_Volume(int *volume);
 		HRESULT XP_put_Volume(int volume);
 
-		HRESULT XP_get_Mute(VARIANT *isMuted);
-		HRESULT XP_put_Mute(BOOL isMuted);
+		HRESULT XP_get_Mute(VARIANT_BOOL *isMuted);
+		HRESULT XP_put_Mute(VARIANT_BOOL isMuted);
 
 		HRESULT XP_get_PeakValue(int *level);
 
@@ -159,12 +164,17 @@ END_CONNECTION_POINT_MAP()
 		//////////////////////////////////////////////////////////////////////////
 
 		/************************************************************************/
+		/* Signature                                                            */
+		/************************************************************************/
+		STDMETHOD(VerifySignature)(BSTR path, BSTR signature, int type, VARIANT_BOOL* isValid);
+
+		/************************************************************************/
 		/* Command line and single instance                                     */
 		/************************************************************************/
 		STDMETHOD(get_CommandLine)(BSTR* commandLine);
 		STDMETHOD(get_CommandLineArgs)(VARIANT* pArgs);
 		STDMETHOD(get_IsFirstInstance)(VARIANT_BOOL* isFirstInstance);
-		STDMETHOD(get_ExecutableDirectory)(BSTR* executableDirectory);
+		STDMETHOD(get_ExecutableFolder)(BSTR* executableDirectory);
 		STDMETHOD(get_ExecutableName)(BSTR* executableName);
 
 		/************************************************************************/
@@ -184,8 +194,8 @@ END_CONNECTION_POINT_MAP()
 		STDMETHOD(put_Volume)(int volume);
 
 		// Muting state
-		STDMETHOD(get_Mute)(VARIANT *isMuted);
-		STDMETHOD(put_Mute)(BOOL isMuted);
+		STDMETHOD(get_Mute)(VARIANT_BOOL *isMuted);
+		STDMETHOD(put_Mute)(VARIANT_BOOL isMuted);
 
 		// Peak level
 		STDMETHOD(get_PeakValue)(int *level);
