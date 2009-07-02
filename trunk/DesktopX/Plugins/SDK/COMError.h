@@ -20,6 +20,8 @@
 ///////////////////////////////////////////////
 // Error codes (DomException + misc)
 ///////////////////////////////////////////////
+#define INTERNAL_ERR				    99
+
 #define INDEX_SIZE_ERR				    1
 #define DOMSTRING_SIZE_ERR			    2
 #define HIERARCHY_REQUEST_ERR		    3
