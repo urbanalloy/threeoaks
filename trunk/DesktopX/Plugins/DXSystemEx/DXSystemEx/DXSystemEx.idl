@@ -74,6 +74,9 @@ interface ISystemEx : IDispatch{
 	// Signature
 	[helpstring("Verify the file signature")] HRESULT VerifySignature([in] BSTR path, [in] BSTR signature, [in] int type, [out, retval] VARIANT_BOOL* isValid);
 
+	// Download
+	[helpstring("Download a file with progress information")] HRESULT DownloadFile([in] BSTR remoteUrl, [in] BSTR localPath, [in] BSTR progressCallback, [in] BSTR completionCallback);
+
 };
 
 [

@@ -116,6 +116,7 @@ END_CONNECTION_POINT_MAP()
 		wstring m_executableDirectory;
 		wstring m_executableName;
 
+		// Monitors
 		HANDLE m_hConfigMutex;
 		vector<pair<RECT, bool>> m_monitors;	
 
@@ -162,6 +163,11 @@ END_CONNECTION_POINT_MAP()
 		//////////////////////////////////////////////////////////////////////////
 		// ISystemEx
 		//////////////////////////////////////////////////////////////////////////
+
+		/************************************************************************/
+		/* Download                                                             */
+		/************************************************************************/
+		STDMETHOD(DownloadFile)(BSTR remoteUrl, BSTR localPath, BSTR progressCallback, BSTR completionCallback);
 
 		/************************************************************************/
 		/* Signature                                                            */
