@@ -427,7 +427,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="File"
+				Name="HTTP"
 				>
 			</Filter>
 		</Filter>

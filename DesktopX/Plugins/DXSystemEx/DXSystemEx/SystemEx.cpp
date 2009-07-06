@@ -245,6 +245,22 @@ STDMETHODIMP CSystemEx::InterfaceSupportsErrorInfo(REFIID riid)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /************************************************************************/
+/* HTTP Download                                                        */
+/************************************************************************/
+STDMETHODIMP CSystemEx::DownloadFile(BSTR remoteUrl, BSTR localPath, BSTR progressCallback, BSTR completionCallback)
+{
+	// Check input
+	if (CComBSTR(remoteUrl) == CComBSTR(""))
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid remote url"), "Remote url is empty!", 0, NULL);	
+
+	if (CComBSTR(localPath) == CComBSTR(""))
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid file path"), "File path is empty!", 0, NULL);	
+
+
+	return S_OK;
+}
+
+/************************************************************************/
 /* Signature                                                            */
 /************************************************************************/
 
@@ -333,7 +349,7 @@ STDMETHODIMP CSystemEx::VerifySignature(BSTR path, BSTR signature, int type, VAR
 
 	// Convert to string
 	char ch[3];
-	for(int i = 0; i < dwHashLen; ++i)
+	for(int i = 0; i < (signed)dwHashLen; ++i)
 	{
 		sprintf_s(ch, 3, "%02x", pbHash[i]);
 		hashValue += ch;
