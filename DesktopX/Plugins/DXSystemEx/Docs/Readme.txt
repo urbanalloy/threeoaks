@@ -57,9 +57,19 @@ Callbacks
 	- SystemEx_OnVolumeEvent(volume)
 	- SystemEx_OnMuteEvent(isMuted)
 	
+Instance
+----
+
+Properties & Methods
+	- CommandLine
+	- CommandLineArgs
+	- IsFirstInstance
+
+Callbacks
+	- SystemEx_OnNewInstance(commandLineArgs)
 	
 Misc
----------
+----
 
 Properties & Methods
 	- VerifySignature(path, signature, type)
@@ -173,6 +183,31 @@ XP Compatibility: might not work with some cards, in which case it will always
 			      
 			      
 *******************************************************************************************************
+
+SystemEx.CommandLine
+--------------------
+
+Get the full command line (including the path to the executable and DesktopX-specific arguments)
+
+SystemEx.CommandLineArgs
+------------------------
+
+Get an array of command line arguments.
+Command line arguments have been cleaned up to remove DesktopX-specific arguments (in the case of single-exe gadgets)
+
+SystemEx.IsFirstInstance
+------------------------
+
+Will be True if this is the first instance to run, False otherwise.
+It is preferable to check for it at startup and close the gadget accordingly,
+as only the first instance will receive a callback message when a new instance is started.
+
+SystemEx_OnNewInstance(commandLineArgs)
+---------------------------------------
+
+Gets called when another instance is started. The command line arguments are passed in an array.
+
+*******************************************************************************************************
 		      
 SystemEx.VerifySignature(path, signature, type)
 -----------------------------------------------
@@ -190,6 +225,7 @@ Version 1.0 Build 228:
   + Added SHA1 signature check
   + Added MouseWheel and Middle button click callbacks (merged from DXMouseWheel)
   + Added Master volume control / Mute / Peak (merged from DXVolumeControl)
+  + Added instance information (merged from DxInstance)
 
 Version 1.0 Build 204: First released version
 
