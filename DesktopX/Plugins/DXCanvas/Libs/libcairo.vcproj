@@ -56,6 +56,7 @@
 				DebugInformationFormat="3"
 				CallingConvention="2"
 				CompileAs="0"
+				DisableSpecificWarnings="4244"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

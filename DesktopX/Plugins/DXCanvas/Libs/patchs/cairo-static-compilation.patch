@@ -1,23 +1,23 @@
-commit c4a61bd93f83a22f22615011b1d2aed9faa93f2c
-Author: unknown <Julien@.(none)>
-Date:   Thu May 7 14:24:04 2009 -0400
+commit e210101bbc28be6449eb418c4650b668b42381db
+Author: Julien <Julien@.(none)>
+Date:   Thu Jul 9 21:27:40 2009 -0400
 
     Patch for static compilation into stdcall dll
 
 diff --git a/src/cairo-font-face-twin.c b/src/cairo-font-face-twin.c
-index 712ca0d..61948d5 100644
+index 3f82733..934a356 100644
 --- a/src/cairo-font-face-twin.c
 +++ b/src/cairo-font-face-twin.c
-@@ -304,7 +304,7 @@ twin_font_face_set_properties_from_toy (cairo_font_face_t *twin_face,
+@@ -299,7 +299,7 @@ twin_font_face_create_properties (cairo_font_face_t *twin_face,
  
      status = cairo_font_face_set_user_data (twin_face,
  					    &twin_properties_key,
 -					    props, free);
 +					    props, free_data);
-     if (unlikely (status))
- 	goto FREE_PROPS;
- 
-@@ -429,7 +429,7 @@ twin_scaled_font_compute_properties (cairo_scaled_font_t *scaled_font,
+     if (unlikely (status)) {
+ 	free (props);
+ 	return status;
+@@ -444,7 +444,7 @@ twin_scaled_font_compute_properties (cairo_scaled_font_t *scaled_font,
      /* Save it */
      status = cairo_scaled_font_set_user_data (scaled_font,
  					      &twin_properties_key,
@@ -40,10 +40,28 @@ index 1fa919b..d35d893 100644
  {
      cairo_hull_t *a = (cairo_hull_t *) av;
 diff --git a/src/cairo-png.c b/src/cairo-png.c
-index 0e8f63d..8a5edfe 100644
+index d4f0476..03fafee 100644
 --- a/src/cairo-png.c
 +++ b/src/cairo-png.c
-@@ -652,7 +652,7 @@ read_png (struct png_read_closure_t *png_closure)
+@@ -97,7 +97,7 @@ convert_data_to_bytes (png_structp png, png_row_infop row_info, png_bytep data)
+  * stderr and rely on the user to check for errors via the #cairo_status_t
+  * return.
+  */
+-static void
++static void __stdcall
+ png_simple_error_callback (png_structp png,
+ 	                   png_const_charp error_msg)
+ {
+@@ -114,7 +114,7 @@ png_simple_error_callback (png_structp png,
+     /* if we get here, then we have to choice but to abort ... */
+ }
+ 
+-static void
++static void __stdcall
+ png_simple_warning_callback (png_structp png,
+ 	                     png_const_charp error_msg)
+ {
+@@ -670,7 +670,7 @@ read_png (struct png_read_closure_t *png_closure)
  					  CAIRO_MIME_TYPE_PNG,
  					  mime_data,
  					  mime_data_length,

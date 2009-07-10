@@ -26,7 +26,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="D:\Apps\Perl\Perl64\bin\perl $(ProjectDir)\pixman\pixman\combine.pl 8 &lt; $(ProjectDir)\pixman\pixman\combine.inc &gt; $(ProjectDir)\pixman\pixman\pixman-combine32.c&#x0D;&#x0A;D:\Apps\Perl\Perl64\bin\perl $(ProjectDir)\pixman\pixman\combine.pl 8 &lt; $(ProjectDir)\pixman\pixman\combine.h.inc &gt; $(ProjectDir)\pixman\pixman\pixman-combine32.h&#x0D;&#x0A;D:\Apps\Perl\Perl64\bin\perl $(ProjectDir)\pixman\pixman\combine.pl 16 &lt; $(ProjectDir)\pixman\pixman\combine.inc &gt; $(ProjectDir)\pixman\pixman\pixman-combine64.c&#x0D;&#x0A;D:\Apps\Perl\Perl64\bin\perl $(ProjectDir)\pixman\pixman\combine.pl 16 &lt; $(ProjectDir)\pixman\pixman\combine.h.inc &gt; $(ProjectDir)\pixman\pixman\pixman-combine64.h&#x0D;&#x0A;"
+				CommandLine="D:\Apps\Perl\Perl64\bin\perl $(ProjectDir)\pixman\pixman\make-combine.pl 8 &lt; $(ProjectDir)\pixman\pixman\pixman-combine.c.template &gt; $(ProjectDir)\pixman\pixman\pixman-combine32.c&#x0D;&#x0A;D:\Apps\Perl\Perl64\bin\perl $(ProjectDir)\pixman\pixman\make-combine.pl 8 &lt; $(ProjectDir)\pixman\pixman\pixman-combine.h.template &gt; $(ProjectDir)\pixman\pixman\pixman-combine32.h&#x0D;&#x0A;D:\Apps\Perl\Perl64\bin\perl $(ProjectDir)\pixman\pixman\make-combine.pl 16 &lt; $(ProjectDir)\pixman\pixman\pixman-combine.c.template &gt; $(ProjectDir)\pixman\pixman\pixman-combine64.c&#x0D;&#x0A;D:\Apps\Perl\Perl64\bin\perl $(ProjectDir)\pixman\pixman\make-combine.pl 16 &lt; $(ProjectDir)\pixman\pixman\pixman-combine.h.template &gt; $(ProjectDir)\pixman\pixman\pixman-combine64.h&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -58,6 +58,7 @@
 				DebugInformationFormat="3"
 				CallingConvention="2"
 				CompileAs="0"
+				DisableSpecificWarnings="4244"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -111,10 +112,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\pixman\pixman\pixman-compute-region.c"
-				>
-			</File>
-			<File
 				RelativePath=".\pixman\pixman\pixman-conical-gradient.c"
 				>
 			</File>
@@ -163,10 +160,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\pixman\pixman\pixman-pict.c"
-				>
-			</File>
-			<File
 				RelativePath=".\pixman\pixman\pixman-radial-gradient.c"
 				>
 			</File>
@@ -196,6 +189,10 @@
 			</File>
 			<File
 				RelativePath=".\pixman\pixman\pixman-utils.c"
+				>
+			</File>
+			<File
+				RelativePath=".\pixman\pixman\pixman.c"
 				>
 			</File>
 		</Filter>
