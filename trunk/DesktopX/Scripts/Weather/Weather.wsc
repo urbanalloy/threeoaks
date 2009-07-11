@@ -1,0 +1,908 @@
+<?xml version="1.0"?>
+<package>
+<?component error="true" debug="true"?>
+<comment>
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Weather Script Component
+//
+// Copyright (c) 2009, Julien Templier
+// All rights reserved.
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// * $LastChangedRevision$
+// * $LastChangedDate$
+// * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
+// 
+// Redistribution and use in source and binary forms, with or without modification, are
+// permitted provided that the following conditions are met:
+//	1. Redistributions of source code must retain the above copyright notice, this list of
+//		 conditions and the following disclaimer. 
+//	2. Redistributions in binary form must reproduce the above copyright notice, this list
+//		 of conditions and the following disclaimer in the documentation and/or other materials
+//		 provided with the distribution. 
+//	3. The name of the author may not be used to endorse or promote products derived from this
+//		 software without specific prior written permission. 
+//
+//	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//	OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+//	MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+//	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+//	EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+//	GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+//	ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+//	OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+//	POSSIBILITY OF SUCH DAMAGE.
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+</comment>
+
+<component>
+	<comment>
+	Main weather controller
+	</comment>
+	<registration description="Weather Controller"
+      			  progid="DXWeather.Controller"
+      			  version="1"
+      	    	  classid="{2DB557E8-FA03-40ce-B559-D0BCCFCB48CC}"/>  
+      	    	  
+	<object id="m_providers" 	progid="Scripting.Dictionary" />  
+	<object id="m_providerList" progid="Scripting.Dictionary" />  
+	  
+	<public>
+		<comment>
+			Setup the license
+			  - id: partner id (use "" if N/A)
+			  - key: license key
+		</comment>
+		<method name="SetLicense">
+			<parameter name="id" />
+			<parameter name="key" />
+		</method>
+		
+		<comment>
+			Returns a dictionnary of available providers (key = provider id, value = provider name)
+		</comment>
+		<property name="Providers">
+			<get />
+		</property>
+		
+		<comment>
+			Set the provider to use
+			  - id: provider id (key) as retrieved bu GetProviders
+			  
+			returns: E_OK if the provider was set correctly
+				     E_ERROR if the id is not a valid provider id (the current provider will be reset to Nothing)
+		</comment>
+		<method name="SetProvider">
+			<parameter name="id" />
+		</method>
+	
+		<comment>
+			Register callbacks for weather controller calls
+			  - locationCallback: called when new location results are available
+			  - weatherCallback: called when new weather information is available
+			  - alertsCallback: called when new alert information is available
+			  - forecastCallback: called when new forecast information is available
+			  - camerasCallback: called when new camera results are available
+			  - errorCallback: called when an error is raised during an operation						  
+		</comment>
+		<method name="RegisterCallbacks">
+			<parameter name="locationCallback" />
+			<parameter name="weatherCallback" />
+			<parameter name="alertsCallback" />
+			<parameter name="forecastCallback" />
+			<parameter name="camerasCallback" />
+			<parameter name="errorCallback" />
+		</method>
+		
+		<comment>
+			Get a WeatherLocation object to be used in a request
+		</comment>
+		<method name="GetRequestObject" />
+
+		<comment>
+			Get a list of locations.
+			  - locationRequest: a WeatherLocation object with the proper fields set
+			  
+			returns: E_OK if the request was send					 
+					 E_NOTAVAILABLE if the query type is not supported by the current provider
+					 E_ERROR if no provider has been set
+		</comment>
+		<method name="GetLocations">
+			<parameter name="locationRequest" />
+		</method>
+		
+		<comment>
+			Get the current weather
+			  - locationRequest: a WeatherLocation object with the proper fields set
+			 			 		 (this can be a WeatherLocation object returned by GetLocations)
+			  
+			returns: E_OK if the request was send
+					 E_NOTIMPLEMENTED if this function is not implemented for the current provider
+					 E_NOTAVAILABLE if the query type is not supported by the current provider
+					 E_ERROR if no provider has been set
+		</comment>
+		<method name="GetWeather">
+			<parameter name="locationRequest" />
+		</method>
+		
+		<comment>
+			Get a list of alerts
+			  - locationRequest: a WeatherLocation object with the proper fields set
+			  					 (this can be a WeatherLocation object returned by GetLocations)
+			  
+			returns: E_OK if the request was send
+					 E_NOTIMPLEMENTED if this function is not implemented for the current provider
+					 E_NOTAVAILABLE if the query type is not supported by the current provider	
+					 E_ERROR if no provider has been set		  
+		</comment>
+		<method name="GetAlerts">
+			<parameter name="locationRequest" />
+		</method>
+		
+		<comment>
+			Get the forecast
+			  - locationRequest: a WeatherLocation object with the proper fields set
+							    (this can be a WeatherLocation object returned by GetLocations)
+			  
+			returns: E_OK if the request was send
+					 E_NOTIMPLEMENTED if this function is not implemented for the current provider
+					 E_NOTAVAILABLE if the query type is not supported by the current provider
+					 E_ERROR if no provider has been set			  
+		</comment>
+		<method name="GetForecast">
+			<parameter name="locationRequest" />
+		</method>
+		
+		<comment>
+			Get a list of cameras.
+			  - locationRequest: a WeatherLocation object with the proper fields set
+			  					 (this can be a WeatherLocation object returned by GetLocations)
+			  
+			returns: E_OK if the request was send
+					 E_NOTIMPLEMENTED if this function is not implemented for the current provider
+					 E_NOTAVAILABLE if the query type is not supported by the current provider	
+					 E_ERROR if no provider has been set		  
+		</comment>
+		<method name="GetCameras">
+			<parameter name="locationRequest" />
+		</method>
+	</public>
+	
+	<script language="VBScript">
+	<![CDATA[
+	
+	Option Explicit
+	
+	' Constants
+	Const E_OK = 1
+	Const E_ERROR = 0
+	Const E_WARNING = -1
+	Const E_NOTAVAILABLE = -2
+	Const E_NOTIMPLEMENTED = -3
+	
+	' Callbacks
+	Dim m_locationsCallback
+	Dim m_weatherCallback
+	Dim m_alertsCallback
+	Dim m_forecastCallback
+	Dim m_camerasCallback
+	Dim m_errorCallback
+	Set m_locationsCallback = Nothing
+	Set m_weatherCallback 	= Nothing
+	Set m_alertsCallback 	= Nothing
+	Set m_forecastCallback  = Nothing
+	Set m_camerasCallback   = Nothing
+	Set m_errorCallback 	= Nothing
+	
+	' Current provider
+	Dim m_currentProvider
+	Set m_currentProvider = Nothing
+	
+	' License information
+	Dim m_id
+	Dim m_key
+	
+	' Provider registration
+	RegisterProvider "WUnderground"
+
+	'=============================================================================================================================
+	'=
+	'= Public Methods
+	'=
+	'=============================================================================================================================	
+	
+	' Setup license
+	Sub SetLicense(id, key)
+		m_id = id
+		m_key = key
+	End Sub
+	
+	' Get the list of available providers
+	Function get_Providers()
+		Set get_Providers = m_providerList
+	End Function
+	
+	' Set the provider to use
+	Function SetProvider(id)
+		If (Not m_providers.Exists(id)) Then
+			SetProvider = E_ERROR
+			
+			' Reset the current provider
+			Set m_currentProvider = Nothing
+			Exit Function
+		End If
+		
+		Set m_currentProvider = m_providers.Item(id)	
+		
+		SetProvider = E_OK
+	End Function
+	
+	' Set the callbacks
+	Sub RegisterCallbacks(locationsCallback, weatherCallback, alertsCallback, forecastCallback, camerasCallback, errorCallback)
+		Set m_locationsCallback = locationsCallback
+		Set m_weatherCallback 	= weatherCallback
+		Set m_alertsCallback 	= alertsCallback
+		Set m_forecastCallback  = forecastCallback
+		Set m_camerasCallback   = camerasCallback
+		Set m_errorCallback 	= errorCallback
+	End Sub
+	
+	' Get a WeatherLocation object
+	Function GetRequestObject()
+		Set GetRequestObject = CreateComponent("WeatherLocation")
+	End Function
+	
+	' Get a list of locations
+	Function GetLocations(locationRequest)
+		If (m_currentProvider Is Nothing) Then
+			GetLocations = E_ERROR
+			Exit Function
+		End If
+	
+		GetLocations = m_currentProvider.GetLocations(locationRequest)
+	End Function
+	
+	' Get the current weather
+	Function GetWeather(locationRequest)
+		If (m_currentProvider Is Nothing) Then
+			GetWeather = E_ERROR
+			Exit Function
+		End If
+	
+		GetWeather = m_currentProvider.GetWeather(locationRequest)
+	End Function
+	
+	' Get a list of alerts
+	Function GetAlerts(locationRequest)
+		If (m_currentProvider Is Nothing) Then
+			GetAlerts = E_ERROR
+			Exit Function
+		End If
+	
+		GetAlertss = m_currentProvider.GetAlerts(locationRequest)
+	End Function
+	
+	' Get the forecast
+	Function GetForecast(locationRequest)
+		If (m_currentProvider Is Nothing) Then
+			GetForecast = E_ERROR
+			Exit Function
+		End If
+	
+		GetForecast = m_currentProvider.GetForecast(locationRequest)
+	End Function
+	
+	' Get a list of cameras
+	Function GetCameras(locationRequest)
+		If (m_currentProvider Is Nothing) Then
+			GetCameras = E_ERROR
+			Exit Function
+		End If
+	
+		GetCameras = m_currentProvider.GetCameras(locationRequest)
+	End Function
+	
+	'=============================================================================================================================
+	'=
+	'= Callbacks and registration
+	'=
+	'=============================================================================================================================	
+		
+	'/////////////////////////////////////////////////////////////////////////////////////////
+	'// Add provider to provider list and generate event code
+	Sub RegisterProvider(id)
+	
+		Dim provider		
+		Set provider = CreateComponent(id)
+				
+		' Add the new provider to the internal provider list and the provider names
+		m_providers.Add id, provider
+		
+		' we use a separate provider list to not expose the providers directly to the user script
+		m_providerList.Add id, provider.Name 
+			
+		' Generate event code
+		Dim S		
+		S = ""
+
+		S = S & "Sub " & id & "_Locations" & vbCrLf
+		S = S & "  OnLocations" & vbCrLf 
+		S = S & "End Sub" & vbCrLf 
+		
+		S = S & "Sub " & id & "_Weather" & vbCrLf
+		S = S & "  OnWeather" & vbCrLf 
+		S = S & "End Sub" & vbCrLf 
+		
+		S = S & "Sub " & id & "_Alerts" & vbCrLf
+		S = S & "  OnAlerts" & vbCrLf 
+		S = S & "End Sub" & vbCrLf 
+		
+		S = S & "Sub " & id & "_Forecast" & vbCrLf
+		S = S & "  OnForecast" & vbCrLf 
+		S = S & "End Sub" & vbCrLf 
+		
+		S = S & "Sub " & id & "_Cameras" & vbCrLf
+		S = S & "  OnCameras" & vbCrLf 
+		S = S & "End Sub" & vbCrLf 
+		
+		S = S & "Sub " & id & "_Error" & vbCrLf
+		S = S & "  OnError E_ERROR" & vbCrLf 
+		S = S & "End Sub" & vbCrLf 
+		
+		S = S & "Sub " & id & "_Warning" & vbCrLf
+		S = S & "  OnError E_WARNING" & vbCrLf 
+		S = S & "End Sub" & vbCrLf 
+		
+		ExecuteGlobal S	
+	End Sub
+	
+	'/////////////////////////////////////////////////////////////////////////////////////////
+	'// Callbacks
+	'/////////////////////////////////////////////////////////////////////////////////////////
+
+	Sub OnLocations
+		If Not (m_locationsCallback Is Nothing) Then			
+			m_locationsCallback m_currentProvider.Locations
+		End If
+	End Sub
+	
+	Sub OnWeather
+		If Not (m_weatherCallback Is Nothing) Then			
+			m_weatherCallback m_currentProvider.Weather
+		End If
+	End Sub
+	
+	Sub OnAlerts
+		If Not (m_alertsCallback Is Nothing) Then			
+			m_alertsCallback m_currentProvider.Alerts
+		End If
+	End Sub
+	
+	Sub OnForecast
+		If Not (m_forecastCallback Is Nothing) Then			
+			m_forecastCallback m_currentProvider.Forecast
+		End If
+	End Sub
+	
+	Sub OnCameras
+		If Not (m_camerasCallback Is Nothing) Then			
+			m_camerasCallback m_currentProvider.Cameras
+		End If
+	End Sub
+	
+	Sub OnError(errType)
+		MsgBox "Error!"
+		If Not (m_errorCallback Is Nothing) Then
+			If (errType = E_ERROR) Then
+				m_errorCallback E_ERROR, m_currentProvider.Error
+			End If
+			
+			If (errType = E_WARNING) Then
+				m_errorCallback E_WARNING, m_currentProvider.Warning
+			End If
+		End If
+	End Sub	
+	
+	]]>
+	</script>
+
+</component>
+
+<component id="WeatherInfo">
+	<comment>
+	Weather information
+	</comment>
+	<registration description="Weather Information"
+      			  progid="DXWeather.Info"
+      			  version="1"
+      	    	  classid="{30EC2AE5-702A-4b2d-94BB-6CE09B399931}"/>  
+      	    	  
+      	    
+	<public>
+		<comment>
+			Weather location info (WeatherLocation object)
+		</comment>
+		<property name="Location" intername="m_location" />
+		
+		<property name="WeatherDescription" intername="m_weatherDescription" />
+		<property name="WeatherCode" intername="m_weatherCode" />
+		
+		<property name="ObservationDate" intername="m_observationDate" />
+		<property name="ObservationTime" intername="m_observationTime" />
+		
+		<property name="Temperature" intername="m_temperature" />
+		<property name="TemperatureFeel" intername="m_temperatureFeel" />
+		
+		<property name="Humidity" intername="m_humidity" />
+		<property name="Precipitation" intername="m_precipitation" />
+
+		<property name="Visibility" intername="m_visibility" />
+		
+		<property name="WindDescription" intername="m_windDescription" />
+		<property name="WindDirection" intername="m_windDirection" />
+		<property name="WindDegrees" intername="m_windDegrees" />
+		<property name="WindSpeed" intername="m_windSpeed" />
+		<property name="WindGust" intername="m_windGust" />
+
+		<property name="WindChillDescription" intername="m_windChillDescription" />
+		<property name="WindChill" intername="m_windChill" />
+		
+		<property name="Pressure" intername="m_pressure" />
+				
+		<property name="DewPointDescription" intername="m_dewPointDescription" />
+		<property name="DewPoint" intername="m_dewPoint" />
+				
+		<property name="HeatDescription" intername="m_heatDescription" />
+		<property name="HeatIndex" intername="m_heatIndex" />	
+		
+		<property name="Sunrise" intername="m_sunrise" />
+		<property name="Sunset" intername="m_sunset" />
+		
+		<property name="MoonPhaseDescription" intername="m_moonPhaseDescription" />
+		<property name="MoonPhaseCode" intername="m_moonPhaseCode" />
+		<property name="MoonIlluminated" intername="m_moonIlluminated" />
+		<property name="MoonAge" intername="m_moonAge" />
+		
+		<property name="DayOfWeek" intername="m_dayOfWeek" />
+		<property name="DayPart" intername="m_dayPart" />
+		<property name="Date" intername="m_date" />		
+		
+		<property name="ForecastDescription" intername="m_forecastDescription" />
+		<property name="ForecastCode" intername="m_forecastCode" />
+		<property name="ForecastHigh" intername="m_forecastHigh" />		
+		<property name="ForecastLow" intername="m_forecastLow" />
+		
+	</public>
+	
+	<script language="JScript">
+	<![CDATA[
+	
+		var m_location = CreateComponent(WeatherLocation);
+		
+		var m_weatherDescription = "";
+		var m_weatherCode = -1;
+		
+		var m_observationDate = "";
+		var m_observationTime = "";
+		
+		var m_temperature = NaN;
+		var m_temperatureFeel = "";
+		
+		var m_humidity = -1;
+		var m_precipitation = -1;
+
+		var m_visibility = -1;
+		
+		var m_windDescription = "";
+		var m_windDirection = NaN;
+		var m_windDegrees = NaN;
+		var m_windSpeed = -1;
+		var m_windGust = -1;
+
+		var m_windChillDescription = "";
+		var m_windChill = "";
+		
+		var m_pressure = -1;
+				
+		var m_dewPointDescription = "";
+		var m_dewPoint = -1;
+				
+		var m_heatDescription = "";
+		var m_heatIndex = -1;
+		
+		var m_sunrise = "";
+		var m_sunset = "";
+		
+		var m_moonPhaseDescription = "";
+		var m_moonPhaseCode = -1;
+		var m_moonIlluminated = -1;
+		var m_moonAge = -1;
+		
+		var m_dayOfWeek = -1;
+		var m_dayPart = "";
+		var m_date = "";
+		
+		var m_forecastDescription = "";
+		var m_forecastCode = -1;
+		var m_forecastHigh = NaN;	
+		var m_forecastLow = NaN;
+		
+	]]>
+	</script>
+
+</component>
+
+<component id="WeatherAlert">
+	<comment>
+	Weather alert container
+	</comment>
+	<registration description="Weather alert"
+      			  progid="DXWeather.Alert"
+      			  version="1"
+      	    	  classid="{D4F984BF-A90A-45da-A695-ACBD974B9924}"/>  
+      	    	  
+      	    
+	<public>
+		<property name="Type" intername="m_type" />
+		<property name="Description" intername="m_description" />
+		<property name="Date" intername="m_date" />
+		<property name="Expiration" intername="m_expiration" />
+		<property name="Message" intername="m_message" />
+		<property name="Phenomena" intername="m_phenomena" />
+		<property name="Significance" intername="m_significance" />		
+	</public>
+	
+	<script language="JScript">
+	<![CDATA[
+	
+	var m_type = "";
+	var m_description = "";
+	var m_date = "";
+	var m_expiration = "";
+	var m_message = "";
+	var m_phenomena = "";
+	var m_significance = "";
+	
+	]]>
+	</script>
+
+</component>
+
+<component id="WeatherLocation">
+	<comment>
+	Weather location container
+	</comment>
+	<registration description="Weather Location"
+      			  progid="DXWeather.Location"
+      			  version="1"
+      	    	  classid="{BC017AA1-3732-4d88-89EC-68823C27ECD3}"/>  
+      	    	  
+      	    
+	<public>
+		<property name="ID" intername="m_ID" />
+		
+		<property name="Name" intername="m_name" />
+		
+		<property name="Country" intername="m_country" />		
+		<property name="State" intername="m_state" />
+		<property name="City" intername="m_city" />
+		
+		<property name="Timezone" intername="m_timezone" />
+		
+		<property name="Latitude" intername="m_latitude" />
+		<property name="Longitude" intername="m_longitude" />
+		<property name="Elevation" intername="m_elevation" />
+		
+		<property name="AirportCode" intername="m_airportCode" />
+		<property name="ZipCode" intername="m_zipCode" />
+		<property name="CityCode" intername="m_cityCode" />		
+	</public>
+	
+	<script language="JScript">
+	<![CDATA[
+	
+		var m_ID = -1;
+		
+		var m_name = "";
+		
+		var m_country = "";
+		var m_state = "";
+		var m_city = "";
+		
+		var m_timezone = "";
+		
+		var m_latitude = NaN;
+		var m_longitude = NaN;
+		var m_elevation = NaN;
+		
+		var m_airportCode = -1;
+		var m_zipCode = -1;
+		var m_cityCode = -1;
+	
+	]]>
+	</script>
+
+</component>
+
+<component id="WeatherHelper">
+	<comment>
+	Weather Helper functions
+	</comment>
+	<registration description="Weather Helper"
+      			  progid="DXWeather.Helper"
+      			  version="1"
+      	    	  classid="{4FBA62F1-7479-42e2-84F1-8DE0927C0DAE}"/>  
+      	    	  
+      	    
+	<public>
+		
+		<comment>
+			Convert from C to F (with rounding)
+		</comment>
+		<method name="CtoF">
+			<parameter name="temperature" />
+		</method>
+		
+		<comment>
+			Convert from F to C (with rounding)
+		</comment>
+		<method name="FtoC">
+			<parameter name="temperature" />
+		</method>
+			
+		<comment>
+			Convert from meter to feet (with rounding)
+		</comment>
+		<method name="MtoFT">
+			<parameter name="length" />
+		</method>
+		
+		<comment>
+			Convert from feet to meter (with rounding)
+		</comment>
+		<method name="FTtoM">
+			<parameter name="length" />
+		</method>
+		
+		<comment>
+			Convert from kilometers to miles (with rounding)
+		</comment>
+		<method name="KMtoMI">
+			<parameter name="distance" />
+		</method>
+		
+		<comment>
+			Convert from miles to kilometers (with rounding)
+		</comment>
+		<method name="MItoKM">
+			<parameter name="distance" />
+		</method>
+		
+		<comment>
+			Convert from millibars to inches (with rounding)
+		</comment>
+		<method name="MBtoIN">
+			<parameter name="pressure" />
+		</method>
+		
+		<comment>
+			Convert from inches to millibars (with rounding)
+		</comment>
+		<method name="INtoMB">
+			<parameter name="pressure" />
+		</method>
+		
+		<comment>
+			Convert from km/h to mp/h (with rounding)
+		</comment>
+		<method name="KMHtoMPH">
+			<parameter name="speed" />
+		</method>
+		
+		<comment>
+			Convert from mp/h to km/h (with rounding)
+		</comment>
+		<method name="MPHtoKMH">
+			<parameter name="speed" />
+		</method>
+		
+	</public>
+	
+	<script language="JScript">
+	<![CDATA[
+	
+	
+	]]>
+	</script>
+
+</component>
+
+<component id="WUnderground">
+	<comment>
+	WUnderground provicer
+	</comment>
+	<registration description="WUnderground Weather Provider"
+      			  progid="DXWeatherProvider.WUnderground"
+      			  version="1"
+      	    	  classid="{DFF07170-3A66-41e8-9685-67CC07173146}"/>  
+	    
+	<public>
+		<property name="Name">
+			<get />
+		</property>
+		
+		<method name="SetLicense">
+			<parameter name="id" />
+			<parameter name="key" />
+		</method>
+		
+		<method name="GetLocations">
+			<parameter name="locationRequest" />
+		</method>
+
+		<method name="GetWeather">
+			<parameter name="locationRequest" />
+		</method>
+
+		<method name="GetAlerts">
+			<parameter name="locationRequest" />
+		</method>
+
+		<method name="GetForecast">
+			<parameter name="locationRequest" />
+		</method>
+		
+		<method name="GetCameras">
+			<parameter name="locationRequest" />
+		</method>
+		
+		<comment>
+			Provider Data
+		</comment>
+		<property name="Locations">
+			<get />
+		</property>
+		<property name="Weather">
+			<get />
+		</property>
+		<property name="Alerts">
+			<get />
+		</property>
+		<property name="Forecast">
+			<get />
+		</property>
+		<property name="Cameras">
+			<get />
+		</property>
+		<property name="Error">
+			<get />
+		</property>
+		<property name="Warning">
+			<get />
+		</property>
+				
+		<comment>
+			Exposed events
+		</comment>
+		<event name="Locations"/>
+		<event name="Weather"/>
+		<event name="Alerts"/>
+		<event name="Forecast"/>
+		<event name="Cameras"/>
+		<event name="Error"/>
+		<event name="Warning"/>
+		
+	</public>
+	
+	<resource id="provider_name">Weather Underground</resource>
+	
+	<script language="JScript">
+	<![CDATA[
+	
+	// Constants
+	var E_OK = 1;
+	var E_ERROR = 0;
+	var E_WARNING = -1
+	var E_NOTAVAILABLE = -2;
+	var E_NOTIMPLEMENTED = -3;
+	
+	// Data
+	var m_locations = null;
+	var m_weather = null;
+	var m_alerts = null;
+	var m_forecast = null;
+	var m_cameras = null;
+	
+	// License
+	var m_id = "";
+	var m_key = "";
+	
+	var m_lastError = "";
+	var m_lastWarning = "";
+	
+	///////////////////////////////
+	// Properties
+	///////////////////////////////
+	function get_Name() {
+		return getResource("provider_name");
+	}
+	
+	function get_Locations() {
+		return m_locations;
+	}
+	
+	function get_Weather() {
+		return m_weather;
+	}
+	
+	function get_Alerts() {
+		return m_alerts;
+	}
+	
+	function get_Forecast() {
+		return m_forecast;
+	}
+	
+	function get_Cameras() {
+		return m_cameras;
+	}
+	
+	///////////////////////////////
+	// Error & Warnings
+	///////////////////////////////
+	function get_Error() {
+		return m_lastError;
+	}
+	
+	function get_Warning() {
+		return m_lastWarning;
+	}
+	
+	///////////////////////////////
+	// Public functions
+	///////////////////////////////
+	
+	// Setup license
+	function SetLicense(id, key) {
+		m_id = id;
+		m_key = key;
+	}
+		
+	// Get a list of locations
+	function GetLocations(locationRequest) {
+		//debugger;
+		
+		m_lastError = "NOT IMPLEMENTED";
+		fireEvent("Locations");
+	}
+	
+	// Get the current weather
+	function GetWeather(locationRequest) {
+		
+	}
+	
+	// Get a list of alerts
+	function GetAlerts(locationRequest) {
+		
+	}
+	
+	// Get the forecast
+	function GetForecast(locationRequest) {
+		
+	}
+	
+	// Get a list of cameras
+	function GetCameras(locationRequest) {
+		
+	}
+	
+	]]>
+	</script>
+
+</component>
+
+</package>
+
