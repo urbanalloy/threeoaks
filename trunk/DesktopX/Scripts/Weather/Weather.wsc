@@ -63,8 +63,18 @@
 		
 		<comment>
 			Setup the license
-			  - id: partner id (use "" if N/A)
+			  - id: partner id
 			  - key: license key
+			  
+			returns: E_OK if the license was set properly
+					 E_INVALIDLICENSE if license information is missing
+					 E_ERROR if no provider has been set
+					 
+			You can use that method to check whether the current provider needs license information.
+			
+			Ex: Try calling the method first with empty information: SetLicense("", ""). If you get E_OK,
+			no license information is needed, otherwise, you need to provide some license information.
+			You can check if id, key or both are needed in the same way.
 		</comment>
 		<method name="SetLicense">
 			<parameter name="id" />
@@ -273,7 +283,9 @@
 		m_useMetricSystem = CBool(system)
 		
 		' Update the provider
-		m_currentProvider.UseMetricSystem = m_useMetricSystem
+		If Not (m_currentProvider Is Nothing) Then
+			m_currentProvider.UseMetricSystem = m_useMetricSystem
+		End If
 	End Function
 	
 	' Get the list of available providers
@@ -282,15 +294,17 @@
 	End Function
 	
 	' Setup license
-	Sub SetLicense(id, key)
+	Function SetLicense(id, key)
 		m_id = id
 		m_key = key
 		
 		' Update license information
-		If Not (m_currentProvider Is Nothing) Then
-			m_currentProvider.SetLicense m_id, m_key
+		If (m_currentProvider Is Nothing) Then
+			SetLicense = E_ERROR
+		Else
+			SetLicense = m_currentProvider.SetLicense(m_id, m_key)
 		End If
-	End Sub
+	End Function
 	
 	' Set the provider to use
 	Function SetProvider(id)
@@ -457,6 +471,16 @@
 		</comment>
 		<property name="Location" internalname="m_location" />
 		
+		<comment>
+			Weather info links
+				- current				
+				- forecast
+				- history
+				- credit
+				- misc.
+		</comment>
+		<property name="Links" internalname="m_links" />
+		
 		<property name="WeatherDescription" internalname="m_weatherDescription" />
 		<property name="WeatherCode" internalname="m_weatherCode" />
 		
@@ -467,7 +491,9 @@
 		<property name="TemperatureFeel" internalname="m_temperatureFeel" />
 		
 		<property name="Humidity" internalname="m_humidity" />
-		<property name="Precipitation" internalname="m_precipitation" />
+		
+		<property name="Precipitation1H" internalname="m_precipitation_1h" />
+		<property name="PrecipitationToday" internalname="m_precipitation_today" />
 
 		<property name="Visibility" internalname="m_visibility" />
 		
@@ -518,7 +544,7 @@
 		var m_useMetricSystem = true;
 		
 		var m_weatherDescription = "";
-		var m_weatherCode = -1;
+		var m_weatherCode = "";
 		
 		var m_observationDate = "";
 		var m_observationTime = "";
@@ -526,51 +552,107 @@
 		var m_temperature = "";
 		var m_temperatureFeel = "";
 		
-		var m_humidity = -1;
-		var m_precipitation = -1;
+		var m_humidity = "";
+		var m_precipitation_1h = "";
+		var m_precipitation_today = "";
 
-		var m_visibility = -1;
+		var m_visibility = "";
 		
 		var m_windDescription = "";
 		var m_windDirection = "";
 		var m_windDegrees = "";
-		var m_windSpeed = -1;
-		var m_windGust = -1;
+		var m_windSpeed = "";
+		var m_windGust = "";
 
 		var m_windChillDescription = "";
 		var m_windChill = "";
 		
-		var m_pressure = -1;
+		var m_pressure = "";
 				
 		var m_dewPointDescription = "";
-		var m_dewPoint = -1;
+		var m_dewPoint = "";
 				
 		var m_heatDescription = "";
-		var m_heatIndex = -1;
+		var m_heatIndex = "";
 		
 		var m_sunrise = "";
 		var m_sunset = "";
 		
 		var m_moonPhaseDescription = "";
-		var m_moonPhaseCode = -1;
-		var m_moonIlluminated = -1;
-		var m_moonAge = -1;
+		var m_moonPhaseCode = "";
+		var m_moonIlluminated = "";
+		var m_moonAge = "";
 		
-		var m_dayOfWeek = -1;
+		var m_dayOfWeek = "";
 		var m_dayPart = "";
 		var m_date = "";
 		
 		var m_forecastDescription = "";
-		var m_forecastCode = -1;
+		var m_forecastCode = "";
 		var m_forecastHigh = "";	
 		var m_forecastLow = "";
 		
 		function ToString()
 		{
-			var text = "Location: " + m_location.ToString() + "\n";	
-			text += "Description: " + m_weatherDescription + " (" + m_weatherCode + ")" + "\n";
+			var text = m_location.ToString() + "\n";	
 			
+			// Description
+			text += append("Description", m_weatherDescription);
+			text += append("Code", m_weatherCode);
+				
+			// Date & Time
+			if (m_observationDate != "" || m_observationTime != "")
+				text += m_observationDate + " " + m_observationTime + "\n";
+				
+			// Temperature / Humidity / Precipitation / Visibility
+			text += append("Temperature", m_temperature);
+			text += append("Temperature (Feel)", m_temperatureFeel);
+			text += append("Humidity", m_humidity);
+			text += append("Precipitation (1h)", m_precipitation_1h);			
+			text += append("Precipitation (today)", m_precipitation_today);			
+			text += append("Visibility", m_visibility);
+			
+			// Wind
+			text += append("Wind Description", m_windDescription);
+			text += append("Direction", m_windDirection);
+			text += append("Degrees", m_windDegrees);
+			text += append("Speed", m_windSpeed);
+			text += append("Gust", m_windGust);
+			text += append("WindChill Description", m_windChillDescription);
+			text += append("Chill", m_windChill);
+			
+			// Pressure / Dew Point / Heat
+			text += append("Pressure", m_pressure);
+			text += append("DewPoint Description", m_dewPointDescription);
+			text += append("DewPoint", m_dewPoint);
+			text += append("Heat Description", m_heatDescription);
+			text += append("Heat Index", m_heatIndex);
+			
+			// Sunrise / Sunset / Moon / Day
+			text += append("Sunrise", m_sunrise);
+			text += append("Sunset", m_sunset);
+			text += append("Moonphase", m_moonPhaseDescription);
+			text += append("Code", m_moonPhaseCode);
+			text += append("Illumination", m_moonIlluminated);
+			text += append("Age", m_moonAge);
+			text += append("Day of week", m_dayOfWeek);
+			text += append("Day part", m_dayPart);
+			text += append("Date", m_date);
+			
+			text += append("Forecast", m_forecastDescription);
+			text += append("Code", m_forecastCode);
+			text += append("High", m_forecastHigh);
+			text += append("Low", m_forecastLow);
+								
 			return text;
+		}
+		
+		function append(title, value)
+		{
+			if (value == "")
+				return "";
+				
+			return title + ": " + value + "\n";
 		}
 	]]>
 	</script>
@@ -685,36 +767,67 @@
 		var m_elevation = "";
 		var m_distance = "";
 
-		// trim values used in query
+		// Trim values used in query
 		function TrimValues()
 		{
 			// Helper
 			var m_helper = createComponent("WeatherHelper");
 			
-			m_ID = m_helper.trim(m_ID);		
+			m_ID = m_helper.Trim(m_ID);		
 				
-			m_country = m_helper.trim(m_country);
-			m_state = m_helper.trim(m_state);
-			m_city = m_helper.trim(m_city);
+			m_country = m_helper.Trim(m_country);
+			m_state = m_helper.Trim(m_state);
+			m_city = m_helper.Trim(m_city);
 			
-			m_latitude = m_helper.trim(m_latitude);
-			m_longitude = m_helper.trim(m_longitude);
+			m_latitude = m_helper.Trim(m_latitude);
+			m_longitude = m_helper.Trim(m_longitude);
 			
-			m_airportCode = m_helper.trim(m_airportCode);
-			m_zipCode = m_helper.trim(m_zipCode);
-			m_cityCode = m_helper.trim(m_cityCode);
+			m_airportCode = m_helper.Trim(m_airportCode);
+			m_zipCode = m_helper.Trim(m_zipCode);
+			m_cityCode = m_helper.Trim(m_cityCode);
 			
-			m_customQueryString = m_helper.trim(m_customQueryString);				
+			m_customQueryString = m_helper.Trim(m_customQueryString);				
 		}
 		
 		function ToString()
 		{
-			var text =  m_ID + " - " + m_name  + "\n";
-			text += "City: " + m_city + ", " + m_state + " (" + m_country + ")" + "\n";
-			text += "Zipcode: " + m_zipCode + "\n";
-			text += "Coordinates: " + m_latitude + ", " + m_longitude + "\n";
-			text += "Airport Code: " + m_airportCode + " - City Code: " + m_cityCode + "\n";
-			text += "Distance: " + m_distance + " - Elevation: " + m_elevation + "\n";
+			var text = "";
+			
+			if (m_ID != "")
+				text += "ID: " + m_ID + "\n";
+				
+			if (m_name != "")
+				text += "Name: " + m_name + "\n";;
+			
+			// City	
+			text += "City: " + m_city;
+			if (m_state != "")
+				text += ", " + m_state;
+				 
+			if (m_country != "")
+				text += " (" + m_country + ")"
+			text += "\n";
+			
+			// Coordinates
+			if (m_latitude != "" || m_longitude != "")
+				text += "Coordinates: " + m_latitude + ", " + m_longitude + "\n";
+				
+			// Distance & Elevation
+			if (m_distance != "")
+				text += "Distance: " + m_distance + "\n";
+				
+			if (m_elevation != "")
+				text += "Elevation: " + m_elevation + "\n";
+							
+			// Codes
+			if (m_zipCode != "")
+				text += "Zipcode: " + m_zipCode + "\n";
+				
+			if (m_airportCode != "")
+				text += "Airport: " + m_airportCode + "\n";
+				
+			if (m_cityCode != "")
+				text += "City Code: " + m_cityCode + "\n";
 
 			return text;
 		}
@@ -823,14 +936,14 @@
 		<comment>
 			Remove multiple, leading or trailing spaces
 		</comment>
-		<method name="trim">
+		<method name="Trim">
 			<parameter name="s" />
 		</method>
 		
 		<comment>
 			Remove all spaces
 		</comment>
-		<method name="removeSpaces">
+		<method name="RemoveSpaces">
 			<parameter name="s" />
 		</method>
 		
@@ -900,7 +1013,7 @@
 	}	
 	
 	// Remove multiple, leading or trailing spaces
-	function trim(s) {
+	function Trim(s) {
 		s = s.replace(/(^\s*)|(\s*$)/gi,"");
 		s = s.replace(/[ ]{2,}/gi," ");
 		s = s.replace(/\n /,"\n");
@@ -908,7 +1021,7 @@
 	}
 	
 	// Remove all spaces
-	function removeSpaces(s) {
+	function RemoveSpaces(s) {
 		return s.replace(/(\s|\n)+/g,'');
 	}
 	
@@ -1023,6 +1136,7 @@
 	<resource id="provider_name">Weather Underground</resource>
 	<resource id="url_locations">http://api.wunderground.com/auto/wui/geo/GeoLookupXML/index.xml?query=</resource>
 	<resource id="url_weather">http://api.wunderground.com/auto/wui/geo/WXCurrentObXML/index.xml?query=</resource>
+	<resource id="url_station">http://api.wunderground.com/weatherstation/WXCurrentObXML.asp?ID=</resource>
 	<resource id="url_alerts">http://api.wunderground.com/auto/wui/geo/AlertsXML/index.xml?query=</resource>
 	<resource id="url_forecast">http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml?query=</resource>
 	
@@ -1073,6 +1187,17 @@
 		return false;
 	}
 	
+		// Try to get a node value and return "" if the node doesn't exists
+	function getNodeValue(entry, nodeName)
+	{
+		 var node = entry.selectNodes(nodeName);
+		 
+		 if (node.length == 0)
+		 	return "";
+		 	
+		 return node[0].nodeValue;
+	}
+	
 	// Get a query string, using data in priority order
 	function getQueryString(locationQuery) {
 		if (locationQuery.CustomQueryString != "")
@@ -1105,23 +1230,56 @@
 	// Get a query string for the weather info (airport code / id only)
 	function getWeatherQueryString(locationQuery)
 	{		
-		if (locationQuery.CustomQueryString != "")
-			return locationQuery.CustomQueryString;
-			
 		if (locationQuery.AirportCode != "")
-			return locationQuery.AirportCode;
+			return getResource("url_weather") + locationQuery.AirportCode;
 		
 		if (locationQuery.ID != "")
-			return locationQuery.ID;
+			return getResource("url_station") + locationQuery.ID;
 		
 		return "";
 	}
 	
+	///////////////////////////////
+	// Misc parsing functions
+	///////////////////////////////	
+	
 	// Parse elevation string and remove unit at the end / convert to metric system if needed
 	function parseElevation(elevation)
 	{
-		// FIXME: remove "ft" at the end of the elevation data and trim the string
+		// FIXME: remove "ft" at the end of the elevation data and Trim the string
 		return m_helper.Trim(elevation);
+	}
+	
+	// Parse humidity string and remove % at the end
+	function parseHumidity(humidity)
+	{
+		// FIXME: remove "%" at the end if present
+		return m_helper.Trim(humidity);
+	}
+	
+	// Parse speed string, remove unit at the end / convert to metric system if needed
+	function parseSpeed(speed)
+	{
+		// FIXME: remove "mph" at the end if present, and convert to metric if needed
+		return m_helper.Trim(speed);
+	}
+	
+	// Parse speed heat/windchill
+	function parseHeat(heat)
+	{
+		var trimmed = m_helper.Trim(heat);
+		
+		if (heat == "NA")
+			return "";
+			
+		return heat;
+	}
+	
+	// Parse weather code and return a code number
+	function parseCode(code)
+	{
+		// FIXME: convert from string code to weather icon number
+		return m_helper.Trim(code);
 	}
 	
 	///////////////////////////////
@@ -1137,7 +1295,8 @@
 	
 	// Setup license
 	function SetLicense(id, key) {
-		// Not used by this provider: ignore values
+		// Not used by this provider: always return E_OK
+		return E_OK;
 	}
 	
 	// Set callbacks
@@ -1201,12 +1360,12 @@
 		    var entry = enumerator.item();
 		    var airport = createComponent("WeatherLocation");
 		    
-		    airport.City 		 = entry.selectNodes("city/text()")[0].nodeValue;	
-		    airport.State  		 = entry.selectNodes("state/text()")[0].nodeValue;	
-		    airport.Country 	 = entry.selectNodes("country/text()")[0].nodeValue;	
-		    airport.AirportCode  = entry.selectNodes("icao/text()")[0].nodeValue;	
-		    airport.Latitude 	 = entry.selectNodes("lat/text()")[0].nodeValue;	
-		    airport.Longitude    = entry.selectNodes("lon/text()")[0].nodeValue;			    
+		    airport.City 		 = getNodeValue(entry, "city/text()");	
+		    airport.State  		 = getNodeValue(entry, "state/text()");	
+		    airport.Country 	 = getNodeValue(entry, "country/text()");	
+		    airport.AirportCode  = getNodeValue(entry, "icao/text()");	
+		    airport.Latitude 	 = getNodeValue(entry, "lat/text()");	
+		    airport.Longitude    = getNodeValue(entry, "lon/text()");			    
 		    
 		    m_locations.Add(i, airport);		    
 		    i++;
@@ -1225,16 +1384,16 @@
 		    var entry = enumerator.item();
 		    var pws = createComponent("WeatherLocation");
 		    
-		    pws.Name	  = entry.selectNodes("neighborhood/text()")[0].nodeValue;	
-		    pws.City 	  = entry.selectNodes("city/text()")[0].nodeValue;	
-		    pws.State  	  = entry.selectNodes("state/text()")[0].nodeValue;	
-		    pws.Country   = entry.selectNodes("country/text()")[0].nodeValue;	
-		    pws.ID  	  = entry.selectNodes("id/text()")[0].nodeValue;	
+		    pws.Name	  = getNodeValue(entry, "neighborhood/text()");	
+		    pws.City 	  = getNodeValue(entry, "city/text()");	
+		    pws.State  	  = getNodeValue(entry, "state/text()");	
+		    pws.Country   = getNodeValue(entry, "country/text()");	
+		    pws.ID  	  = getNodeValue(entry, "id/text()");	
 		    
 		    if (m_useMetricSystem)
-		    	pws.Distance  = entry.selectNodes("distance_km/text()")[0].nodeValue;			    
+		    	pws.Distance  = getNodeValue(entry, "distance_km/text()");			    
 		    else
-		    	pws.Distance  = entry.selectNodes("distance_mi/text()")[0].nodeValue;
+		    	pws.Distance  = getNodeValue(entry, "distance_mi/text()");
 		    
 		    m_locations.Add(i, pws);		    
 		    i++;
@@ -1261,7 +1420,7 @@
 		
 		m_request.onreadystatechange = OnWeatherResponse;
 		m_request.async = true;
-		m_request.load(getResource("url_weather") + getWeatherQueryString(locationQuery));
+		m_request.load(getWeatherQueryString(locationQuery));
 		
 		return E_OK;		
 	}
@@ -1291,44 +1450,104 @@
 		var location = observation[0].getElementsByTagName("display_location");
 		if (location.length != 0) {
 			
-			m_weather.Location.City  	 = location[0].selectNodes("city/text()")[0].nodeValue;		
-			m_weather.Location.State	 = location[0].selectNodes("state_name/text()")[0].nodeValue;		
-			m_weather.Location.Country   = location[0].selectNodes("country/text()")[0].nodeValue;		
-			m_weather.Location.ZipCode   = location[0].selectNodes("zip/text()")[0].nodeValue;		
-			m_weather.Location.Latitude  = location[0].selectNodes("latitude/text()")[0].nodeValue;		
-			m_weather.Location.Longitude = location[0].selectNodes("longitude/text()")[0].nodeValue;		
+			m_weather.Location.City  	 = getNodeValue(location[0], "city/text()");		
+			m_weather.Location.State	 = getNodeValue(location[0], "state_name/text()");		
+			m_weather.Location.Country   = getNodeValue(location[0], "country/text()");		
+			m_weather.Location.ZipCode   = getNodeValue(location[0], "zip/text()");		
+			m_weather.Location.Latitude  = getNodeValue(location[0], "latitude/text()");		
+			m_weather.Location.Longitude = getNodeValue(location[0], "longitude/text()");		
 						
-			m_weather.Location.Elevation = parseElevation(location[0].selectNodes("elevation/text()")[0].nodeValue);
+			m_weather.Location.Elevation = parseElevation(getNodeValue(location[0], "elevation/text()"));
 			
 			// Station ID goes into the location airport code
-			m_weather.Location.AirportCode = observation[0].selectNodes("station_id/text()")[0].nodeValue;
+			m_weather.Location.AirportCode = getNodeValue(observation[0], "station_id/text()");
 		} 
 		
 		// Personal weather station
 		location = observation[0].getElementsByTagName("location");
 		if (location.length != 0) {
 			
-			m_weather.Location.Name 	 = location[0].selectNodes("neighborhood/text()")[0].nodeValue;		
-			m_weather.Location.City  	 = location[0].selectNodes("city/text()")[0].nodeValue;		
-			m_weather.Location.State	 = location[0].selectNodes("state/text()")[0].nodeValue;					
-			m_weather.Location.ZipCode   = location[0].selectNodes("zip/text()")[0].nodeValue;		
-			m_weather.Location.Latitude  = location[0].selectNodes("latitude/text()")[0].nodeValue;		
-			m_weather.Location.Longitude = location[0].selectNodes("longitude/text()")[0].nodeValue;		
+			m_weather.Location.Name 	 = getNodeValue(location[0], "neighborhood/text()");		
+			m_weather.Location.City  	 = getNodeValue(location[0], "city/text()");		
+			m_weather.Location.State	 = getNodeValue(location[0], "state/text()");					
+			m_weather.Location.ZipCode   = getNodeValue(location[0], "zip/text()");		
+			m_weather.Location.Latitude  = getNodeValue(location[0], "latitude/text()");		
+			m_weather.Location.Longitude = getNodeValue(location[0], "longitude/text()");		
 						
-			m_weather.Location.Elevation = parseElevation(location[0].selectNodes("elevation/text()")[0].nodeValue);			
+			m_weather.Location.Elevation = parseElevation(getNodeValue(location[0], "elevation/text()"));				
 			
 			// Station ID goes into the location ID
-			m_weather.Location.ID        =  observation[0].selectNodes("station_id/text()")[0].nodeValue;
+			m_weather.Location.ID        =  getNodeValue(observation[0], "station_id/text()");
 		}
 		
 		//////////////////////////
 		//  Parse weather data  //
 		//////////////////////////
 		
-		// Temperature
+		// Observation date & Time
+		// TODO parse into a Date object
 		
-	    
+		// Temperature
+		if (m_useMetricSystem)
+			m_weather.Temperature = getNodeValue(observation[0], "temp_c/text()");
+		else
+			m_weather.Temperature = getNodeValue(observation[0], "temp_f/text()");
 			
+		// Humidity
+		m_weather.Humidity 		  = parseHumidity(getNodeValue(observation[0], "relative_humidity/text()"));
+		
+		// Wind
+		m_weather.WindDescription = getNodeValue(observation[0], "wind_string/text()");
+		m_weather.WindDirection   = getNodeValue(observation[0], "wind_dir/text()");
+		m_weather.WindDegrees 	  = getNodeValue(observation[0], "wind_degrees/text()");
+		m_weather.WindSpeed		  = parseSpeed(getNodeValue(observation[0], "wind_mph/text()"));
+		m_weather.WindGust 		  = parseSpeed(getNodeValue(observation[0], "wind_gust_mph/text()"));
+	    
+	    // Pressure
+	    if (m_useMetricSystem)
+	    	m_weather.Pressure	  = getNodeValue(observation[0], "pressure_mb/text()");
+	    else
+	    	m_weather.Pressure	  = getNodeValue(observation[0], "pressure_in/text()");
+	    	
+	    // Dew Point
+	    m_weather.DewPointDescription = getNodeValue(observation[0], "dewpoint_string/text()");
+	    if (m_useMetricSystem)
+	    	m_weather.DewPoint	  = getNodeValue(observation[0], "dewpoint_c/text()");
+	    else
+	    	m_weather.DewPoint	  = getNodeValue(observation[0], "dewpoint_f/text()");
+	    	
+	    // Heat index
+	    m_weather.HeatDescription = parseHeat(getNodeValue(observation[0], "heat_index_string/text()"));
+		if (m_useMetricSystem)
+	    	m_weather.HeatIndex	  = parseHeat(getNodeValue(observation[0], "heat_index_c/text()"));
+	    else
+	    	m_weather.HeatIndex	  = parseHeat(getNodeValue(observation[0], "heat_index_f/text()"));			
+	    	
+	    // Wind chill
+	    m_weather.WindChillDescription = parseHeat(getNodeValue(observation[0], "windchill_string/text()"));
+		if (m_useMetricSystem)
+	    	m_weather.WindChill	  = parseHeat(getNodeValue(observation[0], "windchill_c/text()"));
+	    else
+	    	m_weather.WindChill	  = parseHeat(getNodeValue(observation[0], "windchill_f/text()"));		
+	    		    
+	    // Visibility
+	    if (m_useMetricSystem)
+	    	m_weather.Visibility  = getNodeValue(observation[0], "visibility_km/text()");
+	    else
+	    	m_weather.Visibility  = getNodeValue(observation[0], "visibility_mi/text()");
+	    		    	
+	    // Weather code
+	    m_weather.WeatherCode     = parseCode(getNodeValue(observation[0], "icon/text()"));
+	    
+	    // Precipitation
+		if (m_useMetricSystem) {
+	    	m_weather.Precipitation1H     = getNodeValue(observation[0], "precip_1hr_metric/text()");
+	    	m_weather.PrecipitationToday  = getNodeValue(observation[0], "precip_today_metric/text()");	    	
+	    } else {
+	    	m_weather.Precipitation1H     = getNodeValue(observation[0], "precip_1hr_in/text()");
+	    	m_weather.PrecipitationToday  = getNodeValue(observation[0], "precip_today_in/text()");	    
+	    }
+	    	
 		m_weatherCallback(m_weather);	
 	}
 
@@ -1368,13 +1587,13 @@
 		    var entry = enumerator.item();
 		    var alert = createComponent("WeatherAlert");
 		    
-		    alert.Type 		   = entry.selectNodes("type/@src/text()")[0].nodeValue;	
-		    alert.Description  = entry.selectNodes("description/@src/text()")[0].nodeValue;	
-		    alert.Date 		   = entry.selectNodes("date/@src/text()")[0].nodeValue;	
-		    alert.Expiration   = entry.selectNodes("expires/@src/text()")[0].nodeValue;	
-		    alert.Message 	   = entry.selectNodes("message/@src/text()")[0].nodeValue;	
-		    alert.Phenomena    = entry.selectNodes("phenomena/@src/text()")[0].nodeValue;	
-		    alert.Significance = entry.selectNodes("significance/@src/text()")[0].nodeValue;	
+		    alert.Type 		   = getNodeValue(entry, "type/text()");	
+		    alert.Description  = getNodeValue(entry, "description/text()");	
+		    alert.Date 		   = getNodeValue(entry, "date/text()");	
+		    alert.Expiration   = getNodeValue(entry, "expires/text()");	
+		    alert.Message 	   = getNodeValue(entry, "message/text()");	
+		    alert.Phenomena    = getNodeValue(entry, "phenomena/text()");	
+		    alert.Significance = getNodeValue(entry, "significance/text()");	
 		    
 		    m_alerts.Add(i, alert);		    
 		    i++;
