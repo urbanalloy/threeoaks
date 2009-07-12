@@ -1,0 +1,111 @@
+Terms of Use for WeatherBug Web API Service
+
+Thank you for using the WeatherBug Web API service. By using this service ("WeatherBug Web API") you agree to be bound by the following Terms of Use (the "Terms of Use"), along with the general WeatherBug Terms of Service found at http://www.weatherbug.com/aws/termsOfUse.html.
+
+Personal Use
+
+When used for personal non-commercial purposes you may use the WeatherBug Web API in any manner which is compliant with its full design specifications. If you wish to use the WeatherBug Web API for commercial purposes, you must follow the procedures outlined below.  In all cases, whether Personal, Commercial or Mobile, all uses must be accompanied by appropriate attribution on the form of a “Powered by WeatherBug” notation.
+
+Commercial Use
+
+When used for commercial purposes (e.g. derive income, monetary gain or other non-monetary compensation, or distribution of WeatherBug content to consumers to whom you do not have a personal relationship) the use of the WeatherBug Web API must conform to the following: 
+
+1. The WeatherBug Web API may only be used to display the following content types: 
+
+    a.	Current conditions — Temperature, wind direction and wind speed only. Image must be clickable and/or be accompanied by text links/buttons which when clicked will open a browser window and link to the current conditions content area of the WeatherBug.com domain. 
+    b.	Forecast — One period (24 hours) of forecast data only. Image must be clickable and/or be accompanied by text links/buttons which when clicked will open a browser window and link to forecast content area of the WeatherBug.com domain. 
+    c.	Radar and Satellite Imagery — Thumbnail images (as used herein thumbnail images shall not exceed 100x100 pixels) only, which when clicked will open a browser window and link to the radar and satellite content area of the WeatherBug.com domain. "Animate" and "enlarge" text links must accompany thumbnail images. 
+    d.	Alerts — Notification that an alert exists (but not the specific type of alert or any details). Alert notification must be clickable and/or be accompanied by text links/buttons which when clicked will open a browser window and link to the alerts content area of the WeatherBug.com domain. 
+    e.	Weather Cameras — Thumbnail images, text links or buttons only, which when clicked will open a browser window and link to the weather camera content area of the WeatherBug.com domain. "Time lapse" and "enlarge" text links must accompany the thumbnail images. 
+    f.	Community Photos — Thumbnail images, text links or buttons only, which when clicked will open a browser page and link to that specific content area of the WeatherBug.com domain. "More Albums" and "Next Image" text links must accompany the thumbnail images. 
+    g.	Video Content — Still thumbnail images, text links or buttons only, which when clicked will open the WeatherBug video player. "National Outlook" and "Local Outlook" text links must accompany the thumbnail images. 
+    h.	Other content areas — The use of text links and buttons may be used to link to any specific content area of the WeatherBug.com domain. 
+
+2. All content must be accompanied by a link to the specific content area on the weatherbug.com domain for that content type. 
+
+3. For any commercial use of the WeatherBug Web API beyond that described in Section 1 above, you must obtain WeatherBug’s prior written consent prior to any such commercial use. Such consent shall be at WeatherBug’s sole and absolute discretion. 
+
+Compensation for Commercial Use on the Web
+
+When the WeatherBug Web API is used for the commercial purposes described herein, WeatherBug will share 20% of the Net Revenue generated from display advertising on the weatherbug.com domain that are referred by you (as indicated by the use of the zcode). Payments will be made via check on a quarterly basis. As used herein, Net Revenue means gross revenue minus 40% for cost of sales, bad debt, and content fees.  In order to receive compensation, you must deliver a written request for a Revenue Report once each quarter.  We will pay Revenue Shares quarterly, provided that the balance due exceeds $3,000.00.  If the balance due is less than $3,000.00 we will carry the amount over to the following quarter.  Please note that this revenue share does not apply to WAP pages described below.
+
+Mobile Applications
+
+When used for the purpose of mobile application development (mobile application being defined as an application that delivers content to a mobile device, such as cell phone, smartphone, etc.) the use of the WeatherBug Web API must conform to the following:
+
+    a.	Only the following content types can be displayed:
+    
+        1.	Current conditions — Temperature, wind direction and wind speed only. Image must be clickable and/or be accompanied by text links/buttons which when clicked will open a browser window and link to the current conditions content area of the WeatherBug.com domain. 
+        2.	Forecast — One period (24 hours) of forecast data only. Image must be clickable and/or be accompanied by text links/buttons which when clicked will open a browser window and link to forecast content area of the WeatherBug.com domain.:
+        3.	Alerts — Notification that an alert exists (but not the specific type of alert or any details). Alert notification must be clickable and/or be accompanied by text links/buttons which when clicked will open a browser window and link to the alerts content area of the WeatherBug.com domain. 
+
+    b.	Content can be used to create WAP pages and downloadable applications (JAVA, BREW, Smartphone, etc.). Use of this API for any other type of mobile applications, including SMS, is prohibited
+
+    c.	If the WeatherBug API is used to create a WAP page or partial WAP page, you hereby agree to prominently display the WeatherBug logo and “Powered By WeatherBug” sign. As well, all information provided by WeatherBug (temperature, forecast, icons) should be clickable and should link back to WeatherBug WAP site (http://wap.weatherbug.com). In addition, it should be made clear to the end-user that more information is available on WeatherBug WAP site.  We currently do not have mechanisms in place to allow us to share revenue from advertising on our WAP site.
+
+Compensation for Mobile Subscription Products
+
+If the WeatherBug API is used to create a downloadable application to be licensed to end-users (either one-time or subscription), you hereby agree to remit 10% of the Revenue received by you back to WeatherBug.   At the end of every month, please send us a report of Revenue received for the month, and we will invoice from that.  Payment will be Net 30 from your receipt of the Invoice.
+
+WeatherBug retains the right to audit such users of the mobile API not more than 2 times per calendar year. If the results of the audit discover understated reported income to WeatherBug in excess of 5% from the beginning of the service, you will pay for the cost of such audit. 
+
+Registration
+
+You must register with WeatherBug to use the WeatherBug Web API using the Web based registration form found at http://www.weatherbug.com/api/register.asp. Such registration must indicate your: (a) name, (b) company (c) product (that will utilize the WeatherBug content), (d) telephone number (e) email address and, (f) your mailing address (p.o. boxes will not be accepted). Upon receiving your registration form and verifying your information, WeatherBug will provide a license key and assign a unique referrer ID (“zcode”), both of which will be provided to you. Use of the WeatherBug Web API for commercial purposes without both a license key and zcode is prohibited. You must integrate the zcode into all commercial applications of the WeatherBug Web API.
+
+Legitimate uses only
+
+You may only create a single account and must provide accurate identification, contact, and other information required as part of the registration process. You may not create any script or other automated tool that attempts to create multiple WeatherBug Web API accounts. And you may not use the WeatherBug Web API service with an existing product or service that competes with products or services offered by WeatherBug.
+
+You may not use the WeatherBug Web API Service in any manner or for any purpose that violates any law or regulation or proprietary rights, or in any manner inconsistent with the WeatherBug Terms of Use. This includes laws and proprietary rights in the United States as well as in other countries. You may not use the WeatherBug Web API for radio, newspaper, broadcast television, or cable television distribution.
+
+You may not use the WeatherBug Web API in any application where human life or property may be at stake. You understand that the WeatherBug Web API are not designed for such purposes and that their failure in such cases could lead to death, personal injury, or severe property or environmental damage for which WeatherBug is not responsible. In addition, you may not sell, lease, or sublicense the WeatherBug Web API or access thereto.
+
+Your license to the WeatherBug Web API Service under these Terms of Use continues until it is terminated by either party at any time for any reason. You may terminate the license by discontinuing use of all or any of the WeatherBug API. These Terms of Use terminate automatically if (i) you violate any term of these Terms of Use, (ii) WeatherBug publicly posts a written notice of termination on our web site, or (iii) or WeatherBug sends a written notice of termination to you.
+
+If you are interested in doing anything different than what is specifically permitted in these Terms of Use, you must first obtain WeatherBug's written consent. If you fail to do so, WeatherBug reserves the right to take legal action.
+
+If you have questions on your contemplated use or if you have comments on WeatherBug Web API or ideas on how to improve it, please email api-support@weatherbug.com. Please note that by doing so, you also grant WeatherBug permission to use and incorporate your ideas or comments into WeatherBug Web API without further compensation.
+
+Intellectual property
+
+You agree not to remove, obscure, or alter WeatherBug's copyright notice, trademarks, or other proprietary rights notices affixed to or contained within WeatherBug Web API. You also acknowledge that WeatherBug owns all right, title and interest in and to WeatherBug Web API, including without limitation all intellectual property rights (the "WeatherBug Rights"). The WeatherBug Rights include rights to the following: (1) the API developed and provided by WeatherBug, (2) all software associated with the WeatherBug Web API server, and (3) the data and images you obtain when you use WeatherBug Web API. If your work results in WeatherBug data or images being made visible to others, such display must be accompanied by a copyright notice, and a WeatherBug logo. In addition, you shall indicate through the following textual attribution that a product or service that you created either used or is based on the WeatherBug Web API: "powered by WeatherBug". If applicable, this attribution must provide an html link to the http://web.live.weatherbug.com/ web site.
+
+WeatherBug reserves the right to place reasonable access restrictions on the number of requests that any one account can make to our servers. This limit is currently 10,000 requests per day. WeatherBug reserves the right to change this limit, at any time, in its sole discretion.
+
+Support
+
+WeatherBug may elect to provide you with support or modifications for the WeatherBug Web API (collectively, "Support"), in its sole discretion, and may terminate such Support at any time without notice to you. WeatherBug may change, suspend, or discontinue any aspect of the WeatherBug Web API at any time, including the availability of any WeatherBug Web API. WeatherBug may also impose limits on certain features and services or restrict your access to parts or all of the WeatherBug Web API or the WeatherBug web site without notice or liability.
+
+Publicity
+
+So long as you comply with your obligations under this Agreement, you may indicate that a product or service that you created either used or is based on WeatherBug Web API provided that those products or services do not in WeatherBug's reasonable opinion (1) tarnish, infringe, or dilute WeatherBug's trademarks, (2) violate any applicable law, and (3) infringe any third-party rights. If you wish to use the WeatherBug trademark and/or logo in any other manner, you must first obtain WeatherBug's written consent.
+
+Disclaimer of warranties
+
+The WeatherBug Web API service is currently in beta form and has not been fully tested or debugged. Accordingly, WeatherBug disclaims any responsibility for any harm resulting from your use of WeatherBug Web API.
+
+The WeatherBug Web API service is provided "as is," with no warranties whatsoever. WeatherBug expressly disclaims to the fullest extent permitted by law all express, implied, and statutory warranties, including, without limitation, the warranties of merchantability, fitness for a particular purpose, and non-infringement of proprietary rights. WeatherBug disclaims any warranties regarding the security, reliability, timeliness, availability, and performance of WeatherBug Web API.
+
+You understand and agree that you use WeatherBug Web API at your own discretion and risk and that you will be solely responsible for any damages to your computer system or loss of data that results from the download or use of WeatherBug Web API.
+
+Limitation of liability
+
+The WeatherBug Web API service is being provided free of charge. Accordingly, you agree that WeatherBug shall have no liability arising from or based on your use of WeatherBug Web API.
+
+Under no circumstances shall WeatherBug be liable to any user on account of that user's use or misuse of WeatherBug Web API. Such limitation of liability shall apply to prevent recovery of direct, indirect, incidental, consequential, special, exemplary, and punitive damages whether such claim is based on warranty, contract, tort (including negligence), or otherwise, even if WeatherBug has been advised of the possibility of such damages). Such limitation of liability shall apply whether the damages arise from use or misuse of and reliance on the WeatherBug Web API, from inability to use WeatherBug Web API, or from the interruption, suspension, or termination of WeatherBug Web API (including such damages incurred by third parties). Such limitation shall apply notwithstanding a failure of essential purpose of any limited remedy and to the fullest extent permitted by law.
+
+Some states or other jurisdictions do not allow the exclusion or limitation of liability for incidental or consequential damages, so the above limitations and exclusions may not apply to you.
+
+Indemnification
+
+You hereby agree to indemnify, defend and hold WeatherBug, and its officers, directors, agents, licensors and licensees (collectively, the "Indemnified Parties") harmless from and against any and all liability and costs incurred by the Indemnified Parties in connection with any claim arising out of your use of WeatherBug Web API, including, without limitation, reasonable attorneys' fees. You shall cooperate as fully as reasonably required in the defense of any claim. WeatherBug reserves the right, at its own expense, to assume the exclusive defense and control of any matter subject to indemnification by you.
+
+Other Agreements
+
+The WeatherBug Web API service is designed to be used in conjunction with WeatherBug's proprietary weather data and camera images. Accordingly, your use of WeatherBug Web API is also defined by WeatherBug's Terms of Service and Privacy Policy. In the event of a conflict between these Terms of Use and WeatherBug's Terms of Service, these Terms of Use shall prevail.
+
+General provisions
+
+These Terms of Use will be governed by and construed in accordance with the laws of the State of Maryland, without giving effect to the conflict of laws or provisions of Maryland or your actual state or country of residence. Any dispute arising from these Terms of Use shall be adjudicated in the federal or state courts located in Montgomery County, Maryland. If for any reason a court of competent jurisdiction finds any provision or portion of these Terms of Use to be unenforceable, the remainder of these Terms of Use will continue in full force and effect. These Terms of Use constitute the entire agreement between the parties with respect to the subject matter hereof and supersede and replace all prior or contemporaneous understandings or agreements, written or oral, regarding such subject matter. Any waiver of any provision of these Terms of Use will be effective only if in writing and signed by WeatherBug.  We reserve the right to amend these Terms of Use from time to time, in our sole discretion.
+            

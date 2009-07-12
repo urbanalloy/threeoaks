@@ -71,11 +71,11 @@ End Sub
 
 
 Sub UpdateInfo()
-	Dim location
-	'Set location = WeatherController.GetRequestObject()
-	Set location =  GetObject("script:" & LIB_FOLDER & "Weather.wsc#WeatherLocation")
-	location.Name = "Jamaica Plain"
-	WeatherController.GetLocations location
+	Dim query
+	Set query = WeatherController.GetQueryObject()
+	'query.City = "Jamaica Plain"
+	query.AirportCode = "KMQE"
+	WeatherController.GetWeather query
 End Sub
 
 Sub ClearInfo()
@@ -84,37 +84,83 @@ Sub ClearInfo()
 	DesktopX.Object("DXWeather_Info").Text = ""
 End Sub
 
-Sub SetInfo(info)
-	DesktopX.Object("DXWeather_Info").Text = info
+Sub AppendInfo(info)
+	DesktopX.Object("DXWeather_Info").Text = DesktopX.Object("DXWeather_Info").Text & info & vbNewLine
 End Sub
 
 '===========================================================
 '== Callbacks
 '===========================================================
 Sub OnLocations(locationInfo)
-	MsgBox "Locations"
+	Dim location
+	
+	ClearInfo()
+	
+	If (locationInfo.Count = 0) Then
+		AppendInfo "No location!"
+		Exit Sub
+	End If
+	
+	For Each location In locationInfo.Items
+		AppendInfo location.ToString() 
+	Next	
 End Sub
 
 Sub OnWeather(weatherInfo)
-	MsgBox "Weather"
+	ClearInfo()
+	
+	AppendInfo weatherInfo.ToString() 
 End Sub
 
 Sub OnAlerts(alertInfo)
-	MsgBox "Alerts"
+	Dim alert
+	
+	ClearInfo()
+	
+	If (alertInfo.Count = 0) Then
+		AppendInfo "No alerts!"
+		Exit Sub
+	End If
+	
+	For Each alert In alertInfo.Items
+		AppendInfo alert.ToString() 
+	Next	
 End Sub
 
 Sub OnForecast(forecastInfo)
-	MsgBox "Forecast"
+	Dim forecast
+	
+	ClearInfo()
+	
+	If (forecastInfo.Count = 0) Then
+		AppendInfo "No forecast!"
+		Exit Sub
+	End If
+	
+	For Each forecast In forecastInfo.Items
+		AppendInfo forecast.ToString() 
+	Next
 End Sub
 
 Sub OnCameras(cameraInfo)
-	MsgBox "Cameras"
-End Sub
-
-Sub OnError(errType, errValue)
+	Dim camera
+	
 	ClearInfo()
 	
-	SetInfo(errType & " - " & errValue)
+	If (cameraInfo.Count = 0) Then
+		AppendInfo "No cameras!"
+		Exit Sub
+	End If
+	
+	For Each camera In cameraInfo.Items
+		AppendInfo camera.ToString() 
+	Next
+End Sub
+
+Sub OnError(code, value)
+	ClearInfo()
+	
+	AppendInfo code & ": " & value
 End Sub
 
 
