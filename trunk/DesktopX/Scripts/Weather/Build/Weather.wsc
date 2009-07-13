@@ -1,0 +1,1890 @@
+<?xml version="1.0"?>
+<package>
+<?component error="false" debug="false"?>
+<comment>
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Weather Script Component
+//
+// Copyright (c) 2009, Julien Templier
+// All rights reserved.
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// * $LastChangedRevision$
+// * $LastChangedDate$
+// * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
+// 
+// Redistribution and use in source and binary forms, with or without modification, are
+// permitted provided that the following conditions are met:
+//	1. Redistributions of source code must retain the above copyright notice, this list of
+//		 conditions and the following disclaimer. 
+//	2. Redistributions in binary form must reproduce the above copyright notice, this list
+//		 of conditions and the following disclaimer in the documentation and/or other materials
+//		 provided with the distribution. 
+//	3. The name of the author may not be used to endorse or promote products derived from this
+//		 software without specific prior written permission. 
+//
+//	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//	OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+//	MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+//	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+//	EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+//	GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+//	ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+//	OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+//	POSSIBILITY OF SUCH DAMAGE.
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+</comment>
+
+<component id="WeatherController">
+	<comment>
+	Main weather controller
+	</comment>
+	<registration description="Weather Controller"
+      			  progid="DXWeather.Controller"
+      			  version="1"
+      	    	  classid="{2DB557E8-FA03-40ce-B559-D0BCCFCB48CC}"/>  
+      	    	  
+	<object id="m_providers" 	progid="Scripting.Dictionary" />  
+	<object id="m_providerList" progid="Scripting.Dictionary" /> 
+	
+	<public>
+		<comment>
+			Unit system in use
+			
+			Default is metric system. Set to False to use the English/Imperial unit system.
+		</comment>
+		<property name="UseMetricSystem">
+			<get />
+			<put />
+		</property>
+		
+		<comment>
+			Setup the license
+			  - id: partner id
+			  - key: license key
+			  
+			returns: E_OK if the license was set properly
+					 E_INVALIDLICENSE if license information is missing
+					 E_ERROR if no provider has been set
+					 
+			You can use that method to check whether the current provider needs license information.
+			
+			Ex: Try calling the method first with empty information: SetLicense("", ""). If you get E_OK,
+			no license information is needed, otherwise, you need to provide some license information.
+			You can check if id, key or both are needed in the same way.
+		</comment>
+		<method name="SetLicense">
+			<parameter name="id" />
+			<parameter name="key" />
+		</method>
+		
+		<comment>
+			Returns a dictionnary of available providers (key = provider id, value = provider name)
+		</comment>
+		<property name="Providers">
+			<get />
+		</property>
+		
+		<comment>
+			Set the provider to use
+			  - id: provider id (key) as retrieved bu GetProviders
+			  
+			returns: E_OK if the provider was set correctly
+				     E_ERROR if the id is not a valid provider id (the current provider will be reset to Nothing)
+		</comment>
+		<method name="SetProvider">
+			<parameter name="id" />
+		</method>
+	
+		<comment>
+			Register callbacks for weather controller calls
+			  - locationCallback(WeatherLocation[] locations)
+			  		called when new location results are available
+			  		
+			  - weatherCallback(WeatherInfo weather)
+			  		called when new weather information is available
+			  		
+			  - alertsCallback(WeatherAlert[] alerts)
+			  		called when new alert information is available
+			  		
+			  - forecastCallback(WeatherInfo[] forecast)
+			  		called when new forecast information is available
+			  		
+			  - camerasCallback(WeatherCamera[] cameras)
+			  		called when new camera results are available
+			  		
+			  - errorCallback(int errorCode, string errorMessage)
+			  		called when an error is raised during an operation						  
+		</comment>
+		<method name="RegisterCallbacks">
+			<parameter name="locationCallback" />
+			<parameter name="weatherCallback" />
+			<parameter name="alertsCallback" />
+			<parameter name="forecastCallback" />
+			<parameter name="camerasCallback" />
+			<parameter name="errorCallback" />
+		</method>
+		
+		<comment>
+			Get a WeatherLocation object to be used in a query
+		</comment>
+		<method name="GetQueryObject" />
+
+		<comment>
+			Get a list of locations.
+			  - locationQuery: a WeatherLocation object with the proper fields set
+			  
+			returns: E_OK if the request was send					 
+					 E_NOTAVAILABLE if the query type is not supported by the current provider
+					 E_INVALIDLICENSE if license information is missing
+					 E_ERROR if no provider has been set
+		</comment>
+		<method name="GetLocations">
+			<parameter name="locationQuery" />
+		</method>
+		
+		<comment>
+			Get the current weather
+			  - locationQuery: a WeatherLocation object with the proper fields set
+			 			 		 (this can be a WeatherLocation object returned by GetLocations)
+			  
+			returns: E_OK if the request was send
+					 E_NOTIMPLEMENTED if this function is not implemented for the current provider
+					 E_NOTAVAILABLE if the query type is not supported by the current provider
+					 E_INVALIDLICENSE if license information is missing
+					 E_ERROR if no provider has been set
+		</comment>
+		<method name="GetWeather">
+			<parameter name="locationQuery" />
+		</method>
+		
+		<comment>
+			Get a list of alerts
+			  - locationQuery: a WeatherLocation object with the proper fields set
+			  					 (this can be a WeatherLocation object returned by GetLocations)
+			  
+			returns: E_OK if the request was send
+					 E_NOTIMPLEMENTED if this function is not implemented for the current provider
+					 E_NOTAVAILABLE if the query type is not supported by the current provider	
+					 E_INVALIDLICENSE if license information is missing
+					 E_ERROR if no provider has been set		  
+		</comment>
+		<method name="GetAlerts">
+			<parameter name="locationQuery" />
+		</method>
+		
+		<comment>
+			Get the forecast
+			  - locationQuery: a WeatherLocation object with the proper fields set
+							    (this can be a WeatherLocation object returned by GetLocations)
+			  
+			returns: E_OK if the request was send
+					 E_NOTIMPLEMENTED if this function is not implemented for the current provider
+					 E_NOTAVAILABLE if the query type is not supported by the current provider
+					 E_INVALIDLICENSE if license information is missing
+					 E_ERROR if no provider has been set			  
+		</comment>
+		<method name="GetForecast">
+			<parameter name="locationQuery" />
+		</method>
+		
+		<comment>
+			Get a list of cameras.
+			  - locationQuery: a WeatherLocation object with the proper fields set
+			  					 (this can be a WeatherLocation object returned by GetLocations)
+			  
+			returns: E_OK if the request was send
+					 E_NOTIMPLEMENTED if this function is not implemented for the current provider
+					 E_NOTAVAILABLE if the query type is not supported by the current provider	
+					 E_INVALIDLICENSE if license information is missing
+					 E_ERROR if no provider has been set		  
+		</comment>
+		<method name="GetCameras">
+			<parameter name="locationQuery" />
+		</method>
+		
+		<comment>
+			Abort any operation that is in progress
+			  
+			returns: E_OK if the function succeeded	
+					 E_ERROR if no provider has been set		  
+		</comment>
+		<method name="Abort" />
+		
+		<comment>
+			Add a new provider
+			  - id: provider id
+			  - provider: provider script component instance
+			  
+			This is targeted to developers, allowing them to develop a new weather provider without having to modify this file
+			  
+			returns: E_OK if the provider was added correctly
+				     E_ERROR if the id already exists
+		</comment>
+		<method name="AddProvider">
+			<parameter name="id" />
+			<parameter name="provider" />
+		</method>
+	</public>
+	
+	<script language="VBScript">
+	<![CDATA[
+	
+	Option Explicit
+	
+	' Error
+	Dim ErrorCode
+	
+	' Callbacks
+	Dim m_locationsCallback
+	Dim m_weatherCallback
+	Dim m_alertsCallback
+	Dim m_forecastCallback
+	Dim m_camerasCallback
+	Dim m_errorCallback
+	
+	' Current provider
+	Dim m_currentProvider
+	Dim m_useMetricSystem
+	
+	' License information
+	Dim m_id
+	Dim m_key
+	
+	Init()
+	
+	'/////////////////////////////////////////////////////////////////////////////////////////
+	'// Init
+	Sub Init()
+	
+		Set m_locationsCallback = Nothing
+		Set m_weatherCallback 	= Nothing
+		Set m_alertsCallback 	= Nothing
+		Set m_forecastCallback  = Nothing
+		Set m_camerasCallback   = Nothing
+		Set m_errorCallback 	= Nothing
+		
+		Set ErrorCode = CreateComponent("WeatherError")
+		
+		Set m_currentProvider = Nothing
+		m_useMetricSystem = True
+	
+		m_id = ""
+		m_key = ""
+		
+		' Provider registration
+		AddProvider "WUnderground", CreateComponent("WUnderground")
+	
+	End Sub
+
+	'=============================================================================================================================
+	'=
+	'= Public Methods
+	'=
+	'=============================================================================================================================	
+	
+	' Get the unit system in use
+	Function get_UseMetricSystem()
+		get_UseMetricSystem = m_useMetricSystem
+	End Function
+	
+	Function put_UseMetricSystem(system)
+		m_useMetricSystem = CBool(system)
+		
+		' Update the provider
+		If Not (m_currentProvider Is Nothing) Then
+			m_currentProvider.UseMetricSystem = m_useMetricSystem
+		End If
+	End Function
+	
+	' Get the list of available providers
+	Function get_Providers()
+		Set get_Providers = m_providerList
+	End Function
+	
+	' Setup license
+	Function SetLicense(id, key)
+		m_id = id
+		m_key = key
+		
+		' Update license information
+		If (m_currentProvider Is Nothing) Then
+			SetLicense = ErrorCode.E_ERROR
+		Else
+			SetLicense = m_currentProvider.SetLicense(m_id, m_key)
+		End If
+	End Function
+	
+	' Set the provider to use
+	Function SetProvider(id)
+		If (Not m_providers.Exists(id)) Then
+			SetProvider = ErrorCode.E_ERROR
+			
+			' Reset the current provider
+			Set m_currentProvider = Nothing
+			Exit Function
+		End If
+		
+		Set m_currentProvider = m_providers.Item(id)	
+		m_currentProvider.UseMetricSystem = m_useMetricSystem
+		m_currentProvider.SetLicense m_id, m_key
+		
+		' Register callbacks
+		' we have to do that and duplicate all the registration code in all providers,
+		' since we cannot use events without registering the component
+		m_currentProvider.RegisterCallbacks GetRef("OnLocations"), _
+											GetRef("OnWeather"), _
+											GetRef("OnAlerts"), _
+											GetRef("OnForecast"), _
+											GetRef("OnCameras"), _
+											GetRef("OnError")
+		
+		SetProvider = ErrorCode.E_OK
+	End Function
+	
+	' Set the callbacks
+	Sub RegisterCallbacks(locationsCallback, weatherCallback, alertsCallback, forecastCallback, camerasCallback, errorCallback)
+		Set m_locationsCallback = locationsCallback
+		Set m_weatherCallback 	= weatherCallback
+		Set m_alertsCallback 	= alertsCallback
+		Set m_forecastCallback  = forecastCallback
+		Set m_camerasCallback   = camerasCallback
+		Set m_errorCallback 	= errorCallback		
+	End Sub
+	
+	' Get a WeatherLocation object
+	Function GetQueryObject()
+		Set GetQueryObject = CreateComponent("WeatherLocation")
+	End Function
+	
+	' Get a WeatherLocation object
+	Function GetHelper()
+		Set GetHelper = m_helperObject
+	End Function
+	
+	' Get a list of locations
+	Function GetLocations(locationQuery)
+		If (m_currentProvider Is Nothing) Then
+			GetLocations = ErrorCode.E_ERROR
+			Exit Function
+		End If
+		
+		locationQuery.TrimValues()
+		GetLocations = m_currentProvider.GetLocations(locationQuery)
+	End Function
+	
+	' Get the current weather
+	Function GetWeather(locationQuery)
+		If (m_currentProvider Is Nothing) Then
+			GetWeather = ErrorCode.E_ERROR
+			Exit Function
+		End If
+	
+		locationQuery.TrimValues()
+		GetWeather = m_currentProvider.GetWeather(locationQuery)
+	End Function
+	
+	' Get a list of alerts
+	Function GetAlerts(locationQuery)
+		If (m_currentProvider Is Nothing) Then
+			GetAlerts = ErrorCode.E_ERROR
+			Exit Function
+		End If
+	
+		locationQuery.TrimValues()
+		GetAlerts = m_currentProvider.GetAlerts(locationQuery)
+	End Function
+	
+	' Get the forecast
+	Function GetForecast(locationQuery)
+		If (m_currentProvider Is Nothing) Then
+			GetForecast = ErrorCode.E_ERROR
+			Exit Function
+		End If
+	
+		locationQuery.TrimValues()
+		GetForecast = m_currentProvider.GetForecast(locationQuery)
+	End Function
+	
+	' Get a list of cameras
+	Function GetCameras(locationQuery)
+		If (m_currentProvider Is Nothing) Then
+			GetCameras = ErrorCode.E_ERROR
+			Exit Function
+		End If
+	
+		locationQuery.TrimValues()
+		GetCameras = m_currentProvider.GetCameras(locationQuery)
+	End Function
+	
+	' Add provider to provider list
+	Function AddProvider(id, provider)
+		If (m_providers.Exists(id)) Then
+			AddProvider = ErrorCode.E_ERROR
+			Exit Function
+		End If
+			
+		' Add the new provider to the internal provider list
+		m_providers.Add id, provider
+		
+		' we use a separate provider list to not expose the providers directly to the user script
+		m_providerList.Add id, provider.Name 		
+		
+		AddProvider = ErrorCode.E_OK
+	End Function
+	
+	Function Abort()
+		If (m_currentProvider Is Nothing) Then
+			Abort = ErrorCode.E_ERROR
+			Exit Function
+		End If
+		
+		m_currentProvider.Abort()
+	
+		Abort = ErrorCode.E_OK
+	End Function		
+
+	'=============================================================================================================================
+	'=
+	'= Callbacks
+	'=
+	'=============================================================================================================================	
+	
+	'// We check here if the callback are defined, so we can call them without checking if they exist in each provider
+
+	Sub OnLocations(locations)
+		If Not (m_locationsCallback Is Nothing) Then			
+			m_locationsCallback locations
+		End If
+	End Sub
+	
+	Sub OnWeather(weather)
+		If Not (m_weatherCallback Is Nothing) Then			
+			m_weatherCallback weather
+		End If
+	End Sub
+	
+	Sub OnAlerts(alerts)
+		If Not (m_alertsCallback Is Nothing) Then			
+			m_alertsCallback alerts
+		End If
+	End Sub
+	
+	Sub OnForecast(forecast)
+		If Not (m_forecastCallback Is Nothing) Then			
+			m_forecastCallback forecast
+		End If
+	End Sub
+	
+	Sub OnCameras(cameras)
+		If Not (m_camerasCallback Is Nothing) Then			
+			m_camerasCallback cameras
+		End If
+	End Sub
+	
+	Sub OnError(code, value)
+		If Not (m_errorCallback Is Nothing) Then
+			m_errorCallback code, value
+		End If
+	End Sub	
+		
+	]]>
+	</script>
+
+</component>
+
+<component id="WeatherError">
+	<comment>
+	Weather error codes
+	</comment>
+	<registration description="Weather Error codes"
+      			  progid="DXWeather.Error"
+      			  version="1"
+      	    	  classid="{20AAB6F5-77DB-414e-8469-5D57441BFD19}"/>  
+      	    	  
+      	    
+	<public>
+		<property name="E_OK">
+			<get />
+		</property>
+		
+		<property name="E_ERROR">
+			<get />
+		</property>
+		
+		<property name="E_NOTAVAILABLE">
+			<get />
+		</property>
+		
+		<property name="E_NOTIMPLEMENTED">
+			<get />
+		</property>
+		
+		<property name="E_INVALIDLICENSE">
+			<get />
+		</property>
+		
+		<property name="E_PARSEERROR">
+			<get />
+		</property>
+		
+		
+	</public>
+	
+	<script language="JScript">
+	<![CDATA[
+	
+	// Constants
+	var E_OK 			 = 1;
+	var E_ERROR 		 = 0;
+	var E_NOTAVAILABLE   = -1;
+	var E_NOTIMPLEMENTED = -2;
+	var E_INVALIDLICENSE = -3;
+	var E_PARSEERROR	 = -4;
+	
+	function get_E_OK()
+	{
+		return E_OK;
+	}
+	
+	function get_E_ERROR()
+	{
+		return E_ERROR;
+	}
+	
+	function get_E_NOTAVAILABLE()
+	{
+		return E_NOTAVAILABLE;
+	}
+	
+	function get_E_NOTIMPLEMENTED()
+	{
+		return E_NOTIMPLEMENTED;
+	}
+	
+	function get_E_INVALIDLICENSE()
+	{
+		return E_INVALIDLICENSE;
+	}
+	
+	function get_E_PARSEERROR()
+	{
+		return E_PARSEERROR;
+	}
+	
+	]]>
+	</script>
+
+</component>
+
+<component id="WeatherInfo">
+	<comment>
+	Weather information
+	</comment>
+	<registration description="Weather Information"
+      			  progid="DXWeather.Info"
+      			  version="1"
+      	    	  classid="{30EC2AE5-702A-4b2d-94BB-6CE09B399931}"/>  
+      	    	  
+      	    
+	<public>
+		<comment>
+			Weather location info (WeatherLocation object)
+		</comment>
+		<property name="Location" 				internalname="m_location" />
+		
+		<comment>
+			Weather station name
+		</comment>
+		<property name="Station" 				internalname="m_station" />
+		
+		<comment>
+			Weather station type
+		</comment>
+		<property name="Type" 					internalname="m_type" />
+		
+		<comment>
+			Weather info links (WeatherLinks object)
+		</comment>
+		<property name="Links" 					internalname="m_links" />
+		
+		<property name="WeatherDescription"	 	internalname="m_weatherDescription" />
+		<property name="WeatherCode" 			internalname="m_weatherCode" />
+		
+		<property name="ObservationDate" 		internalname="m_observationDate" />
+		<property name="ObservationTime" 		internalname="m_observationTime" />
+		
+		<property name="Temperature" 			internalname="m_temperature" />
+		<property name="TemperatureFeel" 		internalname="m_temperatureFeel" />
+		
+		<property name="Humidity" 				internalname="m_humidity" />
+		
+		<property name="Precipitation1H" 		internalname="m_precipitation_1h" />
+		<property name="PrecipitationToday" 	internalname="m_precipitation_today" />
+
+		<property name="Visibility" 			internalname="m_visibility" />
+		
+		<property name="WindDescription" 		internalname="m_windDescription" />
+		<property name="WindDirection" 			internalname="m_windDirection" />
+		<property name="WindDegrees" 			internalname="m_windDegrees" />
+		<property name="WindSpeed" 				internalname="m_windSpeed" />
+		<property name="WindGust" 				internalname="m_windGust" />
+
+		<property name="WindChillDescription" 	internalname="m_windChillDescription" />
+		<property name="WindChill" 				internalname="m_windChill" />
+		
+		<property name="Pressure" 				internalname="m_pressure" />
+				
+		<property name="DewPointDescription" 	internalname="m_dewPointDescription" />
+		<property name="DewPoint" 				internalname="m_dewPoint" />
+				
+		<property name="HeatDescription" 		internalname="m_heatDescription" />
+		<property name="HeatIndex" 				internalname="m_heatIndex" />	
+		
+		<property name="SolarRadiation" 		internalname="m_solarRadiation" />
+		<property name="UV" 					internalname="m_UV" />	
+		
+		<property name="Sunrise" 				internalname="m_sunrise" />
+		<property name="Sunset"					internalname="m_sunset" />
+		
+		<property name="MoonPhaseDescription" 	internalname="m_moonPhaseDescription" />
+		<property name="MoonPhaseCode" 			internalname="m_moonPhaseCode" />
+		<property name="MoonIlluminated" 		internalname="m_moonIlluminated" />
+		<property name="MoonAge" 				internalname="m_moonAge" />
+		
+		<property name="DayOfWeek" 				internalname="m_dayOfWeek" />
+		<property name="DayPart" 				internalname="m_dayPart" />
+		<property name="Date" 					internalname="m_date" />		
+		
+		<property name="ForecastDescription" 	internalname="m_forecastDescription" />
+		<property name="ForecastCode" 			internalname="m_forecastCode" />
+		<property name="ForecastHigh"			internalname="m_forecastHigh" />		
+		<property name="ForecastLow" 			internalname="m_forecastLow" />
+		
+		<property name="UseMetricSystem" 		internalName="m_useMetricSystem" />
+		
+		<method name="ToString" />
+		
+	</public>
+	
+	<script language="JScript">
+	<![CDATA[
+	
+		var m_location = createComponent("WeatherLocation");		
+		var m_useMetricSystem = true;
+		
+		var m_station = "";
+		var m_type = "";
+		
+		var m_weatherDescription = "";
+		var m_weatherCode = "";
+		
+		var m_observationDate = "";
+		var m_observationTime = "";
+		
+		var m_temperature = "";
+		var m_temperatureFeel = "";
+		
+		var m_humidity = "";
+		var m_precipitation_1h = "";
+		var m_precipitation_today = "";
+
+		var m_visibility = "";
+		
+		var m_windDescription = "";
+		var m_windDirection = "";
+		var m_windDegrees = "";
+		var m_windSpeed = "";
+		var m_windGust = "";
+
+		var m_windChillDescription = "";
+		var m_windChill = "";
+		
+		var m_pressure = "";
+				
+		var m_dewPointDescription = "";
+		var m_dewPoint = "";
+				
+		var m_heatDescription = "";
+		var m_heatIndex = "";
+		
+		var m_solarRadiation = "";
+		var m_UV = "";
+		
+		var m_sunrise = "";
+		var m_sunset = "";
+		
+		var m_moonPhaseDescription = "";
+		var m_moonPhaseCode = "";
+		var m_moonIlluminated = "";
+		var m_moonAge = "";
+		
+		var m_dayOfWeek = "";
+		var m_dayPart = "";
+		var m_date = "";
+		
+		var m_forecastDescription = "";
+		var m_forecastCode = "";
+		var m_forecastHigh = "";	
+		var m_forecastLow = "";
+		
+		function ToString()
+		{
+			var text = m_location.ToString() + "\n";	
+			
+			// Station name & type
+			text += append("Station", m_station);
+			text += append("Type", m_type);
+			
+			// Description
+			text += append("Description", m_weatherDescription);
+			text += append("Code", m_weatherCode);
+				
+			// Date & Time
+			if (m_observationDate != "" || m_observationTime != "")
+				text += m_observationDate + " " + m_observationTime + "\n";
+				
+			// Temperature / Humidity / Precipitation / Visibility
+			text += append("Temperature", m_temperature);
+			text += append("Temperature (Feel)", m_temperatureFeel);
+			text += append("Humidity", m_humidity);
+			text += append("Precipitation (1h)", m_precipitation_1h);			
+			text += append("Precipitation (today)", m_precipitation_today);			
+			text += append("Visibility", m_visibility);
+			
+			// Wind
+			text += append("Wind Description", m_windDescription);
+			text += append("Direction", m_windDirection);
+			text += append("Degrees", m_windDegrees);
+			text += append("Speed", m_windSpeed);
+			text += append("Gust", m_windGust);
+			text += append("WindChill Description", m_windChillDescription);
+			text += append("Chill", m_windChill);
+			
+			// Pressure / Dew Point / Heat
+			text += append("Pressure", m_pressure);
+			text += append("DewPoint Description", m_dewPointDescription);
+			text += append("DewPoint", m_dewPoint);
+			text += append("Heat Description", m_heatDescription);
+			text += append("Heat Index", m_heatIndex);
+			
+			// Solar Radiation & UV
+			text += append("Solar Radiation", m_solarRadiation);
+			text += append("UV", m_UV);
+			
+			// Sunrise / Sunset / Moon / Day
+			text += append("Sunrise", m_sunrise);
+			text += append("Sunset", m_sunset);
+			text += append("Moonphase", m_moonPhaseDescription);
+			text += append("Code", m_moonPhaseCode);
+			text += append("Illumination", m_moonIlluminated);
+			text += append("Age", m_moonAge);
+			text += append("Day of week", m_dayOfWeek);
+			text += append("Day part", m_dayPart);
+			text += append("Date", m_date);
+			
+			text += append("Forecast", m_forecastDescription);
+			text += append("Code", m_forecastCode);
+			text += append("High", m_forecastHigh);
+			text += append("Low", m_forecastLow);
+								
+			return text;
+		}
+		
+		function append(title, value)
+		{
+			if (value == "")
+				return "";
+				
+			return title + ": " + value + "\n";
+		}
+	]]>
+	</script>
+
+</component>
+
+<component id="WeatherAlert">
+	<comment>
+	Weather alert container
+	</comment>
+	<registration description="Weather alert"
+      			  progid="DXWeather.Alert"
+      			  version="1"
+      	    	  classid="{D4F984BF-A90A-45da-A695-ACBD974B9924}"/>  
+      	    	  
+      	    
+	<public>
+		<property name="Type" internalname="m_type" />
+		<property name="Description" internalname="m_description" />
+		<property name="Date" internalname="m_date" />
+		<property name="Expiration" internalname="m_expiration" />
+		<property name="Message" internalname="m_message" />
+		<property name="Phenomena" internalname="m_phenomena" />
+		<property name="Significance" internalname="m_significance" />		
+		
+		<method name="ToString" />
+	</public>
+	
+	<script language="JScript">
+	<![CDATA[
+	
+	var m_type = "";
+	var m_description = "";
+	var m_date = "";
+	var m_expiration = "";
+	var m_message = "";
+	var m_phenomena = "";
+	var m_significance = "";
+	
+	function ToString()
+	{
+		var text = m_description + " (" + m_type + ")" + "\n";		
+		text += "Date: " + m_date + "\n";
+		text += "Expiration: " + m_expiration + "\n";
+		text += "Phenomena: " + m_phenomena + " - Significance: " + m_significance + "\n";
+		text += "Message: " + m_message + "\n";
+		
+		return text;
+	}
+	
+	]]>
+	</script>
+
+</component>
+
+<component id="WeatherLocation">
+	<comment>
+	Weather location/query container
+	</comment>
+	<registration description="Weather Location"
+      			  progid="DXWeather.Location"
+      			  version="1"
+      	    	  classid="{BC017AA1-3732-4d88-89EC-68823C27ECD3}"/>  
+      	    	   
+	<public>
+		<property name="ID" internalname="m_ID" />		
+		<property name="Name" internalname="m_name" />
+	
+		<property name="Country" internalname="m_country" />		
+		<property name="State" internalname="m_state" />
+		<property name="City" internalname="m_city" />
+		
+		<property name="Timezone" internalname="m_timezone" />
+		
+		<property name="Latitude" internalname="m_latitude" />
+		<property name="Longitude" internalname="m_longitude" />
+		<property name="Elevation" internalname="m_elevation" />
+		
+		<property name="Distance" internalname="m_distance" />	
+		
+		<property name="AirportCode" internalname="m_airportCode" />
+		<property name="ZipCode" internalname="m_zipCode" />		
+		<property name="CityCode" internalname="m_cityCode" />
+		
+		<property name="CustomQueryString" internalname="m_customQueryString" />	
+				
+		<method name="TrimValues" />
+		<method name="ToString" />
+	</public>
+	
+	<script language="JScript">
+	<![CDATA[
+	    
+		var m_ID = "";
+	
+		var m_country = "";
+		var m_state = "";
+		var m_city = "";
+		
+		var m_latitude = "";
+		var m_longitude = "";
+		
+		var m_airportCode = "";
+		var m_zipCode = "";
+		var m_cityCode = "";
+		
+		var m_customQueryString = "";
+		
+		// Results-only data
+		var m_name = "";
+		var m_timezone = "";
+		var m_elevation = "";
+		var m_distance = "";
+
+		// Trim values used in query
+		function TrimValues()
+		{
+			// Helper
+			var m_helper = createComponent("WeatherHelper");
+			
+			m_ID = m_helper.Trim(m_ID);		
+				
+			m_country = m_helper.Trim(m_country);
+			m_state = m_helper.Trim(m_state);
+			m_city = m_helper.Trim(m_city);
+			
+			m_latitude = m_helper.Trim(m_latitude);
+			m_longitude = m_helper.Trim(m_longitude);
+			
+			m_airportCode = m_helper.Trim(m_airportCode);
+			m_zipCode = m_helper.Trim(m_zipCode);
+			m_cityCode = m_helper.Trim(m_cityCode);
+			
+			m_customQueryString = m_helper.Trim(m_customQueryString);				
+		}
+		
+		function ToString()
+		{
+			var text = "";
+			
+			if (m_ID != "")
+				text += "ID: " + m_ID + "\n";
+				
+			if (m_name != "")
+				text += "Name: " + m_name + "\n";;
+			
+			// City	
+			text += "City: " + m_city;
+			if (m_state != "")
+				text += ", " + m_state;
+				 
+			if (m_country != "")
+				text += " (" + m_country + ")"
+			text += "\n";
+			
+			// Coordinates
+			if (m_latitude != "" || m_longitude != "")
+				text += "Coordinates: " + m_latitude + ", " + m_longitude + "\n";
+				
+			// Distance & Elevation
+			if (m_distance != "")
+				text += "Distance: " + m_distance + "\n";
+				
+			if (m_elevation != "")
+				text += "Elevation: " + m_elevation + "\n";
+							
+			// Codes
+			if (m_zipCode != "")
+				text += "Zipcode: " + m_zipCode + "\n";
+				
+			if (m_airportCode != "")
+				text += "Airport: " + m_airportCode + "\n";
+				
+			if (m_cityCode != "")
+				text += "City Code: " + m_cityCode + "\n";
+
+			return text;
+		}
+	
+	]]>
+	</script>
+
+</component>
+
+<component id="WeatherLinks">
+	<comment>
+	Weather links container
+		- current				
+		- forecast
+		- history
+		- credit
+		- misc.
+	</comment>
+	<registration description="Weather Links"
+      			  progid="DXWeather.Links"
+      			  version="1"
+      	    	  classid="{ABD6A877-1597-4b60-AF0E-DD1D1CEA7683}"/>  
+      	    	  
+    <object id="m_promo" 	progid="Scripting.Dictionary" />   	    	  
+      	    
+	<public>
+		<property name="Current" 		internalname="m_current" />
+		<property name="Forecast" 		internalname="m_forecast" />
+		<property name="History" 		internalname="m_history" />
+		<property name="Credit" 		internalname="m_credit" />
+		<property name="Logo" 			internalname="m_logo" />
+
+		<property name="Promo" 			internalname="m_promo" />		
+		
+		<method name="ToString" />
+	</public>
+	
+	<script language="JScript">
+	<![CDATA[
+	
+	]]>
+	</script>
+
+</component>
+
+<component id="WeatherHelper">
+	<comment>
+	Weather Helper functions
+	</comment>
+	<registration description="Weather Helper"
+      			  progid="DXWeather.Helper"
+      			  version="1"
+      	    	  classid="{4FBA62F1-7479-42e2-84F1-8DE0927C0DAE}"/>  
+      	    	  
+      	    
+	<public>
+		
+		<comment>
+			Convert from C to F (with rounding)
+		</comment>
+		<method name="CtoF">
+			<parameter name="temperature" />
+		</method>
+		
+		<comment>
+			Convert from F to C (with rounding)
+		</comment>
+		<method name="FtoC">
+			<parameter name="temperature" />
+		</method>
+			
+		<comment>
+			Convert from meter to feet (with rounding)
+		</comment>
+		<method name="MtoFT">
+			<parameter name="length" />
+		</method>
+		
+		<comment>
+			Convert from feet to meter (with rounding)
+		</comment>
+		<method name="FTtoM">
+			<parameter name="length" />
+		</method>
+		
+		<comment>
+			Convert from kilometers to miles (with rounding)
+		</comment>
+		<method name="KMtoMI">
+			<parameter name="distance" />
+		</method>
+		
+		<comment>
+			Convert from miles to kilometers (with rounding)
+		</comment>
+		<method name="MItoKM">
+			<parameter name="distance" />
+		</method>
+		
+		<comment>
+			Convert from millibars to inches of mercury (with rounding)
+		</comment>
+		<method name="MBtoIN">
+			<parameter name="pressure" />
+		</method>
+		
+		<comment>
+			Convert from inches of mercury to millibars (with rounding)
+		</comment>
+		<method name="INtoMB">
+			<parameter name="pressure" />
+		</method>
+		
+		<comment>
+			Convert from millimeters to inches (with rounding)
+		</comment>
+		<method name="MMtoIN">
+			<parameter name="length" />
+		</method>
+		
+		<comment>
+			Convert from inches to millimeters (with rounding)
+		</comment>
+		<method name="INtoMM">
+			<parameter name="length" />
+		</method>
+		
+		<comment>
+			Convert from km/h to mp/h (with rounding)
+		</comment>
+		<method name="KMHtoMPH">
+			<parameter name="speed" />
+		</method>
+		
+		<comment>
+			Convert from mp/h to km/h (with rounding)
+		</comment>
+		<method name="MPHtoKMH">
+			<parameter name="speed" />
+		</method>
+		
+		<comment>
+			Remove multiple, leading or trailing spaces
+		</comment>
+		<method name="Trim">
+			<parameter name="s" />
+		</method>
+		
+		<comment>
+			Remove all spaces
+		</comment>
+		<method name="RemoveSpaces">
+			<parameter name="s" />
+		</method>
+		
+		<comment>
+			Check XmlDom object for parsing errors and report them
+		</comment>
+		<method name="CheckParserError">
+			<parameter name="request" />
+			<parameter name="callback" />
+			<parameter name="ErrorCode" />
+		</method>
+		
+		<comment>
+			Try to get a node value and return "" if the node doesn't exists
+		</comment>
+		<method name="GetNodeValue">
+			<parameter name="entry" />
+			<parameter name="nodeName" />
+		</method>
+
+	</public>
+	
+	<script language="JScript">
+	<![CDATA[
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Parsing & XML handling
+	//
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// Check the request for parser errors
+	function CheckParserError(request, callback, ErrorCode) {
+
+		if (request.parseError.errorCode == 0)
+			return true;
+		
+		if (request.text == "")
+			callback(ErrorCode.E_ERROR, "Received empty response!");
+		else {	
+			var error = "Error parsing response xml: Error " + request.parseError.errorCode + ": " + request.parseError.reason;
+			error += "/ Line " + request.parseError.line + " - position " + request.parseError.linepos;
+			error += "/ Source: " + escape(request.parseError.srcText);
+		
+			callback(ErrorCode.E_PARSEERROR, error);
+		}
+		
+		return false;
+	}
+	
+	// Try to get a node value and return "" if the node doesn't exists
+	function GetNodeValue(entry, nodeName)
+	{
+		 var node = entry.selectNodes(nodeName);
+		 
+		 if (node.length == 0)
+		 	return "";
+		 	
+		 return node[0].nodeValue;
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Unit conversion
+	//
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	
+	function CtoF(temperature)
+	{
+		return FormatNumber((9/5) * temperature + 32, 1);
+	}
+	
+	function FtoC(temperature)
+	{
+		return FormatNumber((5/9) * (temperature - 32) , 1);
+	}
+	
+	function MtoFT(length)
+	{
+		return FormatNumber(length * 3.280839895013123, 0);
+	}
+	
+	function FTtoM(length)
+	{
+		return FormatNumber(length * 0.3048, 0);
+	}
+	
+	function KMtoMI(distance)
+	{
+		return FormatNumber(distance * 0.621371192237334, 1);
+	}
+	
+	function MItoKM(distance)
+	{
+		return FormatNumber(distance * 1.609344, 1);
+	}
+	
+	function MBtoIN(pressure)
+	{
+		return FormatNumber(pressure * 0.0295300, 2);
+	}
+	
+	function INtoMB(pressure)
+	{
+		return FormatNumber(pressure * 33.8639, 2);
+	}
+	
+	function MMtoIN(length)
+	{
+		return FormatNumber(length * 0.0393700787401575, 2);
+	}
+	
+	function INtoMM(length)
+	{
+		return FormatNumber(length * 25.4, 2);
+	}
+	
+	function KMHtoMPH(speed)
+	{
+		return FormatNumber(speed * 0.621371192237334, 1);
+	}
+	
+	function MPHtoKMH(speed)
+	{
+		return FormatNumber(speed * 1.609344, 1);
+	}	
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Text manipulation
+	//
+	/////////////////////////////////////////////////////////////////////////////////////////////	
+	
+	// Remove multiple, leading or trailing spaces
+	function Trim(s) {
+		s = s.replace(/(^\s*)|(\s*$)/gi,"");
+		s = s.replace(/[ ]{2,}/gi," ");
+		s = s.replace(/\n /,"\n");
+		return s;
+	}
+	
+	// Remove all spaces
+	function RemoveSpaces(s) {
+		return s.replace(/(\s|\n)+/g,'');
+	}
+	
+	
+	]]>
+	</script>
+
+</component>
+
+<component id="WUnderground">
+	<comment>
+	WUnderground provider
+	</comment>
+	<registration description="WUnderground Weather Provider" progid="DXWeatherProvider.WUnderground" version="1" classid="{DFF07170-3A66-41e8-9685-67CC07173146}" />  
+      	    	  
+    <object id="m_locations" progid="Scripting.Dictionary" />  
+    <object id="m_alerts" progid="Scripting.Dictionary" />  
+    <object id="m_forecast" progid="Scripting.Dictionary" />  
+    <object id="m_cameras" progid="Scripting.Dictionary" />  
+    
+    <object id="m_request" progid="Microsoft.XmlDom" /> 
+	    
+	<public>
+		<property name="Name">
+			<get />
+		</property>
+		
+		<property name="UseMetricSystem" internalName="m_useMetricSystem" />
+		
+		<method name="SetLicense">
+			<parameter name="id" />
+			<parameter name="key" />
+		</method>
+		
+		<method name="RegisterCallbacks">
+			<parameter name="locationCallback" />
+			<parameter name="weatherCallback" />
+			<parameter name="alertsCallback" />
+			<parameter name="forecastCallback" />
+			<parameter name="camerasCallback" />
+			<parameter name="errorCallback" />
+		</method>
+		
+		<method name="Abort" />
+		
+		<comment>
+			Query can be one of the following:
+				- zipcode (US or Canadian) 
+				- city state; city, state 
+				- city 
+				- state 
+				- country 
+				- airport code (3-letter or 4-letter) 
+				- lat,lon 
+		</comment>
+		<method name="GetLocations">
+			<parameter name="locationQuery" />
+		</method>
+
+		<comment>
+			Query can be one of the following:
+				- airport code
+				- location (ie. station) ID
+		</comment>
+		<method name="GetWeather">
+			<parameter name="locationQuery" />
+		</method>
+
+		<comment>
+			Query can be one of the following:
+				- zipcode (US or Canadian) 
+				- city state; city, state 
+				- city 
+				- state 
+				- country 
+				- airport code (3-letter or 4-letter) 
+				- lat,lon 
+		</comment>
+		<method name="GetAlerts">
+			<parameter name="locationQuery" />
+		</method>
+
+		<comment>
+			Query can be one of the following:
+				- zipcode (US or Canadian) 
+				- city state; city, state 
+				- city 
+				- state 
+				- country 
+				- airport code (3-letter or 4-letter) 
+				- lat,lon 
+		</comment>
+		<method name="GetForecast">
+			<parameter name="locationQuery" />
+		</method>
+		
+		<comment>
+			Query can be one of the following:
+				- zipcode (US or Canadian) 
+				- city state; city, state 
+				- city 
+				- state 
+				- country 
+				- airport code (3-letter or 4-letter) 
+				- lat,lon
+		</comment>
+		<method name="GetCameras">
+			<parameter name="locationQuery" />
+		</method>			
+	</public>
+	
+	<resource id="provider_name">Weather Underground</resource>
+	<resource id="url_locations">http://api.wunderground.com/auto/wui/geo/GeoLookupXML/index.xml?query=</resource>
+	<resource id="url_weather">http://api.wunderground.com/auto/wui/geo/WXCurrentObXML/index.xml?query=</resource>
+	<resource id="url_station">http://api.wunderground.com/weatherstation/WXCurrentObXML.asp?ID=</resource>
+	<resource id="url_alerts">http://api.wunderground.com/auto/wui/geo/AlertsXML/index.xml?query=</resource>
+	<resource id="url_forecast">http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml?query=</resource>
+	
+	<script language="JScript">
+	<![CDATA[
+	
+	var ErrorCode 			= getComponent("WeatherError");
+	
+	// Data
+	var m_weather   		= null;
+	var m_lastUpdateTime	= null;
+	
+	// Helper
+	var m_helper			= getComponent("WeatherHelper");
+
+	// callbacks
+	var m_locationsCallback = null;
+	var m_weatherCallback 	= null;
+	var m_alertsCallback 	= null;
+	var m_forecastCallback  = null;
+	var m_camerasCallback   = null;
+	var m_errorCallback 	= null;
+	
+	var m_useMetricSystem = true;
+	
+	///////////////////////////////
+	// Utilities
+	///////////////////////////////
+	function getComponent(id) {		
+		return createComponent(id);
+	}
+	
+	// Get a query string, using data in priority order
+	function getQueryString(locationQuery) {
+		
+		// TODO: check that location query is not null
+		if (locationQuery.CustomQueryString != "")
+			return locationQuery.CustomQueryString;
+		
+		if (locationQuery.ZipCode != "")
+			return locationQuery.ZipCode;
+			
+		if (locationQuery.City != "" && locationQuery.State != "")
+			return locationQuery.City + ", " + locationQuery.State;
+			
+		if (locationQuery.City != "")
+			return locationQuery.City;
+			
+		if (locationQuery.State != "")
+		 	return locationQuery.State;
+		 	
+		if (locationQuery.Country != "")
+			return locationQuery.Country;
+			
+		if (locationQuery.AirportCode != "")
+			return locationQuery.AirportCode;
+			
+		if (locationQuery.Latitude != "" && locationQuery.Longitude != "")
+			return locationQuery.Latitude + "," + locationQuery.Longitude;
+			
+		return "";		
+	}
+	
+	// Get a query string for the weather info (airport code / id only)
+	function getWeatherQueryString(locationQuery)
+	{		
+		// TODO: check that location query is not null
+		if (locationQuery.AirportCode != "")
+			return getResource("url_weather") + locationQuery.AirportCode;
+		
+		if (locationQuery.ID != "")
+			return getResource("url_station") + locationQuery.ID;
+		
+		return "";
+	}
+	
+	///////////////////////////////
+	// Misc parsing functions
+	///////////////////////////////	
+	
+	// Parse elevation string and remove unit at the end / convert to metric system if needed
+	function parseElevation(elevation)
+	{
+		// FIXME: remove "ft" at the end of the elevation data and Trim the string
+		return m_helper.Trim(elevation);
+	}
+	
+	// Parse humidity string and remove % at the end
+	function parseHumidity(humidity)
+	{
+		// FIXME: remove "%" at the end if present
+		return m_helper.Trim(humidity);
+	}
+	
+	// Parse speed string, remove unit at the end / convert to metric system if needed
+	function parseSpeed(speed)
+	{
+		// FIXME: remove "mph" at the end if present, and convert to metric if needed
+		return m_helper.Trim(speed);
+	}
+	
+	// Parse speed heat/windchill
+	function parseHeat(heat)
+	{
+		var trimmed = m_helper.Trim(heat);
+		
+		if (heat == "NA")
+			return "";
+			
+		return heat;
+	}
+	
+	// Parse weather code and return a code number
+	function parseCode(code)
+	{
+		// FIXME: convert from string code to weather icon number
+		return m_helper.Trim(code);
+	}
+	
+	///////////////////////////////
+	// Properties
+	///////////////////////////////
+	function get_Name() {
+		return getResource("provider_name");
+	}
+	
+	///////////////////////////////
+	// Public functions
+	///////////////////////////////
+	
+	// Setup license
+	function SetLicense(id, key) {
+		// Not used by this provider: always return E_OK
+		return ErrorCode.E_OK;
+	}
+	
+	// Set callbacks
+	function RegisterCallbacks(locationsCallback, weatherCallback, alertsCallback, forecastCallback, camerasCallback, errorCallback) {
+		m_locationsCallback = locationsCallback;
+		m_weatherCallback 	= weatherCallback;
+		m_alertsCallback 	= alertsCallback;
+		m_forecastCallback  = forecastCallback;
+		m_camerasCallback   = camerasCallback;
+		m_errorCallback 	= errorCallback;
+	}
+	
+	// Abort current request
+	function Abort()
+	{
+		m_request.abort();
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Get a list of locations
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	function GetLocations(locationQuery) {
+		// Clear any previous results
+		m_locations.RemoveAll();		
+		
+		// Check query for validity
+		if (getQueryString(locationQuery) == "")
+			return ErrorCode.E_NOTAVAILABLE;
+		
+		// Reset dom
+		m_request.abort();
+		
+		m_request.onreadystatechange = OnLocationsResponse;
+		m_request.async = true;
+		m_request.load(getResource("url_locations") + getQueryString(locationQuery));
+		
+		return ErrorCode.E_OK;		
+	}
+	
+	function OnLocationsResponse() {
+		if (m_request.readyState != 4) 
+			return;
+			
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+			return;
+			
+		// locations index
+		var i = 0;		
+			
+		// Get the weather stations
+		var stations = m_request.getElementsByTagName("nearby_weather_stations");
+		if (stations.length == 0) {
+			m_locationsCallback(m_locations);
+			return;
+		}
+			
+		// List airports
+		var airportNode = stations[0].getElementsByTagName("airport");
+		if (airportNode.length == 0) {
+			m_locationsCallback(m_locations);
+			return;
+		}
+		
+		var airportEnumerator = new Enumerator(airportNode[0].getElementsByTagName("station"));		
+		for (var enumerator = airportEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
+		{						
+		    var entry = enumerator.item();
+		    var airport = getComponent("WeatherLocation");
+		    
+		    airport.City 		 = m_helper.GetNodeValue(entry, "city/text()");	
+		    airport.State  		 = m_helper.GetNodeValue(entry, "state/text()");	
+		    airport.Country 	 = m_helper.GetNodeValue(entry, "country/text()");	
+		    airport.AirportCode  = m_helper.GetNodeValue(entry, "icao/text()");	
+		    airport.Latitude 	 = m_helper.GetNodeValue(entry, "lat/text()");	
+		    airport.Longitude    = m_helper.GetNodeValue(entry, "lon/text()");			    
+		    
+		    m_locations.Add(i, airport);		    
+		    i++;
+		}
+		
+		// List personal weather stations
+		var personalStations = stations[0].getElementsByTagName("pws");
+		if (personalStations.length == 0) {
+			m_locationsCallback(m_locations);
+			return;
+		}
+			
+		var pwsEnumerator = new Enumerator(personalStations[0].getElementsByTagName("station"));		
+		for (var enumerator = pwsEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
+		{						
+		    var entry = enumerator.item();
+		    var pws = getComponent("WeatherLocation");
+		    
+		    pws.Name	  = m_helper.GetNodeValue(entry, "neighborhood/text()");	
+		    pws.City 	  = m_helper.GetNodeValue(entry, "city/text()");	
+		    pws.State  	  = m_helper.GetNodeValue(entry, "state/text()");	
+		    pws.Country   = m_helper.GetNodeValue(entry, "country/text()");	
+		    pws.ID  	  = m_helper.GetNodeValue(entry, "id/text()");	
+		    
+		    if (m_useMetricSystem)
+		    	pws.Distance  = m_helper.GetNodeValue(entry, "distance_km/text()");			    
+		    else
+		    	pws.Distance  = m_helper.GetNodeValue(entry, "distance_mi/text()");
+		    
+		    m_locations.Add(i, pws);		    
+		    i++;
+		}
+		
+		m_locationsCallback(m_locations);
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////	
+	// Get the current weather
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	function GetWeather(locationQuery) {
+		
+		// Reset weather object
+		m_weather == null;
+		m_weather = getComponent("WeatherInfo");
+				
+		// Check query for validity: airport/personal station ID only
+		if (getWeatherQueryString(locationQuery) == "")
+			return ErrorCode.E_NOTAVAILABLE;
+					
+		// Reset dom
+		m_request.abort();
+		
+		m_request.onreadystatechange = OnWeatherResponse;
+		m_request.async = true;
+		m_request.load(getWeatherQueryString(locationQuery));
+		
+		return ErrorCode.E_OK;		
+	}
+	
+	function OnWeatherResponse() {
+		if (m_request.readyState != 4) 
+			return;
+			
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+			return;
+			
+		// Parse weather
+		var observation = m_request.selectNodes("current_observation");
+		if (observation.length == 0) {
+			m_weatherCallback(m_weather);	
+			return;
+		}
+		
+		// Set unit system
+		m_weather.UseMetricSystem = m_useMetricSystem;
+		
+		///////////////////////////
+		//  Parse location data  //
+		///////////////////////////
+		
+		// Airport location
+		var location = observation[0].getElementsByTagName("display_location");
+		if (location.length != 0) {
+			
+			m_weather.Location.City  	 = m_helper.GetNodeValue(location[0], "city/text()");		
+			m_weather.Location.State	 = m_helper.GetNodeValue(location[0], "state_name/text()");		
+			m_weather.Location.Country   = m_helper.GetNodeValue(location[0], "country/text()");		
+			m_weather.Location.ZipCode   = m_helper.GetNodeValue(location[0], "zip/text()");		
+			m_weather.Location.Latitude  = m_helper.GetNodeValue(location[0], "latitude/text()");		
+			m_weather.Location.Longitude = m_helper.GetNodeValue(location[0], "longitude/text()");		
+						
+			m_weather.Location.Elevation = parseElevation(m_helper.GetNodeValue(location[0], "elevation/text()"));
+			
+			// Station ID goes into the location airport code
+			m_weather.Location.AirportCode = m_helper.GetNodeValue(observation[0], "station_id/text()");
+		} 
+		
+		// Personal weather station
+		location = observation[0].getElementsByTagName("location");
+		if (location.length != 0) {
+			
+			m_weather.Location.Name 	 = m_helper.GetNodeValue(location[0], "neighborhood/text()");		
+			m_weather.Location.City  	 = m_helper.GetNodeValue(location[0], "city/text()");		
+			m_weather.Location.State	 = m_helper.GetNodeValue(location[0], "state/text()");					
+			m_weather.Location.ZipCode   = m_helper.GetNodeValue(location[0], "zip/text()");		
+			m_weather.Location.Latitude  = m_helper.GetNodeValue(location[0], "latitude/text()");		
+			m_weather.Location.Longitude = m_helper.GetNodeValue(location[0], "longitude/text()");		
+						
+			m_weather.Location.Elevation = parseElevation(m_helper.GetNodeValue(location[0], "elevation/text()"));				
+			
+			// Station ID goes into the location ID
+			m_weather.Location.ID        =  m_helper.GetNodeValue(observation[0], "station_id/text()");
+		}
+		
+		//////////////////////////
+		//  Parse weather data  //
+		//////////////////////////
+		
+		// Use credit name as a weather station name
+		m_weather.Station		  = m_helper.GetNodeValue(observation[0], "credit/text()");
+		m_weather.Type 			  = m_helper.GetNodeValue(observation[0], "station_type/text()");
+		
+		// Observation date & Time
+		// TODO parse into a Date object "observation_time_rfc822/text()"
+		
+		// Temperature
+		if (m_useMetricSystem)
+			m_weather.Temperature = m_helper.GetNodeValue(observation[0], "temp_c/text()");
+		else
+			m_weather.Temperature = m_helper.GetNodeValue(observation[0], "temp_f/text()");
+			
+		// Humidity
+		m_weather.Humidity 		  = parseHumidity(m_helper.GetNodeValue(observation[0], "relative_humidity/text()"));
+		
+		// Wind
+		m_weather.WindDescription = m_helper.GetNodeValue(observation[0], "wind_string/text()");
+		m_weather.WindDirection   = m_helper.GetNodeValue(observation[0], "wind_dir/text()");
+		m_weather.WindDegrees 	  = m_helper.GetNodeValue(observation[0], "wind_degrees/text()");
+		m_weather.WindSpeed		  = parseSpeed(m_helper.GetNodeValue(observation[0], "wind_mph/text()"));
+		m_weather.WindGust 		  = parseSpeed(m_helper.GetNodeValue(observation[0], "wind_gust_mph/text()"));
+	    
+	    // Pressure
+	    if (m_useMetricSystem)
+	    	m_weather.Pressure	  = m_helper.GetNodeValue(observation[0], "pressure_mb/text()");
+	    else
+	    	m_weather.Pressure	  = m_helper.GetNodeValue(observation[0], "pressure_in/text()");
+	    	
+	    // Dew Point
+	    m_weather.DewPointDescription = m_helper.GetNodeValue(observation[0], "dewpoint_string/text()");
+	    if (m_useMetricSystem)
+	    	m_weather.DewPoint	  = m_helper.GetNodeValue(observation[0], "dewpoint_c/text()");
+	    else
+	    	m_weather.DewPoint	  = m_helper.GetNodeValue(observation[0], "dewpoint_f/text()");
+	    	
+	    // Heat index
+	    m_weather.HeatDescription = parseHeat(m_helper.GetNodeValue(observation[0], "heat_index_string/text()"));
+		if (m_useMetricSystem)
+	    	m_weather.HeatIndex	  = parseHeat(m_helper.GetNodeValue(observation[0], "heat_index_c/text()"));
+	    else
+	    	m_weather.HeatIndex	  = parseHeat(m_helper.GetNodeValue(observation[0], "heat_index_f/text()"));			
+	    	
+	    // Solar Radiation & UV	
+	    m_weather.SolarRadiation  = m_helper.GetNodeValue(observation[0], "solar_radiation/text()");			
+	    m_weather.UV	  		  = m_helper.GetNodeValue(observation[0], "UV/text()");			
+	    	
+	    // Wind chill
+	    m_weather.WindChillDescription = parseHeat(m_helper.GetNodeValue(observation[0], "windchill_string/text()"));
+		if (m_useMetricSystem)
+	    	m_weather.WindChill	  = parseHeat(m_helper.GetNodeValue(observation[0], "windchill_c/text()"));
+	    else
+	    	m_weather.WindChill	  = parseHeat(m_helper.GetNodeValue(observation[0], "windchill_f/text()"));		
+	    		    
+	    // Visibility
+	    if (m_useMetricSystem)
+	    	m_weather.Visibility  = m_helper.GetNodeValue(observation[0], "visibility_km/text()");
+	    else
+	    	m_weather.Visibility  = m_helper.GetNodeValue(observation[0], "visibility_mi/text()");
+	    		    	
+	    // Weather code
+	    m_weather.WeatherCode     = parseCode(m_helper.GetNodeValue(observation[0], "icon/text()"));
+	    
+	    // Precipitation
+		if (m_useMetricSystem) {
+	    	m_weather.Precipitation1H     = m_helper.GetNodeValue(observation[0], "precip_1hr_metric/text()");
+	    	m_weather.PrecipitationToday  = m_helper.GetNodeValue(observation[0], "precip_today_metric/text()");	    	
+	    } else {
+	    	m_weather.Precipitation1H     = m_helper.GetNodeValue(observation[0], "precip_1hr_in/text()");
+	    	m_weather.PrecipitationToday  = m_helper.GetNodeValue(observation[0], "precip_today_in/text()");	    
+	    }
+	    	
+		m_weatherCallback(m_weather);	
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////		
+	// Get a list of alerts
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	function GetAlerts(locationQuery) {
+		// Clear any previous results
+		m_alerts.RemoveAll();
+		
+		// Check query for validity
+		if (getQueryString(locationQuery) == "")
+			return ErrorCode.E_NOTAVAILABLE;
+		
+		// Reset dom
+		m_request.abort();
+		
+		m_request.onreadystatechange = OnAlertsResponse;
+		m_request.async = true;
+		m_request.load(getResource("url_alerts") + getQueryString(locationQuery));
+		
+		return ErrorCode.E_OK;		
+	}
+	
+	function OnAlertsResponse() {
+		if (m_request.readyState != 4) 
+			return;
+			
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+			return;
+		
+		// Parse alert data
+		var i = 0;
+		var entryEnumerator = new Enumerator(m_request.getElementsByTagName("AlertItem"));		
+		for (var enumerator = entryEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
+		{						
+		    var entry = enumerator.item();
+		    var alert = getComponent("WeatherAlert");
+		    
+		    alert.Type 		   = m_helper.GetNodeValue(entry, "type/text()");	
+		    alert.Description  = m_helper.GetNodeValue(entry, "description/text()");	
+		    alert.Date 		   = m_helper.GetNodeValue(entry, "date/text()");	
+		    alert.Expiration   = m_helper.GetNodeValue(entry, "expires/text()");	
+		    alert.Message 	   = m_helper.GetNodeValue(entry, "message/text()");	
+		    alert.Phenomena    = m_helper.GetNodeValue(entry, "phenomena/text()");	
+		    alert.Significance = m_helper.GetNodeValue(entry, "significance/text()");	
+		    
+		    m_alerts.Add(i, alert);		    
+		    i++;
+		}
+		
+		m_alertsCallback(m_alerts);		
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////	
+	// Get the forecast
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	function GetForecast(locationQuery) {		
+		// Clear any previous results
+		m_forecast.RemoveAll();
+		
+		// Check query for validity
+		if (getQueryString(locationQuery) == "")
+			return ErrorCode.E_NOTAVAILABLE;
+		
+		// Reset dom
+		m_request.abort();
+		
+		m_request.onreadystatechange = OnForecastResponse;
+		m_request.async = true;
+		m_request.load(getResource("url_forecast") + getQueryString(locationQuery));
+		
+		return ErrorCode.E_OK;	
+	}
+	
+	function OnForecastResponse() {
+		if (m_request.readyState != 4) 
+			return;
+			
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+			return;
+		
+		// TODO: Implementation
+		debugger;
+		
+		m_forecastCallback(m_forecast);		
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////	
+	// Get a list of cameras
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	function GetCameras(locationQuery) {
+		// TODO we should cache results from GetLocations and only make a new call if the query differs.		
+		return ErrorCode.E_NOTIMPLEMENTED;
+	}	
+	
+	
+	
+	
+	]]>
+	</script>
+
+</component>
+</package>

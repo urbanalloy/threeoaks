@@ -38,7 +38,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 </comment>
 
-<component>
+<component id="WeatherController">
 	<comment>
 	Main weather controller
 	</comment>
@@ -139,6 +139,7 @@
 			  
 			returns: E_OK if the request was send					 
 					 E_NOTAVAILABLE if the query type is not supported by the current provider
+					 E_INVALIDLICENSE if license information is missing
 					 E_ERROR if no provider has been set
 		</comment>
 		<method name="GetLocations">
@@ -153,6 +154,7 @@
 			returns: E_OK if the request was send
 					 E_NOTIMPLEMENTED if this function is not implemented for the current provider
 					 E_NOTAVAILABLE if the query type is not supported by the current provider
+					 E_INVALIDLICENSE if license information is missing
 					 E_ERROR if no provider has been set
 		</comment>
 		<method name="GetWeather">
@@ -167,6 +169,7 @@
 			returns: E_OK if the request was send
 					 E_NOTIMPLEMENTED if this function is not implemented for the current provider
 					 E_NOTAVAILABLE if the query type is not supported by the current provider	
+					 E_INVALIDLICENSE if license information is missing
 					 E_ERROR if no provider has been set		  
 		</comment>
 		<method name="GetAlerts">
@@ -181,6 +184,7 @@
 			returns: E_OK if the request was send
 					 E_NOTIMPLEMENTED if this function is not implemented for the current provider
 					 E_NOTAVAILABLE if the query type is not supported by the current provider
+					 E_INVALIDLICENSE if license information is missing
 					 E_ERROR if no provider has been set			  
 		</comment>
 		<method name="GetForecast">
@@ -195,6 +199,7 @@
 			returns: E_OK if the request was send
 					 E_NOTIMPLEMENTED if this function is not implemented for the current provider
 					 E_NOTAVAILABLE if the query type is not supported by the current provider	
+					 E_INVALIDLICENSE if license information is missing
 					 E_ERROR if no provider has been set		  
 		</comment>
 		<method name="GetCameras">
@@ -230,13 +235,8 @@
 	
 	Option Explicit
 	
-	' Constants
-	Const E_OK 				= 1
-	Const E_ERROR 			= 0
-	Const E_NOTAVAILABLE 	= -1
-	Const E_NOTIMPLEMENTED  = -2
-	Const E_INVALIDLICENSE  = -3
-	Const E_PARSEERROR	    = -4
+	' Error
+	Dim ErrorCode
 	
 	' Callbacks
 	Dim m_locationsCallback
@@ -267,6 +267,8 @@
 		Set m_camerasCallback   = Nothing
 		Set m_errorCallback 	= Nothing
 		
+		Set ErrorCode = CreateComponent("WeatherError")
+		
 		Set m_currentProvider = Nothing
 		m_useMetricSystem = True
 	
@@ -275,7 +277,7 @@
 		
 		' Provider registration
 		'#ifndef DEBUG
-		'AddProvider "WUnderground", CreateComponent(id)
+		'AddProvider "WUnderground", CreateComponent("WUnderground")
 		'#endif
 	
 	End Sub
@@ -312,7 +314,7 @@
 		
 		' Update license information
 		If (m_currentProvider Is Nothing) Then
-			SetLicense = E_ERROR
+			SetLicense = ErrorCode.E_ERROR
 		Else
 			SetLicense = m_currentProvider.SetLicense(m_id, m_key)
 		End If
@@ -321,7 +323,7 @@
 	' Set the provider to use
 	Function SetProvider(id)
 		If (Not m_providers.Exists(id)) Then
-			SetProvider = E_ERROR
+			SetProvider = ErrorCode.E_ERROR
 			
 			' Reset the current provider
 			Set m_currentProvider = Nothing
@@ -342,7 +344,7 @@
 											GetRef("OnCameras"), _
 											GetRef("OnError")
 		
-		SetProvider = E_OK
+		SetProvider = ErrorCode.E_OK
 	End Function
 	
 	' Set the callbacks
@@ -368,7 +370,7 @@
 	' Get a list of locations
 	Function GetLocations(locationQuery)
 		If (m_currentProvider Is Nothing) Then
-			GetLocations = E_ERROR
+			GetLocations = ErrorCode.E_ERROR
 			Exit Function
 		End If
 		
@@ -379,7 +381,7 @@
 	' Get the current weather
 	Function GetWeather(locationQuery)
 		If (m_currentProvider Is Nothing) Then
-			GetWeather = E_ERROR
+			GetWeather = ErrorCode.E_ERROR
 			Exit Function
 		End If
 	
@@ -390,7 +392,7 @@
 	' Get a list of alerts
 	Function GetAlerts(locationQuery)
 		If (m_currentProvider Is Nothing) Then
-			GetAlerts = E_ERROR
+			GetAlerts = ErrorCode.E_ERROR
 			Exit Function
 		End If
 	
@@ -401,7 +403,7 @@
 	' Get the forecast
 	Function GetForecast(locationQuery)
 		If (m_currentProvider Is Nothing) Then
-			GetForecast = E_ERROR
+			GetForecast = ErrorCode.E_ERROR
 			Exit Function
 		End If
 	
@@ -412,7 +414,7 @@
 	' Get a list of cameras
 	Function GetCameras(locationQuery)
 		If (m_currentProvider Is Nothing) Then
-			GetCameras = E_ERROR
+			GetCameras = ErrorCode.E_ERROR
 			Exit Function
 		End If
 	
@@ -423,7 +425,7 @@
 	' Add provider to provider list
 	Function AddProvider(id, provider)
 		If (m_providers.Exists(id)) Then
-			AddProvider = E_ERROR
+			AddProvider = ErrorCode.E_ERROR
 			Exit Function
 		End If
 			
@@ -433,18 +435,18 @@
 		' we use a separate provider list to not expose the providers directly to the user script
 		m_providerList.Add id, provider.Name 		
 		
-		AddProvider = E_OK
+		AddProvider = ErrorCode.E_OK
 	End Function
 	
 	Function Abort()
 		If (m_currentProvider Is Nothing) Then
-			Abort = E_ERROR
+			Abort = ErrorCode.E_ERROR
 			Exit Function
 		End If
 		
 		m_currentProvider.Abort()
 	
-		Abort = E_OK
+		Abort = ErrorCode.E_OK
 	End Function		
 
 	'=============================================================================================================================
@@ -496,6 +498,90 @@
 
 </component>
 
+<component id="WeatherError">
+	<comment>
+	Weather error codes
+	</comment>
+	<registration description="Weather Error codes"
+      			  progid="DXWeather.Error"
+      			  version="1"
+      	    	  classid="{20AAB6F5-77DB-414e-8469-5D57441BFD19}"/>  
+      	    	  
+      	    
+	<public>
+		<property name="E_OK">
+			<get />
+		</property>
+		
+		<property name="E_ERROR">
+			<get />
+		</property>
+		
+		<property name="E_NOTAVAILABLE">
+			<get />
+		</property>
+		
+		<property name="E_NOTIMPLEMENTED">
+			<get />
+		</property>
+		
+		<property name="E_INVALIDLICENSE">
+			<get />
+		</property>
+		
+		<property name="E_PARSEERROR">
+			<get />
+		</property>
+		
+		
+	</public>
+	
+	<script language="JScript">
+	<![CDATA[
+	
+	// Constants
+	var E_OK 			 = 1;
+	var E_ERROR 		 = 0;
+	var E_NOTAVAILABLE   = -1;
+	var E_NOTIMPLEMENTED = -2;
+	var E_INVALIDLICENSE = -3;
+	var E_PARSEERROR	 = -4;
+	
+	function get_E_OK()
+	{
+		return E_OK;
+	}
+	
+	function get_E_ERROR()
+	{
+		return E_ERROR;
+	}
+	
+	function get_E_NOTAVAILABLE()
+	{
+		return E_NOTAVAILABLE;
+	}
+	
+	function get_E_NOTIMPLEMENTED()
+	{
+		return E_NOTIMPLEMENTED;
+	}
+	
+	function get_E_INVALIDLICENSE()
+	{
+		return E_INVALIDLICENSE;
+	}
+	
+	function get_E_PARSEERROR()
+	{
+		return E_PARSEERROR;
+	}
+	
+	]]>
+	</script>
+
+</component>
+
 <component id="WeatherInfo">
 	<comment>
 	Weather information
@@ -516,6 +602,11 @@
 			Weather station name
 		</comment>
 		<property name="Station" 				internalname="m_station" />
+		
+		<comment>
+			Weather station type
+		</comment>
+		<property name="Type" 					internalname="m_type" />
 		
 		<comment>
 			Weather info links (WeatherLinks object)
@@ -555,6 +646,9 @@
 		<property name="HeatDescription" 		internalname="m_heatDescription" />
 		<property name="HeatIndex" 				internalname="m_heatIndex" />	
 		
+		<property name="SolarRadiation" 		internalname="m_solarRadiation" />
+		<property name="UV" 					internalname="m_UV" />	
+		
 		<property name="Sunrise" 				internalname="m_sunrise" />
 		<property name="Sunset"					internalname="m_sunset" />
 		
@@ -581,8 +675,11 @@
 	<script language="JScript">
 	<![CDATA[
 	
-		var m_location = createComponent("WeatherLocation");
+		var m_location = createComponent("WeatherLocation");		
 		var m_useMetricSystem = true;
+		
+		var m_station = "";
+		var m_type = "";
 		
 		var m_weatherDescription = "";
 		var m_weatherCode = "";
@@ -616,6 +713,9 @@
 		var m_heatDescription = "";
 		var m_heatIndex = "";
 		
+		var m_solarRadiation = "";
+		var m_UV = "";
+		
 		var m_sunrise = "";
 		var m_sunset = "";
 		
@@ -636,6 +736,10 @@
 		function ToString()
 		{
 			var text = m_location.ToString() + "\n";	
+			
+			// Station name & type
+			text += append("Station", m_station);
+			text += append("Type", m_type);
 			
 			// Description
 			text += append("Description", m_weatherDescription);
@@ -668,6 +772,10 @@
 			text += append("DewPoint", m_dewPoint);
 			text += append("Heat Description", m_heatDescription);
 			text += append("Heat Index", m_heatIndex);
+			
+			// Solar Radiation & UV
+			text += append("Solar Radiation", m_solarRadiation);
+			text += append("UV", m_UV);
 			
 			// Sunrise / Sunset / Moon / Day
 			text += append("Sunrise", m_sunrise);
@@ -1024,10 +1132,69 @@
 			<parameter name="s" />
 		</method>
 		
+		<comment>
+			Check XmlDom object for parsing errors and report them
+		</comment>
+		<method name="CheckParserError">
+			<parameter name="request" />
+			<parameter name="callback" />
+			<parameter name="ErrorCode" />
+		</method>
+		
+		<comment>
+			Try to get a node value and return "" if the node doesn't exists
+		</comment>
+		<method name="GetNodeValue">
+			<parameter name="entry" />
+			<parameter name="nodeName" />
+		</method>
+
 	</public>
 	
 	<script language="JScript">
 	<![CDATA[
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Parsing & XML handling
+	//
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// Check the request for parser errors
+	function CheckParserError(request, callback, ErrorCode) {
+
+		if (request.parseError.errorCode == 0)
+			return true;
+		
+		if (request.text == "")
+			callback(ErrorCode.E_ERROR, "Received empty response!");
+		else {	
+			var error = "Error parsing response xml: Error " + request.parseError.errorCode + ": " + request.parseError.reason;
+			error += "/ Line " + request.parseError.line + " - position " + request.parseError.linepos;
+			error += "/ Source: " + escape(request.parseError.srcText);
+		
+			callback(ErrorCode.E_PARSEERROR, error);
+		}
+		
+		return false;
+	}
+	
+	// Try to get a node value and return "" if the node doesn't exists
+	function GetNodeValue(entry, nodeName)
+	{
+		 var node = entry.selectNodes(nodeName);
+		 
+		 if (node.length == 0)
+		 	return "";
+		 	
+		 return node[0].nodeValue;
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Unit conversion
+	//
+	/////////////////////////////////////////////////////////////////////////////////////////////
 	
 	function CtoF(temperature)
 	{
@@ -1089,6 +1256,12 @@
 		return FormatNumber(speed * 1.609344, 1);
 	}	
 	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Text manipulation
+	//
+	/////////////////////////////////////////////////////////////////////////////////////////////	
+	
 	// Remove multiple, leading or trailing spaces
 	function Trim(s) {
 		s = s.replace(/(^\s*)|(\s*$)/gi,"");
@@ -1102,6 +1275,7 @@
 		return s.replace(/(\s|\n)+/g,'');
 	}
 	
+	
 	]]>
 	</script>
 
@@ -1109,7 +1283,6 @@
 
 <comment>
 #includecomponent "Providers/WUnderground.wsc"
-#includecomponent "Providers/TWC.wsc"
 </comment>
 
 </package>
