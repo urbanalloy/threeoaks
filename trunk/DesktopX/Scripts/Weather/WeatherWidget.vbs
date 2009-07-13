@@ -10,10 +10,11 @@ Const E_PARSEERROR	    = -4
 Dim WeatherController
 
 Dim LIB_FOLDER
+'#ifdef DEBUG
 LIB_FOLDER = "D:/Sources/Company/src/trunk/src/DesktopX/DXScriptLibrary/Weather/"
-
+'#else
 'LIB_FOLDER = Object.Directory
-
+'#endif
 
 'Called when the script is executed
 Sub Object_OnScriptEnter	
@@ -63,6 +64,10 @@ Sub InitWidget()
 	Dim retCode
 
 	Set WeatherController = GetObject("script:" & LIB_FOLDER & "Weather.wsc")
+	
+	'#ifdef DEBUG
+	WeatherController.AddProvider "WUnderground", GetObject("script:" & LIB_FOLDER & "Providers/WUnderground.wsc")
+	'#endif
 		
 	WeatherController.RegisterCallbacks GetRef("OnLocations"), _
 										GetRef("OnWeather"), _
@@ -118,12 +123,12 @@ End Sub
 '===========================================================
 '== Actions
 '===========================================================
-Sub UpdateInfo()
+Sub GetWeather()
 	ClearInfo()
 	
 	Dim query, retCode
 	Set query = WeatherController.GetQueryObject()	
-	query.ID = DesktopX.ScriptObject("DXWeather_Query").Control.Text
+	query.ID = DesktopX.ScriptObject("DXWeather_Query").Control.Text ' Force to ID, since there are different calls for Airport and weather station
 	retCode = WeatherController.GetWeather(query)
 	
 	ParseRetCode retCode
