@@ -55,3 +55,12 @@ Const TYPE_MISMATCH_ERR			        = 17
 ' Signature
 Const SIGNATURE_SHA1                    = 0
 
+' Download
+Const DOWNLOAD_OK                       = 0
+Const DOWNLOAD_NOT_CONNECTED            = 1
+Const DOWNLOAD_INTERNAL_ERROR           = 2
+Const DOWNLOAD_HTTP_ERROR               = 3
+Const DOWNLOAD_FILE_NOT_WRITABLE        = 4
+Const DOWNLOAD_FOLDER_NOT_WRITABLE      = 5
+Const DOWNLOAD_FOLDER_NOT_EXISTS        = 6
+

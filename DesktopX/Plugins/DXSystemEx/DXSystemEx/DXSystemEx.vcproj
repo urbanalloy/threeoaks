@@ -82,7 +82,7 @@
 				Name="VCLinkerTool"
 				RegisterOutput="false"
 				IgnoreImportLibrary="true"
-				AdditionalDependencies="comsvcs.lib Winmm.lib"
+				AdditionalDependencies="comsvcs.lib Winmm.lib Winhttp.lib"
 				LinkIncremental="2"
 				ModuleDefinitionFile=".\DXSystemEx.def"
 				GenerateDebugInformation="true"
@@ -177,7 +177,7 @@
 				Name="VCLinkerTool"
 				RegisterOutput="false"
 				IgnoreImportLibrary="true"
-				AdditionalDependencies="comsvcs.lib Winmm.lib"
+				AdditionalDependencies="comsvcs.lib Winmm.lib Winhttp.lib"
 				LinkIncremental="1"
 				ModuleDefinitionFile=".\DXSystemEx.def"
 				GenerateDebugInformation="true"
@@ -429,6 +429,14 @@
 			<Filter
 				Name="HTTP"
 				>
+				<File
+					RelativePath=".\FileDownloader.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\FileDownloader.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>

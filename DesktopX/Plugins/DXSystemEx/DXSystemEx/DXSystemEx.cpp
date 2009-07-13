@@ -470,6 +470,11 @@ label_expiration:
 			if (Is_WinVista_or_Later())
 				pVistaVolumeCallback->removeID(objID);
 
+			CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;				
+
+			if (pSystemEx != NULL)
+				pSystemEx->Terminate();
+
 			return TRUE;
 		}
 
