@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- This document is intended only for use by authorized licensees of The  -->
+<!-- Weather Channel. Unauthorized use is prohibited.  Copyright 1995-2009, -->
+<!-- The Weather Channel Interactive, Inc.  All Rights Reserved.            -->
+<search ver="3.0">
+  <loc id="USGA0028" type="1">Atlanta, GA</loc>
+  <loc id="USID0011" type="1">Atlanta, ID</loc>
+  <loc id="USIL0057" type="1">Atlanta, IL</loc>
+  <loc id="USIN0019" type="1">Atlanta, IN</loc>
+  <loc id="USKS0030" type="1">Atlanta, KS</loc>
+  <loc id="USLA0022" type="1">Atlanta, LA</loc>
+  <loc id="USMI0036" type="1">Atlanta, MI</loc>
+  <loc id="USMO0037" type="1">Atlanta, MO</loc>
+  <loc id="USNE0027" type="1">Atlanta, NE</loc>
+  <loc id="USNY0063" type="1">Atlanta, NY</loc>
+</search>
+
+http://xoap.weather.com/weather/local/USID0011?link=xoap&prod=xoap&par=1127278638&key=dfc0467cdd0439dd&cc

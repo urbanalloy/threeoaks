@@ -1,20 +1,10 @@
-' Constants
-Const E_OK 				= 1
-Const E_ERROR 			= 0
-Const E_NOTAVAILABLE 	= -1
-Const E_NOTIMPLEMENTED  = -2
-Const E_INVALIDLICENSE  = -3
-Const E_PARSEERROR	    = -4
-
+Option Explicit
 
 Dim WeatherController
+Dim ErrorCode
 
 Dim LIB_FOLDER
-'#ifdef DEBUG
 LIB_FOLDER = "D:/Sources/Company/src/trunk/src/DesktopX/DXScriptLibrary/Weather/"
-'#else
-'LIB_FOLDER = Object.Directory
-'#endif
 
 'Called when the script is executed
 Sub Object_OnScriptEnter	
@@ -63,7 +53,8 @@ Sub InitWidget()
 	
 	Dim retCode
 
-	Set WeatherController = GetObject("script:" & LIB_FOLDER & "Weather.wsc")
+	Set ErrorCode = GetObject("script:" & LIB_FOLDER & "/Weather.wsc#WeatherError")
+	Set WeatherController = GetObject("script:" & LIB_FOLDER & "/Weather.wsc")
 	
 	'#ifdef DEBUG
 	WeatherController.AddProvider "WUnderground", GetObject("script:" & LIB_FOLDER & "Providers/WUnderground.wsc")
@@ -100,22 +91,22 @@ End Sub
 
 Sub ParseRetCode(code)
 	Select Case code
-		Case E_OK ' query accepted and request sent
+		Case ErrorCode.E_OK ' query accepted and request sent
 			AppendInfo "OK!" & vbNewLine
 		
-		Case E_NOTIMPLEMENTED ' the chosen provider does not implement this method
+		Case ErrorCode.E_NOTIMPLEMENTED ' the chosen provider does not implement this method
 			AppendInfo "Method not implemented!"  & vbNewLine	' should not happen with GetWeather obviously!
 			
-		Case E_NOTAVAILABLE ' the query you used is not supported by this provider/method (for example, you called GetWeather with a country name only)
+		Case ErrorCode.E_NOTAVAILABLE ' the query you used is not supported by this provider/method (for example, you called GetWeather with a country name only)
 			AppendInfo "Query type not available!"  & vbNewLine
 			
-		Case E_ERROR ' you forgot to set a provider or your query is empty
+		Case ErrorCode.E_ERROR ' you forgot to set a provider or your query is empty
 			AppendInfo "Error!"  & vbNewLine
 			
-		Case E_INVALIDLICENSE
+		Case ErrorCode.E_INVALIDLICENSE
 			AppendInfo "Invalid license info!"  & vbNewLine
 			
-		Case E_PARSEERROR
+		Case ErrorCode.E_PARSEERROR
 			AppendInfo "Parsing error!" & vbNewLine
 	End Select
 End Sub
@@ -123,6 +114,28 @@ End Sub
 '===========================================================
 '== Actions
 '===========================================================
+Sub GetLocations()
+	ClearInfo()
+	
+	Dim query, retCode
+	Set query = WeatherController.GetQueryObject()
+	query.CustomQueryString = DesktopX.ScriptObject("DXWeather_Query").Control.Text
+	retCode = WeatherController.GetLocations(query)
+	
+	ParseRetCode retCode
+End Sub
+
+Sub GetForecast()
+	ClearInfo()
+	
+	Dim query, retCode
+	Set query = WeatherController.GetQueryObject()	
+	query.CustomQueryString = DesktopX.ScriptObject("DXWeather_Query").Control.Text
+	retCode = WeatherController.GetForecast(query)
+	
+	ParseRetCode retCode
+End Sub
+
 Sub GetWeather()
 	ClearInfo()
 	
@@ -134,16 +147,18 @@ Sub GetWeather()
 	ParseRetCode retCode
 End Sub
 
-Sub GetLocations()
+Sub GetAlerts()
 	ClearInfo()
 	
 	Dim query, retCode
-	Set query = WeatherController.GetQueryObject()
+	Set query = WeatherController.GetQueryObject()	
 	query.CustomQueryString = DesktopX.ScriptObject("DXWeather_Query").Control.Text
-	retCode = WeatherController.GetLocations(query)
+	retCode = WeatherController.GetAlerts(query)
 	
 	ParseRetCode retCode
 End Sub
+
+
 
 '===========================================================
 '== Callbacks
@@ -201,9 +216,5 @@ Sub OnCameras(cameraInfo)
 End Sub
 
 Sub OnError(code, value)
-	AppendInfo "OnError: " & code & " - " & valye
+	AppendInfo "OnError: " & code & " - " & value
 End Sub
-
-
-
-
