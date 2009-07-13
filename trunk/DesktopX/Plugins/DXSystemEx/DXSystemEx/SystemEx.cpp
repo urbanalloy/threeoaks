@@ -65,6 +65,9 @@ void CSystemEx::Init(DWORD objID, string guiId, HWND hwnd)
 	// Init instance information
 	UpdateInstanceInfo();
 
+	// Downloads
+	m_pFileDownloader = NULL;
+
 	// Init the config mutex
 	if (m_hConfigMutex == NULL) {
 		char name[MAX_PATH];
@@ -78,9 +81,16 @@ void CSystemEx::Init(DWORD objID, string guiId, HWND hwnd)
 	UpdateMonitorInfo();
 }
 
+void CSystemEx::Terminate()
+{
+	if (m_pFileDownloader)
+		m_pFileDownloader->Cleanup();
+}
+
 void CSystemEx::Cleanup()
 {
 	SAFE_DELETE(m_singleInstance);
+	SAFE_DELETE(m_pFileDownloader);
 
 	if (m_hConfigMutex != NULL)
 		CloseHandle(m_hConfigMutex);
@@ -247,15 +257,35 @@ STDMETHODIMP CSystemEx::InterfaceSupportsErrorInfo(REFIID riid)
 /************************************************************************/
 /* HTTP Download                                                        */
 /************************************************************************/
-STDMETHODIMP CSystemEx::DownloadFile(BSTR remoteUrl, BSTR localPath, BSTR progressCallback, BSTR completionCallback)
+STDMETHODIMP CSystemEx::DownloadFile(int id, BSTR remoteUrl, BSTR localPath)
 {
-	// Check input
-	if (CComBSTR(remoteUrl) == CComBSTR(""))
-		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid remote url"), "Remote url is empty!", 0, NULL);	
+	// FIXME: disabled in 1.0
+	return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Disabled in 1.0"), "This function is not available in DXSystem 1.0!", 0, NULL);
 
-	if (CComBSTR(localPath) == CComBSTR(""))
-		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid file path"), "File path is empty!", 0, NULL);	
+	//// Check input
+	//if (CComBSTR(remoteUrl) == CComBSTR(""))
+	//	return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid remote url"), "Remote url is empty!", 0, NULL);	
 
+	//if (CComBSTR(localPath) == CComBSTR(""))
+	//	return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid file path"), "File path is empty!", 0, NULL);
+
+	//if (m_pFileDownloader == NULL)
+	//	m_pFileDownloader = new FileDownloader(m_objID);
+
+	//USES_CONVERSION;
+	//if (!m_pFileDownloader->IsValid(id))
+	//	return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("ID already exists"), "A download is already in progress with this ID", 0, NULL);
+
+	//// Add to the list of file to download
+	//m_pFileDownloader->Download(id, OLE2A(remoteUrl), OLE2A(localPath));
+
+	//return S_OK;
+}
+
+STDMETHODIMP CSystemEx::StopDownload(int id)
+{
+	if (m_pFileDownloader)
+		m_pFileDownloader->StopDownload(id);
 
 	return S_OK;
 }

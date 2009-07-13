@@ -45,6 +45,7 @@
 #include "MonitorInfo.h"
 #include "Volume/IVolumeEventsConnectionPoint.h"
 #include "CSingleInstance.h"
+#include "FileDownloader.h"
 
 #include <string>
 #include <vector>
@@ -75,6 +76,7 @@ public:
 		m_executableName = L"";
 		
 		m_singleInstance = NULL;
+		m_pFileDownloader = NULL;
 
 		return S_OK;
 	}
@@ -120,6 +122,9 @@ END_CONNECTION_POINT_MAP()
 		HANDLE m_hConfigMutex;
 		vector<pair<RECT, bool>> m_monitors;	
 
+		// Downloads
+		FileDownloader* m_pFileDownloader;		
+
 		void UpdateInstanceInfo();
 		static BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData);	
 		static bool hasEnding(wstring const &fullString, wstring const &ending);
@@ -151,6 +156,7 @@ END_CONNECTION_POINT_MAP()
 
 		void Init(DWORD objID, string guiID, HWND hwnd);
 		void Cleanup();
+		void Terminate();
 
 		void UpdateMonitorInfo();
 		HRESULT ExtractCommandLine(LPWSTR commandLine, VARIANT* pArgs, bool extractArgs); 
@@ -167,7 +173,8 @@ END_CONNECTION_POINT_MAP()
 		/************************************************************************/
 		/* Download                                                             */
 		/************************************************************************/
-		STDMETHOD(DownloadFile)(BSTR remoteUrl, BSTR localPath, BSTR progressCallback, BSTR completionCallback);
+		STDMETHOD(DownloadFile)(int id, BSTR remoteUrl, BSTR localPath);
+		STDMETHOD(StopDownload)(int id);
 
 		/************************************************************************/
 		/* Signature                                                            */
