@@ -55,7 +55,7 @@ Const TYPE_MISMATCH_ERR			        = 17
 ' Signature
 Const SIGNATURE_SHA1                    = 0
 
-' Download
+' Download (1.1 only)
 Const DOWNLOAD_OK                       = 0
 Const DOWNLOAD_NOT_CONNECTED            = 1
 Const DOWNLOAD_INTERNAL_ERROR           = 2

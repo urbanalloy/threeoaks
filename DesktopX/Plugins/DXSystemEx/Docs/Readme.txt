@@ -220,7 +220,7 @@ The only type of signature supported at this time is SIGNATURE_SHA1
 ** Changelog
 *******************************************************************************************************
 
-Version 1.0 Build 228:
+Version 1.0 Build 240:
   + Renamed to DXSystemEx (plugin namespace is now SystemEx)
   + Added SHA1 signature check
   + Added MouseWheel and Middle button click callbacks (merged from DXMouseWheel)
