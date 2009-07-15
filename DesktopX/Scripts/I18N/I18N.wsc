@@ -1,0 +1,438 @@
+<?xml version="1.0"?>
+<package>
+<?component error="true" debug="true"?>
+<comment>
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// I18N Script Component for DesktopX
+//
+// Copyright (c) 2007-2009, Three Oaks Crossing
+// All rights reserved.
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+// * $LastChangedRevision$
+// * $LastChangedDate$
+// * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
+// 
+// Redistribution and use in source and binary forms, with or without modification, are
+// permitted provided that the following conditions are met:
+//	1. Redistributions of source code must retain the above copyright notice, this list of
+//		 conditions and the following disclaimer. 
+//	2. Redistributions in binary form must reproduce the above copyright notice, this list
+//		 of conditions and the following disclaimer in the documentation and/or other materials
+//		 provided with the distribution. 
+//	3. The name of the author may not be used to endorse or promote products derived from this
+//		 software without specific prior written permission. 
+//
+//	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//	OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+//	MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+//	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+//	EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+//	GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+//	ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+//	OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+//	POSSIBILITY OF SUCH DAMAGE.
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+</comment>
+
+<component id="I18N" >
+	<registration description="I18N Component"
+      			  progid="DXScriptLibrary.I18N"
+      			  version="1"
+      	    	  classid="{E2050DC0-3CED-4020-A2DE-31C2BB8A5EBB}" />  
+      	    	  
+    <object id="m_data" progid="Scripting.Dictionary" />
+    <object id="fso" progid="Scripting.FileSystemObject"/>
+	<object id="shell" progid="WScript.Shell"/>          	    
+	
+	<public>
+	
+		<comment>
+			Get or set the current computed locale in the format lang-locale or lang
+			
+			When setting a specific locale, make sure to use a valid locale or it will revert to the
+			system locale (or fallback to the default locale)
+		</comment>
+		<property name="CurrentLocale">
+			<get />
+			<put />
+		</property>
+		
+		<property name="SystemLocale">
+			<get />
+		</property>
+		
+		<property name="LocalesData">
+			<get />
+		</property>
+		
+		<property name="LocaleFolder">
+			<get />
+			<put />
+		</property>
+		
+		<method name="Init">
+			<parameter name="localeDir" />
+			<parameter name="libraryDir" />
+			<parameter name="applicationDir" />
+		</method>
+		
+		<method name="LoadDefaultResources" />
+		
+		<method name="Reset" />
+				
+		<method name="getText">
+			<parameter name="key" />
+		</method>
+		
+		<method name="getTextFormat">
+			<parameter name="key" />
+			<parameter name="args" />
+		</method>
+		
+		<method name="getLocaleFromName">
+			<parameter name="name" />
+		</method>
+		
+		<method name="getCurrentLocaleName" /> 
+	</public>	
+
+	<script language="VBScript">
+	<![CDATA[
+	
+	'**Start Encode**
+	
+	Option Explicit
+
+	'//////////////////////////////////////////////////////////////
+	'//  Variables
+	'//////////////////////////////////////////////////////////////	
+	Dim m_loaded
+	
+	Dim m_localeDir
+	Dim m_libraryDir
+	Dim m_applicationDir	
+	
+	Dim m_defaultLocale
+	Dim m_currentLocale
+	Dim m_systemLocale	
+	
+	Dim m_currentLCID
+
+	'//////////////////////////////////////////////////////////////
+	'//  Init Code
+	'//////////////////////////////////////////////////////////////	
+	m_loaded = False
+	
+	Sub Init(localeDir, libraryDir, applicationDir)
+		m_defaultLocale = "en"		
+		m_systemLocale = getSystemLocale()
+		
+		m_localeDir = localeDir		
+		m_libraryDir = libraryDir
+		m_applicationDir = applicationDir
+	End Sub
+
+	'//////////////////////////////////////////////////////////////
+	'//  Properties
+	'//////////////////////////////////////////////////////////////	
+	'Force a locale directory
+	Function put_LocaleFolder(dir)
+		m_localeDir = dir
+	End Function	
+	
+	Function get_LocaleFolder
+		get_LocaleFolder = m_localeDir
+	End Function
+	
+	Function put_CurrentLocale(locale)	
+		If IsLocalePresent(locale) Then
+			m_currentLocale = locale
+		End If
+	End Function	
+	
+	Function get_CurrentLocale
+		get_CurrentLocale = m_currentLocale
+	End Function
+	
+	Function get_SystemLocale
+		get_SystemLocale = m_systemLocale
+	End Function
+
+	Function get_LocalesData
+		Set get_LocalesData = m_data
+	End Function	
+		
+	'//////////////////////////////////////////////////////////////
+	'//  Private Functions & Procedures
+	'//////////////////////////////////////////////////////////////	
+	Function getSystemLocale()
+		m_currentLCID = GetLocale()		
+		
+		getSystemLocale = ConvertLCIDtoISO(m_currentLCID)		
+	End Function
+
+	'Create a list of available locale resources
+	Sub LoadResourcesFrom(folder, resType)
+	
+		Dim fsoDir, iniReader, file
+		
+		' We are not initialized, should have called setLocaleDirectory...
+		If folder = "" Then
+			Exit Sub
+		End If
+		
+		Set iniReader = CreateObject("DXScriptLibrary.IniFileReader")				
+  		Set fsoDir = fso.GetFolder(folder)
+
+		For Each file In fsoDir.Files
+			If (LCase(Right(file.name, Len(resType))) = resType) Then
+				iniReader.Filename = folder & "/" & file.name	
+							
+				LoadResourceData iniReader, True
+			End If
+		Next
+		
+		Set iniReader = Nothing
+		Set fsoDir = Nothing
+	End Sub	
+	
+	'Load one of the default resources
+	Sub LoadResourceData(iniReader, isDefault)
+		Dim locale, lang, key
+		
+		' Read locale info		
+		iniReader.Section = "Info"
+		
+		lang = iniReader.getKeyValue("Language") 
+		
+		If (lang = "") Then
+			Exit Sub
+		End If
+		
+		If Not m_data.Exists(lang) Then 
+			Set m_data.Item(lang) = CreateComponent("LocaleInfo")	
+		End If
+		
+		Set locale = m_data.Item(lang)
+				
+		locale.Language = lang
+		If (isDefault) Then
+			locale.Name = iniReader.getKeyValue("Name")
+			locale.Author = iniReader.getKeyValue("Author")
+			locale.Version = iniReader.getKeyValue("Version")
+		End If
+		
+		' Read all locale data
+		iniReader.Section = "LocalizedStrings"
+		
+		For Each key in iniReader.SectionKeys
+			locale.Data.Item(key) = iniReader.getKeyValue(key)				
+		Next		
+	End Sub
+	
+	' Check for current locale
+	'   - check if resource matching the system locale exists
+	'   - fallback to <lang> if not found
+	'   _ if <lang> not found, fallback to default locale ("en")
+	Sub ComputeCurrentLocale		
+		Dim lang
+		
+		m_currentLocale = ConvertLCIDtoISO(m_currentLCID)
+		
+		If (IsLocalePresent(m_currentLocale)) Then			
+			m_loaded = True
+			Exit Sub
+	 	End If
+		
+		'Fallback to <lang>
+		lang = Split(m_currentLocale, "-")(0)
+		
+		If (IsLocalePresent(lang)) Then
+			m_currentLocale = lang
+			m_loaded = True
+			Exit Sub
+	 	End If
+	 	
+	 	'Fallback to 'en'
+	 	If IsLocalePresent("en") Then
+	 		m_currentLocale = "en"
+	 		m_loaded = True
+	 	Else
+	 		m_loaded = False
+	 	End If
+	 	
+	 			
+	End Sub
+
+	' Check if the locale exists
+	Function IsLocalePresent(localeString)
+		Dim locale
+	
+		For Each locale In m_data.Keys		
+			If locale = localeString Then			
+				IsLocalePresent = True
+				Exit Function				
+			End If
+		Next		
+		
+		IsLocalePresent = False
+		
+	End Function
+	
+	' Convert an LCID to the iso code (<lang>-<locale> or <lang>)
+	Function ConvertLCIDtoISO(lcid)
+		
+		Dim langHex, language
+				
+		langHex = Right("000" & Hex(lcid), 4)
+
+		On Error Resume Next
+		language = ""
+		language = shell.RegRead("HKLM\SOFTWARE\Classes\MIME\Database\Rfc1766\" & langHex)
+
+		' split using ;, and select first element in the Array
+		language = Split(language, ";")(0)
+
+		If language = "" Then
+			ConvertLCIDtoISO = "Unknown"
+		Else
+			ConvertLCIDtoISO = language
+		End If		
+				
+	End Function
+	
+	'//////////////////////////////////////////////////////////////
+	'//  Public Functions & Procedures
+	'//////////////////////////////////////////////////////////////	
+	
+	'Load the widget specific strings file and compute the current locale
+	Sub LoadDefaultResources()
+		LoadResourcesFrom m_libraryDir, "res"		  ' Library resources
+		LoadResourcesFrom m_localeDir, "strings"  ' Widget resources
+		
+		' Widget resources override
+		LoadResourcesFrom m_applicationDir, "res"
+		LoadResourcesFrom m_applicationDir, "strings"
+		
+		ComputeCurrentLocale()
+	End Sub
+	
+	Sub Reset()
+		' Clear the list of locales
+		m_data.RemoveAll()
+	End Sub		
+	
+	Function getText(key)	
+		If m_loaded = False Then
+			GetText = key
+			Exit Function
+		End If
+		
+		getText = GetTextInternal(GetKeyValue(key))		
+	End Function
+	
+	' Formated strings
+	Function getTextFormat(key, args)
+		If m_loaded = False Then
+			GetTextFormat = key
+			Exit Function
+		End If
+		
+		Dim i, txt
+	
+	    txt = GetKeyValue(key)
+		
+	    For i = LBound(args) To UBound(args)
+        	txt = Replace(txt, "%"&CStr(i+1)&"%", args(i))
+	    Next	    
+		
+	    getTextFormat = GetTextInternal(txt)
+	
+	End Function
+	
+	Function GetTextInternal(text)	
+		Dim txt
+			
+		txt = Replace(text, "\n", vbCrLf)
+	    txt = Replace(txt, "\t", vbTab)
+		
+		GetTextInternal = txt
+	End Function
+	
+	Function GetKeyValue(key)		
+		Dim data, value
+		
+		Set data = m_data.Item(m_currentLocale).Data
+		
+		If Not data.Exists(key) Then
+			value = "[I18N_ERROR] " & key
+		Else
+			value = data.Item(key)
+		End If
+		
+		GetKeyValue = value
+		
+		Set data = Nothing
+	End Function
+	
+	Function getLocaleFromName(name)		
+		Dim locale
+		For Each locale in m_data.Items
+			If (locale.Name = name) Then
+				getLocaleFromName = locale.Language
+				Exit Function
+			End If
+		Next
+	
+		' Back to default locale
+		getLocaleFromName = m_systemLocale
+	End Function
+	
+	Function getCurrentLocaleName()		
+		getCurrentLocaleName = m_data.Item(m_currentLocale).Name
+	End Function
+	]]>
+	</script>
+
+</component>
+
+<component id="LocaleInfo">
+	<comment>
+		Provides information about a given locale file
+	</comment>
+	<registration description="I18N Locale info"
+      			  progid="DXScriptLibrary.I18NLocale"
+      			  version="1"
+      	    	  classid="{0212AE1F-5961-4467-A705-4F23BE00798E}"/>  
+      	    	  
+    <object id="m_data" progid="Scripting.Dictionary" />
+
+	<public>
+		<property name="Name" internalName="m_name"/>
+		<property name="Language" internalName="m_language"/>
+		<property name="Author" internalName="m_author"/>
+		<property name="Version" internalName="m_version"/>		
+		
+		<property name="Data" internalName="m_data"/>	
+	</public>
+	
+	<script language="JScript">
+	<![CDATA[	
+	
+	//**Start Encode**
+
+	var m_name = "";
+	var m_language = "";
+	var m_author = "";
+	var m_version = "";
+     	    	  
+	]]>
+	</script>
+
+</component>
+</package>
+
