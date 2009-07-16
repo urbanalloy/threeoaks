@@ -425,12 +425,13 @@
 		{
 			m_errorCallback(ErrorCode.E_ERROR, "Response is empty. Please check that the station code you used is valid!");
 			return;
-		}
-		
+		}		
 		
 		// Airport location
 		var location = observation[0].getElementsByTagName("display_location");
 		if (location.length != 0) {
+			
+			m_weather.Location = getComponent("WeatherLocation");
 			
 			m_weather.Location.City  	 = m_helper.GetNodeValue(location[0], "city/text()");		
 			m_weather.Location.State	 = m_helper.GetNodeValue(location[0], "state_name/text()");		
@@ -448,6 +449,8 @@
 		// Personal weather station
 		location = observation[0].getElementsByTagName("location");
 		if (location.length != 0) {
+			
+			m_weather.Location = getComponent("WeatherLocation");
 			
 			m_weather.Location.Name 	 = m_helper.GetNodeValue(location[0], "neighborhood/text()");		
 			m_weather.Location.City  	 = m_helper.GetNodeValue(location[0], "city/text()");		
@@ -540,13 +543,16 @@
 	    
 	    //////////////////////////////
 		//  Parse links to website  //
-		//////////////////////////////
+		//////////////////////////////		
+		var links = getComponent("WeatherLinks");
 		
-		m_weather.Links.Current			 = m_helper.GetNodeValue(observation[0], "ob_url/text()");
-		m_weather.Links.Forecast		 = m_helper.GetNodeValue(observation[0], "forecast_url/text()");
-		m_weather.Links.History			 = m_helper.GetNodeValue(observation[0], "history_url/text()");
-		m_weather.Links.Credit			 = m_helper.GetNodeValue(observation[0], "credit_URL/text()");
-		m_weather.Links.Logo			 = m_helper.GetNodeValue(observation[0], "ob_url/text()");
+		links.Current			 = m_helper.GetNodeValue(observation[0], "ob_url/text()");
+		links.Forecast		 	 = m_helper.GetNodeValue(observation[0], "forecast_url/text()");
+		links.History			 = m_helper.GetNodeValue(observation[0], "history_url/text()");
+		links.Credit			 = m_helper.GetNodeValue(observation[0], "credit_URL/text()");
+		links.Logo				 = m_helper.GetNodeValue(observation[0], "ob_url/text()");
+		
+		m_weather.Links = links;
 	    	
 		m_weatherCallback(m_weather);	
 	}

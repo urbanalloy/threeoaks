@@ -606,6 +606,7 @@
 		<property name="WindChill" 				internalname="m_windChill" />
 		
 		<property name="Pressure" 				internalname="m_pressure" />
+		<property name="PressureTrend"			internalname="m_pressure" />
 				
 		<property name="DewPointDescription" 	internalname="m_dewPointDescription" />
 		<property name="DewPoint" 				internalname="m_dewPoint" />
@@ -615,6 +616,7 @@
 		
 		<property name="SolarRadiation" 		internalname="m_solarRadiation" />
 		<property name="UV" 					internalname="m_UV" />	
+		<property name="UVDescription"			internalname="m_UVDescription" />	
 		
 		<property name="Sunrise" 				internalname="m_sunrise" />
 		<property name="Sunset"					internalname="m_sunset" />
@@ -633,6 +635,12 @@
 		
 		<property name="UseMetricSystem" 		internalName="m_useMetricSystem" />
 		
+		
+		<comment>
+			Time when this object was retrieved (used for caching purposes)
+		</comment>
+		<property name="LastUpdateTime" 		internalName="m_lastUpdateTime" />
+		
 		<method name="ToString" />
 		
 	</public>
@@ -641,15 +649,29 @@
 	<![CDATA[
 	
 	//**Start Encode**
-
-	// Constants
+	
+	/*********************************
+	 * Properties
+	 *********************************/	
 	var DAY_PART_DAY = 0;
 	var DAY_PART_NIGHT = 1;
-
-	// Properties
+	
+	function get_DAY_PART_DAY()
+	{
+		return DAY_PART_DAY;
+	}
+	
+	function get_DAY_PART_NIGHT()
+	{
+		return DAY_PART_NIGHT;
+	}
+	
 	var m_useMetricSystem = true;
-	var m_location = createComponent("WeatherLocation");	
-	var m_links    = createComponent("WeatherLinks");		
+
+	
+	// Weather data	
+	var m_location = null;	
+	var m_links    = null;		
 			
 	var m_station = "";
 	var m_type = "";
@@ -657,7 +679,6 @@
 	var m_description = "";
 	var m_code = "";
 
-	
 	var m_temperature = "";
 	var m_temperatureFeel = "";
 	
@@ -677,6 +698,7 @@
 	var m_windChill = "";
 	
 	var m_pressure = "";
+	var m_pressureTrend = "";
 			
 	var m_dewPointDescription = "";
 	var m_dewPoint = "";
@@ -686,6 +708,7 @@
 	
 	var m_solarRadiation = "";
 	var m_UV = "";
+	var m_UVDescription = "";
 	
 	var m_sunrise = "";
 	var m_sunset = "";
@@ -704,19 +727,17 @@
 	var m_forecastHigh = "";	
 	var m_forecastLow = "";
 	
-	function get_DAY_PART_DAY()
-	{
-		return DAY_PART_DAY;
-	}
+	var m_lastUpdateTime = "";
 	
-	function get_DAY_PART_NIGHT()
-	{
-		return DAY_PART_NIGHT;
-	}
-	
+	/*********************************
+	 * Functions
+	 *********************************/
 	function ToString()
 	{
-		var text = m_location.ToString();
+		var text = "";
+		
+		if (m_location != null)
+			text += m_location.ToString();
 		
 		if (text != "")
 			 text += "\n";	
@@ -752,6 +773,7 @@
 		
 		// Pressure / Dew Point / Heat
 		text += append("Pressure", m_pressure);
+		text += append("Pressure Trend", m_pressure);
 		text += append("DewPoint Description", m_dewPointDescription);
 		text += append("DewPoint", m_dewPoint);
 		text += append("Heat Description", m_heatDescription);
@@ -759,6 +781,7 @@
 		
 		// Solar Radiation & UV
 		text += append("Solar Radiation", m_solarRadiation);
+		text += append("UV Description", m_UVDescription);	
 		text += append("UV", m_UV);		
 		
 		text += append("Day of week", m_dayOfWeek);
@@ -776,10 +799,12 @@
 		text += append("Moon Illumination", m_moonIlluminated);
 		text += append("Moon Age", m_moonAge);
 		
-		var links = m_links.ToString();
+		if (m_links != null) {
+			var links = m_links.ToString();
 		
-		if (links != "")
-			 text += "\n" + links;
+			if (links != "")
+				text += "\n" + links;			 
+		}
 							
 		return text;
 	}
@@ -887,6 +912,8 @@
 	<![CDATA[
 	
 	//**Start Encode**
+	
+	// TODO add function to check if a string is a US zip code
     
 	var m_ID = "";
 
@@ -1184,6 +1211,18 @@
 			<parameter name="entry" />
 			<parameter name="nodeName" />
 		</method>
+		
+		<comment>
+			Check a cache for value using the passed refresh rate
+			
+			returns true if an object is in the cache and up to date
+					false otherwise
+		</comment>
+		<method name="CheckCache">
+			<parameter name="cache" />
+			<parameter name="id" />
+			<parameter name="rate" />
+		</method>
 
 	</public>
 	
@@ -1191,6 +1230,41 @@
 	<![CDATA[
 	
 	//**Start Encode**
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Misc
+	//
+	/////////////////////////////////////////////////////////////////////////////////////////////	
+	
+	function CheckCache(cache, id, rate)
+	{
+		// check if item exists in the cache
+		if (!cache.Exists(id))
+			return false;
+			
+		// Get item last update time
+		var updateTime = cache.Item(id).LastUpdateTime;
+		
+		if (updateTime == null || updateTime == "")
+			return false;
+		
+		debugger;
+		
+		// Check if we are past the refresh time
+		var now = updateTime.clone().setTimeToNow();
+		var refresh = updateTime.clone().addMinutes(rate);
+		
+		// Hmm, something is wrong here!
+		if (now.isBefore(updateTime))
+			return false;
+			
+		// the cache has not expired yet
+		if (now.isBefore(refresh))
+			return false;
+			
+		return true;		
+	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	//

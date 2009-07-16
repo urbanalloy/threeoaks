@@ -207,7 +207,7 @@ Sub GetForecast()
 	
 	Dim query, retCode
 	Set query = WeatherController.GetQueryObject()	
-	query.CustomQueryString = DesktopX.ScriptObject("DXWeather_Query").Control.Text
+	query.ID = DesktopX.ScriptObject("DXWeather_Query").Control.Text
 	retCode = WeatherController.GetForecast(query)
 	
 	ParseRetCode retCode

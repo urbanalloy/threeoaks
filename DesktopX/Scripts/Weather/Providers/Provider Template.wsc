@@ -6,7 +6,7 @@
 //
 // 
 //
-// Copyright (c) 2009, <AUTHOR>
+// Copyright (c) 2009, [AUTHOR]
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,16 +42,16 @@
 	<comment>
 		
 	</comment>
-	<registration description="<DESCRIPTION>"
-      			  progid="DXWeatherProvider.<NAME>"
+	<registration description="[DESCRIPTION]"
+      			  progid="DXWeatherProvider.[NAME]"
       			  version="1"
-      	    	  classid="<CLASSID>"/>  
-      	    	  
+      	    	  classid="[CLASSID]"/>        	    	  
       	    
 	<object id="m_locations" 	progid="Scripting.Dictionary" />  
-    <object id="m_alerts" 		progid="Scripting.Dictionary" />  
+    <object id="m_weather" 		progid="Scripting.Dictionary" />   
     <object id="m_forecast" 	progid="Scripting.Dictionary" />  
-    <object id="m_cameras" 		progid="Scripting.Dictionary" />  
+    <object id="m_alerts" 		progid="Scripting.Dictionary" />      
+    <object id="m_cameras" 		progid="Scripting.Dictionary" />    
     
     <object id="m_request" 		progid="Microsoft.XmlDom" /> 
 	    
@@ -138,10 +138,6 @@
 	//**Start Encode**
 	
 	var ErrorCode 			= getComponent("WeatherError");
-	
-	// Data
-	var m_weather   		= null;
-	var m_lastUpdateTime	= null;
 	
 	// Helper
 	var m_helper			= getComponent("WeatherHelper");
