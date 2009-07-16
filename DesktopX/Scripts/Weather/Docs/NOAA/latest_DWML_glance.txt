@@ -1,0 +1,483 @@
+<?xml version="1.0"?>
+<dwml version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.nws.noaa.gov/forecasts/xml/DWMLgen/schema/DWML.xsd">
+  <head>
+    <product srsName="WGS 1984" concise-name="glance" operational-mode="official">
+      <title>NOAA's National Weather Service Forecast at a Glance</title>
+      <field>meteorological</field>
+      <category>forecast</category>
+      <creation-date refresh-frequency="PT1H">2008-12-05T19:36:49Z</creation-date>
+    </product>
+    <source>
+      <more-information>http://www.nws.noaa.gov/forecasts/xml/</more-information>
+      <production-center>Meteorological Development Laboratory<sub-center>Product Generation Branch</sub-center></production-center>
+      <disclaimer>http://www.nws.noaa.gov/disclaimer.html</disclaimer>
+      <credit>http://www.weather.gov/</credit>
+      <credit-logo>http://www.weather.gov/images/xml_logo.gif</credit-logo>
+      <feedback>http://www.weather.gov/feedback.php</feedback>
+    </source>
+  </head>
+  <data>
+    <location>
+      <location-key>point1</location-key>
+      <point latitude="48.22" longitude="-106.62"/>
+    </location>
+    <moreWeatherInformation applicable-location="point1">http://forecast.weather.gov/MapClick.php?textField1=48.22&amp;textField2=-106.62</moreWeatherInformation>
+    <time-layout time-coordinate="local" summarization="none">
+      <layout-key>k-p24h-n7-1</layout-key>
+      <start-valid-time period-name="Today">2008-12-05T07:00:00-07:00</start-valid-time>
+      <end-valid-time>2008-12-05T19:00:00-07:00</end-valid-time>
+      <start-valid-time period-name="Tomorrow">2008-12-06T07:00:00-07:00</start-valid-time>
+      <end-valid-time>2008-12-06T19:00:00-07:00</end-valid-time>
+      <start-valid-time period-name="Sunday">2008-12-07T07:00:00-07:00</start-valid-time>
+      <end-valid-time>2008-12-07T19:00:00-07:00</end-valid-time>
+      <start-valid-time period-name="Monday">2008-12-08T07:00:00-07:00</start-valid-time>
+      <end-valid-time>2008-12-08T19:00:00-07:00</end-valid-time>
+      <start-valid-time period-name="Tuesday">2008-12-09T07:00:00-07:00</start-valid-time>
+      <end-valid-time>2008-12-09T19:00:00-07:00</end-valid-time>
+      <start-valid-time period-name="Wednesday">2008-12-10T07:00:00-07:00</start-valid-time>
+      <end-valid-time>2008-12-10T19:00:00-07:00</end-valid-time>
+      <start-valid-time period-name="Thursday">2008-12-11T07:00:00-07:00</start-valid-time>
+      <end-valid-time>2008-12-11T19:00:00-07:00</end-valid-time>
+    </time-layout>
+    <time-layout time-coordinate="local" summarization="none">
+      <layout-key>k-p24h-n6-2</layout-key>
+      <start-valid-time period-name="Tonight">2008-12-05T19:00:00-07:00</start-valid-time>
+      <end-valid-time>2008-12-06T08:00:00-07:00</end-valid-time>
+      <start-valid-time period-name="Tomorrow Night">2008-12-06T19:00:00-07:00</start-valid-time>
+      <end-valid-time>2008-12-07T08:00:00-07:00</end-valid-time>
+      <start-valid-time period-name="Sunday Night">2008-12-07T19:00:00-07:00</start-valid-time>
+      <end-valid-time>2008-12-08T08:00:00-07:00</end-valid-time>
+      <start-valid-time period-name="Monday Night">2008-12-08T19:00:00-07:00</start-valid-time>
+      <end-valid-time>2008-12-09T08:00:00-07:00</end-valid-time>
+      <start-valid-time period-name="Tuesday Night">2008-12-09T19:00:00-07:00</start-valid-time>
+      <end-valid-time>2008-12-10T08:00:00-07:00</end-valid-time>
+      <start-valid-time period-name="Wednesday Night">2008-12-10T19:00:00-07:00</start-valid-time>
+      <end-valid-time>2008-12-11T08:00:00-07:00</end-valid-time>
+    </time-layout>
+    <time-layout time-coordinate="local" summarization="none">
+      <layout-key>k-p3h-n34-3</layout-key>
+      <start-valid-time>2008-12-05T14:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-05T17:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-05T20:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-05T23:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T02:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T05:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T08:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T11:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T14:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T17:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T20:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T23:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T02:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T05:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T08:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T11:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T14:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T17:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T23:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-08T05:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-08T11:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-08T17:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-08T23:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-09T05:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-09T11:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-09T17:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-09T23:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-10T05:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-10T11:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-10T17:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-10T23:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-11T05:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-11T11:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-11T17:00:00-07:00</start-valid-time>
+    </time-layout>
+    <time-layout time-coordinate="local" summarization="none">
+      <layout-key>k-p0h-n61-4</layout-key>
+      <start-valid-time>2008-12-05T13:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-05T14:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-05T15:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-05T16:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-05T17:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-05T18:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-05T19:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-05T20:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-05T21:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-05T22:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-05T23:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T00:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T01:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T02:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T03:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T04:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T05:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T06:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T07:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T08:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T09:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T10:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T11:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T12:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T13:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T14:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T15:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T16:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T17:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T18:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T19:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T20:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T21:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T22:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-06T23:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T00:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T01:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T02:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T03:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T04:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T05:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T06:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T07:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T08:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T09:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T10:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T11:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T12:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T13:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T14:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T15:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T16:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T17:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-07T23:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-08T05:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-08T11:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-08T17:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-08T23:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-09T05:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-09T11:00:00-07:00</start-valid-time>
+      <start-valid-time>2008-12-09T17:00:00-07:00</start-valid-time>
+    </time-layout>
+    <parameters applicable-location="point1">
+      <temperature type="maximum" units="Fahrenheit" time-layout="k-p24h-n7-1">
+        <name>Daily Maximum Temperature</name>
+        <value>38</value>
+        <value>29</value>
+        <value>33</value>
+        <value>20</value>
+        <value>37</value>
+        <value>18</value>
+        <value>14</value>
+      </temperature>
+      <temperature type="minimum" units="Fahrenheit" time-layout="k-p24h-n6-2">
+        <name>Daily Minimum Temperature</name>
+        <value>17</value>
+        <value>19</value>
+        <value>20</value>
+        <value>14</value>
+        <value>14</value>
+        <value>2</value>
+      </temperature>
+      <cloud-amount type="total" units="percent" time-layout="k-p3h-n34-3">
+        <name>Cloud Cover Amount</name>
+        <value>97</value>
+        <value>92</value>
+        <value>92</value>
+        <value>92</value>
+        <value>92</value>
+        <value>96</value>
+        <value>96</value>
+        <value>96</value>
+        <value>96</value>
+        <value>96</value>
+        <value>96</value>
+        <value>96</value>
+        <value>96</value>
+        <value>94</value>
+        <value>94</value>
+        <value>95</value>
+        <value>95</value>
+        <value>95</value>
+        <value>95</value>
+        <value>77</value>
+        <value>77</value>
+        <value>61</value>
+        <value>61</value>
+        <value>69</value>
+        <value>69</value>
+        <value>79</value>
+        <value>79</value>
+        <value>91</value>
+        <value>91</value>
+        <value>59</value>
+        <value>59</value>
+        <value>71</value>
+        <value>71</value>
+        <value>56</value>
+      </cloud-amount>
+      <weather time-layout="k-p3h-n34-3">
+        <name>Weather Type, Coverage, and Intensity</name>
+        <weather-conditions>
+          <value coverage="slight chance" intensity="very light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="slight chance" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="slight chance" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="slight chance" intensity="very light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="slight chance" intensity="very light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="likely" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="likely" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="likely" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="likely" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="chance" intensity="very light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="chance" intensity="very light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="chance" intensity="very light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="chance" intensity="very light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="chance" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="chance" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="chance" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="chance" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="chance" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="chance" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="slight chance" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="slight chance" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions/>
+        <weather-conditions/>
+        <weather-conditions/>
+        <weather-conditions/>
+        <weather-conditions>
+          <value coverage="slight chance" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="slight chance" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="chance" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions>
+          <value coverage="chance" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+        <weather-conditions/>
+        <weather-conditions/>
+        <weather-conditions/>
+        <weather-conditions/>
+        <weather-conditions>
+          <value coverage="slight chance" intensity="light" weather-type="snow" qualifier="none">
+            <visibility xsi:nil="true"/>
+          </value>
+        </weather-conditions>
+      </weather>
+      <conditions-icon type="forecast-NWS" time-layout="k-p3h-n34-3">
+        <name>Conditions Icons</name>
+        <icon-link>http://forecast.weather.gov/images/wtf/sn30.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nsn30.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nsn20.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nsn20.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nsn20.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nsn20.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/sn60.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/sn60.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/sn60.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nsn60.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nsn30.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nsn30.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nsn30.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nsn30.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/sn30.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/sn30.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/sn30.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nsn30.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nsn30.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nsn30.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/sn20.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nbkn.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nbkn.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nbkn.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/bkn.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nsn10.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nsn20.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nsn20.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/sn30.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nbkn.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nbkn.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nbkn.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/bkn.jpg</icon-link>
+        <icon-link>http://forecast.weather.gov/images/wtf/nsn10.jpg</icon-link>
+      </conditions-icon>
+      <hazards time-layout="k-p0h-n61-4">
+        <name>Watches, Warnings, and Advisories</name>
+        <hazard-conditions>
+          <hazard hazardCode="LW.Y" phenomena="Lake Wind" significance="Advisory" hazardType="long duration">
+            <hazardTextURL>http://forecast.weather.gov/wwamap/wwatxtget.php?cwa=usa&amp;wwa=Lake%20Wind%20Advisory</hazardTextURL>
+          </hazard>
+        </hazard-conditions>
+        <hazard-conditions>
+          <hazard hazardCode="LW.Y" phenomena="Lake Wind" significance="Advisory" hazardType="long duration">
+            <hazardTextURL>http://forecast.weather.gov/wwamap/wwatxtget.php?cwa=usa&amp;wwa=Lake%20Wind%20Advisory</hazardTextURL>
+          </hazard>
+        </hazard-conditions>
+        <hazard-conditions>
+          <hazard hazardCode="LW.Y" phenomena="Lake Wind" significance="Advisory" hazardType="long duration">
+            <hazardTextURL>http://forecast.weather.gov/wwamap/wwatxtget.php?cwa=usa&amp;wwa=Lake%20Wind%20Advisory</hazardTextURL>
+          </hazard>
+        </hazard-conditions>
+        <hazard-conditions>
+          <hazard hazardCode="LW.Y" phenomena="Lake Wind" significance="Advisory" hazardType="long duration">
+            <hazardTextURL>http://forecast.weather.gov/wwamap/wwatxtget.php?cwa=usa&amp;wwa=Lake%20Wind%20Advisory</hazardTextURL>
+          </hazard>
+        </hazard-conditions>
+        <hazard-conditions>
+          <hazard hazardCode="LW.Y" phenomena="Lake Wind" significance="Advisory" hazardType="long duration">
+            <hazardTextURL>http://forecast.weather.gov/wwamap/wwatxtget.php?cwa=usa&amp;wwa=Lake%20Wind%20Advisory</hazardTextURL>
+          </hazard>
+        </hazard-conditions>
+        <hazard-conditions>
+          <hazard hazardCode="LW.Y" phenomena="Lake Wind" significance="Advisory" hazardType="long duration">
+            <hazardTextURL>http://forecast.weather.gov/wwamap/wwatxtget.php?cwa=usa&amp;wwa=Lake%20Wind%20Advisory</hazardTextURL>
+          </hazard>
+        </hazard-conditions>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+        <hazard-conditions/>
+      </hazards>
+    </parameters>
+  </data>
+</dwml>

@@ -2,6 +2,9 @@ Option Explicit
 
 Dim WeatherController
 Dim ErrorCode
+Dim IniFile
+
+'#include "licences.ini.sample"
 
 Dim LIB_FOLDER
 LIB_FOLDER = "D:/Sources/Company/src/trunk/src/DesktopX/DXScriptLibrary/Weather/"
@@ -10,6 +13,7 @@ LIB_FOLDER = "D:/Sources/Company/src/trunk/src/DesktopX/DXScriptLibrary/Weather/
 Sub Object_OnScriptEnter	
 	Set WeatherController = Nothing
 	Set ErrorCode = Nothing
+	Set IniFile = Nothing
 
 	Object.Visible = False
 	
@@ -24,6 +28,7 @@ End Sub
 Sub Object_OnScriptExit
 	Set ErrorCode = Nothing
 	Set WeatherController = Nothing
+	Set IniFile = Nothing
 End Sub
 
 '===========================================================
@@ -59,8 +64,9 @@ Sub InitWidget()
 	Set WeatherController = GetObject("script:" & LIB_FOLDER & "/Weather.wsc")
 	
 	'#ifdef DEBUG
-	WeatherController.AddProvider "WUnderground", GetObject("script:" & LIB_FOLDER & "Providers/WUnderground.wsc")
-	WeatherController.AddProvider "TWC", GetObject("script:" & LIB_FOLDER & "Providers/TWC.wsc")
+	WeatherController.AddProvider GetObject("script:" & LIB_FOLDER & "/Providers/TWC.wsc")	
+	WeatherController.AddProvider GetObject("script:" & LIB_FOLDER & "/Providers/NOAA.wsc")		
+	WeatherController.AddProvider GetObject("script:" & LIB_FOLDER & "/Providers/WUnderground.wsc")
 	'#endif
 		
 	WeatherController.RegisterCallbacks GetRef("OnLocations"), _
@@ -71,13 +77,9 @@ Sub InitWidget()
 										GetRef("OnError")
 											
 	WeatherController.UseMetricSystem = True				' Default is True
-	WeatherController.SetLicense "my_id", "my_key" 			' This will be ignored by the WUnderground provider as it doesn't use a license key
-	
-	InitProviders()
-End Sub	
 
-Sub InitProviders()
-
+	'===========================================================================================================	
+	' Init Providers
 	DesktopX.ScriptObject("DXWeather_Provider").Control.ResetList()
 
 	If (WeatherController.Providers.Count = 0) Then
@@ -96,6 +98,8 @@ Sub InitProviders()
 End Sub
 	
 Sub OnSelectProvider(item, value)
+	Cleanup()
+	
 	Dim retCode, keys
 	
 	' Get the provider ids
@@ -105,6 +109,14 @@ Sub OnSelectProvider(item, value)
 	
 	If retCode <> ErrorCode.E_OK Then
 		AppendInfo "Error setting provider: " & retCode & vbNewLine
+		Exit Sub
+	End If
+	
+	' Set license info
+	retCode = SetLicenceInfo(keys(item))
+	
+	If retCode <> ErrorCode.E_OK Then
+		ParseRetCode retCode
 		DesktopX.ScriptObject("DXWeather_Query").Control.Enabled = False
 	Else
 		DesktopX.ScriptObject("DXWeather_Query").Control.Enabled = True
@@ -160,6 +172,23 @@ Sub ResetScript(name, script)
 End Sub
 
 '===========================================================
+'== Licences
+'===========================================================
+
+Function SetLicenceInfo(id)
+	' Get iniFile component
+	If (IniFile Is Nothing) Then
+		Set IniFile = GetObject("script:" & LIB_FOLDER & "./../File/IniFile.wsc")	
+		
+		IniFile.FileName = LIB_FOLDER & "/licences.ini"
+	End If
+	
+	IniFile.Section = id	
+
+	SetLicenceInfo = WeatherController.SetLicense(IniFile.getKeyValue("id"), IniFile.getKeyValue("key"))
+End Function
+
+'===========================================================
 '== Actions
 '===========================================================
 Sub GetLocations()
@@ -205,8 +234,6 @@ Sub GetAlerts()
 	
 	ParseRetCode retCode
 End Sub
-
-
 
 '===========================================================
 '== Callbacks
