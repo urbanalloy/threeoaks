@@ -760,7 +760,10 @@
 	
 	function ToString()
 	{
-		var text = m_location.ToString() + "\n";	
+		var text = m_location.ToString();
+		
+		if (text != "")
+			 text += "\n";	
 		
 		// Station name & type
 		text += append("Station", m_station);
@@ -771,7 +774,8 @@
 		text += append("Code", m_code);
 			
 		// Date & Time
-		text += append("Date", m_date.toISOString());
+		if (m_date != null)
+			text += append("Date", m_date.toISOString());
 			
 		// Temperature / Humidity / Precipitation / Visibility
 		text += append("Temperature", m_temperature);
@@ -799,15 +803,7 @@
 		
 		// Solar Radiation & UV
 		text += append("Solar Radiation", m_solarRadiation);
-		text += append("UV", m_UV);
-		
-		// Sunrise / Sunset / Moon / Day
-		text += append("Sunrise", m_sunrise);
-		text += append("Sunset", m_sunset);
-		text += append("Moonphase", m_moonPhaseDescription);
-		text += append("Code", m_moonPhaseCode);
-		text += append("Illumination", m_moonIlluminated);
-		text += append("Age", m_moonAge);
+		text += append("UV", m_UV);		
 		
 		text += append("Day of week", m_dayOfWeek);
 		text += append("Day part", m_dayPart);
@@ -816,14 +812,25 @@
 		text += append("High", m_forecastHigh);
 		text += append("Low", m_forecastLow);
 		
-		text += "\n" + m_links.ToString();
+		// Sunrise / Sunset / Moon / Day
+		text += append("Sunrise", m_sunrise);
+		text += append("Sunset", m_sunset);
+		text += append("Moonphase", m_moonPhaseDescription);
+		text += append("Moon Code", m_moonPhaseCode);
+		text += append("Moon Illumination", m_moonIlluminated);
+		text += append("Moon Age", m_moonAge);
+		
+		var links = m_links.ToString();
+		
+		if (links != "")
+			 text += "\n" + links;
 							
 		return text;
 	}
 	
 	function append(title, value)
 	{
-		if (value == "")
+		if (value == null || value == "")
 			return "";
 			
 		return title + ": " + value + "\n";
@@ -980,13 +987,17 @@
 			text += "Name: " + m_name + "\n";;
 		
 		// City	
-		text += "City: " + m_city;
-		if (m_state != "")
-			text += ", " + m_state;
-			 
-		if (m_country != "")
-			text += " (" + m_country + ")"
-		text += "\n";
+		if (m_city != "" || m_state != "" || m_country !="") {
+			text += "City: " + m_city;
+			
+			if (m_state != "")
+				text += ", " + m_state;
+				 
+			if (m_country != "")
+				text += " (" + m_country + ")"
+				
+			text += "\n";
+		}
 		
 		// Coordinates
 		if (m_latitude != "" || m_longitude != "")
@@ -1347,8 +1358,7 @@
 	function RemoveSpaces(s) {
 		return s.replace(/(\s|\n)+/g,'');
 	}
-	
-	
+		
 	]]>
 	</script>
 
@@ -1675,7 +1685,7 @@
 	     * @return {Number}  The number of days in the month.
 	     */
 	    $P.getDaysInMonth = function (year, month) {
-	        return [31, ($D.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+	        return [31, ($P.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
 	    };
 	 
 	    $P.getTimezoneAbbreviation = function (offset) {
@@ -1832,7 +1842,7 @@
 	        var n = this.getDate();
 	        this.setDate(1);
 	        this.setMonth(this.getMonth() + value * 1);
-	        this.setDate(Math.min(n, $D.getDaysInMonth(this.getFullYear(), this.getMonth())));
+	        this.setDate(Math.min(n, $P.getDaysInMonth(this.getFullYear(), this.getMonth())));
 	        return this;
 	    };
 	
@@ -2015,7 +2025,7 @@
 	     * @return {Boolean} true if within range, otherwise false.
 	     */
 	    $P.validateDay = function (value, year, month) {
-	        return validate(value, 1, $D.getDaysInMonth(year, month), "day");
+	        return validate(value, 1, $P.getDaysInMonth(year, month), "day");
 	    };
 	
 	    /**
@@ -2049,32 +2059,32 @@
 	     * @return {Date}    this
 	     */
 	    $P.set = function (config) {
-	        if ($D.validateMillisecond(config.millisecond)) {
+	        if ($P.validateMillisecond(config.millisecond)) {
 	            this.addMilliseconds(config.millisecond - this.getMilliseconds()); 
 	        }
 	        
-	        if ($D.validateSecond(config.second)) {
+	        if ($P.validateSecond(config.second)) {
 	            this.addSeconds(config.second - this.getSeconds()); 
 	        }
 	        
-	        if ($D.validateMinute(config.minute)) {
+	        if ($P.validateMinute(config.minute)) {
 	            this.addMinutes(config.minute - this.getMinutes()); 
 	        }
 	        
-	        if ($D.validateHour(config.hour)) {
+	        if ($P.validateHour(config.hour)) {
 	            this.addHours(config.hour - this.getHours()); 
 	        }
 	        
-	        if ($D.validateMonth(config.month)) {
+	        if ($P.validateMonth(config.month)) {
 	            this.addMonths(config.month - this.getMonth()); 
 	        }
 	
-	        if ($D.validateYear(config.year)) {
+	        if ($P.validateYear(config.year)) {
 	            this.addYears(config.year - this.getFullYear()); 
 	        }
 	        
 		    /* day has to go last because you can't validate the day without first knowing the month */
-	        if ($D.validateDay(config.day, this.getFullYear(), this.getMonth())) {
+	        if ($P.validateDay(config.day, this.getFullYear(), this.getMonth())) {
 	            this.addDays(config.day - this.getDate()); 
 	        }
 	        
@@ -2106,7 +2116,7 @@
 	     * @return {Date}    this
 	     */
 	    $P.moveToLastDayOfMonth = function () { 
-	        return this.set({ day: $D.getDaysInMonth(this.getFullYear(), this.getMonth())});
+	        return this.set({ day: $P.getDaysInMonth(this.getFullYear(), this.getMonth())});
 	    };
 	
 	    /**
@@ -2165,7 +2175,7 @@
 	     * @return {String} The abbreviated time zone name (e.g. "EST")
 	     */
 	    $P.getTimezone = function () {
-	        return $D.getTimezoneAbbreviation(this.getUTCOffset());
+	        return $P.getTimezoneAbbreviation(this.getUTCOffset());
 	    };
 	
 	    $P.setTimezoneOffset = function (offset) {
@@ -2174,7 +2184,7 @@
 	    };
 	
 	    $P.setTimezone = function (offset) { 
-	        return this.setTimezoneOffset($D.getTimezoneOffset(offset)); 
+	        return this.setTimezoneOffset($P.getTimezoneOffset(offset)); 
 	    };
 	
 	    /**
@@ -2420,13 +2430,13 @@
 // #region *******************************      Parser      *********************************
 
 	(function () {
-	    Date.Parsing = {
+	    Date.prototype.Parsing = {
 	        Exception: function (s) {
 	            this.message = "Parse error at '" + s.substring(0, 10) + " ...'"; 
 	        }
 	    };
 	    
-	    var $P = Date.Parsing; 
+	    var $P = Date.prototype.Parsing; 
 	    var _ = $P.Operators = {
 	        //
 	        // Tokenizers
@@ -2893,9 +2903,9 @@
 	        return rx;
 	    };
 	    
-	    $D.Grammar = {};
+	    $P.Grammar = {};
 		
-	    $D.Translator = {
+	    $P.Translator = {
 	        hour: function (s) { 
 	            return function () { 
 	                this.hour = Number(s); 
@@ -3010,7 +3020,7 @@
 	                }
 	            }
 	            
-	            if (this.day > $D.getDaysInMonth(this.year, this.month)) {
+	            if (this.day > $P.getDaysInMonth(this.year, this.month)) {
 	                throw new RangeError(this.day + " is not a valid value for days.");
 	            }
 	
@@ -3037,7 +3047,7 @@
 	                }
 	            }
 	            
-	            var today = $D.today();
+	            var today = $P.today();
 	            
 	            if (this.now && !this.unit && !this.operator) { 
 	                return new Date(); 
@@ -3073,7 +3083,7 @@
 	            
 	            if (expression && this.weekday && this.unit != "month") {
 	                this.unit = "day";
-	                gap = ($D.getDayNumberFromName(this.weekday) - today.getDay());
+	                gap = ($P.getDayNumberFromName(this.weekday) - today.getDay());
 	                mod = 7;
 	                this.days = gap ? ((gap + (orient * mod)) % mod) : (orient * mod);
 	            }
@@ -3152,7 +3162,7 @@
 	        }
 	    };
 	
-	    var _ = $D.Parsing.Operators, g = $D.Grammar, t = $D.Translator, _fn;
+	    var _ = $P.Parsing.Operators, g = $P.Grammar, t = $P.Translator, _fn;
 	
 	    g.datePartDelimiter = _.rtoken(/^([\s\-\.\,\/\x27]+)/); 
 	    g.timePartDelimiter = _.stoken(":");
@@ -3282,7 +3292,7 @@
 	        if (g[fmt]) { 
 	            return g[fmt]; 
 	        } else { 
-	            throw $D.Parsing.Exception(fmt); 
+	            throw $P.Parsing.Exception(fmt); 
 	        }
 	    }
 	    ),
@@ -3368,7 +3378,7 @@
 	        return g._start.call({}, s);
 	    };
 		
-		$P._parse = $D.parse;
+		$P._parse = $P.parse;
 	
 	    /**
 	     * Converts the specified string value into its JavaScript Date equivalent using CultureInfo specific format information.
@@ -3479,7 +3489,7 @@
 	            return s;
 	        }
 	        try { 
-	            r = $D.Grammar.start.call({}, s.replace(/^\s*(\S*(\s+\S+)*)\s*$/, "$1")); 
+	            r = $P.Grammar.start.call({}, s.replace(/^\s*(\S*(\s+\S+)*)\s*$/, "$1")); 
 	        } catch (e) { 
 	            return null; 
 	        }
@@ -3487,7 +3497,7 @@
 	    };
 	
 	    $P.getParseFunction = function (fx) {
-	        var fn = $D.Grammar.formats(fx);
+	        var fn = $P.Grammar.formats(fx);
 	        return function (s) {
 	            var r = null;
 	            try { 
@@ -3523,7 +3533,7 @@
 	     * @return {Date}    A Date object or null if the string cannot be converted into a Date.
 	     */
 	    $P.parseExact = function (s, fx) { 
-	        return $D.getParseFunction(fx)(s); 
+	        return $P.getParseFunction(fx)(s); 
 	    };	
 	}());
 
@@ -3590,7 +3600,7 @@
 	     * @return {Date}    date
 	     */    
 	    $P.next = function () {
-	        return $D.today().next();
+	        return $P.today().next();
 	    };
 	
 	    /** 
@@ -3624,8 +3634,8 @@
 	     *  
 	     * @return {Date}    date
 	     */
-	    $P.last = $D.prev = $D.previous = function () {
-	        return $D.today().last();
+	    $P.last = $P.prev = $P.previous = function () {
+	        return $P.today().last();
 	    };    
 	
 	    /** 
@@ -3733,7 +3743,7 @@
 	     * @return {Date}    date
 	     */
 	    $P.at = function (time) {
-	        return (typeof time === "string") ? $D.parse(this.toString("d") + " " + time) : this.set(time);
+	        return (typeof time === "string") ? $P.parse(this.toString("d") + " " + time) : this.set(time);
 	    }; 
 	        
 	    /** 
@@ -3861,7 +3871,7 @@
 	                var temp = this.clone().moveToLastDayOfMonth();
 	                this.moveToNthOccurrence(n, ntemp);
 	                if (this > temp) {
-	                    throw new RangeError($D.getDayName(n) + " does not occur " + ntemp + " times in the month of " + $D.getMonthName(temp.getMonth()) + " " + temp.getFullYear() + ".");
+	                    throw new RangeError($P.getDayName(n) + " does not occur " + ntemp + " times in the month of " + $P.getMonthName(temp.getMonth()) + " " + temp.getFullYear() + ".");
 	                }
 	                return this;
 	            }			
@@ -3871,7 +3881,7 @@
 	    
 	    var sdf = function (n) {
 	        return function () {
-	            var t = $D.today(), shift = n - t.getDay();
+	            var t = $P.today(), shift = n - t.getDay();
 	            if (n === 0 && $C.firstDayOfWeek === 1 && t.getDay() !== 0) {
 	                shift = shift + 7;
 	            }
@@ -3881,10 +3891,10 @@
 		
 	    for (var i = 0; i < dx.length; i++) {
 	        // Create constant static Day Name variables. Example: Date.MONDAY or Date.MON
-	        $D[dx[i].toUpperCase()] = $D[dx[i].toUpperCase().substring(0, 3)] = i;
+	        $P[dx[i].toUpperCase()] = $P[dx[i].toUpperCase().substring(0, 3)] = i;
 	
 	        // Create Day Name functions. Example: Date.monday() or Date.mon()
-	        $D[dx[i]] = $D[dx[i].substring(0, 3)] = sdf(i);
+	        $P[dx[i]] = $P[dx[i].substring(0, 3)] = sdf(i);
 	
 	        // Create Day Name instance functions. Example: Date.today().next().monday()
 	        $P[dx[i]] = $P[dx[i].substring(0, 3)] = df(i);
@@ -3903,16 +3913,16 @@
 	    
 	    var smf = function (n) {
 	        return function () {
-	            return $D.today().set({ month: n, day: 1 });
+	            return $P.today().set({ month: n, day: 1 });
 	        };
 	    };
 	    
 	    for (var j = 0; j < mx.length; j++) {
 	        // Create constant static Month Name variables. Example: Date.MARCH or Date.MAR
-	        $D[mx[j].toUpperCase()] = $D[mx[j].toUpperCase().substring(0, 3)] = j;
+	        $P[mx[j].toUpperCase()] = $P[mx[j].toUpperCase().substring(0, 3)] = j;
 	
 	        // Create Month Name functions. Example: Date.march() or Date.mar()
-	        $D[mx[j]] = $D[mx[j].substring(0, 3)] = smf(j);
+	        $P[mx[j]] = $P[mx[j].substring(0, 3)] = smf(j);
 	
 	        // Create Month Name instance functions. Example: Date.today().next().march()
 	        $P[mx[j]] = $P[mx[j].substring(0, 3)] = mf(j);
@@ -4724,9 +4734,7 @@
 		m_weather.Type 			  = m_helper.GetNodeValue(observation[0], "station_type/text()");
 		
 		// Observation date
-		m_weather.Date = m_dateHelper.GetDate();
-		m_weather.Date.today();
-		m_weather.Date.parse(m_helper.GetNodeValue(observation[0],  "observation_time_rfc822/text()"));
+		m_weather.Date = m_dateHelper.GetDate().parse(m_helper.GetNodeValue(observation[0],  "observation_time_rfc822/text()"));
 		
 		// Temperature
 		if (m_useMetricSystem)
@@ -4887,9 +4895,39 @@
 			
 		// forecast index
 		var i = 0;	
+		
+		// Parse text forecast (today / tonight)
+		var text_forecast = m_request.selectNodes("forecast/txt_forecast");
+		if (text_forecast.length != 0) {
+			
+			var date = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(text_forecast[0], "date/text()"), "h:mm tt T");		
+			
+			var textforecastEnumerator = new Enumerator(text_forecast[0].getElementsByTagName("forecastday"));
+			for (var enumerator = textforecastEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
+			{		
+			    var entry = enumerator.item();
+			    var forecast = getComponent("WeatherInfo");
 				
+				// Description
+			    forecast.Description = m_helper.GetNodeValue(entry, "title/text()");
+			    
+			    // Weather code
+	   			forecast.Code     = parseCode(m_helper.GetNodeValue(entry, "icon/text()"));
+				
+				// Forecast text
+				forecast.ForecastDescription = m_helper.GetNodeValue(entry, "fcttext/text()");
+				
+				// FIXME: Set day part!
+				
+				forecast.Date = date;
+			    			    
+			  	m_forecast.Add(i, forecast);    
+			    i++;
+			}
+		}			
+		
 		// Parse detailed forecast
-		var forecastNode = m_request.selectNodes("simpleforecast");
+		var forecastNode = m_request.selectNodes("forecast/simpleforecast");
 		if (forecastNode.length != 0) {
 			
 			var forecastEnumerator = new Enumerator(forecastNode[0].getElementsByTagName("forecastday"));
@@ -4914,41 +4952,15 @@
 			    }
 			    
 			    // Date
-			    //forecast.Date = m_dateHelper.GetDate();
-			   // forecast.Date.parse(m_helper.GetNodeValue(entry, "low/fahrenheit/text()"));
-			    
+			    forecast.Date = m_dateHelper.GetDate().parse(m_helper.GetNodeValue(entry, "date/epoch/text()") * 1000, "U");			    
 			    
 			    m_forecast.Add(i, forecast);		    
 			    i++;
 			}
 		}
-		
-		// Reset index
-		i = 0;
-		
-		// Parse text forecast
-		var text_forecast = m_request.selectNodes("txt_forecast");
-		if (text_forecast.length != 0) {
-			
-			var textforecastEnumerator = new Enumerator(forecastNode[0].getElementsByTagName("forecastday"));
-			for (var enumerator = textforecastEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
-			{						
-			    // Get the forecast
-			    var forecast = m_forecast.Item(i);			
-				if (forecast == null)
-					forecast = getComponent("WeatherInfo");
-					
-				// Update the forecast
-				var entry = enumerator.item();
-			    
-			    
-			  	m_forecast.Item(i) = forecast;	    
-			    i++;
-			}
-		}	
-		
+
 		// Parse moon phase (insert in first forecast)
-		var moon_phase = m_request.selectNodes("moon_phase");
+		var moon_phase = m_request.selectNodes("forecast/moon_phase");
 		if (moon_phase.length != 0)
 		{
 			// Get the first forecast
@@ -4956,8 +4968,25 @@
 			if (forecast == null)
 				forecast = getComponent("WeatherInfo");
 				
-			// Update forecast
+			// Update Moon info
+			forecast.MoonIlluminated 		 = m_helper.GetNodeValue(moon_phase[0], "percentIlluminated/text()"); 
+			forecast.MoonAge				 = m_helper.GetNodeValue(moon_phase[0], "ageOfMoon/text()");
 			
+			// Sunrise / Sunset times
+			var sunrise_hour 				 = m_helper.GetNodeValue(moon_phase[0], "sunrise/hour/text()");
+			var sunrise_minute 				 = m_helper.GetNodeValue(moon_phase[0], "sunrise/minute/text()");
+			var sunset_hour 				 = m_helper.GetNodeValue(moon_phase[0], "sunset/hour/text()")
+			var sunset_minute 				 = m_helper.GetNodeValue(moon_phase[0], "sunset/minute/text()")
+			
+			if (sunrise_hour != "" && sunrise_minute != "")
+				forecast.Sunrise = m_dateHelper.GetDate().set({ 
+									 hour: parseInt(sunrise_hour),
+									 minute: parseInt(sunrise_minute)});
+								 
+			if (sunset_hour != "" && sunset_minute != "")
+				forecast.Sunset = m_dateHelper.GetDate().set({ 
+									 hour: parseInt(sunset_hour),
+									 minute: parseInt(sunset_minute)});
 			
 			m_forecast.Item(0) = forecast;		
 		}
