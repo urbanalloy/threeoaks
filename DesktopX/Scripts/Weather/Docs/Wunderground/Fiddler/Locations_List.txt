@@ -1,0 +1,38 @@
+HTTP/1.1 200 OK
+Date: Thu, 16 Jul 2009 15:21:10 GMT
+Server: Apache/1.3.33 (Unix) PHP/4.4.0
+X-CreationTime: 1.916
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/xml
+
+38f
+<?xml version="1.0" encoding="UTF-8"?>
+		<locations><location type="CITY">
+  <name>London, Arkansas</name>
+  <link>/US/AR/London.html</link>
+  </location><location type="CITY">
+  <name>London, Kentucky</name>
+  <link>/US/KY/London.html</link>
+  </location><location type="CITY">
+  <name>London, Minnesota</name>
+  <link>/US/MN/London.html</link>
+  </location><location type="CITY">
+  <name>London, Ohio</name>
+  <link>/US/OH/London.html</link>
+  </location><location type="INTLCITY">
+  <name>London, Ontario</name>
+  <link>/global/stations/71623.html</link>
+  </location><location type="CITY">
+  <name>London, Texas</name>
+  <link>/US/TX/London.html</link>
+  </location><location type="INTLCITY">
+  <name>London, United Kingdom</name>
+  <link>/global/stations/03772.html</link>
+  </location><location type="CITY">
+  <name>London, West Virginia</name>
+  <link>/US/WV/London.html</link>
+  </location></locations>
+
+0
+

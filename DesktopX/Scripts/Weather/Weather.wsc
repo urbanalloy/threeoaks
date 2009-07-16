@@ -1001,6 +1001,9 @@
 			
 		if (m_cityCode != "")
 			text += "City Code: " + m_cityCode + "\n";
+			
+		if (m_customQueryString != "")
+			text += "Custom: " + m_customQueryString + "\n";
 
 		return text;
 	}
