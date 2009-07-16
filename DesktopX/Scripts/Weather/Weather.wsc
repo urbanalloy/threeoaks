@@ -260,8 +260,8 @@
 	function Init() {				
 		//#ifndef DEBUG
 		//AddProvider(createComponent("WUnderground"));
-		//AddProvider(CreateComponent("TWC"));
-		//AddProvider(CreateComponent("NOAA"));
+		//AddProvider(createComponent("TWC"));
+		//AddProvider(createComponent("NOAA"));
 		//#endif
 	}	
 

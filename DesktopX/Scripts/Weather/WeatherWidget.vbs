@@ -60,8 +60,8 @@ Sub InitWidget()
 	Object.Visible = True
 	Cleanup()
 
-	Set ErrorCode = GetObject("script:" & LIB_FOLDER & "/Weather.wsc#WeatherError")
-	Set WeatherController = GetObject("script:" & LIB_FOLDER & "/Weather.wsc")
+	Set ErrorCode = GetObject("script:" & LIB_FOLDER & "Weather.wsc#WeatherError")
+	Set WeatherController = GetObject("script:" & LIB_FOLDER & "Weather.wsc")
 	
 	'#ifdef DEBUG
 	WeatherController.AddProvider GetObject("script:" & LIB_FOLDER & "/Providers/TWC.wsc")	
@@ -161,15 +161,21 @@ Sub ParseRetCode(code)
 End Sub
 
 Sub Reset()
+	'#ifdef DEBUG
 	ResetScript "DXWeather", LIB_FOLDER & "/WeatherWidget.vbs"
+	'#else
+	'InitWidget()
+	'#endif
 End Sub
 
+'#ifdef DEBUG
 Sub ResetScript(name, script)	
 	DesktopX.Object(name).SetScript("")
 	DesktopX.Object(name).SetScript(script)	
 	
 	DesktopX.ScriptObject(name).Object_OnScriptEnter()
 End Sub
+'#endif
 
 '===========================================================
 '== Licences

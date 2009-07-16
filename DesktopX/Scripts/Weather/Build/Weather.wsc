@@ -225,274 +225,229 @@
 				     E_ERROR if the id already exists
 		</comment>
 		<method name="AddProvider">
-			<parameter name="id" />
 			<parameter name="provider" />
 		</method>
 	</public>
 	
-	<script language="VBScript">
+	<script language="JScript">
 	<![CDATA[
 	
-	'**Start Encode**
+	//**Start Encode**	
 	
-	Option Explicit
+	// Error
+	var ErrorCode = createComponent("WeatherError");
 	
-	' Error
-	Dim ErrorCode
+	// Callbacks
+	var m_locationsCallback = null;
+	var m_weatherCallback = null;
+	var m_alertsCallback = null;
+	var m_forecastCallback = null;
+	var m_camerasCallback = null;
+	var m_errorCallback = null;
 	
-	' Callbacks
-	Dim m_locationsCallback
-	Dim m_weatherCallback
-	Dim m_alertsCallback
-	Dim m_forecastCallback
-	Dim m_camerasCallback
-	Dim m_errorCallback
+	// Current provider
+	var m_currentProvider = null;
+	var m_useMetricSystem = true;
 	
-	' Current provider
-	Dim m_currentProvider
-	Dim m_useMetricSystem
+	// License information
+	var m_id = "";
+	var m_key = "";
 	
-	' License information
-	Dim m_id
-	Dim m_key
+	Init();
 	
-	Init()
-	
-	'/////////////////////////////////////////////////////////////////////////////////////////
-	'// Init
-	Sub Init()
-	
-		Set m_locationsCallback = Nothing
-		Set m_weatherCallback 	= Nothing
-		Set m_alertsCallback 	= Nothing
-		Set m_forecastCallback  = Nothing
-		Set m_camerasCallback   = Nothing
-		Set m_errorCallback 	= Nothing
-		
-		Set ErrorCode = CreateComponent("WeatherError")
-		
-		Set m_currentProvider = Nothing
-		m_useMetricSystem = True
-	
-		m_id = ""
-		m_key = ""
-		
-		' Provider registration
-		AddProvider "WUnderground", CreateComponent("WUnderground")
-		AddProvider "TWC", CreateComponent("TWC")
-	
-	End Sub
+	/////////////////////////////////////////////////////////////////////////////////////////
+	// Provider registration
+	function Init() {				
+		AddProvider(createComponent("WUnderground"));
+		AddProvider(createComponent("TWC"));
+		AddProvider(createComponent("NOAA"));
+	}	
 
-	'=============================================================================================================================
-	'=
-	'= Public Methods
-	'=
-	'=============================================================================================================================	
+	/*=============================================================================================================================
+	=
+	= Public Methods
+	=
+	=============================================================================================================================*/
 	
-	' Get the unit system in use
-	Function get_UseMetricSystem()
-		get_UseMetricSystem = m_useMetricSystem
-	End Function
+	// Get the unit system in use
+	function get_UseMetricSystem() {
+		return m_useMetricSystem;
+	}
 	
-	Function put_UseMetricSystem(system)
-		m_useMetricSystem = CBool(system)
+	function put_UseMetricSystem(system) {
+		m_useMetricSystem = system;
 		
-		' Update the provider
-		If Not (m_currentProvider Is Nothing) Then
-			m_currentProvider.UseMetricSystem = m_useMetricSystem
-		End If
-	End Function
+		// Update the provider
+		if (m_currentProvider != null)
+			m_currentProvider.UseMetricSystem = m_useMetricSystem;		
+	}
 	
-	' Get the list of available providers
-	Function get_Providers()
-		Set get_Providers = m_providerList
-	End Function
+	// Get the list of available providers
+	function get_Providers() {
+		return m_providerList;
+	}
 	
-	' Setup license
-	Function SetLicense(id, key)
-		m_id = id
-		m_key = key
+	// Setup license
+	function SetLicense(id, key) {
+		m_id = id;
+		m_key = key;
 		
-		' Update license information
-		If (m_currentProvider Is Nothing) Then
-			SetLicense = ErrorCode.E_ERROR
-		Else
-			SetLicense = m_currentProvider.SetLicense(m_id, m_key)
-		End If
-	End Function
+		// Update license information
+		if (m_currentProvider == null)
+			return ErrorCode.E_ERROR;
+		
+		return m_currentProvider.SetLicense(m_id, m_key);		
+	}
 	
-	' Set the provider to use
-	Function SetProvider(id)
-		If (Not m_providers.Exists(id)) Then
-			SetProvider = ErrorCode.E_ERROR
+	// Set the provider to use
+	function SetProvider(id) {
+		if (!m_providers.Exists(id)) {
+			// Reset the current provider
+			m_currentProvider = null;
 			
-			' Reset the current provider
-			Set m_currentProvider = Nothing
-			Exit Function
-		End If
+			return ErrorCode.E_ERROR;
+		}
 		
-		Set m_currentProvider = m_providers.Item(id)	
-		m_currentProvider.UseMetricSystem = m_useMetricSystem
-		m_currentProvider.SetLicense m_id, m_key
+		m_currentProvider = m_providers.Item(id);
+		m_currentProvider.UseMetricSystem = m_useMetricSystem;
+		m_currentProvider.SetLicense(m_id, m_key);
 		
-		' Register callbacks
-		' we have to do that and duplicate all the registration code in all providers,
-		' since we cannot use events without registering the component
-		m_currentProvider.RegisterCallbacks GetRef("OnLocations"), _
-											GetRef("OnWeather"), _
-											GetRef("OnAlerts"), _
-											GetRef("OnForecast"), _
-											GetRef("OnCameras"), _
-											GetRef("OnError")
+		// Register callbacks
+		// we have to do that and duplicate all the registration code in all providers,
+		// since we cannot use events without registering the component
+		m_currentProvider.RegisterCallbacks(OnLocations,
+											OnWeather,
+											OnAlerts,
+											OnForecast,
+											OnCameras,
+											OnError);
 		
-		SetProvider = ErrorCode.E_OK
-	End Function
+		return ErrorCode.E_OK;
+	}
 	
-	' Set the callbacks
-	Sub RegisterCallbacks(locationsCallback, weatherCallback, alertsCallback, forecastCallback, camerasCallback, errorCallback)
-		Set m_locationsCallback = locationsCallback
-		Set m_weatherCallback 	= weatherCallback
-		Set m_alertsCallback 	= alertsCallback
-		Set m_forecastCallback  = forecastCallback
-		Set m_camerasCallback   = camerasCallback
-		Set m_errorCallback 	= errorCallback		
-	End Sub
+	// Set the callbacks
+	function RegisterCallbacks(locationsCallback, weatherCallback, alertsCallback, forecastCallback, camerasCallback, errorCallback) {
+		m_locationsCallback = locationsCallback;
+		m_weatherCallback 	= weatherCallback;
+		m_alertsCallback 	= alertsCallback;
+		m_forecastCallback  = forecastCallback;
+		m_camerasCallback   = camerasCallback;
+		m_errorCallback 	= errorCallback;
+	}
 	
-	' Get a WeatherLocation object
-	Function GetQueryObject()
-		Set GetQueryObject = CreateComponent("WeatherLocation")
-	End Function
-	
-	' Get a WeatherLocation object
-	Function GetHelper()
-		Set GetHelper = m_helperObject
-	End Function
-	
-	' Get a list of locations
-	Function GetLocations(locationQuery)
-		If (m_currentProvider Is Nothing) Then
-			GetLocations = ErrorCode.E_ERROR
-			Exit Function
-		End If
+	// Add provider to provider list
+	function AddProvider(provider) {			
+		// Add the new provider to the internal provider list
+		m_providers.Add(provider.ID, provider);
 		
-		locationQuery.TrimValues()
-		GetLocations = m_currentProvider.GetLocations(locationQuery)
-	End Function
-	
-	' Get the current weather
-	Function GetWeather(locationQuery)
-		If (m_currentProvider Is Nothing) Then
-			GetWeather = ErrorCode.E_ERROR
-			Exit Function
-		End If
-	
-		locationQuery.TrimValues()
-		GetWeather = m_currentProvider.GetWeather(locationQuery)
-	End Function
-	
-	' Get a list of alerts
-	Function GetAlerts(locationQuery)
-		If (m_currentProvider Is Nothing) Then
-			GetAlerts = ErrorCode.E_ERROR
-			Exit Function
-		End If
-	
-		locationQuery.TrimValues()
-		GetAlerts = m_currentProvider.GetAlerts(locationQuery)
-	End Function
-	
-	' Get the forecast
-	Function GetForecast(locationQuery)
-		If (m_currentProvider Is Nothing) Then
-			GetForecast = ErrorCode.E_ERROR
-			Exit Function
-		End If
-	
-		locationQuery.TrimValues()
-		GetForecast = m_currentProvider.GetForecast(locationQuery)
-	End Function
-	
-	' Get a list of cameras
-	Function GetCameras(locationQuery)
-		If (m_currentProvider Is Nothing) Then
-			GetCameras = ErrorCode.E_ERROR
-			Exit Function
-		End If
-	
-		locationQuery.TrimValues()
-		GetCameras = m_currentProvider.GetCameras(locationQuery)
-	End Function
-	
-	' Add provider to provider list
-	Function AddProvider(id, provider)
-		If (m_providers.Exists(id)) Then
-			AddProvider = ErrorCode.E_ERROR
-			Exit Function
-		End If
-			
-		' Add the new provider to the internal provider list
-		m_providers.Add id, provider
+		// we use a separate provider list to not expose the providers directly to the user script
+		m_providerList.Add(provider.ID, provider.Name);
 		
-		' we use a separate provider list to not expose the providers directly to the user script
-		m_providerList.Add id, provider.Name 		
-		
-		AddProvider = ErrorCode.E_OK
-	End Function
+		return ErrorCode.E_OK;
+	}
 	
-	Function Abort()
-		If (m_currentProvider Is Nothing) Then
-			Abort = ErrorCode.E_ERROR
-			Exit Function
-		End If
+	// Abort any call in progress
+	function Abort() {
+		if (m_currentProvider == null)		
+			return ErrorCode.E_ERROR;
 		
-		m_currentProvider.Abort()
+		m_currentProvider.Abort();
 	
-		Abort = ErrorCode.E_OK
-	End Function		
+		return ErrorCode.E_OK;
+	}	
+	
+	// Get a WeatherLocation object
+	function GetQueryObject() {
+		return createComponent("WeatherLocation");
+	}
+	
+	// Get a WeatherHelper object
+	function GetHelper() {
+		return m_helperObject;
+	}
+	
+	// Get a list of locations
+	function GetLocations(locationQuery) {
+		if (m_currentProvider == null)		
+			return ErrorCode.E_ERROR;
+		
+		locationQuery.TrimValues();
+		return m_currentProvider.GetLocations(locationQuery);
+	}
+	
+	// Get the current weather
+	function GetWeather(locationQuery) {
+		if (m_currentProvider == null)		
+			return ErrorCode.E_ERROR;
+		
+		locationQuery.TrimValues();
+		return m_currentProvider.GetWeather(locationQuery);
+	}
+	
+	// Get a list of alerts
+	function GetAlerts(locationQuery) {
+		if (m_currentProvider == null)		
+			return ErrorCode.E_ERROR;
+		
+		locationQuery.TrimValues();
+		return m_currentProvider.GetAlerts(locationQuery);
+	}
+	
+	// Get the forecast
+	function GetForecast(locationQuery) {
+		if (m_currentProvider == null)		
+			return ErrorCode.E_ERROR;
+		
+		locationQuery.TrimValues();
+		return m_currentProvider.GetForecast(locationQuery);
+	}
+	
+	// Get a list of cameras
+	function GetCameras(locationQuery) {
+		if (m_currentProvider == null)		
+			return ErrorCode.E_ERROR;
+		
+		locationQuery.TrimValues();
+		return m_currentProvider.GetCameras(locationQuery);
+	}	
 
-	'=============================================================================================================================
-	'=
-	'= Callbacks
-	'=
-	'=============================================================================================================================	
+	/*=============================================================================================================================
+	=
+	= Callbacks
+	=
+	=============================================================================================================================*/
 	
-	' We check here if the callback are defined, so we can call them without checking if they exist in each provider
+	// We check here if the callback are defined, so we can call them without checking if they exist in each provider
 
-	Sub OnLocations(locations)
-		If Not (m_locationsCallback Is Nothing) Then			
-			m_locationsCallback locations
-		End If
-	End Sub
+	function OnLocations(locations) {
+		if (m_locationsCallback != null)
+			m_locationsCallback(locations);
+	}
 	
-	Sub OnWeather(weather)
-		If Not (m_weatherCallback Is Nothing) Then			
-			m_weatherCallback weather
-		End If
-	End Sub
+	function OnWeather(weather) {
+		if (m_weatherCallback != null)
+			m_weatherCallback(weather);
+	}
 	
-	Sub OnAlerts(alerts)
-		If Not (m_alertsCallback Is Nothing) Then			
-			m_alertsCallback alerts
-		End If
-	End Sub
+	function OnAlerts(alerts) {
+		if (m_alertsCallback != null)
+			m_alertsCallback(alerts);
+	}
 	
-	Sub OnForecast(forecast)
-		If Not (m_forecastCallback Is Nothing) Then			
-			m_forecastCallback forecast
-		End If
-	End Sub
+	function OnForecast(forecast) {
+		if (m_forecastCallback != null)
+			m_forecastCallback(forecast);
+	}
 	
-	Sub OnCameras(cameras)
-		If Not (m_camerasCallback Is Nothing) Then			
-			m_camerasCallback cameras
-		End If
-	End Sub
+	function OnCameras(cameras) {
+		if (m_camerasCallback != null)
+			m_camerasCallback(cameras);
+	}
 	
-	Sub OnError(code, value)
-		If Not (m_errorCallback Is Nothing) Then
-			m_errorCallback code, value
-		End If
-	End Sub	
+	function OnError(code, value) {
+		if (m_errorCallback != null)
+			m_errorCallback(code, value);
+	}	
 		
 	]]>
 	</script>
@@ -507,8 +462,7 @@
       			  progid="DXWeather.Error"
       			  version="1"
       	    	  classid="{20AAB6F5-77DB-414e-8469-5D57441BFD19}"/>  
-      	    	  
-      	    
+      	    	        	    
 	<public>
 		<property name="E_OK">
 			<get />
@@ -650,6 +604,7 @@
 		<property name="WindChill" 				internalname="m_windChill" />
 		
 		<property name="Pressure" 				internalname="m_pressure" />
+		<property name="PressureTrend"			internalname="m_pressure" />
 				
 		<property name="DewPointDescription" 	internalname="m_dewPointDescription" />
 		<property name="DewPoint" 				internalname="m_dewPoint" />
@@ -659,6 +614,7 @@
 		
 		<property name="SolarRadiation" 		internalname="m_solarRadiation" />
 		<property name="UV" 					internalname="m_UV" />	
+		<property name="UVDescription"			internalname="m_UVDescription" />	
 		
 		<property name="Sunrise" 				internalname="m_sunrise" />
 		<property name="Sunset"					internalname="m_sunset" />
@@ -677,6 +633,12 @@
 		
 		<property name="UseMetricSystem" 		internalName="m_useMetricSystem" />
 		
+		
+		<comment>
+			Time when this object was retrieved (used for caching purposes)
+		</comment>
+		<property name="LastUpdateTime" 		internalName="m_lastUpdateTime" />
+		
 		<method name="ToString" />
 		
 	</public>
@@ -685,15 +647,29 @@
 	<![CDATA[
 	
 	//**Start Encode**
-
-	// Constants
+	
+	/*********************************
+	 * Properties
+	 *********************************/	
 	var DAY_PART_DAY = 0;
 	var DAY_PART_NIGHT = 1;
-
-	// Properties
+	
+	function get_DAY_PART_DAY()
+	{
+		return DAY_PART_DAY;
+	}
+	
+	function get_DAY_PART_NIGHT()
+	{
+		return DAY_PART_NIGHT;
+	}
+	
 	var m_useMetricSystem = true;
-	var m_location = createComponent("WeatherLocation");	
-	var m_links    = createComponent("WeatherLinks");		
+
+	
+	// Weather data	
+	var m_location = null;	
+	var m_links    = null;		
 			
 	var m_station = "";
 	var m_type = "";
@@ -701,7 +677,6 @@
 	var m_description = "";
 	var m_code = "";
 
-	
 	var m_temperature = "";
 	var m_temperatureFeel = "";
 	
@@ -721,6 +696,7 @@
 	var m_windChill = "";
 	
 	var m_pressure = "";
+	var m_pressureTrend = "";
 			
 	var m_dewPointDescription = "";
 	var m_dewPoint = "";
@@ -730,6 +706,7 @@
 	
 	var m_solarRadiation = "";
 	var m_UV = "";
+	var m_UVDescription = "";
 	
 	var m_sunrise = "";
 	var m_sunset = "";
@@ -748,19 +725,17 @@
 	var m_forecastHigh = "";	
 	var m_forecastLow = "";
 	
-	function get_DAY_PART_DAY()
-	{
-		return DAY_PART_DAY;
-	}
+	var m_lastUpdateTime = "";
 	
-	function get_DAY_PART_NIGHT()
-	{
-		return DAY_PART_NIGHT;
-	}
-	
+	/*********************************
+	 * Functions
+	 *********************************/
 	function ToString()
 	{
-		var text = m_location.ToString();
+		var text = "";
+		
+		if (m_location != null)
+			text += m_location.ToString();
 		
 		if (text != "")
 			 text += "\n";	
@@ -796,6 +771,7 @@
 		
 		// Pressure / Dew Point / Heat
 		text += append("Pressure", m_pressure);
+		text += append("Pressure Trend", m_pressure);
 		text += append("DewPoint Description", m_dewPointDescription);
 		text += append("DewPoint", m_dewPoint);
 		text += append("Heat Description", m_heatDescription);
@@ -803,6 +779,7 @@
 		
 		// Solar Radiation & UV
 		text += append("Solar Radiation", m_solarRadiation);
+		text += append("UV Description", m_UVDescription);	
 		text += append("UV", m_UV);		
 		
 		text += append("Day of week", m_dayOfWeek);
@@ -820,10 +797,12 @@
 		text += append("Moon Illumination", m_moonIlluminated);
 		text += append("Moon Age", m_moonAge);
 		
-		var links = m_links.ToString();
+		if (m_links != null) {
+			var links = m_links.ToString();
 		
-		if (links != "")
-			 text += "\n" + links;
+			if (links != "")
+				text += "\n" + links;			 
+		}
 							
 		return text;
 	}
@@ -848,8 +827,7 @@
 	<registration description="Weather alert"
       			  progid="DXWeather.Alert"
       			  version="1"
-      	    	  classid="{D4F984BF-A90A-45da-A695-ACBD974B9924}"/>  
-      	    	  
+      	    	  classid="{D4F984BF-A90A-45da-A695-ACBD974B9924}"/>    
       	    
 	<public>
 		<property name="Type" internalname="m_type" />
@@ -932,6 +910,8 @@
 	<![CDATA[
 	
 	//**Start Encode**
+	
+	// TODO add function to check if a string is a US zip code
     
 	var m_ID = "";
 
@@ -1019,6 +999,9 @@
 			
 		if (m_cityCode != "")
 			text += "City Code: " + m_cityCode + "\n";
+			
+		if (m_customQueryString != "")
+			text += "Custom: " + m_customQueryString + "\n";
 
 		return text;
 	}
@@ -1112,8 +1095,7 @@
       			  progid="DXWeather.Helper"
       			  version="1"
       	    	  classid="{4FBA62F1-7479-42e2-84F1-8DE0927C0DAE}"/>  
-      	    	  
-      	    
+      	    	  	    
 	<public>
 		
 		<comment>
@@ -1230,6 +1212,18 @@
 			<parameter name="entry" />
 			<parameter name="nodeName" />
 		</method>
+		
+		<comment>
+			Check a cache for value using the passed refresh rate
+			
+			returns true if an object is in the cache and up to date
+					false otherwise
+		</comment>
+		<method name="CheckCache">
+			<parameter name="cache" />
+			<parameter name="id" />
+			<parameter name="rate" />
+		</method>
 
 	</public>
 	
@@ -1237,6 +1231,39 @@
 	<![CDATA[
 	
 	//**Start Encode**
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Misc
+	//
+	/////////////////////////////////////////////////////////////////////////////////////////////	
+	
+	function CheckCache(cache, id, rate)
+	{
+		// check if item exists in the cache
+		if (!cache.Exists(id))
+			return false;
+			
+		// Get item last update time
+		var updateTime = cache.Item(id).LastUpdateTime;
+		
+		if (updateTime == null || updateTime == "")
+			return false;
+		
+		// Check if we are past the refresh time
+		var now = updateTime.clone().setTimeToNow();
+		var refresh = updateTime.clone().addMinutes(rate);
+		
+		// Hmm, something is wrong here!
+		if (now.isBefore(updateTime))
+			return false;
+			
+		// the cache has expired
+		if (now.isAfter(refresh))
+			return false;
+			
+		return true;		
+	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1621,8 +1648,7 @@
 	     * @return {Date}    The current date.
 	     */
 	    $P.today = function () {
-	    	debugger;
-	        return new Date().clearTime();
+	        return new Date().prototype.clearTime();
 	    };
 	
 	    /**
@@ -1734,7 +1760,7 @@
 	     * @return {Number}  -1 = this is lessthan date. 0 = values are equal. 1 = this is greaterthan date.
 	     */
 	    $P.compareTo = function (date) {
-	        return Date.compare(this, date);
+	        return $P.compare(this, date);
 	    };
 	
 	    /**
@@ -2195,7 +2221,7 @@
 	        return this.addMinutes(there - here); 
 	    };
 	
-	    $P.setTimezone = function (offset) { 
+	    $P.setTimezone = function (offset) { 	    	
 	        return this.setTimezoneOffset($P.getTimezoneOffset(offset)); 
 	    };
 	
@@ -3037,7 +3063,7 @@
 	            }
 	
 	            var r = new Date(this.year, this.month, this.day, this.hour, this.minute, this.second);
-	
+				
 	            if (this.timezone) { 
 	                r.set({ timezone: this.timezone }); 
 	            } else if (this.timezoneOffset) { 
@@ -3340,7 +3366,7 @@
 	    };
 	  
 	    g.formats = function (fx) {
-	        if (fx instanceof Array) {
+	        if (typeof(fx) == "object") {
 	            var rx = []; 
 	            for (var i = 0 ; i < fx.length ; i++) {
 	                rx.push(_get(fx[i])); 
@@ -4221,7 +4247,6 @@
 	        TimePeriod.prototype["get" + $b] = gFn($a);
 	        TimePeriod.prototype["set" + $b] = sFn($a);
 	    }
-	    
 	    if (arguments.length == 7) { 
 	        this.years = years;
 	        this.months = months;
@@ -4304,6 +4329,10 @@
     <object id="m_request" progid="Microsoft.XmlDom" /> 
 	    
 	<public>
+		<property name="ID">
+			<get />
+		</property>
+		
 		<property name="Name">
 			<get />
 		</property>
@@ -4392,6 +4421,7 @@
 		</method>			
 	</public>
 	
+	<resource id="provider_id">WUnderground</resource>
 	<resource id="provider_name">Weather Underground</resource>
 	<resource id="url_locations">http://api.wunderground.com/auto/wui/geo/GeoLookupXML/index.xml?query=</resource>
 	<resource id="url_weather">http://api.wunderground.com/auto/wui/geo/WXCurrentObXML/index.xml?query=</resource>
@@ -4423,6 +4453,17 @@
 	var m_errorCallback 	= null;
 	
 	var m_useMetricSystem = true;
+	
+	///////////////////////////////
+	// Properties
+	///////////////////////////////
+	function get_ID() {
+		return getResource("provider_id");
+	}
+	
+	function get_Name() {
+		return getResource("provider_name");
+	}	
 	
 	///////////////////////////////
 	// Utilities
@@ -4480,7 +4521,7 @@
 		
 		return "";
 	}
-	
+
 	///////////////////////////////
 	// Misc parsing functions
 	///////////////////////////////	
@@ -4522,14 +4563,7 @@
 	{
 		// FIXME: convert from string code to weather icon number
 		return m_helper.Trim(code);
-	}
-	
-	///////////////////////////////
-	// Properties
-	///////////////////////////////
-	function get_Name() {
-		return getResource("provider_name");
-	}
+	}	
 	
 	///////////////////////////////
 	// Public functions
@@ -4584,9 +4618,37 @@
 			
 		// Clear any previous results
 		m_locations.RemoveAll();	
-			
+		
 		// locations index
-		var i = 0;		
+		var i = 0;
+		
+		// Check if we got an intermediate list and parse it
+		var locations = m_request.getElementsByTagName("locations");
+		if (locations.length != 0) {
+			
+			debugger;
+			
+			var locationsEnumerator = new Enumerator(locations[0].getElementsByTagName("location"));		
+			for (var enumerator = locationsEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
+			{						
+			    var entry = enumerator.item();
+			    var city = getComponent("WeatherLocation");
+			    
+			    // we have no way to determine wether the second part is a state or a country,
+			    // so we use the CustomQueryString property    
+			    
+			    // TODO if type == CITY, this is a US city and the second part is a state
+			    // for INTLCITY, we cannot say whether this is a state or a country (ex: London, Ontario => in Canada)
+			    city.CustomQueryString =  m_helper.GetNodeValue(entry, "name/text()");				  
+			    
+			    m_locations.Add(i, city);		    
+			    i++;
+			}
+			
+			m_locationsCallback(m_locations);
+			return;
+		}
+				
 			
 		// Get the weather stations
 		var stations = m_request.getElementsByTagName("nearby_weather_stations");
@@ -4600,7 +4662,7 @@
 		if (airportNode.length == 0) {
 			m_locationsCallback(m_locations);
 			return;
-		}
+		}	
 		
 		var airportEnumerator = new Enumerator(airportNode[0].getElementsByTagName("station"));		
 		for (var enumerator = airportEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
@@ -4653,12 +4715,7 @@
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
 	// Get the current weather
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	function GetWeather(locationQuery) {
-		
-		// Reset weather object
-		m_weather = null;
-		m_weather = getComponent("WeatherInfo");
-				
+	function GetWeather(locationQuery) {				
 		// Check query for validity
 		if (getWeatherQueryString(locationQuery) == "")
 			return ErrorCode.E_NOTAVAILABLE;
@@ -4679,6 +4736,10 @@
 			
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
 			return;
+
+		// Reset weather object
+		m_weather = null;
+		m_weather = getComponent("WeatherInfo");
 			
 		// Parse weather
 		var observation = m_request.selectNodes("current_observation");
@@ -4700,12 +4761,13 @@
 		{
 			m_errorCallback(ErrorCode.E_ERROR, "Response is empty. Please check that the station code you used is valid!");
 			return;
-		}
-		
+		}		
 		
 		// Airport location
 		var location = observation[0].getElementsByTagName("display_location");
 		if (location.length != 0) {
+			
+			m_weather.Location = getComponent("WeatherLocation");
 			
 			m_weather.Location.City  	 = m_helper.GetNodeValue(location[0], "city/text()");		
 			m_weather.Location.State	 = m_helper.GetNodeValue(location[0], "state_name/text()");		
@@ -4723,6 +4785,8 @@
 		// Personal weather station
 		location = observation[0].getElementsByTagName("location");
 		if (location.length != 0) {
+			
+			m_weather.Location = getComponent("WeatherLocation");
 			
 			m_weather.Location.Name 	 = m_helper.GetNodeValue(location[0], "neighborhood/text()");		
 			m_weather.Location.City  	 = m_helper.GetNodeValue(location[0], "city/text()");		
@@ -4815,13 +4879,16 @@
 	    
 	    //////////////////////////////
 		//  Parse links to website  //
-		//////////////////////////////
+		//////////////////////////////		
+		var links = getComponent("WeatherLinks");
 		
-		m_weather.Links.Current			 = m_helper.GetNodeValue(observation[0], "ob_url/text()");
-		m_weather.Links.Forecast		 = m_helper.GetNodeValue(observation[0], "forecast_url/text()");
-		m_weather.Links.History			 = m_helper.GetNodeValue(observation[0], "history_url/text()");
-		m_weather.Links.Credit			 = m_helper.GetNodeValue(observation[0], "credit_URL/text()");
-		m_weather.Links.Logo			 = m_helper.GetNodeValue(observation[0], "ob_url/text()");
+		links.Current			 = m_helper.GetNodeValue(observation[0], "ob_url/text()");
+		links.Forecast		 	 = m_helper.GetNodeValue(observation[0], "forecast_url/text()");
+		links.History			 = m_helper.GetNodeValue(observation[0], "history_url/text()");
+		links.Credit			 = m_helper.GetNodeValue(observation[0], "credit_URL/text()");
+		links.Logo				 = m_helper.GetNodeValue(observation[0], "ob_url/text()");
+		
+		m_weather.Links = links;
 	    	
 		m_weatherCallback(m_weather);	
 	}
@@ -4830,8 +4897,6 @@
 	// Get a list of alerts
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	function GetAlerts(locationQuery) {
-		// Clear any previous results
-		m_alerts.RemoveAll();
 		
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
@@ -4853,6 +4918,9 @@
 			
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
 			return;
+
+		// Clear any previous results
+		m_alerts.RemoveAll();
 		
 		// Parse alert data
 		var i = 0;
@@ -4882,10 +4950,7 @@
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
 	// Get the forecast
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	function GetForecast(locationQuery) {		
-		// Clear any previous results
-		m_forecast.RemoveAll();
-		
+	function GetForecast(locationQuery) {				
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
 			return ErrorCode.E_NOTAVAILABLE;
@@ -4906,6 +4971,9 @@
 			
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
 			return;
+
+		// Clear any previous results
+		m_forecast.RemoveAll();
 			
 		// forecast index
 		var i = 0;	
@@ -4940,8 +5008,7 @@
 				
 				if (forecast.Description.search("Tonight") != -1)
 					forecast.DayPart = forecast.DAY_PART_NIGHT;
-					
-				// TODO: Try parsing the description as a day of the week and adjust the date				
+									
 				forecast.Date = date;
 			    			    
 			  	m_forecast.Add(i, forecast);    
@@ -5027,26 +5094,570 @@
 	}	
 	
 	
-	
-	
 	]]>
 	</script>
 
 </component><component id="TWC">
 	<comment>
 		The Weather Channel Provider
+		
+		Use is restricted. Please see the License Agreement in Docs/Weather.com"		
+		You will need valid licensing information to be able to use this provider.
 	</comment>
 	<registration description="The Weather Channel Provider" progid="DXWeatherProvider.TWC" version="1" classid="{06FF483D-9278-4720-A58D-233581196FE7}" />  
+      	    	  
+	<object id="m_locations" progid="Scripting.Dictionary" />   
+	<object id="m_weather" progid="Scripting.Dictionary" />   
+    <object id="m_forecast" progid="Scripting.Dictionary" />      
+    
+    <object id="m_request" progid="Microsoft.XmlDom" /> 
+	    
+	<public>
+		<property name="ID">
+			<get />
+		</property>
+		
+		<property name="Name">
+			<get />
+		</property>
+		
+		<property name="UseMetricSystem" internalName="m_useMetricSystem" />
+		
+		<method name="SetLicense">
+			<parameter name="id" />
+			<parameter name="key" />
+		</method>
+		
+		<method name="RegisterCallbacks">
+			<parameter name="locationCallback" />
+			<parameter name="weatherCallback" />
+			<parameter name="alertsCallback" />
+			<parameter name="forecastCallback" />
+			<parameter name="camerasCallback" />
+			<parameter name="errorCallback" />
+		</method>
+		
+		<method name="Abort" />
+		
+		<comment>
+			Query can be one of the following:
+				- Name
+				- City
+				- City, State
+				- City, Country
+				- Zip Code
+		</comment>
+		<method name="GetLocations">
+			<parameter name="locationQuery" />
+		</method>
+
+		<comment>
+			Query can be one of the following:
+				- ID
+		</comment>
+		<method name="GetWeather">
+			<parameter name="locationQuery" />
+		</method>
+
+		<comment>
+			Not implemented in this provider
+		</comment>
+		<method name="GetAlerts">
+			<parameter name="locationQuery" />
+		</method>
+
+		<comment>
+			Query can be one of the following:
+				- ID
+		</comment>
+		<method name="GetForecast">
+			<parameter name="locationQuery" />
+		</method>
+		
+		<comment>
+			Not implemented in this provider
+		</comment>
+		<method name="GetCameras">
+			<parameter name="locationQuery" />
+		</method>			
+	
+	</public>
+	
+	<resource id="provider_id">TWC</resource>
+	<resource id="provider_name">Weather.com</resource>
+	
+	<comment>
+		Refresh rate in minutes
+	</comment>
+	<resource id="refresh_weather">25</resource>
+	<resource id="refresh_forecast">210</resource>
+	
+	<resource id="url_locations">http://xoap.weather.com/search/search?where=</resource>
+	<resource id="url_weather">http://xoap.weather.com/weather/local/</resource>
+		
+	<script language="JScript">
+	<![CDATA[
+	
+	//**Start Encode**	
+	
+	var ErrorCode 			= getComponent("WeatherError");
+	
+	// Helper
+	var m_helper			= getComponent("WeatherHelper");
+	var m_dateHelper		= getComponent("DateEx");
+
+	// callbacks
+	var m_locationsCallback = null;
+	var m_weatherCallback 	= null;
+	var m_alertsCallback 	= null;
+	var m_forecastCallback  = null;
+	var m_camerasCallback   = null;
+	var m_errorCallback 	= null;
+	
+	// License info
+	var m_id = "";
+	var m_key = "";
+	
+	var m_useMetricSystem = true;
+	
+	///////////////////////////////
+	// Properties
+	///////////////////////////////
+	function get_ID() {
+		return getResource("provider_id");
+	}
+	
+	function get_Name() {
+		return getResource("provider_name");
+	}
+	
+	///////////////////////////////
+	// Utilities
+	///////////////////////////////
+	function getComponent(id) {		
+		return createComponent(id);
+	}
+	
+	///////////////////////////////
+	// Query
+	///////////////////////////////
+	function getLocationQueryString(query)
+	{
+		// Check that location query is not null
+		if (query == null)
+			return "";
+			
+		if (query.CustomQueryString != "")
+			return query.CustomQueryString;	
+						
+		if (query.ZipCode != "")
+			return query.ZipCode;
+			
+		if (query.City != "" && query.State != "")
+			return query.City + ", " + query.State;
+			
+		if (query.City != ""  && query.Country != "")
+			return query.City + ", " + query.Country;
+			
+		if (query.City != "")
+		 	return query.City;			
+			
+		return "";
+	}
+	
+	function getQueryString(queryLocation, isForecast)
+	{
+		// Check that location query is not null
+		if (queryLocation == null || queryLocation.ID == "")
+			return "";
+
+		var query = getResource("url_weather");
+		
+		query += queryLocation.ID;
+		
+		if (isForecast)
+			query += "?dayf=5";	// 5 day forecast
+		else
+			query += "?cc=*";	// current conditions
+	
+		query += "&link=xoap&prod=xoap";
+	
+		// Partner id & key
+		query += "&par=" + m_id + "&key=" + m_key;
+		
+		if (m_useMetricSystem)
+			query += "&unit=m";
+
+		return query;
+	}
+	
+	function checkFeedError()
+	{
+		// Check if this is an error message
+		var error = m_request.selectNodes("error");
+		if (error.length == 0)			
+			return false;
+			
+		// Get err node
+		var msg = m_request.getElementsByTagName("err");
+		if (msg.length == 0) {
+			m_errorCallback(ErrorCode.E_ERROR, "The provider returned an error!");
+			return true;
+		}
+		
+		// Get message
+		var type	 = m_helper.GetNodeValue(msg[0], "@type/text()");	
+		var message  = m_helper.GetNodeValue(msg[0], "text()");	
+		
+		m_errorCallback(ErrorCode.E_ERROR, "The provider returned an error: " + message + "(" + type + ")");
+		
+		return true;		
+	}
+	
+	function parseLinks()
+	{
+		// Get the promo links node
+		var promo = m_request.selectNodes("weather/lnks");
+		if (promo.length == 0)
+			return null;
+			
+		// Check link type: if anything else than prmo, throw an error
+		var type = m_helper.GetNodeValue(promo[0], "@type/text()");
+		if (type != "prmo")
+		{
+			m_errorCallback(ErrorCode.E_PARSERERROR, "Unknow type of link encoutered: " + type);
+			return null;
+		}			
+			
+		var links = getComponent("WeatherLinks");
+
+		var promoEnumerator = new Enumerator(promo[0].getElementsByTagName("link"));		
+		for (var enumerator = promoEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
+		{						
+		    var entry = enumerator.item();
+		
+			var title = m_helper.GetNodeValue(entry, "t/text()");
+			var url   = m_helper.GetNodeValue(entry, "l/text()");
+			
+			links.Promo.Add(title, url);
+		}
+		
+		if (links.Promo.Count == 0) // no link added!
+			return null;
+			
+		return links;		
+	}
+	
+	function parseCode(code)
+	{
+		// TODO parse code
+		return code;
+	}
+	
+	function parseCodeMoon(code)
+	{
+		// TODO parse code
+		return code;
+	}
+	
+	///////////////////////////////
+	// Public functions
+	///////////////////////////////
+	
+	// Setup license
+	function SetLicense(id, key) {			
+		if (id == "" || key == "")
+			return ErrorCode.E_INVALIDLICENSE;
+		
+		m_id = id;
+		m_key = key;	
+		
+		return ErrorCode.E_OK;
+	}
+	
+	// Set callbacks
+	function RegisterCallbacks(locationsCallback, weatherCallback, alertsCallback, forecastCallback, camerasCallback, errorCallback) {
+		m_locationsCallback = locationsCallback;
+		m_weatherCallback 	= weatherCallback;
+		m_alertsCallback 	= alertsCallback;
+		m_forecastCallback  = forecastCallback;
+		m_camerasCallback   = camerasCallback;
+		m_errorCallback 	= errorCallback;
+	}
+	
+	// Abort current request
+	function Abort()
+	{
+		m_request.abort();
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Get a list of locations
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	function GetLocations(locationQuery) {
+		// Check query for validity
+		if (getLocationQueryString(locationQuery) == "")
+			return ErrorCode.E_NOTAVAILABLE;
+		
+		// Reset dom
+		m_request.abort();
+		
+		m_request.onreadystatechange = OnLocationsResponse;
+		m_request.async = true;
+		m_request.load(getResource("url_locations") + getLocationQueryString(locationQuery));
+		
+		return ErrorCode.E_OK;		
+	}
+	
+	function OnLocationsResponse() {
+		if (m_request.readyState != 4) 
+			return;
+			
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+			return;
+			
+		if (checkFeedError())
+			return;
+			
+		// Clear any previous results (we do not cache location searchs)
+		m_locations.RemoveAll();
+		
+		// Get search node
+		var search = m_request.getElementsByTagName("search");
+		if (search.length == 0) {
+			m_errorCallback(ErrorCode.E_ERROR, "No search results!");
+			return;
+		}
+		
+		var i = 0;				
+		var locationEnumerator = new Enumerator(search[0].getElementsByTagName("loc"));		
+		for (var enumerator = locationEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
+		{						
+		    var entry = enumerator.item();
+		    var location = getComponent("WeatherLocation");
+		    
+		    // Get location id
+		    location.ID = m_helper.GetNodeValue(entry, "@id/text()");	
+		    
+		    // Check the location type
+		    var type = m_helper.GetNodeValue(entry, "@type/text()");	
+		    
+		    switch (type)
+		    {
+		    	// Type 1: City
+		    	case "1":
+		    		// We don't know the format of the location text, so we can't parse it
+		    		// in particular, we have no idea if the second part is a state name or
+		    		// a country
+		    		location.Name = m_helper.GetNodeValue(entry, "text()");			    	
+		    		break;
+		    		
+		    	// Type 4: 5-digits zip code		
+		    	case "4":
+		    		location.ZipCode = m_helper.GetNodeValue(entry, "text()");			
+		    		break;
+		    	
+		    	// Unknown type
+		    	default:
+		    		// report with an error message
+		    		m_errorCallback(ErrorCode.E_PARSERERROR, "Unknown location type: " + type);
+		    		return;		    				    
+		    }
+		    
+		    m_locations.Add(i, location);		    
+		    i++;
+		}
+		
+		// If we didn't get any location
+		if (m_locations.Count == 0) {
+			m_errorCallback(ErrorCode.E_ERROR, "No search results!");
+			return;
+		}
+			
+		m_locationsCallback(m_locations);
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////	
+	// Get the current weather
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	function GetWeather(locationQuery) {				
+		// Check query for validity
+		if (getQueryString(locationQuery, false) == "")
+			return ErrorCode.E_NOTAVAILABLE;
+					
+		// Reset dom
+		m_request.abort();
+		
+		// Check cache
+		if (m_helper.CheckCache(m_weather, locationQuery.ID, getResource("refresh_weather"))) {
+			m_weatherCallback(m_weather.Item(locationQuery.ID));
+			
+			return ErrorCode.E_OK;
+		}
+
+		m_request.onreadystatechange = OnWeatherResponse;
+		m_request.async = true;
+		m_request.load(getQueryString(locationQuery, false));
+		
+		return ErrorCode.E_OK;		
+	}
+	
+	function OnWeatherResponse() {
+		if (m_request.readyState != 4) 
+			return;
+			
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+			return;
+			
+		if (checkFeedError())
+			return;
+			
+		var weather = getComponent("WeatherInfo");
+		
+		// Save update time
+		weather.LastUpdateTime = m_dateHelper.GetDate();
+		
+		// Location
+		var location = m_request.getElementsByTagName("loc");
+		if (location.length != 0) {
+			
+			weather.Location = getComponent("WeatherLocation");
+			
+			weather.Location.ID 		= m_helper.GetNodeValue(location[0], "@id/text()");			
+			weather.Location.Name  		= m_helper.GetNodeValue(location[0], "dnam/text()");		
+			weather.Location.Latitude  	= m_helper.GetNodeValue(location[0], "lat/text()");		
+			weather.Location.Longitude 	= m_helper.GetNodeValue(location[0], "lon/text()");			
+			
+			// TODO store the zone number
+			// Use the "tm" value to adjust sunrise & sunset to local timezone
+			
+			// Sunrise & Sunset				
+			weather.Sunrise 			= m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(location[0], "sunr/text()"), "h:mm tt");
+			weather.Sunset 				= m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(location[0], "suns/text()"), "h:mm tt");			
+		}
+		
+		// Weather data
+		var info = m_request.getElementsByTagName("cc");
+		if (info.length != 0) {
+			
+			// Remove end of date string if present
+			var date = m_helper.GetNodeValue(info[0], "lsup/text()");
+			var index = date.search("Local Time");
+			if (index != -1)
+				date = date.substr(0, index - 1); 
+									
+			weather.Date 				= m_dateHelper.GetDate().parseExact(date, ["d/mm/yy h:mm tt", "d/mm/yy h:mm tt zzz"]);				
+			weather.Station				= m_helper.GetNodeValue(info[0], "obst/text()");
+			weather.Temperature			= m_helper.GetNodeValue(info[0], "tmp/text()");
+			weather.TemperatureFeel		= m_helper.GetNodeValue(info[0], "flik/text()");
+			weather.Description			= m_helper.GetNodeValue(info[0], "t/text()");
+			weather.Code				= parseCode(m_helper.GetNodeValue(info[0], "icon/text()"));
+			
+			weather.Pressure			= m_helper.GetNodeValue(info[0], "bar/r/text()");
+			weather.PressureTrend		= m_helper.GetNodeValue(info[0], "bar/d/text()");
+			
+			weather.WindSpeed			= m_helper.GetNodeValue(info[0], "wind/s/text()");
+			weather.WindGust			= m_helper.GetNodeValue(info[0], "wind/gust/text()");
+			weather.WindDirection		= m_helper.GetNodeValue(info[0], "wind/d/text()");
+			weather.WindDescription		= m_helper.GetNodeValue(info[0], "wind/t/text()");
+			
+			weather.Humidity			= m_helper.GetNodeValue(info[0], "hmid/text()");
+			weather.Visibility			= m_helper.GetNodeValue(info[0], "vis/text()");
+			
+			weather.UV					= m_helper.GetNodeValue(info[0], "uv/i/text()");
+			weather.UVDescription		= m_helper.GetNodeValue(info[0], "uv/t/text()");
+			
+			weather.DewPoint			= m_helper.GetNodeValue(info[0], "dewp/text()");
+			
+			weather.MoonPhaseCode		= parseCodeMoon(m_helper.GetNodeValue(info[0], "moon/icon/text()"));
+			weather.MoonPhaseDescription = m_helper.GetNodeValue(info[0], "moon/t/text()");			
+		}
+		
+		// Links
+		weather.Links = parseLinks();
+		
+		// Update weather cache
+		if (weather.Location.ID != null)
+			m_weather(weather.Location.ID) = weather;
+		 	
+		m_weatherCallback(weather);	
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////	
+	// Get the forecast
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	function GetForecast(locationQuery) {		
+		// Check query for validity
+		if (getQueryString(locationQuery, true) == "")
+			return ErrorCode.E_NOTAVAILABLE;
+					
+		// Reset dom
+		m_request.abort();
+		
+		// Check cache
+		if (m_helper.CheckCache(m_forecast, locationQuery.ID, getResource("refresh_forecast"))) {
+			m_weatherCallback(m_forecast.Item(locationQuery.ID));
+			
+			return ErrorCode.E_OK;
+		}
+
+		m_request.onreadystatechange = OnForecastResponse;
+		m_request.async = true;
+		m_request.load(getQueryString(locationQuery, true));
+		
+		return ErrorCode.E_OK;		
+	}
+	
+	function OnForecastResponse() {
+		if (m_request.readyState != 4) 
+			return;
+			
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+			return;
+		
+		// TODO: Implementation
+		
+		//if (location.id != null)
+		//	m_forecast(location.id) = forecast;
+		
+		m_forecastCallback(forecast);		
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////		
+	// Get a list of alerts
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	function GetAlerts(locationQuery) {
+		return ErrorCode.E_NOTIMPLEMENTED;
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////	
+	// Get a list of cameras
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	function GetCameras(locationQuery) {		
+		return ErrorCode.E_NOTIMPLEMENTED;
+	}	
+		
+	]]>
+	</script>
+
+</component><component id="NOAA">
+	<comment>
+		NOAA Weather Provider
+	</comment>
+	<registration description="NOAA Weather Provider" progid="DXWeatherProvider.NOAA" version="1" classid="{7877D04D-AC0F-43c6-83F5-F511B9677230}" />  
       	    	  
       	    
 	<object id="m_locations" progid="Scripting.Dictionary" />  
     <object id="m_alerts" progid="Scripting.Dictionary" />  
     <object id="m_forecast" progid="Scripting.Dictionary" />  
-    <object id="m_cameras" progid="Scripting.Dictionary" />  
-    
+
     <object id="m_request" progid="Microsoft.XmlDom" /> 
 	    
 	<public>
+		<property name="ID">
+			<get />
+		</property>
+	
 		<property name="Name">
 			<get />
 		</property>
@@ -5102,8 +5713,7 @@
 		</method>
 		
 		<comment>
-			Query can be one of the following:
-				-
+			Not supported by NOAA
 		</comment>
 		<method name="GetCameras">
 			<parameter name="locationQuery" />
@@ -5111,13 +5721,14 @@
 	
 	</public>
 	
-	<resource id="provider_name">Weather.com</resource>
+	<resource id="provider_id">NOAA</resource>
+	<resource id="provider_name">NOAA's National Weather</resource>
 	<resource id="url_locations"></resource>
 	<resource id="url_weather"></resource>
 	<resource id="url_station"></resource>
 	<resource id="url_alerts"></resource>
 	<resource id="url_forecast"></resource>
-		
+	
 	<script language="JScript">
 	<![CDATA[
 	
@@ -5157,6 +5768,10 @@
 	///////////////////////////////
 	// Properties
 	///////////////////////////////
+	function get_ID() {
+		return getResource("provider_id");
+	}
+	
 	function get_Name() {
 		return getResource("provider_name");
 	}
@@ -5167,7 +5782,8 @@
 	
 	// Setup license
 	function SetLicense(id, key) {	
-		return ErrorCode.E_ERROR;
+		// Not used by this provider: always return E_OK
+		return ErrorCode.E_OK;
 	}
 	
 	// Set callbacks
