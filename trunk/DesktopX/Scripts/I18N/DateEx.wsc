@@ -72,6 +72,8 @@
 	<script language="JScript">
 	<![CDATA[
 	
+	//**Start Encode**
+	
 	// Return a new Date object
 	function GetDate()
 	{
