@@ -1,3 +1,12 @@
+HTTP/1.1 200 OK
+Date: Thu, 16 Jul 2009 11:57:30 GMT
+Server: Apache
+Cache-Control: max-age=300
+Content-Length: 2119
+Keep-Alive: timeout=1, max=7473
+Connection: Keep-Alive
+Content-Type: application/xml;charset=ISO-8859-1
+
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- This document is intended only for use by authorized licensees of The  -->
 <!-- Weather Channel. Unauthorized use is prohibited.  Copyright 1995-2009, -->

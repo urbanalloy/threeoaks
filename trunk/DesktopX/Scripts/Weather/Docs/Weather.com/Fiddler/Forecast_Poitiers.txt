@@ -1,0 +1,215 @@
+HTTP/1.1 200 OK
+Date: Thu, 16 Jul 2009 12:08:03 GMT
+Server: Apache
+Cache-Control: max-age=300
+Content-Length: 5318
+Keep-Alive: timeout=1, max=7495
+Connection: Keep-Alive
+Content-Type: application/xml;charset=ISO-8859-1
+
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- This document is intended only for use by authorized licensees of The  -->
+<!-- Weather Channel. Unauthorized use is prohibited.  Copyright 1995-2009, -->
+<!-- The Weather Channel Interactive, Inc.  All Rights Reserved.            -->
+<weather ver="2.0">
+  <head>
+    <locale>en_US</locale>
+    <form>MEDIUM</form>
+    <ut>C</ut>
+    <ud>km</ud>
+    <us>km/h</us>
+    <up>mb</up>
+    <ur>mm</ur>
+  </head>
+  <loc id="FRXX0170">
+    <dnam>Poitiers, France</dnam>
+    <tm>2:08 PM</tm>
+    <lat>46.59</lat>
+    <lon>.34</lon>
+    <sunr>6:21 AM</sunr>
+    <suns>9:48 PM</suns>
+    <zone>2</zone>
+  </loc>
+  <lnks type="prmo">
+    <link pos="1">
+      <l>http://www.weather.com/allergies?par=xoap&amp;site=textlink&amp;cm_ven=XOAP&amp;cm_cat=TextLink&amp;cm_pla=Link1&amp;cm_ite=Allergies</l>
+      <t>Local Pollen Reports</t>
+    </link>
+    <link pos="2">
+      <l>http://www.weather.com/flights?par=xoap&amp;site=textlink&amp;cm_ven=XOAP&amp;cm_cat=TextLink&amp;cm_pla=Link2&amp;cm_ite=BusinessTraveler</l>
+      <t>Airport Conditions</t>
+    </link>
+    <link pos="3">
+      <l>http://www.weather.com/garden?par=xoap&amp;site=textlink&amp;cm_ven=XOAP&amp;cm_cat=TextLink&amp;cm_pla=Link3&amp;cm_ite=Garden</l>
+      <t>Lawn and Garden Weather</t>
+    </link>
+    <link pos="4">
+      <l>http://www.weather.com/traffic?par=xoap&amp;site=textlink&amp;cm_ven=XOAP&amp;cm_cat=TextLink&amp;cm_pla=Link4&amp;cm_ite=Traffic</l>
+      <t>Rush Hour Traffic</t>
+    </link>
+  </lnks>
+  <dayf>
+    <lsup>7/16/09 7:24 AM Local Time</lsup>
+    <day d="0" t="Thursday" dt="Jul 16">
+      <hi>31</hi>
+      <low>14</low>
+      <sunr>6:21 AM</sunr>
+      <suns>9:48 PM</suns>
+      <part p="d">
+        <icon>32</icon>
+        <t>Sunny</t>
+        <wind>
+          <s>11</s>
+          <gust>N/A</gust>
+          <d>123</d>
+          <t>ESE</t>
+        </wind>
+        <bt>Sunny</bt>
+        <ppcp>20</ppcp>
+        <hmid>56</hmid>
+      </part>
+      <part p="n">
+        <icon>12</icon>
+        <t>Rain / Thunder</t>
+        <wind>
+          <s>18</s>
+          <gust>N/A</gust>
+          <d>249</d>
+          <t>WSW</t>
+        </wind>
+        <bt>Rain/Thunder</bt>
+        <ppcp>60</ppcp>
+        <hmid>79</hmid>
+      </part>
+    </day>
+    <day d="1" t="Friday" dt="Jul 17">
+      <hi>19</hi>
+      <low>12</low>
+      <sunr>6:22 AM</sunr>
+      <suns>9:47 PM</suns>
+      <part p="d">
+        <icon>11</icon>
+        <t>Light Rain / Wind</t>
+        <wind>
+          <s>29</s>
+          <gust>N/A</gust>
+          <d>258</d>
+          <t>WSW</t>
+        </wind>
+        <bt>Light Rain</bt>
+        <ppcp>70</ppcp>
+        <hmid>72</hmid>
+      </part>
+      <part p="n">
+        <icon>45</icon>
+        <t>Showers Early</t>
+        <wind>
+          <s>27</s>
+          <gust>N/A</gust>
+          <d>273</d>
+          <t>W</t>
+        </wind>
+        <bt>Shwrs Early</bt>
+        <ppcp>30</ppcp>
+        <hmid>73</hmid>
+      </part>
+    </day>
+    <day d="2" t="Saturday" dt="Jul 18">
+      <hi>22</hi>
+      <low>12</low>
+      <sunr>6:23 AM</sunr>
+      <suns>9:46 PM</suns>
+      <part p="d">
+        <icon>30</icon>
+        <t>Partly Cloudy</t>
+        <wind>
+          <s>23</s>
+          <gust>N/A</gust>
+          <d>262</d>
+          <t>W</t>
+        </wind>
+        <bt>P Cloudy</bt>
+        <ppcp>10</ppcp>
+        <hmid>56</hmid>
+      </part>
+      <part p="n">
+        <icon>11</icon>
+        <t>Light Rain Late</t>
+        <wind>
+          <s>14</s>
+          <gust>N/A</gust>
+          <d>237</d>
+          <t>WSW</t>
+        </wind>
+        <bt>Rain Late</bt>
+        <ppcp>60</ppcp>
+        <hmid>64</hmid>
+      </part>
+    </day>
+    <day d="3" t="Sunday" dt="Jul 19">
+      <hi>25</hi>
+      <low>14</low>
+      <sunr>6:24 AM</sunr>
+      <suns>9:45 PM</suns>
+      <part p="d">
+        <icon>11</icon>
+        <t>AM Light Rain</t>
+        <wind>
+          <s>19</s>
+          <gust>N/A</gust>
+          <d>244</d>
+          <t>WSW</t>
+        </wind>
+        <bt>AM Lgt Rain</bt>
+        <ppcp>60</ppcp>
+        <hmid>55</hmid>
+      </part>
+      <part p="n">
+        <icon>29</icon>
+        <t>Partly Cloudy</t>
+        <wind>
+          <s>8</s>
+          <gust>N/A</gust>
+          <d>206</d>
+          <t>SSW</t>
+        </wind>
+        <bt>P Cloudy</bt>
+        <ppcp>10</ppcp>
+        <hmid>67</hmid>
+      </part>
+    </day>
+    <day d="4" t="Monday" dt="Jul 20">
+      <hi>29</hi>
+      <low>15</low>
+      <sunr>6:25 AM</sunr>
+      <suns>9:44 PM</suns>
+      <part p="d">
+        <icon>34</icon>
+        <t>Mostly Sunny</t>
+        <wind>
+          <s>16</s>
+          <gust>N/A</gust>
+          <d>201</d>
+          <t>SSW</t>
+        </wind>
+        <bt>M Sunny</bt>
+        <ppcp>10</ppcp>
+        <hmid>55</hmid>
+      </part>
+      <part p="n">
+        <icon>29</icon>
+        <t>Partly Cloudy</t>
+        <wind>
+          <s>11</s>
+          <gust>N/A</gust>
+          <d>216</d>
+          <t>SW</t>
+        </wind>
+        <bt>P Cloudy</bt>
+        <ppcp>10</ppcp>
+        <hmid>66</hmid>
+      </part>
+    </day>
+  </dayf>
+</weather>
+
