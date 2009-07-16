@@ -4624,9 +4624,7 @@
 		
 		// Check if we got an intermediate list and parse it
 		var locations = m_request.getElementsByTagName("locations");
-		if (locations.length != 0) {
-			
-			debugger;
+		if (locations.length != 0) {			
 			
 			var locationsEnumerator = new Enumerator(locations[0].getElementsByTagName("location"));		
 			for (var enumerator = locationsEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
