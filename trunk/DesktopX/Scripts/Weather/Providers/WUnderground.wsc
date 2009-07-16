@@ -506,7 +506,7 @@
 		m_weather.Type 			  = m_helper.GetNodeValue(observation[0], "station_type/text()");
 		
 		// Observation date
-		m_weather.Date = m_dateHelper.GetDate().parse(m_helper.GetNodeValue(observation[0],  "observation_time_rfc822/text()"));
+		m_weather.Date = m_dateHelper.FromEpoch(m_helper.GetNodeValue(observation[0],  "observation_epoch/text()"));
 		
 		// Temperature
 		if (m_useMetricSystem)
@@ -624,8 +624,10 @@
 		    
 		    alert.Type 		   = m_helper.GetNodeValue(entry, "type/text()");	
 		    alert.Description  = m_helper.GetNodeValue(entry, "description/text()");	
-		    alert.Date 		   = m_helper.GetNodeValue(entry, "date/text()");	
-		    alert.Expiration   = m_helper.GetNodeValue(entry, "expires/text()");	
+		    
+		    alert.Date 		   = m_dateHelper.FromEpoch(m_helper.GetNodeValue(entry, "date/@epoch/text()"));	
+		    alert.Expiration   = m_dateHelper.FromEpoch(m_helper.GetNodeValue(entry, "expires/@epoch/text()"));
+		    	
 		    alert.Message 	   = m_helper.GetNodeValue(entry, "message/text()");	
 		    alert.Phenomena    = m_helper.GetNodeValue(entry, "phenomena/text()");	
 		    alert.Significance = m_helper.GetNodeValue(entry, "significance/text()");	
@@ -672,7 +674,7 @@
 		var text_forecast = m_request.selectNodes("forecast/txt_forecast");
 		if (text_forecast.length != 0) {
 			
-			var date = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(text_forecast[0], "date/text()"), "h:mm tt T");		
+			var date = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(text_forecast[0], "date/text()"), ["h:mm tt Z", "h:mm tt"]);		
 			
 			var textforecastEnumerator = new Enumerator(text_forecast[0].getElementsByTagName("forecastday"));
 			for (var enumerator = textforecastEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
@@ -689,8 +691,14 @@
 				// Forecast text
 				forecast.ForecastDescription = m_helper.GetNodeValue(entry, "fcttext/text()");
 				
-				// FIXME: Set day part!
+				// Set day part
+				if (forecast.Description == "Today")
+					forecast.DayPart = forecast.DAY_PART_DAY;
 				
+				if (forecast.Description == "Tonight")
+					forecast.DayPart = forecast.DAY_PART_NIGHT;
+					
+				// TODO: Try parsing the description as a day of the week and adjust the date				
 				forecast.Date = date;
 			    			    
 			  	m_forecast.Add(i, forecast);    
@@ -724,7 +732,7 @@
 			    }
 			    
 			    // Date
-			    forecast.Date = m_dateHelper.GetDate().parse(m_helper.GetNodeValue(entry, "date/epoch/text()") * 1000, "U");			    
+			    forecast.Date = m_dateHelper.FromEpoch(m_helper.GetNodeValue(entry, "date/epoch/text()"));			    
 			    
 			    m_forecast.Add(i, forecast);		    
 			    i++;
