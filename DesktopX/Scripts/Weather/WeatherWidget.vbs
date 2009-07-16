@@ -8,6 +8,9 @@ LIB_FOLDER = "D:/Sources/Company/src/trunk/src/DesktopX/DXScriptLibrary/Weather/
 
 'Called when the script is executed
 Sub Object_OnScriptEnter	
+	Set WeatherController = Nothing
+	Set ErrorCode = Nothing
+
 	Object.Visible = False
 	
 	If (SystemEx.IsFirstInstance) Then
@@ -50,14 +53,13 @@ End Sub
 Sub InitWidget()
 	Object.Visible = True
 	Cleanup()
-	
-	Dim retCode
 
 	Set ErrorCode = GetObject("script:" & LIB_FOLDER & "/Weather.wsc#WeatherError")
 	Set WeatherController = GetObject("script:" & LIB_FOLDER & "/Weather.wsc")
 	
 	'#ifdef DEBUG
 	WeatherController.AddProvider "WUnderground", GetObject("script:" & LIB_FOLDER & "Providers/WUnderground.wsc")
+	WeatherController.AddProvider "TWC", GetObject("script:" & LIB_FOLDER & "Providers/TWC.wsc")
 	'#endif
 		
 	WeatherController.RegisterCallbacks GetRef("OnLocations"), _
@@ -69,9 +71,43 @@ Sub InitWidget()
 											
 	WeatherController.UseMetricSystem = True				' Default is True
 	WeatherController.SetLicense "my_id", "my_key" 			' This will be ignored by the WUnderground provider as it doesn't use a license key
-	retCode = WeatherController.SetProvider("WUnderground") ' you can use the WeatherController.Providers property to get a list of <id, display name> pairs
 	
-	ParseRetCode retCode
+	InitProviders()
+End Sub	
+
+Sub InitProviders()
+
+	DesktopX.ScriptObject("DXWeather_Provider").Control.ResetList()
+
+	If (WeatherController.Providers.Count = 0) Then
+		Exit Sub
+	End If
+	
+	Dim name
+	For Each name In WeatherController.Providers.Items
+		DesktopX.ScriptObject("DXWeather_Provider").Control.AddItem name
+	Next
+	
+	DesktopX.ScriptObject("DXWeather_Provider").Control.Enabled = True
+	DesktopX.ScriptObject("DXWeather_Provider").Control.ListIndex = 0
+	
+	OnSelectProvider 0, ""
+End Sub
+	
+Sub OnSelectProvider(item, value)
+	Dim retCode, keys
+	
+	' Get the provider ids
+	keys = WeatherController.Providers.Keys
+
+	retCode = WeatherController.SetProvider(keys(item))
+	
+	If retCode <> ErrorCode.E_OK Then
+		AppendInfo "Error setting provider: " & retCode & vbNewLine
+		DesktopX.ScriptObject("DXWeather_Query").Control.Enabled = False
+	Else
+		DesktopX.ScriptObject("DXWeather_Query").Control.Enabled = True
+	End If
 End Sub
 
 Sub Cleanup()
@@ -92,7 +128,7 @@ End Sub
 Sub ParseRetCode(code)
 	Select Case code
 		Case ErrorCode.E_OK ' query accepted and request sent
-			AppendInfo "OK!" & vbNewLine
+			AppendInfo "Request Sent!" & vbNewLine
 		
 		Case ErrorCode.E_NOTIMPLEMENTED ' the chosen provider does not implement this method
 			AppendInfo "Method not implemented!"  & vbNewLine	' should not happen with GetWeather obviously!

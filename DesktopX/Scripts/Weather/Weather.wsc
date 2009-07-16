@@ -233,6 +233,8 @@
 	<script language="VBScript">
 	<![CDATA[
 	
+	'**Start Encode**
+	
 	Option Explicit
 	
 	' Error
@@ -278,6 +280,7 @@
 		' Provider registration
 		'#ifndef DEBUG
 		'AddProvider "WUnderground", CreateComponent("WUnderground")
+		'AddProvider "TWC", CreateComponent("TWC")
 		'#endif
 	
 	End Sub
@@ -455,7 +458,7 @@
 	'=
 	'=============================================================================================================================	
 	
-	'// We check here if the callback are defined, so we can call them without checking if they exist in each provider
+	' We check here if the callback are defined, so we can call them without checking if they exist in each provider
 
 	Sub OnLocations(locations)
 		If Not (m_locationsCallback Is Nothing) Then			
@@ -539,6 +542,8 @@
 	<script language="JScript">
 	<![CDATA[
 	
+	//**Start Encode**
+	
 	// Constants
 	var E_OK 			 = 1;
 	var E_ERROR 		 = 0;
@@ -590,9 +595,18 @@
       			  progid="DXWeather.Info"
       			  version="1"
       	    	  classid="{30EC2AE5-702A-4b2d-94BB-6CE09B399931}"/>  
-      	    	  
-      	    
+      	    	      
 	<public>
+		<comment>
+			Constants
+		</comment>
+		<property name="DAY_PART_DAY">
+			<get/>
+		</property>
+		<property name="DAY_PART_NIGHT">
+			<get/>
+		</property>	
+	
 		<comment>
 			Weather location info (WeatherLocation object)
 		</comment>
@@ -613,11 +627,10 @@
 		</comment>
 		<property name="Links" 					internalname="m_links" />
 		
-		<property name="WeatherDescription"	 	internalname="m_weatherDescription" />
-		<property name="WeatherCode" 			internalname="m_weatherCode" />
+		<property name="Description"	 		internalname="m_description" />
+		<property name="Code" 					internalname="m_code" />
 		
-		<property name="ObservationDate" 		internalname="m_observationDate" />
-		<property name="ObservationTime" 		internalname="m_observationTime" />
+		<property name="Date" 					internalname="m_date" />
 		
 		<property name="Temperature" 			internalname="m_temperature" />
 		<property name="TemperatureFeel" 		internalname="m_temperatureFeel" />
@@ -658,11 +671,9 @@
 		<property name="MoonAge" 				internalname="m_moonAge" />
 		
 		<property name="DayOfWeek" 				internalname="m_dayOfWeek" />
-		<property name="DayPart" 				internalname="m_dayPart" />
-		<property name="Date" 					internalname="m_date" />		
+		<property name="DayPart" 				internalname="m_dayPart" />	
 		
-		<property name="ForecastDescription" 	internalname="m_forecastDescription" />
-		<property name="ForecastCode" 			internalname="m_forecastCode" />
+		<property name="ForecastDescription" 	internalname="m_forecastDescription" />		
 		<property name="ForecastHigh"			internalname="m_forecastHigh" />		
 		<property name="ForecastLow" 			internalname="m_forecastLow" />
 		
@@ -675,134 +686,151 @@
 	<script language="JScript">
 	<![CDATA[
 	
-		var m_location = createComponent("WeatherLocation");		
-		var m_useMetricSystem = true;
-		
-		var m_station = "";
-		var m_type = "";
-		
-		var m_weatherDescription = "";
-		var m_weatherCode = "";
-		
-		var m_observationDate = "";
-		var m_observationTime = "";
-		
-		var m_temperature = "";
-		var m_temperatureFeel = "";
-		
-		var m_humidity = "";
-		var m_precipitation_1h = "";
-		var m_precipitation_today = "";
+	//**Start Encode**
 
-		var m_visibility = "";
-		
-		var m_windDescription = "";
-		var m_windDirection = "";
-		var m_windDegrees = "";
-		var m_windSpeed = "";
-		var m_windGust = "";
+	// Constants
+	var DAY_PART_DAY = 0;
+	var DAY_PART_NIGHT = 1;
 
-		var m_windChillDescription = "";
-		var m_windChill = "";
-		
-		var m_pressure = "";
-				
-		var m_dewPointDescription = "";
-		var m_dewPoint = "";
-				
-		var m_heatDescription = "";
-		var m_heatIndex = "";
-		
-		var m_solarRadiation = "";
-		var m_UV = "";
-		
-		var m_sunrise = "";
-		var m_sunset = "";
-		
-		var m_moonPhaseDescription = "";
-		var m_moonPhaseCode = "";
-		var m_moonIlluminated = "";
-		var m_moonAge = "";
-		
-		var m_dayOfWeek = "";
-		var m_dayPart = "";
-		var m_date = "";
-		
-		var m_forecastDescription = "";
-		var m_forecastCode = "";
-		var m_forecastHigh = "";	
-		var m_forecastLow = "";
-		
-		function ToString()
-		{
-			var text = m_location.ToString() + "\n";	
+	// Properties
+	var m_useMetricSystem = true;
+	var m_location = createComponent("WeatherLocation");	
+	var m_links    = createComponent("WeatherLinks");		
 			
-			// Station name & type
-			text += append("Station", m_station);
-			text += append("Type", m_type);
+	var m_station = "";
+	var m_type = "";
+	
+	var m_description = "";
+	var m_code = "";
+
+	
+	var m_temperature = "";
+	var m_temperatureFeel = "";
+	
+	var m_humidity = "";
+	var m_precipitation_1h = "";
+	var m_precipitation_today = "";
+
+	var m_visibility = "";
+	
+	var m_windDescription = "";
+	var m_windDirection = "";
+	var m_windDegrees = "";
+	var m_windSpeed = "";
+	var m_windGust = "";
+
+	var m_windChillDescription = "";
+	var m_windChill = "";
+	
+	var m_pressure = "";
 			
-			// Description
-			text += append("Description", m_weatherDescription);
-			text += append("Code", m_weatherCode);
-				
-			// Date & Time
-			if (m_observationDate != "" || m_observationTime != "")
-				text += m_observationDate + " " + m_observationTime + "\n";
-				
-			// Temperature / Humidity / Precipitation / Visibility
-			text += append("Temperature", m_temperature);
-			text += append("Temperature (Feel)", m_temperatureFeel);
-			text += append("Humidity", m_humidity);
-			text += append("Precipitation (1h)", m_precipitation_1h);			
-			text += append("Precipitation (today)", m_precipitation_today);			
-			text += append("Visibility", m_visibility);
+	var m_dewPointDescription = "";
+	var m_dewPoint = "";
 			
-			// Wind
-			text += append("Wind Description", m_windDescription);
-			text += append("Direction", m_windDirection);
-			text += append("Degrees", m_windDegrees);
-			text += append("Speed", m_windSpeed);
-			text += append("Gust", m_windGust);
-			text += append("WindChill Description", m_windChillDescription);
-			text += append("Chill", m_windChill);
-			
-			// Pressure / Dew Point / Heat
-			text += append("Pressure", m_pressure);
-			text += append("DewPoint Description", m_dewPointDescription);
-			text += append("DewPoint", m_dewPoint);
-			text += append("Heat Description", m_heatDescription);
-			text += append("Heat Index", m_heatIndex);
-			
-			// Solar Radiation & UV
-			text += append("Solar Radiation", m_solarRadiation);
-			text += append("UV", m_UV);
-			
-			// Sunrise / Sunset / Moon / Day
-			text += append("Sunrise", m_sunrise);
-			text += append("Sunset", m_sunset);
-			text += append("Moonphase", m_moonPhaseDescription);
-			text += append("Code", m_moonPhaseCode);
-			text += append("Illumination", m_moonIlluminated);
-			text += append("Age", m_moonAge);
-			text += append("Day of week", m_dayOfWeek);
-			text += append("Day part", m_dayPart);
-			text += append("Date", m_date);
-			
-			text += append("Forecast", m_forecastDescription);
-			text += append("Code", m_forecastCode);
-			text += append("High", m_forecastHigh);
-			text += append("Low", m_forecastLow);
-								
-			return text;
-		}
+	var m_heatDescription = "";
+	var m_heatIndex = "";
+	
+	var m_solarRadiation = "";
+	var m_UV = "";
+	
+	var m_sunrise = "";
+	var m_sunset = "";
+	
+	var m_moonPhaseDescription = "";
+	var m_moonPhaseCode = "";
+	var m_moonIlluminated = "";
+	var m_moonAge = "";
+	
+	var m_dayOfWeek = "";
+	var m_dayPart = "";
+	var m_date = "";
+	
+	var m_forecastDescription = "";
+	var m_forecastCode = "";
+	var m_forecastHigh = "";	
+	var m_forecastLow = "";
+	
+	function get_DAY_PART_DAY()
+	{
+		return DAY_PART_DAY;
+	}
+	
+	function get_DAY_PART_NIGHT()
+	{
+		return DAY_PART_NIGHT;
+	}
+	
+	function ToString()
+	{
+		var text = m_location.ToString() + "\n";	
 		
-		function append(title, value)
-		{
-			if (value == "")
-				return "";
-				
-			return title + ": " + value + "\n";
-		}
+		// Station name & type
+		text += append("Station", m_station);
+		text += append("Type", m_type);
+		
+		// Description
+		text += append("Description", m_description);
+		text += append("Code", m_code);
+			
+		// Date & Time
+		text += append("Date", m_date.toISOString());
+			
+		// Temperature / Humidity / Precipitation / Visibility
+		text += append("Temperature", m_temperature);
+		text += append("Temperature (Feel)", m_temperatureFeel);
+		text += append("Humidity", m_humidity);
+		text += append("Precipitation (1h)", m_precipitation_1h);			
+		text += append("Precipitation (today)", m_precipitation_today);			
+		text += append("Visibility", m_visibility);
+		
+		// Wind
+		text += append("Wind Description", m_windDescription);
+		text += append("Direction", m_windDirection);
+		text += append("Degrees", m_windDegrees);
+		text += append("Speed", m_windSpeed);
+		text += append("Gust", m_windGust);
+		text += append("WindChill Description", m_windChillDescription);
+		text += append("Chill", m_windChill);
+		
+		// Pressure / Dew Point / Heat
+		text += append("Pressure", m_pressure);
+		text += append("DewPoint Description", m_dewPointDescription);
+		text += append("DewPoint", m_dewPoint);
+		text += append("Heat Description", m_heatDescription);
+		text += append("Heat Index", m_heatIndex);
+		
+		// Solar Radiation & UV
+		text += append("Solar Radiation", m_solarRadiation);
+		text += append("UV", m_UV);
+		
+		// Sunrise / Sunset / Moon / Day
+		text += append("Sunrise", m_sunrise);
+		text += append("Sunset", m_sunset);
+		text += append("Moonphase", m_moonPhaseDescription);
+		text += append("Code", m_moonPhaseCode);
+		text += append("Illumination", m_moonIlluminated);
+		text += append("Age", m_moonAge);
+		
+		text += append("Day of week", m_dayOfWeek);
+		text += append("Day part", m_dayPart);
+		
+		text += append("Forecast", m_forecastDescription);
+		text += append("High", m_forecastHigh);
+		text += append("Low", m_forecastLow);
+		
+		text += "\n" + m_links.ToString();
+							
+		return text;
+	}
+	
+	function append(title, value)
+	{
+		if (value == "")
+			return "";
+			
+		return title + ": " + value + "\n";
+	}
+	
 	]]>
 	</script>
 
@@ -833,6 +861,8 @@
 	<script language="JScript">
 	<![CDATA[
 	
+	//**Start Encode**
+	
 	var m_type = "";
 	var m_description = "";
 	var m_date = "";
@@ -846,7 +876,8 @@
 		var text = m_description + " (" + m_type + ")" + "\n";		
 		text += "Date: " + m_date + "\n";
 		text += "Expiration: " + m_expiration + "\n";
-		text += "Phenomena: " + m_phenomena + " - Significance: " + m_significance + "\n";
+		text += "Phenomena: " + m_phenomena + "\n";
+		text += "Significance: " + m_significance + "\n";
 		text += "Message: " + m_message + "\n";
 		
 		return text;
@@ -894,93 +925,95 @@
 	
 	<script language="JScript">
 	<![CDATA[
-	    
-		var m_ID = "";
 	
-		var m_country = "";
-		var m_state = "";
-		var m_city = "";
-		
-		var m_latitude = "";
-		var m_longitude = "";
-		
-		var m_airportCode = "";
-		var m_zipCode = "";
-		var m_cityCode = "";
-		
-		var m_customQueryString = "";
-		
-		// Results-only data
-		var m_name = "";
-		var m_timezone = "";
-		var m_elevation = "";
-		var m_distance = "";
+	//**Start Encode**
+    
+	var m_ID = "";
 
-		// Trim values used in query
-		function TrimValues()
-		{
-			// Helper
-			var m_helper = createComponent("WeatherHelper");
-			
-			m_ID = m_helper.Trim(m_ID);		
-				
-			m_country = m_helper.Trim(m_country);
-			m_state = m_helper.Trim(m_state);
-			m_city = m_helper.Trim(m_city);
-			
-			m_latitude = m_helper.Trim(m_latitude);
-			m_longitude = m_helper.Trim(m_longitude);
-			
-			m_airportCode = m_helper.Trim(m_airportCode);
-			m_zipCode = m_helper.Trim(m_zipCode);
-			m_cityCode = m_helper.Trim(m_cityCode);
-			
-			m_customQueryString = m_helper.Trim(m_customQueryString);				
-		}
-		
-		function ToString()
-		{
-			var text = "";
-			
-			if (m_ID != "")
-				text += "ID: " + m_ID + "\n";
-				
-			if (m_name != "")
-				text += "Name: " + m_name + "\n";;
-			
-			// City	
-			text += "City: " + m_city;
-			if (m_state != "")
-				text += ", " + m_state;
-				 
-			if (m_country != "")
-				text += " (" + m_country + ")"
-			text += "\n";
-			
-			// Coordinates
-			if (m_latitude != "" || m_longitude != "")
-				text += "Coordinates: " + m_latitude + ", " + m_longitude + "\n";
-				
-			// Distance & Elevation
-			if (m_distance != "")
-				text += "Distance: " + m_distance + "\n";
-				
-			if (m_elevation != "")
-				text += "Elevation: " + m_elevation + "\n";
-							
-			// Codes
-			if (m_zipCode != "")
-				text += "Zipcode: " + m_zipCode + "\n";
-				
-			if (m_airportCode != "")
-				text += "Airport: " + m_airportCode + "\n";
-				
-			if (m_cityCode != "")
-				text += "City Code: " + m_cityCode + "\n";
-
-			return text;
-		}
+	var m_country = "";
+	var m_state = "";
+	var m_city = "";
 	
+	var m_latitude = "";
+	var m_longitude = "";
+	
+	var m_airportCode = "";
+	var m_zipCode = "";
+	var m_cityCode = "";
+	
+	var m_customQueryString = "";
+	
+	// Results-only data
+	var m_name = "";
+	var m_timezone = "";
+	var m_elevation = "";
+	var m_distance = "";
+
+	// Trim values used in query
+	function TrimValues()
+	{
+		// Helper
+		var m_helper = createComponent("WeatherHelper");
+		
+		m_ID = m_helper.Trim(m_ID);		
+			
+		m_country = m_helper.Trim(m_country);
+		m_state = m_helper.Trim(m_state);
+		m_city = m_helper.Trim(m_city);
+		
+		m_latitude = m_helper.Trim(m_latitude);
+		m_longitude = m_helper.Trim(m_longitude);
+		
+		m_airportCode = m_helper.Trim(m_airportCode);
+		m_zipCode = m_helper.Trim(m_zipCode);
+		m_cityCode = m_helper.Trim(m_cityCode);
+		
+		m_customQueryString = m_helper.Trim(m_customQueryString);				
+	}
+	
+	function ToString()
+	{
+		var text = "";
+		
+		if (m_ID != "")
+			text += "ID: " + m_ID + "\n";
+			
+		if (m_name != "")
+			text += "Name: " + m_name + "\n";;
+		
+		// City	
+		text += "City: " + m_city;
+		if (m_state != "")
+			text += ", " + m_state;
+			 
+		if (m_country != "")
+			text += " (" + m_country + ")"
+		text += "\n";
+		
+		// Coordinates
+		if (m_latitude != "" || m_longitude != "")
+			text += "Coordinates: " + m_latitude + ", " + m_longitude + "\n";
+			
+		// Distance & Elevation
+		if (m_distance != "")
+			text += "Distance: " + m_distance + "\n";
+			
+		if (m_elevation != "")
+			text += "Elevation: " + m_elevation + "\n";
+						
+		// Codes
+		if (m_zipCode != "")
+			text += "Zipcode: " + m_zipCode + "\n";
+			
+		if (m_airportCode != "")
+			text += "Airport: " + m_airportCode + "\n";
+			
+		if (m_cityCode != "")
+			text += "City Code: " + m_cityCode + "\n";
+
+		return text;
+	}
+
 	]]>
 	</script>
 
@@ -1016,6 +1049,46 @@
 	
 	<script language="JScript">
 	<![CDATA[
+	
+	//**Start Encode**
+	
+	var m_current = "";
+	var m_forecast = "";
+	var m_history = "";
+	var m_credit = "";
+	var m_logo = "";	
+	
+	function ToString()
+	{
+		var text = "";
+		
+		if (m_current != "")
+			text += "Current: " + m_current + "\n";
+			
+		if (m_forecast != "")
+			text += "Forecast: " + m_forecast + "\n";
+			
+		if (m_history != "")
+			text += "History: " + m_history + "\n";
+		
+		if (m_credit != "")
+			text += "Credit: " + m_credit + "\n";
+			
+		if (m_logo != "")
+			text += "Logo: " + m_logo + "\n";
+			
+		if (m_promo.Count != 0) {
+			text += "Promo links:\n\n";
+			
+			var keys = (new VBArray(m_promo.Keys())).toArray();
+			var items = (new VBArray(m_promo.Items())).toArray();
+			
+			for (i in keys)
+				text += keys[i] + " (" + items[i] + ")" + "\n";			
+		}
+			
+		return text;
+	}
 	
 	]]>
 	</script>
@@ -1154,6 +1227,8 @@
 	<script language="JScript">
 	<![CDATA[
 	
+	//**Start Encode**
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	// Parsing & XML handling
@@ -1282,7 +1357,9 @@
 </component>
 
 <comment>
+#includecomponent "../I18N/DateEx.wsc"
 #includecomponent "Providers/WUnderground.wsc"
+#includecomponent "Providers/TWC.wsc"
 </comment>
 
 </package>

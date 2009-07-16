@@ -1,0 +1,307 @@
+HTTP/1.1 200 OK
+Date: Wed, 15 Jul 2009 02:19:26 GMT
+Server: Apache/1.3.33 (Unix) PHP/4.4.0
+X-CreationTime: 0.726
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/xml
+
+4f1
+<?xml version="1.0" ?>
+<forecast>
+	<termsofservice link="http://www.wunderground.com/members/tos.asp#api" />
+	<txt_forecast>
+  <date>3:52 PM EDT</date>
+  <number>2</number>
+  <forecastday>
+  <period>1</period>
+  <icon>nt_cloudy</icon>
+  <title>Tonight</title>
+  <fcttext>Mostly cloudy this evening...then clearing. Lows in the upper 50s. West winds 5 to 10 mph. Gusts up to 20 mph this evening. </fcttext>
+  </forecastday>
+  <forecastday>
+  <period>2</period>
+  <icon>sunny</icon>
+  <title>Wednesday</title>
+  <fcttext>Sunny. Highs around 80. West winds 10 to 15 mph. </fcttext>
+  </forecastday>
+	</txt_forecast>
+<simpleforecast>
+  <forecastday>
+  <period>1</period>
+  <date>
+  <epoch>1247626856</epoch>
+  <pretty_short>11:00 PM EDT</pretty_short>
+  <pretty>11:00 PM EDT on July 14, 2009</pretty>
+  <day>14</day>
+  <month>7</month>
+  <year>2009</year>
+  <yday>194</yday>
+  <hour>23</hour>
+  <min>00</min>
+  <sec>56</sec>
+  <isdst>1</isdst>
+  <monthname>July</monthname>
+  <weekday_short></weekday_short>
+  <weekday>Tuesday</weekday>
+  <ampm>PM</ampm>
+  <tz_short>EDT</tz_short>
+  <tz_long>America/New_York</tz_long>
+</date>
+            <high>
+              <fahrenheit>77</fahrenheit>
+              <celsius>25</celsius>
+            </high>
+            <low>
+      
+5b4
+        <fahrenheit>54</fahrenheit>
+              <celsius>12</celsius>
+            </low>
+            <conditions>Partly Cloudy</conditions>
+            <icon>partlycloudy</icon>
+            <skyicon>partlycloudy</skyicon>
+			<pop>13</pop>
+        </forecastday>
+
+
+
+
+
+
+        <forecastday>
+            <period>2</period>
+            <date>
+  <epoch>1247713256</epoch>
+  <pretty_short>11:00 PM EDT</pretty_short>
+  <pretty>11:00 PM EDT on July 15, 2009</pretty>
+  <day>15</day>
+  <month>7</month>
+  <year>2009</year>
+  <yday>195</yday>
+  <hour>23</hour>
+  <min>00</min>
+  <sec>56</sec>
+  <isdst>1</isdst>
+  <monthname>July</monthname>
+  <weekday_short></weekday_short>
+  <weekday>Wednesday</weekday>
+  <ampm>PM</ampm>
+  <tz_short>EDT</tz_short>
+  <tz_long>America/New_York</tz_long>
+</date>
+            <high>
+              <fahrenheit>81</fahrenheit>
+              <celsius>27</celsius>
+            </high>
+            <low>
+              <fahrenheit>61</fahrenheit>
+              <celsius>16</celsius>
+            </low>
+            <conditions>Clear</conditions>
+            <icon>clear</icon>
+            <skyicon>sunny</skyicon>
+			<pop>5</pop>
+        </forecastday>
+
+
+
+
+
+
+        <forecastday>
+            <period>3</period>
+            <date>
+  <epoch>1247799656</epoch>
+  <pretty_short>11:00 PM EDT</pretty_short>
+  <pretty>11:00 PM EDT on July 16, 2009</pretty>
+  <day>16</day>
+  <month>7</month>
+  <year>2009</year>
+  <yday>196</yday>
+  <hour>23</h
+52a
+our>
+  <min>00</min>
+  <sec>56</sec>
+  <isdst>1</isdst>
+  <monthname>July</monthname>
+  <weekday_short></weekday_short>
+  <weekday>Thursday</weekday>
+  <ampm>PM</ampm>
+  <tz_short>EDT</tz_short>
+  <tz_long>America/New_York</tz_long>
+</date>
+            <high>
+              <fahrenheit>79</fahrenheit>
+              <celsius>26</celsius>
+            </high>
+            <low>
+              <fahrenheit>63</fahrenheit>
+              <celsius>17</celsius>
+            </low>
+            <conditions>Chance of a Thunderstorm</conditions>
+            <icon>chancetstorms</icon>
+            <skyicon>mostlycloudy</skyicon>
+			<pop>48</pop>
+        </forecastday>
+
+
+
+
+
+
+        <forecastday>
+            <period>4</period>
+            <date>
+  <epoch>1247875256</epoch>
+  <pretty_short>8:00 PM EDT</pretty_short>
+  <pretty>8:00 PM EDT on July 17, 2009</pretty>
+  <day>17</day>
+  <month>7</month>
+  <year>2009</year>
+  <yday>197</yday>
+  <hour>20</hour>
+  <min>00</min>
+  <sec>56</sec>
+  <isdst>1</isdst>
+  <monthname>July</monthname>
+  <weekday_short></weekday_short>
+  <weekday>Friday</weekday>
+  <ampm>PM</ampm>
+  <tz_short>EDT</tz_short>
+  <tz_long>America/New_York</tz_long>
+</date>
+            <high>
+              <fahrenheit>81</fahrenheit>
+              <celsius>27</celsius>
+            </high>
+            <low>
+      
+637
+        <fahrenheit>63</fahrenheit>
+              <celsius>17</celsius>
+            </low>
+            <conditions>Chance of Rain</conditions>
+            <icon>chancerain</icon>
+            <skyicon>partlycloudy</skyicon>
+			<pop>36</pop>
+        </forecastday>
+
+
+
+
+
+
+        <forecastday>
+            <period>5</period>
+            <date>
+  <epoch>1247961656</epoch>
+  <pretty_short>8:00 PM EDT</pretty_short>
+  <pretty>8:00 PM EDT on July 18, 2009</pretty>
+  <day>18</day>
+  <month>7</month>
+  <year>2009</year>
+  <yday>198</yday>
+  <hour>20</hour>
+  <min>00</min>
+  <sec>56</sec>
+  <isdst>1</isdst>
+  <monthname>July</monthname>
+  <weekday_short></weekday_short>
+  <weekday>Saturday</weekday>
+  <ampm>PM</ampm>
+  <tz_short>EDT</tz_short>
+  <tz_long>America/New_York</tz_long>
+</date>
+            <high>
+              <fahrenheit>76</fahrenheit>
+              <celsius>24</celsius>
+            </high>
+            <low>
+              <fahrenheit>61</fahrenheit>
+              <celsius>16</celsius>
+            </low>
+            <conditions>Chance of Rain</conditions>
+            <icon>chancerain</icon>
+            <skyicon>mostlycloudy</skyicon>
+			<pop>49</pop>
+        </forecastday>
+
+
+
+
+
+
+        <forecastday>
+            <period>6</period>
+            <date>
+  <epoch>1248048056</epoch>
+  <pretty_short>8:00 PM EDT</pretty_short>
+  <pretty>8:00 PM EDT on July 19, 2009</pretty>
+  <day>19</day>
+  <month>7</month>
+  <year>2009</year>
+  <yday>199</yday>
+  <hour>20</hour>
+  <min>00</min>
+  <sec>56</sec>
+  <isdst>1</isdst>
+  <monthname>July</monthname>
+  <weekday_short></weekday_sh
+3ba
+ort>
+  <weekday>Sunday</weekday>
+  <ampm>PM</ampm>
+  <tz_short>EDT</tz_short>
+  <tz_long>America/New_York</tz_long>
+</date>
+            <high>
+              <fahrenheit>79</fahrenheit>
+              <celsius>26</celsius>
+            </high>
+            <low>
+              <fahrenheit>61</fahrenheit>
+              <celsius>16</celsius>
+            </low>
+            <conditions>Chance of Rain</conditions>
+            <icon>chancerain</icon>
+            <skyicon>mostlycloudy</skyicon>
+			<pop>29</pop>
+        </forecastday>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</simpleforecast>
+<moon_phase>
+        <percentIlluminated>53</percentIlluminated>
+        <ageOfMoon>22</ageOfMoon>
+		<current_time>
+			<hour>22</hour>
+			<minute>19</minute>
+		</current_time>
+        <sunset>
+            <hour>20</hour>
+            <minute>19</minute>
+        </sunset>
+        <sunrise>
+            <hour>5</hour>
+            <minute>20</minute>
+        </sunrise>
+</moon_phase>
+</forecast>
+
+
+0
+

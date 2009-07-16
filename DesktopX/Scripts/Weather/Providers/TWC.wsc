@@ -4,9 +4,9 @@
 <comment>
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //
-// 
+// The Weather Channel Provider
 //
-// Copyright (c) 2009, <AUTHOR>
+// Copyright (c) 2009, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,14 +38,14 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 </comment>
 
-<component>
+<component id="TWC">
 	<comment>
-		
+		The Weather Channel Provider
 	</comment>
-	<registration description="<DESCRIPTION>"
-      			  progid="DXWeatherProvider.<NAME>"
+	<registration description="The Weather Channel Provider"
+      			  progid="DXWeatherProvider.TWC"
       			  version="1"
-      	    	  classid="<CLASSID>"/>  
+      	    	  classid="{06FF483D-9278-4720-A58D-233581196FE7}"/>  
       	    	  
       	    
 	<object id="m_locations" 	progid="Scripting.Dictionary" />  
@@ -120,13 +120,13 @@
 	
 	</public>
 	
-	<resource id="provider_name"></resource>
+	<resource id="provider_name">Weather.com</resource>
 	<resource id="url_locations"></resource>
 	<resource id="url_weather"></resource>
 	<resource id="url_station"></resource>
 	<resource id="url_alerts"></resource>
 	<resource id="url_forecast"></resource>
-	
+		
 	<script language="JScript">
 	<![CDATA[
 	
