@@ -1,0 +1,21 @@
+;==============================================
+;= Weather Providers licences
+;==============================================
+; Use DX preferences in your widget to allow
+; users to input id/key or hardcode your own
+; licence information
+;
+; Format:
+;
+; [Provider ID]
+; id=<license id>
+; key=<license key>
+;
+; if no section is found or if one of ini key
+; is not found, "" will be passed for that value
+; to the SetLicence function
+
+[TWC]
+id=
+key=
+

@@ -55,6 +55,10 @@
     <object id="m_request" 		progid="Microsoft.XmlDom" /> 
 	    
 	<public>
+		<property name="ID">
+			<get />
+		</property>
+		
 		<property name="Name">
 			<get />
 		</property>
@@ -143,6 +147,7 @@
 		</method>			
 	</public>
 	
+	<resource id="provider_id">WUnderground</resource>
 	<resource id="provider_name">Weather Underground</resource>
 	<resource id="url_locations">http://api.wunderground.com/auto/wui/geo/GeoLookupXML/index.xml?query=</resource>
 	<resource id="url_weather">http://api.wunderground.com/auto/wui/geo/WXCurrentObXML/index.xml?query=</resource>
@@ -242,51 +247,12 @@
 	}
 	
 	///////////////////////////////
-	// Misc parsing functions
-	///////////////////////////////	
-	
-	// Parse elevation string and remove unit at the end / convert to metric system if needed
-	function parseElevation(elevation)
-	{
-		// FIXME: remove "ft" at the end of the elevation data and Trim the string
-		return m_helper.Trim(elevation);
-	}
-	
-	// Parse humidity string and remove % at the end
-	function parseHumidity(humidity)
-	{
-		// FIXME: remove "%" at the end if present
-		return m_helper.Trim(humidity);
-	}
-	
-	// Parse speed string, remove unit at the end / convert to metric system if needed
-	function parseSpeed(speed)
-	{
-		// FIXME: remove "mph" at the end if present, and convert to metric if needed
-		return m_helper.Trim(speed);
-	}
-	
-	// Parse speed heat/windchill
-	function parseHeat(heat)
-	{
-		var trimmed = m_helper.Trim(heat);
-		
-		if (heat == "NA")
-			return "";
-			
-		return heat;
-	}
-	
-	// Parse weather code and return a code number
-	function parseCode(code)
-	{
-		// FIXME: convert from string code to weather icon number
-		return m_helper.Trim(code);
-	}
-	
-	///////////////////////////////
 	// Properties
 	///////////////////////////////
+	function get_ID() {
+		return getResource("provider_id");
+	}
+	
 	function get_Name() {
 		return getResource("provider_name");
 	}
@@ -413,12 +379,7 @@
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
 	// Get the current weather
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	function GetWeather(locationQuery) {
-		
-		// Reset weather object
-		m_weather = null;
-		m_weather = getComponent("WeatherInfo");
-				
+	function GetWeather(locationQuery) {				
 		// Check query for validity
 		if (getWeatherQueryString(locationQuery) == "")
 			return ErrorCode.E_NOTAVAILABLE;
@@ -439,6 +400,10 @@
 			
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
 			return;
+
+		// Reset weather object
+		m_weather = null;
+		m_weather = getComponent("WeatherInfo");
 			
 		// Parse weather
 		var observation = m_request.selectNodes("current_observation");
@@ -590,8 +555,6 @@
 	// Get a list of alerts
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	function GetAlerts(locationQuery) {
-		// Clear any previous results
-		m_alerts.RemoveAll();
 		
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
@@ -613,6 +576,9 @@
 			
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
 			return;
+
+		// Clear any previous results
+		m_alerts.RemoveAll();
 		
 		// Parse alert data
 		var i = 0;
@@ -642,10 +608,7 @@
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
 	// Get the forecast
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	function GetForecast(locationQuery) {		
-		// Clear any previous results
-		m_forecast.RemoveAll();
-		
+	function GetForecast(locationQuery) {				
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
 			return ErrorCode.E_NOTAVAILABLE;
@@ -666,6 +629,9 @@
 			
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
 			return;
+
+		// Clear any previous results
+		m_forecast.RemoveAll();
 			
 		// forecast index
 		var i = 0;	
@@ -700,8 +666,7 @@
 				
 				if (forecast.Description.search("Tonight") != -1)
 					forecast.DayPart = forecast.DAY_PART_NIGHT;
-					
-				// TODO: Try parsing the description as a day of the week and adjust the date				
+									
 				forecast.Date = date;
 			    			    
 			  	m_forecast.Add(i, forecast);    
@@ -787,7 +752,48 @@
 	}	
 	
 	
+		///////////////////////////////
+	// Misc parsing functions
+	///////////////////////////////	
 	
+	// Parse elevation string and remove unit at the end / convert to metric system if needed
+	function parseElevation(elevation)
+	{
+		// FIXME: remove "ft" at the end of the elevation data and Trim the string
+		return m_helper.Trim(elevation);
+	}
+	
+	// Parse humidity string and remove % at the end
+	function parseHumidity(humidity)
+	{
+		// FIXME: remove "%" at the end if present
+		return m_helper.Trim(humidity);
+	}
+	
+	// Parse speed string, remove unit at the end / convert to metric system if needed
+	function parseSpeed(speed)
+	{
+		// FIXME: remove "mph" at the end if present, and convert to metric if needed
+		return m_helper.Trim(speed);
+	}
+	
+	// Parse speed heat/windchill
+	function parseHeat(heat)
+	{
+		var trimmed = m_helper.Trim(heat);
+		
+		if (heat == "NA")
+			return "";
+			
+		return heat;
+	}
+	
+	// Parse weather code and return a code number
+	function parseCode(code)
+	{
+		// FIXME: convert from string code to weather icon number
+		return m_helper.Trim(code);
+	}
 	
 	]]>
 	</script>

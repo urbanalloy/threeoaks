@@ -225,276 +225,231 @@
 				     E_ERROR if the id already exists
 		</comment>
 		<method name="AddProvider">
-			<parameter name="id" />
 			<parameter name="provider" />
 		</method>
 	</public>
 	
-	<script language="VBScript">
+	<script language="JScript">
 	<![CDATA[
 	
-	'**Start Encode**
+	//**Start Encode**	
 	
-	Option Explicit
+	// Error
+	var ErrorCode = createComponent("WeatherError");
 	
-	' Error
-	Dim ErrorCode
+	// Callbacks
+	var m_locationsCallback = null;
+	var m_weatherCallback = null;
+	var m_alertsCallback = null;
+	var m_forecastCallback = null;
+	var m_camerasCallback = null;
+	var m_errorCallback = null;
 	
-	' Callbacks
-	Dim m_locationsCallback
-	Dim m_weatherCallback
-	Dim m_alertsCallback
-	Dim m_forecastCallback
-	Dim m_camerasCallback
-	Dim m_errorCallback
+	// Current provider
+	var m_currentProvider = null;
+	var m_useMetricSystem = true;
 	
-	' Current provider
-	Dim m_currentProvider
-	Dim m_useMetricSystem
+	// License information
+	var m_id = "";
+	var m_key = "";
 	
-	' License information
-	Dim m_id
-	Dim m_key
+	Init();
 	
-	Init()
-	
-	'/////////////////////////////////////////////////////////////////////////////////////////
-	'// Init
-	Sub Init()
-	
-		Set m_locationsCallback = Nothing
-		Set m_weatherCallback 	= Nothing
-		Set m_alertsCallback 	= Nothing
-		Set m_forecastCallback  = Nothing
-		Set m_camerasCallback   = Nothing
-		Set m_errorCallback 	= Nothing
-		
-		Set ErrorCode = CreateComponent("WeatherError")
-		
-		Set m_currentProvider = Nothing
-		m_useMetricSystem = True
-	
-		m_id = ""
-		m_key = ""
-		
-		' Provider registration
-		'#ifndef DEBUG
-		'AddProvider "WUnderground", CreateComponent("WUnderground")
-		'AddProvider "TWC", CreateComponent("TWC")
-		'#endif
-	
-	End Sub
+	/////////////////////////////////////////////////////////////////////////////////////////
+	// Provider registration
+	function Init() {				
+		//#ifndef DEBUG
+		//AddProvider(createComponent("WUnderground"));
+		//AddProvider(CreateComponent("TWC"));
+		//AddProvider(CreateComponent("NOAA"));
+		//#endif
+	}	
 
-	'=============================================================================================================================
-	'=
-	'= Public Methods
-	'=
-	'=============================================================================================================================	
+	/*=============================================================================================================================
+	=
+	= Public Methods
+	=
+	=============================================================================================================================*/
 	
-	' Get the unit system in use
-	Function get_UseMetricSystem()
-		get_UseMetricSystem = m_useMetricSystem
-	End Function
+	// Get the unit system in use
+	function get_UseMetricSystem() {
+		return m_useMetricSystem;
+	}
 	
-	Function put_UseMetricSystem(system)
-		m_useMetricSystem = CBool(system)
+	function put_UseMetricSystem(system) {
+		m_useMetricSystem = system;
 		
-		' Update the provider
-		If Not (m_currentProvider Is Nothing) Then
-			m_currentProvider.UseMetricSystem = m_useMetricSystem
-		End If
-	End Function
+		// Update the provider
+		if (m_currentProvider != null)
+			m_currentProvider.UseMetricSystem = m_useMetricSystem;		
+	}
 	
-	' Get the list of available providers
-	Function get_Providers()
-		Set get_Providers = m_providerList
-	End Function
+	// Get the list of available providers
+	function get_Providers() {
+		return m_providerList;
+	}
 	
-	' Setup license
-	Function SetLicense(id, key)
-		m_id = id
-		m_key = key
+	// Setup license
+	function SetLicense(id, key) {
+		m_id = id;
+		m_key = key;
 		
-		' Update license information
-		If (m_currentProvider Is Nothing) Then
-			SetLicense = ErrorCode.E_ERROR
-		Else
-			SetLicense = m_currentProvider.SetLicense(m_id, m_key)
-		End If
-	End Function
+		// Update license information
+		if (m_currentProvider == null)
+			return ErrorCode.E_ERROR;
+		
+		return m_currentProvider.SetLicense(m_id, m_key);		
+	}
 	
-	' Set the provider to use
-	Function SetProvider(id)
-		If (Not m_providers.Exists(id)) Then
-			SetProvider = ErrorCode.E_ERROR
+	// Set the provider to use
+	function SetProvider(id) {
+		if (!m_providers.Exists(id)) {
+			// Reset the current provider
+			m_currentProvider = null;
 			
-			' Reset the current provider
-			Set m_currentProvider = Nothing
-			Exit Function
-		End If
+			return ErrorCode.E_ERROR;
+		}
 		
-		Set m_currentProvider = m_providers.Item(id)	
-		m_currentProvider.UseMetricSystem = m_useMetricSystem
-		m_currentProvider.SetLicense m_id, m_key
+		m_currentProvider = m_providers.Item(id);
+		m_currentProvider.UseMetricSystem = m_useMetricSystem;
+		m_currentProvider.SetLicense(m_id, m_key);
 		
-		' Register callbacks
-		' we have to do that and duplicate all the registration code in all providers,
-		' since we cannot use events without registering the component
-		m_currentProvider.RegisterCallbacks GetRef("OnLocations"), _
-											GetRef("OnWeather"), _
-											GetRef("OnAlerts"), _
-											GetRef("OnForecast"), _
-											GetRef("OnCameras"), _
-											GetRef("OnError")
+		// Register callbacks
+		// we have to do that and duplicate all the registration code in all providers,
+		// since we cannot use events without registering the component
+		m_currentProvider.RegisterCallbacks(OnLocations,
+											OnWeather,
+											OnAlerts,
+											OnForecast,
+											OnCameras,
+											OnError);
 		
-		SetProvider = ErrorCode.E_OK
-	End Function
+		return ErrorCode.E_OK;
+	}
 	
-	' Set the callbacks
-	Sub RegisterCallbacks(locationsCallback, weatherCallback, alertsCallback, forecastCallback, camerasCallback, errorCallback)
-		Set m_locationsCallback = locationsCallback
-		Set m_weatherCallback 	= weatherCallback
-		Set m_alertsCallback 	= alertsCallback
-		Set m_forecastCallback  = forecastCallback
-		Set m_camerasCallback   = camerasCallback
-		Set m_errorCallback 	= errorCallback		
-	End Sub
+	// Set the callbacks
+	function RegisterCallbacks(locationsCallback, weatherCallback, alertsCallback, forecastCallback, camerasCallback, errorCallback) {
+		m_locationsCallback = locationsCallback;
+		m_weatherCallback 	= weatherCallback;
+		m_alertsCallback 	= alertsCallback;
+		m_forecastCallback  = forecastCallback;
+		m_camerasCallback   = camerasCallback;
+		m_errorCallback 	= errorCallback;
+	}
 	
-	' Get a WeatherLocation object
-	Function GetQueryObject()
-		Set GetQueryObject = CreateComponent("WeatherLocation")
-	End Function
-	
-	' Get a WeatherLocation object
-	Function GetHelper()
-		Set GetHelper = m_helperObject
-	End Function
-	
-	' Get a list of locations
-	Function GetLocations(locationQuery)
-		If (m_currentProvider Is Nothing) Then
-			GetLocations = ErrorCode.E_ERROR
-			Exit Function
-		End If
+	// Add provider to provider list
+	function AddProvider(provider) {			
+		// Add the new provider to the internal provider list
+		m_providers.Add(provider.ID, provider);
 		
-		locationQuery.TrimValues()
-		GetLocations = m_currentProvider.GetLocations(locationQuery)
-	End Function
-	
-	' Get the current weather
-	Function GetWeather(locationQuery)
-		If (m_currentProvider Is Nothing) Then
-			GetWeather = ErrorCode.E_ERROR
-			Exit Function
-		End If
-	
-		locationQuery.TrimValues()
-		GetWeather = m_currentProvider.GetWeather(locationQuery)
-	End Function
-	
-	' Get a list of alerts
-	Function GetAlerts(locationQuery)
-		If (m_currentProvider Is Nothing) Then
-			GetAlerts = ErrorCode.E_ERROR
-			Exit Function
-		End If
-	
-		locationQuery.TrimValues()
-		GetAlerts = m_currentProvider.GetAlerts(locationQuery)
-	End Function
-	
-	' Get the forecast
-	Function GetForecast(locationQuery)
-		If (m_currentProvider Is Nothing) Then
-			GetForecast = ErrorCode.E_ERROR
-			Exit Function
-		End If
-	
-		locationQuery.TrimValues()
-		GetForecast = m_currentProvider.GetForecast(locationQuery)
-	End Function
-	
-	' Get a list of cameras
-	Function GetCameras(locationQuery)
-		If (m_currentProvider Is Nothing) Then
-			GetCameras = ErrorCode.E_ERROR
-			Exit Function
-		End If
-	
-		locationQuery.TrimValues()
-		GetCameras = m_currentProvider.GetCameras(locationQuery)
-	End Function
-	
-	' Add provider to provider list
-	Function AddProvider(id, provider)
-		If (m_providers.Exists(id)) Then
-			AddProvider = ErrorCode.E_ERROR
-			Exit Function
-		End If
-			
-		' Add the new provider to the internal provider list
-		m_providers.Add id, provider
+		// we use a separate provider list to not expose the providers directly to the user script
+		m_providerList.Add(provider.ID, provider.Name);
 		
-		' we use a separate provider list to not expose the providers directly to the user script
-		m_providerList.Add id, provider.Name 		
-		
-		AddProvider = ErrorCode.E_OK
-	End Function
+		return ErrorCode.E_OK;
+	}
 	
-	Function Abort()
-		If (m_currentProvider Is Nothing) Then
-			Abort = ErrorCode.E_ERROR
-			Exit Function
-		End If
+	// Abort any call in progress
+	function Abort() {
+		if (m_currentProvider == null)		
+			return ErrorCode.E_ERROR;
 		
-		m_currentProvider.Abort()
+		m_currentProvider.Abort();
 	
-		Abort = ErrorCode.E_OK
-	End Function		
+		return ErrorCode.E_OK;
+	}	
+	
+	// Get a WeatherLocation object
+	function GetQueryObject() {
+		return createComponent("WeatherLocation");
+	}
+	
+	// Get a WeatherHelper object
+	function GetHelper() {
+		return m_helperObject;
+	}
+	
+	// Get a list of locations
+	function GetLocations(locationQuery) {
+		if (m_currentProvider == null)		
+			return ErrorCode.E_ERROR;
+		
+		locationQuery.TrimValues();
+		return m_currentProvider.GetLocations(locationQuery);
+	}
+	
+	// Get the current weather
+	function GetWeather(locationQuery) {
+		if (m_currentProvider == null)		
+			return ErrorCode.E_ERROR;
+		
+		locationQuery.TrimValues();
+		return m_currentProvider.GetWeather(locationQuery);
+	}
+	
+	// Get a list of alerts
+	function GetAlerts(locationQuery) {
+		if (m_currentProvider == null)		
+			return ErrorCode.E_ERROR;
+		
+		locationQuery.TrimValues();
+		return m_currentProvider.GetAlerts(locationQuery);
+	}
+	
+	// Get the forecast
+	function GetForecast(locationQuery) {
+		if (m_currentProvider == null)		
+			return ErrorCode.E_ERROR;
+		
+		locationQuery.TrimValues();
+		return m_currentProvider.GetForecast(locationQuery);
+	}
+	
+	// Get a list of cameras
+	function GetCameras(locationQuery) {
+		if (m_currentProvider == null)		
+			return ErrorCode.E_ERROR;
+		
+		locationQuery.TrimValues();
+		return m_currentProvider.GetCameras(locationQuery);
+	}	
 
-	'=============================================================================================================================
-	'=
-	'= Callbacks
-	'=
-	'=============================================================================================================================	
+	/*=============================================================================================================================
+	=
+	= Callbacks
+	=
+	=============================================================================================================================*/
 	
-	' We check here if the callback are defined, so we can call them without checking if they exist in each provider
+	// We check here if the callback are defined, so we can call them without checking if they exist in each provider
 
-	Sub OnLocations(locations)
-		If Not (m_locationsCallback Is Nothing) Then			
-			m_locationsCallback locations
-		End If
-	End Sub
+	function OnLocations(locations) {
+		if (m_locationsCallback != null)
+			m_locationsCallback(locations);
+	}
 	
-	Sub OnWeather(weather)
-		If Not (m_weatherCallback Is Nothing) Then			
-			m_weatherCallback weather
-		End If
-	End Sub
+	function OnWeather(weather) {
+		if (m_weatherCallback != null)
+			m_weatherCallback(weather);
+	}
 	
-	Sub OnAlerts(alerts)
-		If Not (m_alertsCallback Is Nothing) Then			
-			m_alertsCallback alerts
-		End If
-	End Sub
+	function OnAlerts(alerts) {
+		if (m_alertsCallback != null)
+			m_alertsCallback(alerts);
+	}
 	
-	Sub OnForecast(forecast)
-		If Not (m_forecastCallback Is Nothing) Then			
-			m_forecastCallback forecast
-		End If
-	End Sub
+	function OnForecast(forecast) {
+		if (m_forecastCallback != null)
+			m_forecastCallback(forecast);
+	}
 	
-	Sub OnCameras(cameras)
-		If Not (m_camerasCallback Is Nothing) Then			
-			m_camerasCallback cameras
-		End If
-	End Sub
+	function OnCameras(cameras) {
+		if (m_camerasCallback != null)
+			m_camerasCallback(cameras);
+	}
 	
-	Sub OnError(code, value)
-		If Not (m_errorCallback Is Nothing) Then
-			m_errorCallback code, value
-		End If
-	End Sub	
+	function OnError(code, value) {
+		if (m_errorCallback != null)
+			m_errorCallback(code, value);
+	}	
 		
 	]]>
 	</script>
@@ -509,8 +464,7 @@
       			  progid="DXWeather.Error"
       			  version="1"
       	    	  classid="{20AAB6F5-77DB-414e-8469-5D57441BFD19}"/>  
-      	    	  
-      	    
+      	    	        	    
 	<public>
 		<property name="E_OK">
 			<get />
@@ -850,8 +804,7 @@
 	<registration description="Weather alert"
       			  progid="DXWeather.Alert"
       			  version="1"
-      	    	  classid="{D4F984BF-A90A-45da-A695-ACBD974B9924}"/>  
-      	    	  
+      	    	  classid="{D4F984BF-A90A-45da-A695-ACBD974B9924}"/>    
       	    
 	<public>
 		<property name="Type" internalname="m_type" />
@@ -1114,8 +1067,7 @@
       			  progid="DXWeather.Helper"
       			  version="1"
       	    	  classid="{4FBA62F1-7479-42e2-84F1-8DE0927C0DAE}"/>  
-      	    	  
-      	    
+      	    	  	    
 	<public>
 		
 		<comment>
@@ -1370,6 +1322,7 @@
 #includecomponent "../I18N/DateEx.wsc"
 #includecomponent "Providers/WUnderground.wsc"
 #includecomponent "Providers/TWC.wsc"
+#includecomponent "Providers/NOAA.wsc"
 </comment>
 
 </package>

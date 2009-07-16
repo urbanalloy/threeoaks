@@ -56,6 +56,10 @@
     <object id="m_request" 		progid="Microsoft.XmlDom" /> 
 	    
 	<public>
+		<property name="ID">
+			<get />
+		</property>
+		
 		<property name="Name">
 			<get />
 		</property>
@@ -120,6 +124,7 @@
 	
 	</public>
 	
+	<resource id="provider_id">TWC</resource>
 	<resource id="provider_name">Weather.com</resource>
 	<resource id="url_locations"></resource>
 	<resource id="url_weather"></resource>
@@ -149,6 +154,10 @@
 	var m_camerasCallback   = null;
 	var m_errorCallback 	= null;
 	
+	// License info
+	var m_id = "";
+	var m_key = "";
+	
 	var m_useMetricSystem = true;
 	
 	///////////////////////////////
@@ -171,6 +180,10 @@
 	///////////////////////////////
 	// Properties
 	///////////////////////////////
+	function get_ID() {
+		return getResource("provider_id");
+	}
+	
 	function get_Name() {
 		return getResource("provider_name");
 	}
@@ -180,8 +193,14 @@
 	///////////////////////////////
 	
 	// Setup license
-	function SetLicense(id, key) {	
-		return ErrorCode.E_ERROR;
+	function SetLicense(id, key) {			
+		if (id == "" || key == "")
+			return ErrorCode.E_INVALIDLICENSE;
+		
+		m_id = id;
+		m_key = key;	
+		
+		return ErrorCode.E_OK;
 	}
 	
 	// Set callbacks
