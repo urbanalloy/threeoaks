@@ -22,7 +22,8 @@ End Sub
 
 'Called when the script is terminated
 Sub Object_OnScriptExit
-
+	Set ErrorCode = Nothing
+	Set WeatherController = Nothing
 End Sub
 
 '===========================================================
@@ -145,6 +146,17 @@ Sub ParseRetCode(code)
 		Case ErrorCode.E_PARSEERROR
 			AppendInfo "Parsing error!" & vbNewLine
 	End Select
+End Sub
+
+Sub Reset()
+	ResetScript "DXWeather", LIB_FOLDER & "/WeatherWidget.vbs"
+End Sub
+
+Sub ResetScript(name, script)	
+	DesktopX.Object(name).SetScript("")
+	DesktopX.Object(name).SetScript(script)	
+	
+	DesktopX.ScriptObject(name).Object_OnScriptEnter()
 End Sub
 
 '===========================================================
