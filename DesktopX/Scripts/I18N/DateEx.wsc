@@ -297,8 +297,7 @@
 	     * @return {Date}    The current date.
 	     */
 	    $P.today = function () {
-	    	debugger;
-	        return new Date().clearTime();
+	        return new Date().prototype.clearTime();
 	    };
 	
 	    /**
@@ -410,7 +409,7 @@
 	     * @return {Number}  -1 = this is lessthan date. 0 = values are equal. 1 = this is greaterthan date.
 	     */
 	    $P.compareTo = function (date) {
-	        return Date.compare(this, date);
+	        return $P.compare(this, date);
 	    };
 	
 	    /**
@@ -871,7 +870,7 @@
 	        return this.addMinutes(there - here); 
 	    };
 	
-	    $P.setTimezone = function (offset) { 
+	    $P.setTimezone = function (offset) { 	    	
 	        return this.setTimezoneOffset($P.getTimezoneOffset(offset)); 
 	    };
 	
@@ -1713,7 +1712,8 @@
 	            }
 	
 	            var r = new Date(this.year, this.month, this.day, this.hour, this.minute, this.second);
-	
+				debugger;
+				
 	            if (this.timezone) { 
 	                r.set({ timezone: this.timezone }); 
 	            } else if (this.timezoneOffset) { 
@@ -2016,7 +2016,7 @@
 	    };
 	  
 	    g.formats = function (fx) {
-	        if (fx instanceof Array) {
+	        if (typeof(fx) == "object") {
 	            var rx = []; 
 	            for (var i = 0 ; i < fx.length ; i++) {
 	                rx.push(_get(fx[i])); 
@@ -2897,7 +2897,6 @@
 	        TimePeriod.prototype["get" + $b] = gFn($a);
 	        TimePeriod.prototype["set" + $b] = sFn($a);
 	    }
-	    
 	    if (arguments.length == 7) { 
 	        this.years = years;
 	        this.months = months;
