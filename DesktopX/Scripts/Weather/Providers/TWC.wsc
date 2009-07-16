@@ -466,8 +466,6 @@
 			return;
 			
 		var weather = getComponent("WeatherInfo");
-			
-		debugger;
 		
 		// Location
 		var location = m_request.getElementsByTagName("loc");
@@ -485,14 +483,20 @@
 			
 			// Sunrise & Sunset				
 			weather.Sunrise 			= m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(location[0], "sunr/text()"), "h:mm tt");
-			weather.Sunset 				= m_dateHelper.GetDate().parse(m_helper.GetNodeValue(location[0], "suns/text()"), "h:mm tt");			
+			weather.Sunset 				= m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(location[0], "suns/text()"), "h:mm tt");			
 		}
 		
 		// Weather data
 		var info = m_request.getElementsByTagName("cc");
 		if (info.length != 0) {
 			
-			weather.Date 				= m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(info[0], "lsup/text()"), "d/mm/yy h:mm tt Local Time");				
+			// Remove end of date string if present
+			var date = m_helper.GetNodeValue(info[0], "lsup/text()");
+			var index = date.search("Local Time");
+			if (index != -1)
+				date = date.substr(0, index - 1); 
+						
+			weather.Date 				= m_dateHelper.GetDate().parseExact(date, "d/mm/yy h:mm tt");				
 			weather.Station				= m_helper.GetNodeValue(info[0], "obst/text()");
 			weather.Temperature			= m_helper.GetNodeValue(info[0], "tmp/text()");
 			weather.TemperatureFeel		= m_helper.GetNodeValue(info[0], "flik/text()");
@@ -523,8 +527,8 @@
 		weather.Links = parseLinks();
 		
 		// Update weather cache
-		//if (weather.Location.ID != null)
-		//	m_weather[weather.Location.ID] = weather;
+		if (weather.Location.ID != null)
+			m_weather(weather.Location.ID) = weather;
 		 	
 		m_weatherCallback(weather);	
 	}
@@ -563,7 +567,10 @@
 		
 		// TODO: Implementation
 		
-		m_forecastCallback(m_forecast);		
+		//if (location.id != null)
+		//	m_forecast(location.id) = forecast;
+		
+		m_forecastCallback(forecast);		
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////		
