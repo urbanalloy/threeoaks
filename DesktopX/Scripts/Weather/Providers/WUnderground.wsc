@@ -670,6 +670,9 @@
 		// forecast index
 		var i = 0;	
 		
+		// FIXME: merge forecast text & forecast into the first x objects
+		//  we need to check the forecast number to now where to put things
+		
 		// Parse text forecast (today / tonight)
 		var text_forecast = m_request.selectNodes("forecast/txt_forecast");
 		if (text_forecast.length != 0) {
@@ -695,7 +698,7 @@
 				if (forecast.Description == "Today")
 					forecast.DayPart = forecast.DAY_PART_DAY;
 				
-				if (forecast.Description == "Tonight")
+				if (forecast.Description.search("Tonight") != -1)
 					forecast.DayPart = forecast.DAY_PART_NIGHT;
 					
 				// TODO: Try parsing the description as a day of the week and adjust the date				
