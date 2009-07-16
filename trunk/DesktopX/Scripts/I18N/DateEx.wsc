@@ -59,6 +59,13 @@
 		<method name="GetDateI18N">
 			<parameter name="locale" />			
 		</method>
+		
+		<comment>
+			Parse a RFC822 date
+		</comment>
+		<method name="FromRFC822">
+			<parameter name="rfc822" />			
+		</method>
 	
 		<comment>
 			Convert an epoch to a Date object
@@ -83,17 +90,20 @@
 	// Return a new Date object using the specified locale
 	function GetDateI18N(locale)
 	{
+		// TODO implement on-the-fly loading of a different locale
 		return new Date();
 	}
 	
 	// Return a Date from an epoch
 	function FromEpoch(epoch)
 	{
-		var date = GetDate();
-		
-		date.parse(epoch, "U");
-		
-		return date;
+		return new Date(epoch * 1000);
+	}
+	
+	// Return a Date from an epoch
+	function FromRFC822(rfc822)
+	{		
+		return GetDate().parseExact(rfc822, "ddd, dd MMMM yyyy HH:mm:ss T");
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////
@@ -152,11 +162,13 @@
 	        shortDate: "M/d/yyyy",
 	        longDate: "dddd, MMMM dd, yyyy",
 	        shortTime: "h:mm tt",
+	        shortTimeWithTimeZone: "h:mm tt Z",
 	        longTime: "h:mm:ss tt",
 	        fullDateTime: "dddd, MMMM dd, yyyy h:mm:ss tt",
 	        sortableDateTime: "yyyy-MM-ddTHH:mm:ss",
 	        universalSortableDateTime: "yyyy-MM-dd HH:mm:ssZ",
 	        rfc1123: "ddd, dd MMM yyyy HH:mm:ss GMT",
+	        rfc822: "ddd, dd MMMM yyyy HH:mm:ss GMT",
 	        monthDay: "MMMM dd",
 	        yearMonth: "MMMM, yyyy"
 	    },
