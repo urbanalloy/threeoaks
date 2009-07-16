@@ -181,6 +181,17 @@
 	var m_useMetricSystem = true;
 	
 	///////////////////////////////
+	// Properties
+	///////////////////////////////
+	function get_ID() {
+		return getResource("provider_id");
+	}
+	
+	function get_Name() {
+		return getResource("provider_name");
+	}	
+	
+	///////////////////////////////
 	// Utilities
 	///////////////////////////////
 	function getComponent(id) {		
@@ -245,17 +256,49 @@
 		
 		return "";
 	}
+
+	///////////////////////////////
+	// Misc parsing functions
+	///////////////////////////////	
 	
-	///////////////////////////////
-	// Properties
-	///////////////////////////////
-	function get_ID() {
-		return getResource("provider_id");
+	// Parse elevation string and remove unit at the end / convert to metric system if needed
+	function parseElevation(elevation)
+	{
+		// FIXME: remove "ft" at the end of the elevation data and Trim the string
+		return m_helper.Trim(elevation);
 	}
 	
-	function get_Name() {
-		return getResource("provider_name");
+	// Parse humidity string and remove % at the end
+	function parseHumidity(humidity)
+	{
+		// FIXME: remove "%" at the end if present
+		return m_helper.Trim(humidity);
 	}
+	
+	// Parse speed string, remove unit at the end / convert to metric system if needed
+	function parseSpeed(speed)
+	{
+		// FIXME: remove "mph" at the end if present, and convert to metric if needed
+		return m_helper.Trim(speed);
+	}
+	
+	// Parse speed heat/windchill
+	function parseHeat(heat)
+	{
+		var trimmed = m_helper.Trim(heat);
+		
+		if (heat == "NA")
+			return "";
+			
+		return heat;
+	}
+	
+	// Parse weather code and return a code number
+	function parseCode(code)
+	{
+		// FIXME: convert from string code to weather icon number
+		return m_helper.Trim(code);
+	}	
 	
 	///////////////////////////////
 	// Public functions
@@ -310,9 +353,37 @@
 			
 		// Clear any previous results
 		m_locations.RemoveAll();	
-			
+		
 		// locations index
-		var i = 0;		
+		var i = 0;
+		
+		// Check if we got an intermediate list and parse it
+		var locations = m_request.getElementsByTagName("locations");
+		if (locations.length != 0) {
+			
+			debugger;
+			
+			var locationsEnumerator = new Enumerator(locations[0].getElementsByTagName("location"));		
+			for (var enumerator = locationsEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
+			{						
+			    var entry = enumerator.item();
+			    var city = getComponent("WeatherLocation");
+			    
+			    // we have no way to determine wether the second part is a state or a country,
+			    // so we use the CustomQueryString property    
+			    
+			    // TODO if type == CITY, this is a US city and the second part is a state
+			    // for INTLCITY, we cannot say whether this is a state or a country (ex: London, Ontario => in Canada)
+			    city.CustomQueryString =  m_helper.GetNodeValue(entry, "name/text()");				  
+			    
+			    m_locations.Add(i, city);		    
+			    i++;
+			}
+			
+			m_locationsCallback(m_locations);
+			return;
+		}
+				
 			
 		// Get the weather stations
 		var stations = m_request.getElementsByTagName("nearby_weather_stations");
@@ -326,7 +397,7 @@
 		if (airportNode.length == 0) {
 			m_locationsCallback(m_locations);
 			return;
-		}
+		}	
 		
 		var airportEnumerator = new Enumerator(airportNode[0].getElementsByTagName("station"));		
 		for (var enumerator = airportEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
@@ -757,49 +828,6 @@
 		return ErrorCode.E_NOTIMPLEMENTED;
 	}	
 	
-	
-		///////////////////////////////
-	// Misc parsing functions
-	///////////////////////////////	
-	
-	// Parse elevation string and remove unit at the end / convert to metric system if needed
-	function parseElevation(elevation)
-	{
-		// FIXME: remove "ft" at the end of the elevation data and Trim the string
-		return m_helper.Trim(elevation);
-	}
-	
-	// Parse humidity string and remove % at the end
-	function parseHumidity(humidity)
-	{
-		// FIXME: remove "%" at the end if present
-		return m_helper.Trim(humidity);
-	}
-	
-	// Parse speed string, remove unit at the end / convert to metric system if needed
-	function parseSpeed(speed)
-	{
-		// FIXME: remove "mph" at the end if present, and convert to metric if needed
-		return m_helper.Trim(speed);
-	}
-	
-	// Parse speed heat/windchill
-	function parseHeat(heat)
-	{
-		var trimmed = m_helper.Trim(heat);
-		
-		if (heat == "NA")
-			return "";
-			
-		return heat;
-	}
-	
-	// Parse weather code and return a code number
-	function parseCode(code)
-	{
-		// FIXME: convert from string code to weather icon number
-		return m_helper.Trim(code);
-	}
 	
 	]]>
 	</script>
