@@ -762,7 +762,10 @@
 	
 	function ToString()
 	{
-		var text = m_location.ToString() + "\n";	
+		var text = m_location.ToString();
+		
+		if (text != "")
+			 text += "\n";	
 		
 		// Station name & type
 		text += append("Station", m_station);
@@ -773,7 +776,8 @@
 		text += append("Code", m_code);
 			
 		// Date & Time
-		text += append("Date", m_date.toISOString());
+		if (m_date != null)
+			text += append("Date", m_date.toISOString());
 			
 		// Temperature / Humidity / Precipitation / Visibility
 		text += append("Temperature", m_temperature);
@@ -801,15 +805,7 @@
 		
 		// Solar Radiation & UV
 		text += append("Solar Radiation", m_solarRadiation);
-		text += append("UV", m_UV);
-		
-		// Sunrise / Sunset / Moon / Day
-		text += append("Sunrise", m_sunrise);
-		text += append("Sunset", m_sunset);
-		text += append("Moonphase", m_moonPhaseDescription);
-		text += append("Code", m_moonPhaseCode);
-		text += append("Illumination", m_moonIlluminated);
-		text += append("Age", m_moonAge);
+		text += append("UV", m_UV);		
 		
 		text += append("Day of week", m_dayOfWeek);
 		text += append("Day part", m_dayPart);
@@ -818,14 +814,25 @@
 		text += append("High", m_forecastHigh);
 		text += append("Low", m_forecastLow);
 		
-		text += "\n" + m_links.ToString();
+		// Sunrise / Sunset / Moon / Day
+		text += append("Sunrise", m_sunrise);
+		text += append("Sunset", m_sunset);
+		text += append("Moonphase", m_moonPhaseDescription);
+		text += append("Moon Code", m_moonPhaseCode);
+		text += append("Moon Illumination", m_moonIlluminated);
+		text += append("Moon Age", m_moonAge);
+		
+		var links = m_links.ToString();
+		
+		if (links != "")
+			 text += "\n" + links;
 							
 		return text;
 	}
 	
 	function append(title, value)
 	{
-		if (value == "")
+		if (value == null || value == "")
 			return "";
 			
 		return title + ": " + value + "\n";
@@ -982,13 +989,17 @@
 			text += "Name: " + m_name + "\n";;
 		
 		// City	
-		text += "City: " + m_city;
-		if (m_state != "")
-			text += ", " + m_state;
-			 
-		if (m_country != "")
-			text += " (" + m_country + ")"
-		text += "\n";
+		if (m_city != "" || m_state != "" || m_country !="") {
+			text += "City: " + m_city;
+			
+			if (m_state != "")
+				text += ", " + m_state;
+				 
+			if (m_country != "")
+				text += " (" + m_country + ")"
+				
+			text += "\n";
+		}
 		
 		// Coordinates
 		if (m_latitude != "" || m_longitude != "")
@@ -1349,8 +1360,7 @@
 	function RemoveSpaces(s) {
 		return s.replace(/(\s|\n)+/g,'');
 	}
-	
-	
+		
 	]]>
 	</script>
 
