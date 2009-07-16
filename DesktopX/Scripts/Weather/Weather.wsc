@@ -1249,8 +1249,6 @@
 		if (updateTime == null || updateTime == "")
 			return false;
 		
-		debugger;
-		
 		// Check if we are past the refresh time
 		var now = updateTime.clone().setTimeToNow();
 		var refresh = updateTime.clone().addMinutes(rate);
@@ -1259,8 +1257,8 @@
 		if (now.isBefore(updateTime))
 			return false;
 			
-		// the cache has not expired yet
-		if (now.isBefore(refresh))
+		// the cache has expired
+		if (now.isAfter(refresh))
 			return false;
 			
 		return true;		

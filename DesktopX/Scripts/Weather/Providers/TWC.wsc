@@ -443,7 +443,7 @@
 		
 		// Check cache
 		if (m_helper.CheckCache(m_weather, locationQuery.ID, getResource("refresh_weather"))) {
-			m_weatherCallback(m_weather[locationQuery.ID]);
+			m_weatherCallback(m_weather.Item(locationQuery.ID));
 			
 			return ErrorCode.E_OK;
 		}
@@ -466,6 +466,9 @@
 			return;
 			
 		var weather = getComponent("WeatherInfo");
+		
+		// Save update time
+		weather.LastUpdateTime = m_dateHelper.GetDate();
 		
 		// Location
 		var location = m_request.getElementsByTagName("loc");
@@ -495,8 +498,8 @@
 			var index = date.search("Local Time");
 			if (index != -1)
 				date = date.substr(0, index - 1); 
-						
-			weather.Date 				= m_dateHelper.GetDate().parseExact(date, "d/mm/yy h:mm tt");				
+									
+			weather.Date 				= m_dateHelper.GetDate().parseExact(date, ["d/mm/yy h:mm tt", "d/mm/yy h:mm tt zzz"]);				
 			weather.Station				= m_helper.GetNodeValue(info[0], "obst/text()");
 			weather.Temperature			= m_helper.GetNodeValue(info[0], "tmp/text()");
 			weather.TemperatureFeel		= m_helper.GetNodeValue(info[0], "flik/text()");
@@ -546,7 +549,7 @@
 		
 		// Check cache
 		if (m_helper.CheckCache(m_forecast, locationQuery.ID, getResource("refresh_forecast"))) {
-			m_weatherCallback(m_forecast[locationQuery.ID]);
+			m_weatherCallback(m_forecast.Item(locationQuery.ID));
 			
 			return ErrorCode.E_OK;
 		}
