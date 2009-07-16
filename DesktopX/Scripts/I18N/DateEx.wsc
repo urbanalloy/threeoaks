@@ -361,7 +361,7 @@
 	     * @return {Number}  The number of days in the month.
 	     */
 	    $P.getDaysInMonth = function (year, month) {
-	        return [31, ($D.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+	        return [31, ($P.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
 	    };
 	 
 	    $P.getTimezoneAbbreviation = function (offset) {
@@ -518,7 +518,7 @@
 	        var n = this.getDate();
 	        this.setDate(1);
 	        this.setMonth(this.getMonth() + value * 1);
-	        this.setDate(Math.min(n, $D.getDaysInMonth(this.getFullYear(), this.getMonth())));
+	        this.setDate(Math.min(n, $P.getDaysInMonth(this.getFullYear(), this.getMonth())));
 	        return this;
 	    };
 	
@@ -701,7 +701,7 @@
 	     * @return {Boolean} true if within range, otherwise false.
 	     */
 	    $P.validateDay = function (value, year, month) {
-	        return validate(value, 1, $D.getDaysInMonth(year, month), "day");
+	        return validate(value, 1, $P.getDaysInMonth(year, month), "day");
 	    };
 	
 	    /**
@@ -735,32 +735,32 @@
 	     * @return {Date}    this
 	     */
 	    $P.set = function (config) {
-	        if ($D.validateMillisecond(config.millisecond)) {
+	        if ($P.validateMillisecond(config.millisecond)) {
 	            this.addMilliseconds(config.millisecond - this.getMilliseconds()); 
 	        }
 	        
-	        if ($D.validateSecond(config.second)) {
+	        if ($P.validateSecond(config.second)) {
 	            this.addSeconds(config.second - this.getSeconds()); 
 	        }
 	        
-	        if ($D.validateMinute(config.minute)) {
+	        if ($P.validateMinute(config.minute)) {
 	            this.addMinutes(config.minute - this.getMinutes()); 
 	        }
 	        
-	        if ($D.validateHour(config.hour)) {
+	        if ($P.validateHour(config.hour)) {
 	            this.addHours(config.hour - this.getHours()); 
 	        }
 	        
-	        if ($D.validateMonth(config.month)) {
+	        if ($P.validateMonth(config.month)) {
 	            this.addMonths(config.month - this.getMonth()); 
 	        }
 	
-	        if ($D.validateYear(config.year)) {
+	        if ($P.validateYear(config.year)) {
 	            this.addYears(config.year - this.getFullYear()); 
 	        }
 	        
 		    /* day has to go last because you can't validate the day without first knowing the month */
-	        if ($D.validateDay(config.day, this.getFullYear(), this.getMonth())) {
+	        if ($P.validateDay(config.day, this.getFullYear(), this.getMonth())) {
 	            this.addDays(config.day - this.getDate()); 
 	        }
 	        
@@ -792,7 +792,7 @@
 	     * @return {Date}    this
 	     */
 	    $P.moveToLastDayOfMonth = function () { 
-	        return this.set({ day: $D.getDaysInMonth(this.getFullYear(), this.getMonth())});
+	        return this.set({ day: $P.getDaysInMonth(this.getFullYear(), this.getMonth())});
 	    };
 	
 	    /**
@@ -851,7 +851,7 @@
 	     * @return {String} The abbreviated time zone name (e.g. "EST")
 	     */
 	    $P.getTimezone = function () {
-	        return $D.getTimezoneAbbreviation(this.getUTCOffset());
+	        return $P.getTimezoneAbbreviation(this.getUTCOffset());
 	    };
 	
 	    $P.setTimezoneOffset = function (offset) {
@@ -860,7 +860,7 @@
 	    };
 	
 	    $P.setTimezone = function (offset) { 
-	        return this.setTimezoneOffset($D.getTimezoneOffset(offset)); 
+	        return this.setTimezoneOffset($P.getTimezoneOffset(offset)); 
 	    };
 	
 	    /**
@@ -1106,13 +1106,13 @@
 // #region *******************************      Parser      *********************************
 
 	(function () {
-	    Date.Parsing = {
+	    Date.prototype.Parsing = {
 	        Exception: function (s) {
 	            this.message = "Parse error at '" + s.substring(0, 10) + " ...'"; 
 	        }
 	    };
 	    
-	    var $P = Date.Parsing; 
+	    var $P = Date.prototype.Parsing; 
 	    var _ = $P.Operators = {
 	        //
 	        // Tokenizers
@@ -1579,9 +1579,9 @@
 	        return rx;
 	    };
 	    
-	    $D.Grammar = {};
+	    $P.Grammar = {};
 		
-	    $D.Translator = {
+	    $P.Translator = {
 	        hour: function (s) { 
 	            return function () { 
 	                this.hour = Number(s); 
@@ -1696,7 +1696,7 @@
 	                }
 	            }
 	            
-	            if (this.day > $D.getDaysInMonth(this.year, this.month)) {
+	            if (this.day > $P.getDaysInMonth(this.year, this.month)) {
 	                throw new RangeError(this.day + " is not a valid value for days.");
 	            }
 	
@@ -1723,7 +1723,7 @@
 	                }
 	            }
 	            
-	            var today = $D.today();
+	            var today = $P.today();
 	            
 	            if (this.now && !this.unit && !this.operator) { 
 	                return new Date(); 
@@ -1759,7 +1759,7 @@
 	            
 	            if (expression && this.weekday && this.unit != "month") {
 	                this.unit = "day";
-	                gap = ($D.getDayNumberFromName(this.weekday) - today.getDay());
+	                gap = ($P.getDayNumberFromName(this.weekday) - today.getDay());
 	                mod = 7;
 	                this.days = gap ? ((gap + (orient * mod)) % mod) : (orient * mod);
 	            }
@@ -1838,7 +1838,7 @@
 	        }
 	    };
 	
-	    var _ = $D.Parsing.Operators, g = $D.Grammar, t = $D.Translator, _fn;
+	    var _ = $P.Parsing.Operators, g = $P.Grammar, t = $P.Translator, _fn;
 	
 	    g.datePartDelimiter = _.rtoken(/^([\s\-\.\,\/\x27]+)/); 
 	    g.timePartDelimiter = _.stoken(":");
@@ -1968,7 +1968,7 @@
 	        if (g[fmt]) { 
 	            return g[fmt]; 
 	        } else { 
-	            throw $D.Parsing.Exception(fmt); 
+	            throw $P.Parsing.Exception(fmt); 
 	        }
 	    }
 	    ),
@@ -2054,7 +2054,7 @@
 	        return g._start.call({}, s);
 	    };
 		
-		$P._parse = $D.parse;
+		$P._parse = $P.parse;
 	
 	    /**
 	     * Converts the specified string value into its JavaScript Date equivalent using CultureInfo specific format information.
@@ -2165,7 +2165,7 @@
 	            return s;
 	        }
 	        try { 
-	            r = $D.Grammar.start.call({}, s.replace(/^\s*(\S*(\s+\S+)*)\s*$/, "$1")); 
+	            r = $P.Grammar.start.call({}, s.replace(/^\s*(\S*(\s+\S+)*)\s*$/, "$1")); 
 	        } catch (e) { 
 	            return null; 
 	        }
@@ -2173,7 +2173,7 @@
 	    };
 	
 	    $P.getParseFunction = function (fx) {
-	        var fn = $D.Grammar.formats(fx);
+	        var fn = $P.Grammar.formats(fx);
 	        return function (s) {
 	            var r = null;
 	            try { 
@@ -2209,7 +2209,7 @@
 	     * @return {Date}    A Date object or null if the string cannot be converted into a Date.
 	     */
 	    $P.parseExact = function (s, fx) { 
-	        return $D.getParseFunction(fx)(s); 
+	        return $P.getParseFunction(fx)(s); 
 	    };	
 	}());
 
@@ -2276,7 +2276,7 @@
 	     * @return {Date}    date
 	     */    
 	    $P.next = function () {
-	        return $D.today().next();
+	        return $P.today().next();
 	    };
 	
 	    /** 
@@ -2310,8 +2310,8 @@
 	     *  
 	     * @return {Date}    date
 	     */
-	    $P.last = $D.prev = $D.previous = function () {
-	        return $D.today().last();
+	    $P.last = $P.prev = $P.previous = function () {
+	        return $P.today().last();
 	    };    
 	
 	    /** 
@@ -2419,7 +2419,7 @@
 	     * @return {Date}    date
 	     */
 	    $P.at = function (time) {
-	        return (typeof time === "string") ? $D.parse(this.toString("d") + " " + time) : this.set(time);
+	        return (typeof time === "string") ? $P.parse(this.toString("d") + " " + time) : this.set(time);
 	    }; 
 	        
 	    /** 
@@ -2547,7 +2547,7 @@
 	                var temp = this.clone().moveToLastDayOfMonth();
 	                this.moveToNthOccurrence(n, ntemp);
 	                if (this > temp) {
-	                    throw new RangeError($D.getDayName(n) + " does not occur " + ntemp + " times in the month of " + $D.getMonthName(temp.getMonth()) + " " + temp.getFullYear() + ".");
+	                    throw new RangeError($P.getDayName(n) + " does not occur " + ntemp + " times in the month of " + $P.getMonthName(temp.getMonth()) + " " + temp.getFullYear() + ".");
 	                }
 	                return this;
 	            }			
@@ -2557,7 +2557,7 @@
 	    
 	    var sdf = function (n) {
 	        return function () {
-	            var t = $D.today(), shift = n - t.getDay();
+	            var t = $P.today(), shift = n - t.getDay();
 	            if (n === 0 && $C.firstDayOfWeek === 1 && t.getDay() !== 0) {
 	                shift = shift + 7;
 	            }
@@ -2567,10 +2567,10 @@
 		
 	    for (var i = 0; i < dx.length; i++) {
 	        // Create constant static Day Name variables. Example: Date.MONDAY or Date.MON
-	        $D[dx[i].toUpperCase()] = $D[dx[i].toUpperCase().substring(0, 3)] = i;
+	        $P[dx[i].toUpperCase()] = $P[dx[i].toUpperCase().substring(0, 3)] = i;
 	
 	        // Create Day Name functions. Example: Date.monday() or Date.mon()
-	        $D[dx[i]] = $D[dx[i].substring(0, 3)] = sdf(i);
+	        $P[dx[i]] = $P[dx[i].substring(0, 3)] = sdf(i);
 	
 	        // Create Day Name instance functions. Example: Date.today().next().monday()
 	        $P[dx[i]] = $P[dx[i].substring(0, 3)] = df(i);
@@ -2589,16 +2589,16 @@
 	    
 	    var smf = function (n) {
 	        return function () {
-	            return $D.today().set({ month: n, day: 1 });
+	            return $P.today().set({ month: n, day: 1 });
 	        };
 	    };
 	    
 	    for (var j = 0; j < mx.length; j++) {
 	        // Create constant static Month Name variables. Example: Date.MARCH or Date.MAR
-	        $D[mx[j].toUpperCase()] = $D[mx[j].toUpperCase().substring(0, 3)] = j;
+	        $P[mx[j].toUpperCase()] = $P[mx[j].toUpperCase().substring(0, 3)] = j;
 	
 	        // Create Month Name functions. Example: Date.march() or Date.mar()
-	        $D[mx[j]] = $D[mx[j].substring(0, 3)] = smf(j);
+	        $P[mx[j]] = $P[mx[j].substring(0, 3)] = smf(j);
 	
 	        // Create Month Name instance functions. Example: Date.today().next().march()
 	        $P[mx[j]] = $P[mx[j].substring(0, 3)] = mf(j);
