@@ -40,9 +40,9 @@
 
 <component id="WUnderground">
 	<comment>
-	WUnderground provider
+		Weather Underground provider
 	</comment>
-	<registration description="WUnderground Weather Provider"
+	<registration description="Weather Underground Provider"
       			  progid="DXWeatherProvider.WUnderground"
       			  version="1"
       	    	  classid="{DFF07170-3A66-41e8-9685-67CC07173146}"/>  
@@ -153,6 +153,8 @@
 	<script language="JScript">
 	<![CDATA[
 	
+	//**Start Encode**
+	
 	var ErrorCode 			= getComponent("WeatherError");
 	
 	// Data
@@ -161,6 +163,7 @@
 	
 	// Helper
 	var m_helper			= getComponent("WeatherHelper");
+	var m_dateHelper		= getComponent("DateEx");
 
 	// callbacks
 	var m_locationsCallback = null;
@@ -177,8 +180,12 @@
 	///////////////////////////////
 	function getComponent(id) {		
 		//#ifdef DEBUG
-		var LIB_FOLDER = "D:/Sources/Company/src/trunk/src/DesktopX/DXScriptLibrary/Weather/";
-		return GetObject("script:" + LIB_FOLDER + "/Weather.wsc#" + id);
+		var LIB_FOLDER = "D:/Sources/Company/src/trunk/src/DesktopX/DXScriptLibrary";
+		
+		if (id == "DateEx")
+			return GetObject("script:" + LIB_FOLDER + "/I18N/DateEx.wsc");
+		else
+			return GetObject("script:" + LIB_FOLDER + "/Weather/Weather.wsc#" + id);
 		//#else
 		//return createComponent(id);
 		//#endif
@@ -187,7 +194,10 @@
 	// Get a query string, using data in priority order
 	function getQueryString(locationQuery) {
 		
-		// TODO: check that location query is not null
+		// Check that location query is not null
+		if (locationQuery == null)
+			return "";
+				
 		if (locationQuery.CustomQueryString != "")
 			return locationQuery.CustomQueryString;
 		
@@ -218,7 +228,10 @@
 	// Get a query string for the weather info (airport code / id only)
 	function getWeatherQueryString(locationQuery)
 	{		
-		// TODO: check that location query is not null
+		// Check that location query is not null
+		if (locationQuery == null)
+			return "";
+			
 		if (locationQuery.AirportCode != "")
 			return getResource("url_weather") + locationQuery.AirportCode;
 		
@@ -308,14 +321,11 @@
 	// Get a list of locations
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	function GetLocations(locationQuery) {
-		// Clear any previous results
-		m_locations.RemoveAll();		
-		
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
 			return ErrorCode.E_NOTAVAILABLE;
 		
-		// Reset dom
+		// Reset DOM
 		m_request.abort();
 		
 		m_request.onreadystatechange = OnLocationsResponse;
@@ -331,6 +341,9 @@
 			
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
 			return;
+			
+		// Clear any previous results
+		m_locations.RemoveAll();	
 			
 		// locations index
 		var i = 0;		
@@ -403,14 +416,14 @@
 	function GetWeather(locationQuery) {
 		
 		// Reset weather object
-		m_weather == null;
+		m_weather = null;
 		m_weather = getComponent("WeatherInfo");
 				
-		// Check query for validity: airport/personal station ID only
+		// Check query for validity
 		if (getWeatherQueryString(locationQuery) == "")
 			return ErrorCode.E_NOTAVAILABLE;
 					
-		// Reset dom
+		// Reset DOM
 		m_request.abort();
 		
 		m_request.onreadystatechange = OnWeatherResponse;
@@ -441,6 +454,15 @@
 		//  Parse location data  //
 		///////////////////////////
 		
+		// Check that station ID is not empty
+		var station_id = m_helper.GetNodeValue(observation[0], "station_id/text()");
+		if (station_id == "")
+		{
+			m_errorCallback(ErrorCode.E_ERROR, "Response is empty. Please check that the station code you used is valid!");
+			return;
+		}
+		
+		
 		// Airport location
 		var location = observation[0].getElementsByTagName("display_location");
 		if (location.length != 0) {
@@ -455,7 +477,7 @@
 			m_weather.Location.Elevation = parseElevation(m_helper.GetNodeValue(location[0], "elevation/text()"));
 			
 			// Station ID goes into the location airport code
-			m_weather.Location.AirportCode = m_helper.GetNodeValue(observation[0], "station_id/text()");
+			m_weather.Location.AirportCode = station_id;
 		} 
 		
 		// Personal weather station
@@ -472,7 +494,7 @@
 			m_weather.Location.Elevation = parseElevation(m_helper.GetNodeValue(location[0], "elevation/text()"));				
 			
 			// Station ID goes into the location ID
-			m_weather.Location.ID        =  m_helper.GetNodeValue(observation[0], "station_id/text()");
+			m_weather.Location.ID        =  station_id;
 		}
 		
 		//////////////////////////
@@ -483,8 +505,10 @@
 		m_weather.Station		  = m_helper.GetNodeValue(observation[0], "credit/text()");
 		m_weather.Type 			  = m_helper.GetNodeValue(observation[0], "station_type/text()");
 		
-		// Observation date & Time
-		// TODO parse into a Date object "observation_time_rfc822/text()"
+		// Observation date
+		m_weather.Date = m_dateHelper.GetDate();
+		m_weather.Date.today();
+		m_weather.Date.parse(m_helper.GetNodeValue(observation[0],  "observation_time_rfc822/text()"));
 		
 		// Temperature
 		if (m_useMetricSystem)
@@ -540,7 +564,7 @@
 	    	m_weather.Visibility  = m_helper.GetNodeValue(observation[0], "visibility_mi/text()");
 	    		    	
 	    // Weather code
-	    m_weather.WeatherCode     = parseCode(m_helper.GetNodeValue(observation[0], "icon/text()"));
+	    m_weather.Code    		  = parseCode(m_helper.GetNodeValue(observation[0], "icon/text()"));
 	    
 	    // Precipitation
 		if (m_useMetricSystem) {
@@ -550,6 +574,16 @@
 	    	m_weather.Precipitation1H     = m_helper.GetNodeValue(observation[0], "precip_1hr_in/text()");
 	    	m_weather.PrecipitationToday  = m_helper.GetNodeValue(observation[0], "precip_today_in/text()");	    
 	    }
+	    
+	    //////////////////////////////
+		//  Parse links to website  //
+		//////////////////////////////
+		
+		m_weather.Links.Current			 = m_helper.GetNodeValue(observation[0], "ob_url/text()");
+		m_weather.Links.Forecast		 = m_helper.GetNodeValue(observation[0], "forecast_url/text()");
+		m_weather.Links.History			 = m_helper.GetNodeValue(observation[0], "history_url/text()");
+		m_weather.Links.Credit			 = m_helper.GetNodeValue(observation[0], "credit_URL/text()");
+		m_weather.Links.Logo			 = m_helper.GetNodeValue(observation[0], "ob_url/text()");
 	    	
 		m_weatherCallback(m_weather);	
 	}
@@ -565,7 +599,7 @@
 		if (getQueryString(locationQuery) == "")
 			return ErrorCode.E_NOTAVAILABLE;
 		
-		// Reset dom
+		// Reset DOM
 		m_request.abort();
 		
 		m_request.onreadystatechange = OnAlertsResponse;
@@ -616,7 +650,7 @@
 		if (getQueryString(locationQuery) == "")
 			return ErrorCode.E_NOTAVAILABLE;
 		
-		// Reset dom
+		// Reset DOM
 		m_request.abort();
 		
 		m_request.onreadystatechange = OnForecastResponse;
@@ -632,10 +666,85 @@
 			
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
 			return;
+			
+		// forecast index
+		var i = 0;	
+				
+		// Parse detailed forecast
+		var forecastNode = m_request.selectNodes("simpleforecast");
+		if (forecastNode.length != 0) {
+			
+			var forecastEnumerator = new Enumerator(forecastNode[0].getElementsByTagName("forecastday"));
+			for (var enumerator = forecastEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
+			{						
+			    var entry = enumerator.item();
+			    var forecast = getComponent("WeatherInfo");
+			    
+			    // Description
+			    forecast.Description = m_helper.GetNodeValue(entry, "conditions/text()");
+			    
+			    // Weather code
+	   			forecast.Code     = parseCode(m_helper.GetNodeValue(entry, "icon/text()"));
+			    			    			   
+			    // High & Low
+			    if (m_useMetricSystem) {
+			    	forecast.ForecastHigh		= m_helper.GetNodeValue(entry, "high/celsius/text()");
+			    	forecast.ForecastLow		= m_helper.GetNodeValue(entry, "low/celsius/text()");	    	
+			    } else {
+			    	forecast.ForecastHigh		= m_helper.GetNodeValue(entry, "high/fahrenheit/text()");
+			    	forecast.ForecastLow		= m_helper.GetNodeValue(entry, "low/fahrenheit/text()");	
+			    }
+			    
+			    // Date
+			    //forecast.Date = m_dateHelper.GetDate();
+			   // forecast.Date.parse(m_helper.GetNodeValue(entry, "low/fahrenheit/text()"));
+			    
+			    
+			    m_forecast.Add(i, forecast);		    
+			    i++;
+			}
+		}
 		
-		// TODO: Implementation
-		debugger;
+		// Reset index
+		i = 0;
 		
+		// Parse text forecast
+		var text_forecast = m_request.selectNodes("txt_forecast");
+		if (text_forecast.length != 0) {
+			
+			var textforecastEnumerator = new Enumerator(forecastNode[0].getElementsByTagName("forecastday"));
+			for (var enumerator = textforecastEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
+			{						
+			    // Get the forecast
+			    var forecast = m_forecast.Item(i);			
+				if (forecast == null)
+					forecast = getComponent("WeatherInfo");
+					
+				// Update the forecast
+				var entry = enumerator.item();
+			    
+			    
+			  	m_forecast.Item(i) = forecast;	    
+			    i++;
+			}
+		}	
+		
+		// Parse moon phase (insert in first forecast)
+		var moon_phase = m_request.selectNodes("moon_phase");
+		if (moon_phase.length != 0)
+		{
+			// Get the first forecast
+			var forecast = m_forecast.Item(0);			
+			if (forecast == null)
+				forecast = getComponent("WeatherInfo");
+				
+			// Update forecast
+			
+			
+			m_forecast.Item(0) = forecast;		
+		}
+		
+			
 		m_forecastCallback(m_forecast);		
 	}
 	

@@ -1,0 +1,74 @@
+HTTP/1.1 200 OK
+Date: Wed, 15 Jul 2009 02:26:01 GMT
+Server: Apache/1.3.33 (Unix) PHP/4.4.0
+X-CreationTime: 0.066
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/xml
+
+4f1
+
+<alerts>
+		<termsofservice link="http://www.wunderground.com/members/tos.asp#api" /><alert count="2">
+<AlertItem>
+  <type>WRN</type>
+  <description>Severe Thunderstorm Warning</description>
+  <date epoch="1247624520">9:22 PM CDT on July 14, 2009</date>
+		<expires epoch="1247625000">9:30 PM CDT on July 14, 2009</expires>
+  <message>
+...A Severe Thunderstorm Warning remains in effect until 930 PM CDT
+for northwestern Hancock...eastern Kossuth and southern Winnebago
+counties...
+At 922 PM CDT...National Weather Service Doppler radar continued to
+indicate a severe thunderstorm capable of producing quarter size
+hail...and damaging winds in excess of 60 mph. This storm was located
+near Crystal Lake...or 31 miles west of Mason City...moving east at
+35 mph.
+The severe thunderstorm will be near...
+  Forest City by 930 PM CDT...
+Precautionary/preparedness actions...
+Prepare for damaging winds...falling trees and flying debris. Move
+indoors and stay away from windows. If you live in a Mobile home...
+seek shelter in a sturdy building.
+Lat...Lon 4324 9394 4335 9391 4331 9357 4300 9379
+  4311 9415
+time...Mot...loc 0222z 284deg 31kt 4318 9381
+Cogil
+</message>
+		<phenomena>SV</phenomena>
+		<significance>W</significance>
+  </AlertItem><AlertItem>
+  <type>SEW</ty
+2de
+pe>
+  <description>Severe Thunderstorm Watch</description>
+  <date epoch="1247623380">9:03 PM CDT on July 14, 2009</date>
+		<expires epoch="1247644800">3:00 AM CDT on July 15, 2009</expires>
+  <message>
+Severe Thunderstorm Watch 584 remains in effect until 300 am CDT
+for the following locations
+IA
+. Iowa counties included are
+Audubon Black Hawk Boone
+Bremer Butler Calhoun
+Carroll Cerro Gordo Chickasaw
+Crawford Dallas Emmet
+Fayette Floyd Franklin
+Greene Grundy Guthrie
+Hamilton Hancock Hardin
+Howard Humboldt Jasper
+Kossuth Marshall Mitchell
+Palo Alto Pocahontas Polk
+Poweshiek SAC story
+Tama Webster Winnebago
+Winneshiek Worth Wright
+</message>
+		<phenomena>SV</phenomena>
+		<significance>A</significance>
+  </AlertItem></alert>
+ 
+b
+ </alerts>
+
+0
+

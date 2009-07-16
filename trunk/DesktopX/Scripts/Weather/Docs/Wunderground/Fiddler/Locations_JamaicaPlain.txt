@@ -1,0 +1,1541 @@
+HTTP/1.1 200 OK
+Date: Wed, 15 Jul 2009 02:18:06 GMT
+Server: Apache/1.3.33 (Unix) PHP/4.4.0
+X-CreationTime: 2.600
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/xml
+
+4f1
+<?xml version="1.0" encoding="UTF-8"?>
+		<location type="CITY">
+		<termsofservice link="http://www.wunderground.com/members/tos.asp#api" />
+		<country>US</country>
+  <state>MA</state>
+  <city>Jamaica Plain</city>
+  <tz_short>EDT</tz_short>
+  <tz_unix>America/New_York</tz_unix>
+  <lat>42.29471970</lat>
+  <lon>-71.13053894</lon>
+  <zip>02130</zip>
+  <magic>1</magic>
+  <wmo>99999</wmo>
+		<requesturl>/US/MA/Jamaica_Plain.html</requesturl>
+		<wuiurl>http://www.wunderground.com/US/MA/Jamaica_Plain.html</wuiurl>
+		<radar>
+		<image_url><![CDATA[http://resize.wunderground.com/cgi-bin/resize_convert?ox=gif&url=radblast/cgi-bin/radar/WUNIDS_composite%3Fcenterlat=42.29471970%26centerlon=-71.13053894%26radius=15%26newmaps=1%26smooth=1]]></image_url>
+		<url><![CDATA[http://www.wunderground.com/radar/radblast.asp?ID=BOX&region=a5&lat=42.29471970&lon=-71.13053894]]></url>
+		</radar>
+		<webcams>
+		<cam>
+  <handle>jbd</handle>
+  <camid>jbdCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KNHLOUDO1</assoc_station_id>
+  <link>http://www.milessmithfarm.net/</link>
+  <linktext>Miles Smith Farm</linktext>
+  <cameratype>Panasonic</cameratype>
+  <organization>Miles Smith Farm</organization>
+  <neighborhood></neighborhood>
+  <address>56 Whitehouse Road</address>
+
+5b4
+  <zip>03307</zip>
+  <city>Loudon</city>
+  <state>NH</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>0</hexant>
+  <hexid>17028</hexid>
+  <lat>43.33994675</lat>
+  <lon>-71.48396301</lon>
+  <updated>2009-07-14 22:17:15</updated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/j/b/jbd/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/j/b/jbd/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/jbd/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>bt83</handle>
+  <camid>bt83CAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KNHHOLLI5</assoc_station_id>
+  <link>http://</link>
+  <linktext></linktext>
+  <cameratype>Logitech Quickcam</cameratype>
+  <organization></organization>
+  <neighborhood>Pine Hill</neighborhood>
+  <address>83 Howe Ln</address>
+  <zip>03049</zip>
+  <city>Hollis</city>
+  <state>NH</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>3</hexant>
+  <hexid>17028</hexid>
+  <lat>42.76207352</lat>
+  <lon>-71.52764893</lon>
+  <updated>2009-07-14 21:27:07</updated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/b/t/bt83/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/b/t/bt83/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+52a
+
+  <CAMURL>http://www.wunderground.com/webcams/bt83/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>jbd</handle>
+  <camid>jbdCAM2</camid>
+  <camindex>2</camindex>
+  <assoc_station_id>KNHLOUDO1</assoc_station_id>
+  <link>http://www.milessmithfarm.net/</link>
+  <linktext>Miles Smith Farm</linktext>
+  <cameratype>Panasonic</cameratype>
+  <organization>Miles Smith Farm</organization>
+  <neighborhood></neighborhood>
+  <address>56 Whitehouse Road</address>
+  <zip>03307</zip>
+  <city>Loudon</city>
+  <state>NH</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>0</hexant>
+  <hexid>17028</hexid>
+  <lat>43.34011078</lat>
+  <lon>-71.48413849</lon>
+  <updated>2009-07-14 22:17:19</updated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/j/b/jbd/2/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/j/b/jbd/2/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/jbd/2/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>CW9123</handle>
+  <camid>CW9123CAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KNHMERRI10</assoc_station_id>
+  <link>http://</link>
+  <linktext></linktext>
+  <cameratype>Logitech QuickCam Web</cameratype>
+  <organization></organizatio
+636
+n>
+  <neighborhood></neighborhood>
+  <address>87 Bean Road</address>
+  <zip>03054</zip>
+  <city>Merrimack</city>
+  <state>NH</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>3</hexant>
+  <hexid>17028</hexid>
+  <lat>42.88653183</lat>
+  <lon>-71.52459717</lon>
+  <updated>2009-07-14 22:17:40</updated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/c/w/CW9123/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/c/w/CW9123/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/CW9123/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>CalStumpJumper</handle>
+  <camid>CalStumpJumperCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KNHANDOV2</assoc_station_id>
+  <link>http://</link>
+  <linktext></linktext>
+  <cameratype>Toshiba IK-WB11A</cameratype>
+  <organization></organization>
+  <neighborhood>East Andover Village</neighborhood>
+  <address>35 Maple Street</address>
+  <zip>03231</zip>
+  <city>East Andover</city>
+  <state>NH</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>5</hexant>
+  <hexid>17028</hexid>
+  <lat>43.45972061</lat>
+  <lon>-71.75083160</lon>
+  <updated>2009-07-14 22:10:52</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/c/a/CalStumpJumper/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/c/a/CalStumpJumper/1
+5b4
+/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/CalStumpJumper/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>LondonderryNH</handle>
+  <camid>LondonderryNHCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id></assoc_station_id>
+  <link>http://www.LondonderryNH.net</link>
+  <linktext>Londonderry Hometown Online News</linktext>
+  <cameratype>Robin Cam watch and replay for this batch of Robins visit www.LondonderryNH.us for more info</cameratype>
+  <organization>Londonderry Hometown Online News</organization>
+  <neighborhood>Londonderry</neighborhood>
+  <address>7 Fiddlers Ridge Rd</address>
+  <zip>03053</zip>
+  <city>Londonderry</city>
+  <state>NH</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>2</hexant>
+  <hexid>17028</hexid>
+  <lat>42.84966660</lat>
+  <lon>-71.38126373</lon>
+  <updated>2009-07-14 22:17:56</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/l/o/LondonderryNH/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/l/o/LondonderryNH/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/LondonderryNH/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>1stgen</handle>
+  <camid>1stgenCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KNHMANCH5</assoc_station_id>
+5b4
+
+  <link>http://manchvegasweather.net</link>
+  <linktext>Westerly view over Merrimack river</linktext>
+  <cameratype>Custom VGA CCD</cameratype>
+  <organization></organization>
+  <neighborhood></neighborhood>
+  <address>Westminster St</address>
+  <zip>03103</zip>
+  <city>Manchester</city>
+  <state>NH</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>2</hexant>
+  <hexid>17028</hexid>
+  <lat>42.95826721</lat>
+  <lon>-71.45881653</lon>
+  <updated>2009-07-14 22:15:52</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/1/s/1stgen/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/1/s/1stgen/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/1stgen/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>N1EDU</handle>
+  <camid>N1EDUCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KNHFREMO2</assoc_station_id>
+  <link>http://</link>
+  <linktext>HoraceCam</linktext>
+  <cameratype>linksys WVC54GCA</cameratype>
+  <organization>N1EDU</organization>
+  <neighborhood>HoraceCam</neighborhood>
+  <address>7 Louise Ln</address>
+  <zip>03044</zip>
+  <city>Fremont</city>
+  <state>NH</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>2</hexant>
+  <hexid>17028</hexid>
+  <lat>42.98699951</lat>
+  <lon>-71.12799835</lon>
+5b4
+
+  <updated>2009-07-14 20:02:20</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/n/1/N1EDU/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/n/1/N1EDU/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/N1EDU/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>Moonmatters</handle>
+  <camid>MoonmattersCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id></assoc_station_id>
+  <link>http://bowlake.homeip.net:1024</link>
+  <linktext>Live streaming video on website</linktext>
+  <cameratype>Sony SNC-RX550N</cameratype>
+  <organization>MoonMatters</organization>
+  <neighborhood>Bow Lake</neighborhood>
+  <address>Water Street</address>
+  <zip>03884</zip>
+  <city>Strafford</city>
+  <state>NH</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>1</hexant>
+  <hexid>17028</hexid>
+  <lat>43.24049759</lat>
+  <lon>-71.15546417</lon>
+  <updated>2009-07-14 21:00:25</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/m/o/Moonmatters/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/m/o/Moonmatters/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/Moon
+5b4
+matters/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>aps</handle>
+  <camid>apsCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMAWESTF9</assoc_station_id>
+  <link>http://</link>
+  <linktext></linktext>
+  <cameratype>Axis 2100</cameratype>
+  <organization></organization>
+  <neighborhood>Pacific Lane</neighborhood>
+  <address>2 Pacific Lane</address>
+  <zip>01886</zip>
+  <city>Westford</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>3</hexant>
+  <hexid>17028</hexid>
+  <lat>42.57394028</lat>
+  <lon>-71.44855499</lon>
+  <updated>2009-07-14 21:56:05</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/a/p/aps/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/a/p/aps/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/aps/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>egil222</handle>
+  <camid>egil222CAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KNHHAMPS1</assoc_station_id>
+  <link>http://www.westhampsteadweather.com</link>
+  <linktext>West Hampstead Weather</linktext>
+  <cameratype>Hue HD webcam</cameratype>
+  <organization></organization>
+  <neighborhood>West Hampstead</neighborhood>
+  <address>9 Valley Rd.</address>
+  <zip>03841</zip>
+  <city>Hampstead</city>
+  <state>NH</state>
+ 
+2fa
+ <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>2</hexant>
+  <hexid>17028</hexid>
+  <lat>42.91099930</lat>
+  <lon>-71.21700287</lon>
+  <updated>2009-07-14 21:15:12</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/e/g/egil222/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/e/g/egil222/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/egil222/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>WestfordWxMan</handle>
+  <camid>WestfordWxManCAM2</camid>
+  <camindex>2</camindex>
+  <assoc_station_id>KMAWESTF5</assoc_station_id>
+  <link>http://westca
+866
+m.no-ip.info:18081/canvas01.jpg</link>
+  <linktext>West Webcam</linktext>
+  <cameratype>Panasonic BL-C10</cameratype>
+  <organization></organization>
+  <neighborhood>Flagg Rd</neighborhood>
+  <address>47 Flagg Rd</address>
+  <zip>01886</zip>
+  <city>Westford</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>3</hexant>
+  <hexid>17028</hexid>
+  <lat>42.56949997</lat>
+  <lon>-71.45259857</lon>
+  <updated>2009-07-14 22:15:16</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/w/e/WestfordWxMan/2/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/w/e/WestfordWxMan/2/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/WestfordWxMan/2/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>tmitchell</handle>
+  <camid>tmitchellCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMASTONE1</assoc_station_id>
+  <link>http://www.tom.org</link>
+  <linktext>Very Current Beverly, MA Weather</linktext>
+  <cameratype></cameratype>
+  <organization></organization>
+  <neighborhood>Beverly Cove</neighborhood>
+  <address>6 Tall Tree Dr</address>
+  <zip>01915</zip>
+  <city>Beverly</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>4</hexant>
+  <hexid>17029</hexid>
+  <lat>42.56214142</lat>
+  <lon>-70.84956360</lon>
+  <updated>2009-07-14 22:16:26</updated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/t/m/tmitchell/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/t/m/tmitchell/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/tmitchell/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>grampfl</handle>
+  <camid>grampflCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMASALEM6</assoc_station_id>
+  <link></link>
+  <linktext></linktext>
+  <cameratype></cameratype>
+  <organization></organization>
+  <neighborhood>Sale
+5b4
+m Ma.Essex &amp; Central St </neighborhood>
+  <address>195 Essex st</address>
+  <zip>01970</zip>
+  <city>Salem</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>4</hexant>
+  <hexid>17029</hexid>
+  <lat>42.52145767</lat>
+  <lon>-70.89385223</lon>
+  <updated>2009-07-14 22:16:10</updated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/g/r/grampfl/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/g/r/grampfl/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/grampfl/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>swstone</handle>
+  <camid>swstoneCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMAGLOUC7</assoc_station_id>
+  <link>http://www.lanescove.us</link>
+  <linktext>On the Cove - Lanes Cove, Gloucester, MA</linktext>
+  <cameratype>Canon ZR-500</cameratype>
+  <organization></organization>
+  <neighborhood>Lanesville</neighborhood>
+  <address>20 Andrews St</address>
+  <zip>01930</zip>
+  <city>Gloucester</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>3</hexant>
+  <hexid>17029</hexid>
+  <lat>42.67923355</lat>
+  <lon>-70.65814209</lon>
+  <updated>2009-07-14 22:16:50</updated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/s/w/swstone/1/current.jpg?t
+5b4
+=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/s/w/swstone/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/swstone/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>METHERB</handle>
+  <camid>METHERBCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KNHROCHE5</assoc_station_id>
+  <link>http://</link>
+  <linktext></linktext>
+  <cameratype>Linksys Internet Cam</cameratype>
+  <organization></organization>
+  <neighborhood>Rochester</neighborhood>
+  <address>7 Paradis Dr</address>
+  <zip>03867</zip>
+  <city>Rochester</city>
+  <state>NH</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>5</hexant>
+  <hexid>17029</hexid>
+  <lat>43.32481003</lat>
+  <lon>-70.95529938</lon>
+  <updated>2009-07-14 22:17:03</updated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/m/e/METHERB/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/m/e/METHERB/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/METHERB/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>Wavemagic</handle>
+  <camid>WavemagicCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMAMARBL4</assoc_station_id>
+  <link>http://joemaletz.com</link>
+  <linktext>Joe Maletz Webpage</linktext>
+  <cameratype>Panasonic Wireless 80
+5b4
+2.11 b/g Network Camera and Pet Cam (BL-C30A)</cameratype>
+  <organization>Marblehead</organization>
+  <neighborhood>Salem Harbor (Pitman Road)</neighborhood>
+  <address>78 Pitman Rd</address>
+  <zip>01945</zip>
+  <city>Marblehead</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>4</hexant>
+  <hexid>17029</hexid>
+  <lat>42.51495361</lat>
+  <lon>-70.86463165</lon>
+  <updated>2009-07-14 22:16:34</updated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/w/a/Wavemagic/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/w/a/Wavemagic/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/Wavemagic/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>wea5ray</handle>
+  <camid>wea5rayCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMASALIS1</assoc_station_id>
+  <link>http:\\users.adelphia.net\~wea5\wx.htm</link>
+  <linktext></linktext>
+  <cameratype>Marshall Bullet</cameratype>
+  <organization>home</organization>
+  <neighborhood>Newburyport Salisbury Area</neighborhood>
+  <address>121 Main St</address>
+  <zip>01952</zip>
+  <city>Salisbury</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>4</hexant>
+  <hexid>17029</hexid>
+  <lat>42.86401367</lat>
+  <lon>-70.89958191</lon>
+  <updated>2009-07-14 20:20:51</upd
+5b4
+ated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/w/e/wea5ray/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/w/e/wea5ray/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/wea5ray/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>hollisav</handle>
+  <camid>hollisavCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KNHROCHE7</assoc_station_id>
+  <link>http://</link>
+  <linktext></linktext>
+  <cameratype>Dlink DSC-920</cameratype>
+  <organization>Rochester Hill Weather</organization>
+  <neighborhood>Rochester, NH</neighborhood>
+  <address>110 Rochester Hill Rd</address>
+  <zip>03867</zip>
+  <city>Rochester</city>
+  <state>NH</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>5</hexant>
+  <hexid>17029</hexid>
+  <lat>43.28976440</lat>
+  <lon>-70.94807434</lon>
+  <updated>2009-07-14 22:16:05</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/h/o/hollisav/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/h/o/hollisav/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/hollisav/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>SnowRider</handle>
+  <camid>SnowRiderCAM1</cami
+ca
+d>
+  <camindex>1</camindex>
+  <assoc_station_id>KMEYORK2</assoc_station_id>
+  <link>http://</link>
+  <linktext></linktext>
+  <cameratype>D-Link DCS-920</cameratype>
+  <organization></organization>
+  <ne
+4e2
+ighborhood></neighborhood>
+  <address>24 Donica Rd</address>
+  <zip>03909</zip>
+  <city>York</city>
+  <state>ME</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>5</hexant>
+  <hexid>17029</hexid>
+  <lat>43.15797806</lat>
+  <lon>-70.64965057</lon>
+  <updated>2009-07-14 22:17:56</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/s/n/SnowRider/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/s/n/SnowRider/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/SnowRider/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>JPL</handle>
+  <camid>JPLCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMANORTH19</assoc_station_id>
+  <link>http://</link>
+  <linktext></linktext>
+  <cameratype>Panasonic BL-C30A</cameratype>
+  <organization></organization>
+  <neighborhood>North Easton Village</neighborhood>
+  <address>4 Avis Circle</address>
+  <zip>02356</zip>
+  <city>North Easton</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>5</hexant>
+  <hexid>17389</hexid>
+  <lat>42.06206894<
+5b4
+/lat>
+  <lon>-71.09960938</lon>
+  <updated>2009-07-14 22:17:32</updated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/j/p/JPL/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/j/p/JPL/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/JPL/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>JPL</handle>
+  <camid>JPLCAM2</camid>
+  <camindex>2</camindex>
+  <assoc_station_id></assoc_station_id>
+  <link>http://</link>
+  <linktext></linktext>
+  <cameratype>Panasonic BL-C30A</cameratype>
+  <organization></organization>
+  <neighborhood>North Easton Village</neighborhood>
+  <address>4 Avis Circle</address>
+  <zip>02356</zip>
+  <city>North easton</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>5</hexant>
+  <hexid>17389</hexid>
+  <lat>42.06152725</lat>
+  <lon>-71.10076904</lon>
+  <updated>2009-07-14 22:16:57</updated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/j/p/JPL/2/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/j/p/JPL/2/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/JPL/2/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>weatherman444</handle>
+  <camid>weatherman444CAM1</camid>
+  <camindex>1</camin
+111c
+dex>
+  <assoc_station_id>KRICRANS2</assoc_station_id>
+  <link>http://members.cox.net/wbunch/Weather</link>
+  <linktext></linktext>
+  <cameratype>Linksys</cameratype>
+  <organization></organization>
+  <neighborhood>Southeastern Cranston</neighborhood>
+  <address>51 Fairwood Dr</address>
+  <zip>02920</zip>
+  <city>Cranston</city>
+  <state>RI</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>4</hexant>
+  <hexid>17389</hexid>
+  <lat>41.73433304</lat>
+  <lon>-71.46627808</lon>
+  <updated>2009-07-14 21:14:39</updated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/w/e/weatherman444/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/w/e/weatherman444/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/weatherman444/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>alienxp</handle>
+  <camid>alienxpCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KXIMAWAR2</assoc_station_id>
+  <link>http://www.gateway2capecod.com</link>
+  <linktext>West Wareham, Mass Weather</linktext>
+  <cameratype>Axis-211A </cameratype>
+  <organization></organization>
+  <neighborhood>West Wareham</neighborhood>
+  <address>1182 Main St</address>
+  <zip>02576</zip>
+  <city>West Wareham</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>2</hexant>
+  <hexid>17389</hexid>
+  <lat>41.79678345</lat>
+  <lon>-70.77667236</lon>
+  <updated>2009-07-14 21:50:15</updated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/a/l/alienxp/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/a/l/alienxp/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/alienxp/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>JohnstonWX</handle>
+  <camid>JohnstonWXCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KRIJOHNS2</assoc_station_id>
+  <link>http://</link>
+  <linktext></linktext>
+  <cameratype>Axis 2100</cameratype>
+  <organization></organization>
+  <neighborhood>Cherry Hill</neighborhood>
+  <address>232 Rosemont Ave</address>
+  <zip>02919</zip>
+  <city>Johsnton</city>
+  <state>RI</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>4</hexant>
+  <hexid>17389</hexid>
+  <lat>41.83324814</lat>
+  <lon>-71.48280334</lon>
+  <updated>2009-07-14 22:14:17</updated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/j/o/JohnstonWX/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/j/o/JohnstonWX/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/JohnstonWX/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>jlg99</handle>
+  <camid>jlg99CAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id></assoc_station_id>
+  <link></link>
+  <linktext></linktext>
+  <cameratype>Airlink101 AIC250W</cameratype>
+  <organization></organization>
+  <neighborhood>Rexhame</neighborhood>
+  <address>Concord St</address>
+  <zip>02050</zip>
+  <city>Marshfield</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>1</hexant>
+  <hexid>17389</hexid>
+  <lat>42.10955811</lat>
+  <lon>-70.66612244</lon>
+  <updated>2009-07-14 21:49:48</updated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/j/l/jlg99/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/j/l/jlg99/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/jlg99/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>quicksandfarm</handle>
+  <camid>quicksandfarmCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KRILITTL3</assoc_station_id>
+  <link></link>
+  <linktext></linktext>
+  <cameratype></cameratype>
+  <organization></organization>
+  <neighborhood>Pottersville Road</neighborhood>
+  <address>64 Pottersville Road</address>
+  <zip>02837</zip>
+  <city>Little Compton</city>
+  <state>RI</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>3</hexant>
+  <hexid>17389</hexid>
+  <lat>41.52243423</lat>
+  <lon>-71.141
+44e
+22772</lon>
+  <updated>2009-07-14 21:55:04</updated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/q/u/quicksandfarm/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/q/u/quicksandfarm/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/quicksandfarm/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>CaptFrank</handle>
+  <camid>CaptFrankCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMAMARSH4</assoc_station_id>
+  <link></link>
+  <linktext></linktext>
+  <cameratype>Logitech QuickCam Fusion</cameratype>
+  <organization></organization>
+  <neighborhood></neighborhood>
+  <address>35 Robert Ave</address>
+  <zip>02050</zip>
+  <city>Marshfield</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>1</hexant>
+  <hexid>17389</hexid>
+  <lat>42.13006592</lat>
+  <lon>-70.71669769</lon>
+  <updated>2009-07-14 22:13:25</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEU
+2000
+RL>http://icons.wunderground.com/webcamramdisk/c/a/CaptFrank/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/c/a/CaptFrank/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/CaptFrank/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>KA1WBH</handle>
+  <camid>KA1WBHCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMAFAIRH9</assoc_station_id>
+  <link>http://www.westislandweather.com</link>
+  <linktext>westislandweather.com</linktext>
+  <cameratype>Custom Built w/Sony Components</cameratype>
+  <organization>West Island Weather Station KA1WBH</organization>
+  <neighborhood>West Island</neighborhood>
+  <address>36 Bluepoint rd</address>
+  <zip>02719</zip>
+  <city>Fairhaven</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>3</hexant>
+  <hexid>17389</hexid>
+  <lat>41.59840775</lat>
+  <lon>-70.83294678</lon>
+  <updated>2009-07-14 22:17:06</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/k/a/KA1WBH/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/k/a/KA1WBH/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/KA1WBH/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>humarock</handle>
+  <camid>humarockCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMASCITU3</assoc_station_id>
+  <link>http://</link>
+  <linktext></linktext>
+  <cameratype></cameratype>
+  <organization></organization>
+  <neighborhood>Humarock Beach</neighborhood>
+  <address>Humarock Beach Rd</address>
+  <zip>02066</zip>
+  <city>Scituate</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>1</hexant>
+  <hexid>17389</hexid>
+  <lat>42.14488983</lat>
+  <lon>-70.69441223</lon>
+  <updated>2009-07-14 20:54:05</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/h/u/humarock/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/h/u/humarock/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/humarock/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>zach34298</handle>
+  <camid>zach34298CAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMALEXIN3</assoc_station_id>
+  <link></link>
+  <linktext></linktext>
+  <cameratype>logitech</cameratype>
+  <organization></organization>
+  <neighborhood>The Great Meadow</neighborhood>
+  <address>900 Mass Ave</address>
+  <zip>02420</zip>
+  <city>Lexington</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>0</hexant>
+  <hexid>17389</hexid>
+  <lat>42.43197632</lat>
+  <lon>-71.20904541</lon>
+  <updated>2009-07-14 22:16:46</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/z/a/zach34298/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/z/a/zach34298/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/zach34298/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>SSarcione</handle>
+  <camid>SSarcioneCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMAASHLA4</assoc_station_id>
+  <link>http://</link>
+  <linktext></linktext>
+  <cameratype>Logitech QuickCam</cameratype>
+  <organization></organization>
+  <neighborhood></neighborhood>
+  <address>2 Barry Drive</address>
+  <zip>01721</zip>
+  <city>Ashland</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>5</hexant>
+  <hexid>17389</hexid>
+  <lat>42.26489639</lat>
+  <lon>-71.46465302</lon>
+  <updated>2009-07-14 22:13:44</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/s/s/SSarcione/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/s/s/SSarcione/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/SSarcione/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>maboo</handle>
+  <camid>mabooCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMAQUINC2</assoc_station_id>
+  <link>http://</link>
+  <linktext></linktext>
+  <cameratype></cameratype>
+  <organization></organization>
+  <neighborhood></neighborhood>
+  <address>42 Wesson Ave</address>
+  <zip>02169</zip>
+  <city>Quincy</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>0</hexant>
+  <hexid>17389</hexid>
+  <lat>42.23548508</lat>
+  <lon>-71.02597809</lon>
+  <updated>2009-07-14 22:00:52</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/m/a/maboo/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/m/a/maboo/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/maboo/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>Wheelsea</handle>
+  <camid>WheelseaCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMAHULL1</assoc_station_id>
+  <link></link>
+  <linktext></linktext>
+  <cameratype>Logitech</cameratype>
+  <organization></organization>
+  <neighborhood>Point Allerton</neighborhood>
+  <address>9 Winthrop Ave</address>
+  <zip>02045</zip>
+  <city>Hull</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>0</hexant>
+  <hexid>17389</hexid>
+  <lat>42.30696869</lat>
+  <lon>-70.88912201</lon>
+  <updated>2009-07-14 22:15:48</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/w/h/Wheelsea/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/w/h/Wheelsea/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/Wheelsea/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>N1ACT</handle>
+  <camid>N1ACTCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMAPLAIN3</assoc_station_id>
+  <link>http://</link>
+  <linktext>N1ACT Weather</linktext>
+  <cameratype>Logitech QuickCam Ultra Vision</cameratype>
+  <organization></organization>
+  <neighborhood>Off Rt. 106 (facing W)</neighborhood>
+  <address>6 Hillcrest DR</address>
+  <zip>02762</zip>
+  <city>Plainville</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>5</hexant>
+  <hexid>17389</hexid>
+  <lat>42.00572205</lat>
+  <lon>-71.32707214</lon>
+  <updated>2009-07-14 22:15:14</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/n/1/N1ACT/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/n/1/N1ACT/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/N1ACT/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>onsetrpt</handle>
+  <camid>onsetrptCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMAONSET3</assoc_station_id>
+  <link></link>
+  <linktext></linktext>
+  <cameratype>Logitech</cameratype>
+  <organization></organization>
+  <neighborhood>Onset</neighborhood>
+  <address>12th street</address>
+  <zip>02558</zip>
+  <city>Onset</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>2</hexant>
+  <hexid>17389</hexid>
+  <lat>41.74517441</lat>
+  <lon>-70.65747833</lon>
+  <updated>2009-07-14 22:10:27</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/o/n/onsetrpt/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/o/n/onsetrpt/1/w
+1a5e
+idget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/onsetrpt/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>MS1</handle>
+  <camid>MS1CAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMAMARSH5</assoc_station_id>
+  <link>http://</link>
+  <linktext></linktext>
+  <cameratype>Linksys WCV11B</cameratype>
+  <organization></organization>
+  <neighborhood>Cornwell Hill</neighborhood>
+  <address>85 Cornwell Hill</address>
+  <zip>02050</zip>
+  <city>Marshfield</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>1</hexant>
+  <hexid>17389</hexid>
+  <lat>42.14459610</lat>
+  <lon>-70.71825409</lon>
+  <updated>2009-07-14 21:25:36</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/m/s/MS1/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/m/s/MS1/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/MS1/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>MS1</handle>
+  <camid>MS1CAM2</camid>
+  <camindex>2</camindex>
+  <assoc_station_id>KMAMARSH5</assoc_station_id>
+  <link></link>
+  <linktext></linktext>
+  <cameratype>Linksys WVC11B</cameratype>
+  <organization></organization>
+  <neighborhood>Cornwell Hill</neighborhood>
+  <address>85 Cornwell Hill</address>
+  <zip>02050</zip>
+  <city>Marshfield</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>1</hexant>
+  <hexid>17389</hexid>
+  <lat>42.14438248</lat>
+  <lon>-70.71842957</lon>
+  <updated>2009-07-14 21:47:09</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/m/s/MS1/2/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/m/s/MS1/2/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/MS1/2/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>WD1L</handle>
+  <camid>WD1LCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMABROCK4</assoc_station_id>
+  <link>http://www.wd1l.net/Local_Weather.shtml</link>
+  <linktext>WD1L.net Weather</linktext>
+  <cameratype>Logitech</cameratype>
+  <organization></organization>
+  <neighborhood></neighborhood>
+  <address>50 Bailey Rd.</address>
+  <zip>02302</zip>
+  <city>Brockton</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>0</hexant>
+  <hexid>17389</hexid>
+  <lat>42.06592560</lat>
+  <lon>-70.99050903</lon>
+  <updated>2009-07-14 22:16:26</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/w/d/WD1L/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/w/d/WD1L/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/WD1L/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>garryhennessy</handle>
+  <camid>garryhennessyCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMAASHLA2</assoc_station_id>
+  <link></link>
+  <linktext></linktext>
+  <cameratype>D-Link DCS 920</cameratype>
+  <organization></organization>
+  <neighborhood>SE Ashland, MA</neighborhood>
+  <address>7 Sherborne Cir</address>
+  <zip>01721</zip>
+  <city>Ashland</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>5</hexant>
+  <hexid>17389</hexid>
+  <lat>42.23859024</lat>
+  <lon>-71.42552948</lon>
+  <updated>2009-07-14 21:26:28</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/g/a/garryhennessy/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/g/a/garryhennessy/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/garryhennessy/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>apetala2</handle>
+  <camid>apetala2CAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMAMELRO3</assoc_station_id>
+  <link>http://</link>
+  <linktext></linktext>
+  <cameratype></cameratype>
+  <organization></organization>
+  <neighborhood>Near Wyoming Cemetary</neighborhood>
+  <address>22 Hopkins St</address>
+  <zip>02176</zip>
+  <city>Melrose</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>0</hexant>
+  <hexid>17389</hexid>
+  <lat>42.44443130</lat>
+  <lon>-71.05532837</lon>
+  <updated>2009-07-14 22:17:04</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/a/p/apetala2/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/a/p/apetala2/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/apetala2/1/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>garryhennessy</handle>
+  <camid>garryhennessyCAM2</camid>
+  <camindex>2</camindex>
+  <assoc_station_id>KMASCITU4</assoc_station_id>
+  <link>http://</link>
+  <linktext></linktext>
+  <cameratype>D-Link DCS-920</cameratype>
+  <organization></organization>
+  <neighborhood>Minot/North Scituate, MA</neighborhood>
+  <address>44 Ocean Ave.</address>
+  <zip>02066</zip>
+  <city>Scituate</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>1</hexant>
+  <hexid>17389</hexid>
+  <lat>42.23768616</lat>
+  <lon>-70.76371002</lon>
+  <updated>2009-07-14 11:16:46</updated>
+  <isrecent>1</isrecent>
+  <curqueue>webcamqueue1</curqueue>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/g/a/garryhennessy/2/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/g/a/garryhennessy/2/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/garryhennessy/2/show.html</CAMURL>
+  </cam>
+		<cam>
+  <handle>TheWeissGuy</handle>
+  <camid>TheWeissGuyCAM1</camid>
+  <camindex>1</camindex>
+  <assoc_station_id>KMABREWS6</assoc_station_id>
+  <link>http://theweissguy.com</link>
+  <linktext>My Backyard</linktext>
+  <cameratype>Logitech Webcam</cameratype>
+  <organization></organization>
+  <neighborhood>West Brewster</neighborhood>
+  <address>172 Tubman Rd</address>
+  <zip>02631</zip>
+  <city>Brewster</city>
+  <state>MA</state>
+  <country>US</country>
+  <tzname>America/New_York</tzname>
+  <hexant>3</hexant>
+  <hexid>17390</hexid>
+  <lat>41.74964523</lat>
+  <lon>-70.09332275</lon>
+  <updated>2009-07-14
+5a2
+ 16:46:09</updated>
+  <isrecent>1</isrecent>
+  <CURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/t/h/TheWeissGuy/1/current.jpg?t=1247624287</CURRENTIMAGEURL>
+  <WIDGETCURRENTIMAGEURL>http://icons.wunderground.com/webcamramdisk/t/h/TheWeissGuy/1/widget.jpg?t=1247624287</WIDGETCURRENTIMAGEURL>
+  <CAMURL>http://www.wunderground.com/webcams/TheWeissGuy/1/show.html</CAMURL>
+  </cam>
+  </webcams>
+		<nearby_weather_stations>
+<airport>
+  <station>
+  <city>East Milton</city>
+  <state>MA</state>
+  <country>US</country>
+  <icao>KMQE</icao>
+  <lat>42.20999908</lat>
+  <lon>-71.11000061</lon>
+  </station>
+  <station>
+  <city>Norwood</city>
+  <state>MA</state>
+  <country>US</country>
+  <icao>KOWD</icao>
+  <lat>42.18999863</lat>
+  <lon>-71.16999817</lon>
+  </station>
+  <station>
+  <city>Boston</city>
+  <state>MA</state>
+  <country>US</country>
+  <icao>KBOS</icao>
+  <lat>42.36000061</lat>
+  <lon>-71.00000000</lon>
+  </station>
+  <station>
+  <city>Bedford</city>
+  <state>MA</state>
+  <country>US</country>
+  <icao>KBED</icao>
+  <lat>42.47000122</lat>
+  <lon>-71.29000092</lon>
+  </station>
+</airport>
+<pws>
+  <station>
+  <neighborhood><![CDATA[APRSWXNET Jamaica Plain               MA US]]></neighborhood>
+  <city><![CDATA[Jamaica Plain]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[MAP586]]></id>
+  <distance_km><![CDATA[1]]></distance_km>
+  <distance_mi><![CDATA[0]]></distance_mi>
+  <
+5be
+/station>
+  <station>
+  <neighborhood><![CDATA[South End]]></neighborhood>
+  <city><![CDATA[Boston]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMABOSTO21]]></id>
+  <distance_km><![CDATA[6]]></distance_km>
+  <distance_mi><![CDATA[3]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[Central Square]]></neighborhood>
+  <city><![CDATA[Cambridge]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMACAMBR4]]></id>
+  <distance_km><![CDATA[7]]></distance_km>
+  <distance_mi><![CDATA[4]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[I-95 / MA-109]]></neighborhood>
+  <city><![CDATA[Dedham]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMADEDHA1]]></id>
+  <distance_km><![CDATA[8]]></distance_km>
+  <distance_mi><![CDATA[5]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[MIT (Green Bld Roof)]]></neighborhood>
+  <city><![CDATA[Cambridge]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMACAMBR9]]></id>
+  <distance_km><![CDATA[7]]></distance_km>
+  <distance_mi><![CDATA[4]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[Great Blue Hill]]></neighborhood>
+  <city><![CDATA[Milton]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMAMILTO3]]></id>
+  <distance_km><![CDATA[9]]></d
+5b4
+istance_km>
+  <distance_mi><![CDATA[5]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[Great Blue Hill, Milton MA]]></neighborhood>
+  <city><![CDATA[Milton]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMAMILTO2]]></id>
+  <distance_km><![CDATA[9]]></distance_km>
+  <distance_mi><![CDATA[5]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[Sheridan Hills]]></neighborhood>
+  <city><![CDATA[Wellesley]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMAWELLE4]]></id>
+  <distance_km><![CDATA[9]]></distance_km>
+  <distance_mi><![CDATA[5]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[]]></neighborhood>
+  <city><![CDATA[Quincy]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMAQINCY2]]></id>
+  <distance_km><![CDATA[10]]></distance_km>
+  <distance_mi><![CDATA[6]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[APRSWXNET Boston                     MA US]]></neighborhood>
+  <city><![CDATA[Quincy]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[MC1378]]></id>
+  <distance_km><![CDATA[10]]></distance_km>
+  <distance_mi><![CDATA[6]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[North Canton]]></neighborhood>
+  <city><![CDATA[Canton]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![
+5b4
+CDATA[US]]></country>
+  <id><![CDATA[KMACANTO2]]></id>
+  <distance_km><![CDATA[11]]></distance_km>
+  <distance_mi><![CDATA[6]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[]]></neighborhood>
+  <city><![CDATA[Quincy]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMAQUINC2]]></id>
+  <distance_km><![CDATA[11]]></distance_km>
+  <distance_mi><![CDATA[6]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[Winter Hill]]></neighborhood>
+  <city><![CDATA[Somerville]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMASOMER3]]></id>
+  <distance_km><![CDATA[10]]></distance_km>
+  <distance_mi><![CDATA[6]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[Quincy Center]]></neighborhood>
+  <city><![CDATA[Quincy]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMAQUINC8]]></id>
+  <distance_km><![CDATA[11]]></distance_km>
+  <distance_mi><![CDATA[7]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[APRSWXNET Waltham                    MA US]]></neighborhood>
+  <city><![CDATA[Waltham]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[MC4655]]></id>
+  <distance_km><![CDATA[12]]></distance_km>
+  <distance_mi><![CDATA[7]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[ASOS_HFM BOSTON/LOGAN INT, MA]]></ne
+5b4
+ighborhood>
+  <city><![CDATA[Boston]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[72509.000000]]></id>
+  <distance_km><![CDATA[12]]></distance_km>
+  <distance_mi><![CDATA[7]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[]]></neighborhood>
+  <city><![CDATA[Waltham]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMAWALTH6]]></id>
+  <distance_km><![CDATA[12]]></distance_km>
+  <distance_mi><![CDATA[7]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[APRSWXNET Medford                    MA US]]></neighborhood>
+  <city><![CDATA[Medford]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[MD2806]]></id>
+  <distance_km><![CDATA[12]]></distance_km>
+  <distance_mi><![CDATA[7]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[ASOS_HFM NORWOOD, MA]]></neighborhood>
+  <city><![CDATA[Norwood]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[MKOWD]]></id>
+  <distance_km><![CDATA[13]]></distance_km>
+  <distance_mi><![CDATA[8]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[Emerson St. Across from Police Station]]></neighborhood>
+  <city><![CDATA[Medford]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMAMEDFO4]]></id>
+  <distance_km><![CDATA[14]]></distance_km>
+  <di
+5b4
+stance_mi><![CDATA[8]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[APRSWXNET Wellesley                  MA US]]></neighborhood>
+  <city><![CDATA[Wellesley]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[MC6982]]></id>
+  <distance_km><![CDATA[13]]></distance_km>
+  <distance_mi><![CDATA[8]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[Lawrence Estates]]></neighborhood>
+  <city><![CDATA[Medford]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMAMEDFO6]]></id>
+  <distance_km><![CDATA[13]]></distance_km>
+  <distance_mi><![CDATA[8]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[South Side]]></neighborhood>
+  <city><![CDATA[Weston]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMAWESTO3]]></id>
+  <distance_km><![CDATA[15]]></distance_km>
+  <distance_mi><![CDATA[9]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[Houghs Neck]]></neighborhood>
+  <city><![CDATA[Quincy]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMAQUINC9]]></id>
+  <distance_km><![CDATA[15]]></distance_km>
+  <distance_mi><![CDATA[9]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[Malden West]]></neighborhood>
+  <city><![CDATA[Malden]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></count
+372
+ry>
+  <id><![CDATA[KMAMALDE3]]></id>
+  <distance_km><![CDATA[15]]></distance_km>
+  <distance_mi><![CDATA[9]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[Fellsmere]]></neighborhood>
+  <city><![CDATA[Malden]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMAMALDE4]]></id>
+  <distance_km><![CDATA[15]]></distance_km>
+  <distance_mi><![CDATA[9]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[Arlington Heights - Turkey Hill]]></neighborhood>
+  <city><![CDATA[ARLINGTON]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMAARLIN3]]></id>
+  <distance_km><![CDATA[15]]></distance_km>
+  <distance_mi><![CDATA[9]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[Winthrop Beach]]></neighborhood>
+  <city><![CDATA[Winthrop]]></city>
+  <state><![CD
+358
+ATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMAWINTH1]]></id>
+  <distance_km><![CDATA[16]]></distance_km>
+  <distance_mi><![CDATA[9]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[Weston Center]]></neighborhood>
+  <city><![CDATA[Weston]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMAWESTO6]]></id>
+  <distance_km><![CDATA[15]]></distance_km>
+  <distance_mi><![CDATA[9]]></distance_mi>
+  </station>
+  <station>
+  <neighborhood><![CDATA[Overbrook A.R.S.  N1EDF]]></neighborhood>
+  <city><![CDATA[Wellesley]]></city>
+  <state><![CDATA[MA]]></state>
+  <country><![CDATA[US]]></country>
+  <id><![CDATA[KMAWELLE9]]></id>
+  <distance_km><![CDATA[16]]></distance_km>
+  <distance_mi><![CDATA[9]]></distance_mi>
+  </station>
+</pws>
+</nearby_weather_stations>
+		</location>
+
+0
+
