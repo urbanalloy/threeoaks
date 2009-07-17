@@ -487,7 +487,10 @@
 		<property name="E_PARSEERROR">
 			<get />
 		</property>
-		
+				
+		<property name="E_WARNING">
+			<get />
+		</property>
 		
 	</public>
 	
@@ -503,6 +506,8 @@
 	var E_NOTIMPLEMENTED = -2;
 	var E_INVALIDLICENSE = -3;
 	var E_PARSEERROR	 = -4;
+	
+	var E_WARNING		 = -100;
 	
 	function get_E_OK()
 	{
@@ -532,6 +537,11 @@
 	function get_E_PARSEERROR()
 	{
 		return E_PARSEERROR;
+	}
+	
+	function get_E_WARNING()
+	{
+		return E_WARNING;
 	}
 	
 	]]>
@@ -749,8 +759,8 @@
 		text += append("Code", m_code);
 			
 		// Date & Time
-		if (m_date != null)
-			text += append("Date", m_date.toISOString());
+		if (m_date != null && m_date != "")
+			text += append("Date", m_date.format("%A, %c %Z"));
 			
 		// Temperature / Humidity / Precipitation / Visibility
 		text += append("Temperature", m_temperature);
@@ -790,8 +800,11 @@
 		text += append("Low", m_forecastLow);
 		
 		// Sunrise / Sunset / Moon / Day
-		text += append("Sunrise", m_sunrise);
-		text += append("Sunset", m_sunset);
+		if (m_sunrise != null && m_sunrise != "")
+			text += append("Sunrise", m_sunrise.format("%r"));
+		if (m_sunset != null && m_sunset != "")
+			text += append("Sunset", m_sunset.format("%r"));
+			
 		text += append("Moonphase", m_moonPhaseDescription);
 		text += append("Moon Code", m_moonPhaseCode);
 		text += append("Moon Illumination", m_moonIlluminated);
@@ -856,9 +869,14 @@
 	
 	function ToString()
 	{
-		var text = m_description + " (" + m_type + ")" + "\n";		
-		text += "Date: " + m_date + "\n";
-		text += "Expiration: " + m_expiration + "\n";
+		var text = m_description + " (" + m_type + ")" + "\n";	
+		
+		if (m_date != null && m_date != "")
+			text += "Date: " + m_date.format("%A, %c %Z");		
+			
+		if (m_expiration != null && m_expiration != "")
+			text += "Expiration: " + m_expiration.format("%A, %c %Z");				
+			
 		text += "Phenomena: " + m_phenomena + "\n";
 		text += "Significance: " + m_significance + "\n";
 		text += "Message: " + m_message + "\n";
@@ -1238,14 +1256,24 @@
 	//
 	/////////////////////////////////////////////////////////////////////////////////////////////	
 	
-	function CheckCache(cache, id, rate)
+	function CheckCache(cache, id, rate, isSublevel)
 	{
 		// check if item exists in the cache
 		if (!cache.Exists(id))
 			return false;
-			
-		// Get item last update time
-		var updateTime = cache.Item(id).LastUpdateTime;
+					
+		// Get cached item
+		var updateTime = null;
+		var cachedObject = cache.Item(id);
+		
+		// Check for items in a dictionnary under the cache
+		if (isSublevel) {
+			if (!cachedObject.Exists(0))
+				return false;
+				
+			updateTime = cachedObject.Item(0).LastUpdateTime;			
+		} else
+			updateTime = cachedObject.LastUpdateTime;
 		
 		if (updateTime == null || updateTime == "")
 			return false;
@@ -1647,8 +1675,8 @@
 	     * Gets a date that is set to the current date. The time is set to the start of the day (00:00 or 12:00 AM).
 	     * @return {Date}    The current date.
 	     */
-	    $P.today = function () {
-	        return new Date().prototype.clearTime();
+	    $D.today = function () {
+	        return new Date().clearTime();
 	    };
 	
 	    /**
@@ -1657,7 +1685,7 @@
 	     * @param {Date}     Second Date object to compare to [Required].
 	     * @return {Number}  -1 = date1 is lessthan date2. 0 = values are equal. 1 = date1 is greaterthan date2.
 	     */
-	    $P.compare = function (date1, date2) {
+	    $D.compare = function (date1, date2) {
 	        if (isNaN(date1) || isNaN(date2)) { 
 	            throw new Error(date1 + " - " + date2); 
 	        } else if (date1 instanceof Date && date2 instanceof Date) {
@@ -1673,7 +1701,7 @@
 	     * @param {Date}     Second Date object to compare to [Required]
 	     * @return {Boolean} true if dates are equal. false if they are not equal.
 	     */
-	    $P.equals = function (date1, date2) { 
+	    $D.equals = function (date1, date2) { 
 	        return (date1.compareTo(date2) === 0); 
 	    };
 	
@@ -1682,7 +1710,7 @@
 	     * @param {String}   The name of the day (eg. "Monday, "Mon", "tuesday", "tue", "We", "we").
 	     * @return {Number}  The day number
 	     */
-	    $P.getDayNumberFromName = function (name) {
+	    $D.getDayNumberFromName = function (name) {
 	        var n = $C.dayNames, m = $C.abbreviatedDayNames, o = $C.shortestDayNames, s = name.toLowerCase();
 	        for (var i = 0; i < n.length; i++) { 
 	            if (n[i].toLowerCase() == s || m[i].toLowerCase() == s || o[i].toLowerCase() == s) { 
@@ -1697,7 +1725,7 @@
 	     * @param {String}   The name of the month (eg. "February, "Feb", "october", "oct").
 	     * @return {Number}  The day number
 	     */
-	    $P.getMonthNumberFromName = function (name) {
+	    $D.getMonthNumberFromName = function (name) {
 	        var n = $C.monthNames, m = $C.abbreviatedMonthNames, s = name.toLowerCase();
 	        for (var i = 0; i < n.length; i++) {
 	            if (n[i].toLowerCase() == s || m[i].toLowerCase() == s) { 
@@ -1712,7 +1740,7 @@
 	     * @param {Number}   The year.
 	     * @return {Boolean} true if date is within a LeapYear, otherwise false.
 	     */
-	    $P.isLeapYear = function (year) { 
+	    $D.isLeapYear = function (year) { 
 	        return ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0); 
 	    };
 	
@@ -1722,11 +1750,11 @@
 	     * @param {Number}   The month (0-11).
 	     * @return {Number}  The number of days in the month.
 	     */
-	    $P.getDaysInMonth = function (year, month) {
-	        return [31, ($P.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+	    $D.getDaysInMonth = function (year, month) {
+	        return [31, ($D.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
 	    };
 	 
-	    $P.getTimezoneAbbreviation = function (offset) {
+	    $D.getTimezoneAbbreviation = function (offset) {
 	        var z = $C.timezones, p;
 	        for (var i = 0; i < z.length; i++) {
 	            if (z[i].offset === offset) {
@@ -1736,7 +1764,7 @@
 	        return null;
 	    };
 	    
-	    $P.getTimezoneOffset = function (name) {
+	    $D.getTimezoneOffset = function (name) {
 	        var z = $C.timezones, p;
 	        for (var i = 0; i < z.length; i++) {
 	            if (z[i].name === name.toUpperCase()) {
@@ -1760,7 +1788,7 @@
 	     * @return {Number}  -1 = this is lessthan date. 0 = values are equal. 1 = this is greaterthan date.
 	     */
 	    $P.compareTo = function (date) {
-	        return $P.compare(this, date);
+	        return $D.compare(this, date);
 	    };
 	
 	    /**
@@ -1880,7 +1908,7 @@
 	        var n = this.getDate();
 	        this.setDate(1);
 	        this.setMonth(this.getMonth() + value * 1);
-	        this.setDate(Math.min(n, $P.getDaysInMonth(this.getFullYear(), this.getMonth())));
+	        this.setDate(Math.min(n, $D.getDaysInMonth(this.getFullYear(), this.getMonth())));
 	        return this;
 	    };
 	
@@ -2026,7 +2054,7 @@
 	     * @param {Number}   The number to check if within range.
 	     * @return {Boolean} true if within range, otherwise false.
 	     */
-	    $P.validateMillisecond = function (value) {
+	    $D.validateMillisecond = function (value) {
 	        return validate(value, 0, 999, "millisecond");
 	    };
 	
@@ -2035,7 +2063,7 @@
 	     * @param {Number}   The number to check if within range.
 	     * @return {Boolean} true if within range, otherwise false.
 	     */
-	    $P.validateSecond = function (value) {
+	    $D.validateSecond = function (value) {
 	        return validate(value, 0, 59, "second");
 	    };
 	
@@ -2044,7 +2072,7 @@
 	     * @param {Number}   The number to check if within range.
 	     * @return {Boolean} true if within range, otherwise false.
 	     */
-	    $P.validateMinute = function (value) {
+	    $D.validateMinute = function (value) {
 	        return validate(value, 0, 59, "minute");
 	    };
 	
@@ -2053,7 +2081,7 @@
 	     * @param {Number}   The number to check if within range.
 	     * @return {Boolean} true if within range, otherwise false.
 	     */
-	    $P.validateHour = function (value) {
+	    $D.validateHour = function (value) {
 	        return validate(value, 0, 23, "hour");
 	    };
 	
@@ -2062,8 +2090,8 @@
 	     * @param {Number}   The number to check if within range.
 	     * @return {Boolean} true if within range, otherwise false.
 	     */
-	    $P.validateDay = function (value, year, month) {
-	        return validate(value, 1, $P.getDaysInMonth(year, month), "day");
+	    $D.validateDay = function (value, year, month) {
+	        return validate(value, 1, $D.getDaysInMonth(year, month), "day");
 	    };
 	
 	    /**
@@ -2071,7 +2099,7 @@
 	     * @param {Number}   The number to check if within range.
 	     * @return {Boolean} true if within range, otherwise false.
 	     */
-	    $P.validateMonth = function (value) {
+	    $D.validateMonth = function (value) {
 	        return validate(value, 0, 11, "month");
 	    };
 	
@@ -2080,7 +2108,7 @@
 	     * @param {Number}   The number to check if within range.
 	     * @return {Boolean} true if within range, otherwise false.
 	     */
-	    $P.validateYear = function (value) {
+	    $D.validateYear = function (value) {
 	        return validate(value, 0, 9999, "year");
 	    };
 	
@@ -2097,32 +2125,32 @@
 	     * @return {Date}    this
 	     */
 	    $P.set = function (config) {
-	        if ($P.validateMillisecond(config.millisecond)) {
+	        if ($D.validateMillisecond(config.millisecond)) {
 	            this.addMilliseconds(config.millisecond - this.getMilliseconds()); 
 	        }
 	        
-	        if ($P.validateSecond(config.second)) {
+	        if ($D.validateSecond(config.second)) {
 	            this.addSeconds(config.second - this.getSeconds()); 
 	        }
 	        
-	        if ($P.validateMinute(config.minute)) {
+	        if ($D.validateMinute(config.minute)) {
 	            this.addMinutes(config.minute - this.getMinutes()); 
 	        }
 	        
-	        if ($P.validateHour(config.hour)) {
+	        if ($D.validateHour(config.hour)) {
 	            this.addHours(config.hour - this.getHours()); 
 	        }
 	        
-	        if ($P.validateMonth(config.month)) {
+	        if ($D.validateMonth(config.month)) {
 	            this.addMonths(config.month - this.getMonth()); 
 	        }
 	
-	        if ($P.validateYear(config.year)) {
+	        if ($D.validateYear(config.year)) {
 	            this.addYears(config.year - this.getFullYear()); 
 	        }
 	        
 		    /* day has to go last because you can't validate the day without first knowing the month */
-	        if ($P.validateDay(config.day, this.getFullYear(), this.getMonth())) {
+	        if ($D.validateDay(config.day, this.getFullYear(), this.getMonth())) {
 	            this.addDays(config.day - this.getDate()); 
 	        }
 	        
@@ -2154,7 +2182,7 @@
 	     * @return {Date}    this
 	     */
 	    $P.moveToLastDayOfMonth = function () { 
-	        return this.set({ day: $P.getDaysInMonth(this.getFullYear(), this.getMonth())});
+	        return this.set({ day: $D.getDaysInMonth(this.getFullYear(), this.getMonth())});
 	    };
 	
 	    /**
@@ -2213,7 +2241,7 @@
 	     * @return {String} The abbreviated time zone name (e.g. "EST")
 	     */
 	    $P.getTimezone = function () {
-	        return $P.getTimezoneAbbreviation(this.getUTCOffset());
+	        return $D.getTimezoneAbbreviation(this.getUTCOffset());
 	    };
 	
 	    $P.setTimezoneOffset = function (offset) {
@@ -2222,7 +2250,7 @@
 	    };
 	
 	    $P.setTimezone = function (offset) { 	    	
-	        return this.setTimezoneOffset($P.getTimezoneOffset(offset)); 
+	        return this.setTimezoneOffset($D.getTimezoneOffset(offset)); 
 	    };
 	
 	    /**
@@ -2230,7 +2258,7 @@
 	     * @return {Boolean} true|false
 	     */
 	    $P.hasDaylightSavingTime = function () { 
-	        return (Date.today().set({month: 0, day: 1}).getTimezoneOffset() !== Date.today().set({month: 6, day: 1}).getTimezoneOffset());
+	        return ($D.today().set({month: 0, day: 1}).getTimezoneOffset() !== $D.today().set({month: 6, day: 1}).getTimezoneOffset());
 	    };
 	    
 	    /**
@@ -2238,7 +2266,7 @@
 	     * @return {Boolean} true|false
 	     */
 	    $P.isDaylightSavingTime = function () {
-	        return Date.today().set({month: 0, day: 1}).getTimezoneOffset() != this.getTimezoneOffset();
+	        return $D.today().set({month: 0, day: 1}).getTimezoneOffset() != this.getTimezoneOffset();
 	    };
 	
 	    /**
@@ -2468,13 +2496,13 @@
 // #region *******************************      Parser      *********************************
 
 	(function () {
-	    Date.prototype.Parsing = {
+	    Date.Parsing = {
 	        Exception: function (s) {
 	            this.message = "Parse error at '" + s.substring(0, 10) + " ...'"; 
 	        }
 	    };
 	    
-	    var $P = Date.prototype.Parsing; 
+	    var $P = Date.Parsing; 
 	    var _ = $P.Operators = {
 	        //
 	        // Tokenizers
@@ -2941,9 +2969,9 @@
 	        return rx;
 	    };
 	    
-	    $P.Grammar = {};
+	    $D.Grammar = {};
 		
-	    $P.Translator = {
+	    $D.Translator = {
 	        hour: function (s) { 
 	            return function () { 
 	                this.hour = Number(s); 
@@ -3058,7 +3086,7 @@
 	                }
 	            }
 	            
-	            if (this.day > $P.getDaysInMonth(this.year, this.month)) {
+	            if (this.day > $D.getDaysInMonth(this.year, this.month)) {
 	                throw new RangeError(this.day + " is not a valid value for days.");
 	            }
 	
@@ -3085,7 +3113,7 @@
 	                }
 	            }
 	            
-	            var today = $P.today();
+	            var today = $D.today();
 	            
 	            if (this.now && !this.unit && !this.operator) { 
 	                return new Date(); 
@@ -3121,7 +3149,7 @@
 	            
 	            if (expression && this.weekday && this.unit != "month") {
 	                this.unit = "day";
-	                gap = ($P.getDayNumberFromName(this.weekday) - today.getDay());
+	                gap = ($D.getDayNumberFromName(this.weekday) - today.getDay());
 	                mod = 7;
 	                this.days = gap ? ((gap + (orient * mod)) % mod) : (orient * mod);
 	            }
@@ -3189,7 +3217,7 @@
 	            }
 	            
 	            if (!this.orient && !this.operator && this.unit == "week" && this.value && !this.day && !this.month) {
-	                return Date.today().setWeek(this.value);
+	                return $D.today().setWeek(this.value);
 	            }
 	
 	            if (expression && this.timezone && this.day && this.days) {
@@ -3200,7 +3228,7 @@
 	        }
 	    };
 	
-	    var _ = $P.Parsing.Operators, g = $P.Grammar, t = $P.Translator, _fn;
+	    var _ = $D.Parsing.Operators, g = $D.Grammar, t = $D.Translator, _fn;
 	
 	    g.datePartDelimiter = _.rtoken(/^([\s\-\.\,\/\x27]+)/); 
 	    g.timePartDelimiter = _.stoken(":");
@@ -3330,7 +3358,7 @@
 	        if (g[fmt]) { 
 	            return g[fmt]; 
 	        } else { 
-	            throw $P.Parsing.Exception(fmt); 
+	            throw $D.Parsing.Exception(fmt); 
 	        }
 	    }
 	    ),
@@ -3416,7 +3444,7 @@
 	        return g._start.call({}, s);
 	    };
 		
-		$P._parse = $P.parse;
+		$D._parse = $D.parse;
 	
 	    /**
 	     * Converts the specified string value into its JavaScript Date equivalent using CultureInfo specific format information.
@@ -3518,7 +3546,7 @@
 	     * @param {String}   The string value to convert into a Date object [Required]
 	     * @return {Date}    A Date object or null if the string cannot be converted into a Date.
 	     */
-	    $P.parse = function (s) {
+	    $D.parse = function (s) {
 	        var r = null; 
 	        if (!s) { 
 	            return null; 
@@ -3527,7 +3555,7 @@
 	            return s;
 	        }
 	        try { 
-	            r = $P.Grammar.start.call({}, s.replace(/^\s*(\S*(\s+\S+)*)\s*$/, "$1")); 
+	            r = $D.Grammar.start.call({}, s.replace(/^\s*(\S*(\s+\S+)*)\s*$/, "$1")); 
 	        } catch (e) { 
 	            return null; 
 	        }
@@ -3535,7 +3563,7 @@
 	    };
 	
 	    $P.getParseFunction = function (fx) {
-	        var fn = $P.Grammar.formats(fx);
+	        var fn = $D.Grammar.formats(fx);
 	        return function (s) {
 	            var r = null;
 	            try { 
@@ -3637,8 +3665,8 @@
 	     * 
 	     * @return {Date}    date
 	     */    
-	    $P.next = function () {
-	        return $P.today().next();
+	    $D.next = function () {
+	        return $D.today().next();
 	    };
 	
 	    /** 
@@ -3672,8 +3700,8 @@
 	     *  
 	     * @return {Date}    date
 	     */
-	    $P.last = $P.prev = $P.previous = function () {
-	        return $P.today().last();
+	    $D.last = $D.prev = $D.previous = function () {
+	        return $D.today().last();
 	    };    
 	
 	    /** 
@@ -3781,7 +3809,7 @@
 	     * @return {Date}    date
 	     */
 	    $P.at = function (time) {
-	        return (typeof time === "string") ? $P.parse(this.toString("d") + " " + time) : this.set(time);
+	        return (typeof time === "string") ? $D.parse(this.toString("d") + " " + time) : this.set(time);
 	    }; 
 	        
 	    /** 
@@ -3873,9 +3901,9 @@
 	     *  
 	     * @return {Date}    An object literal representing the original date object.
 	     */    
-	    $P.fromObject = function(config) {
+	    $D.fromObject = function(config) {
 	        config.week = null;
-	        return Date.today().set(config);
+	        return $D.today().set(config);
 	    };
 	        
 	    // Create day name functions and abbreviated day name functions (eg. monday(), friday(), fri()).
@@ -3909,7 +3937,7 @@
 	                var temp = this.clone().moveToLastDayOfMonth();
 	                this.moveToNthOccurrence(n, ntemp);
 	                if (this > temp) {
-	                    throw new RangeError($P.getDayName(n) + " does not occur " + ntemp + " times in the month of " + $P.getMonthName(temp.getMonth()) + " " + temp.getFullYear() + ".");
+	                    throw new RangeError($D.getDayName(n) + " does not occur " + ntemp + " times in the month of " + $D.getMonthName(temp.getMonth()) + " " + temp.getFullYear() + ".");
 	                }
 	                return this;
 	            }			
@@ -3919,7 +3947,7 @@
 	    
 	    var sdf = function (n) {
 	        return function () {
-	            var t = $P.today(), shift = n - t.getDay();
+	            var t = $D.today(), shift = n - t.getDay();
 	            if (n === 0 && $C.firstDayOfWeek === 1 && t.getDay() !== 0) {
 	                shift = shift + 7;
 	            }
@@ -3929,10 +3957,10 @@
 		
 	    for (var i = 0; i < dx.length; i++) {
 	        // Create constant static Day Name variables. Example: Date.MONDAY or Date.MON
-	        $P[dx[i].toUpperCase()] = $P[dx[i].toUpperCase().substring(0, 3)] = i;
+	        $D[dx[i].toUpperCase()] = $D[dx[i].toUpperCase().substring(0, 3)] = i;
 	
 	        // Create Day Name functions. Example: Date.monday() or Date.mon()
-	        $P[dx[i]] = $P[dx[i].substring(0, 3)] = sdf(i);
+	        $D[dx[i]] = $D[dx[i].substring(0, 3)] = sdf(i);
 	
 	        // Create Day Name instance functions. Example: Date.today().next().monday()
 	        $P[dx[i]] = $P[dx[i].substring(0, 3)] = df(i);
@@ -3951,16 +3979,16 @@
 	    
 	    var smf = function (n) {
 	        return function () {
-	            return $P.today().set({ month: n, day: 1 });
+	            return $D.today().set({ month: n, day: 1 });
 	        };
 	    };
 	    
 	    for (var j = 0; j < mx.length; j++) {
 	        // Create constant static Month Name variables. Example: Date.MARCH or Date.MAR
-	        $P[mx[j].toUpperCase()] = $P[mx[j].toUpperCase().substring(0, 3)] = j;
+	        $D[mx[j].toUpperCase()] = $D[mx[j].toUpperCase().substring(0, 3)] = j;
 	
 	        // Create Month Name functions. Example: Date.march() or Date.mar()
-	        $P[mx[j]] = $P[mx[j].substring(0, 3)] = smf(j);
+	        $D[mx[j]] = $D[mx[j].substring(0, 3)] = smf(j);
 	
 	        // Create Month Name instance functions. Example: Date.today().next().march()
 	        $P[mx[j]] = $P[mx[j].substring(0, 3)] = mf(j);
@@ -4284,7 +4312,7 @@
 	        d1.addYears(this.years);
 	
 	        if (orient == +1) {
-	            while (d1 < d2 && d1.clone().addDays(Date.getDaysInMonth(d1.getYear(), d1.getMonth()) ) < d2) {
+	            while (d1 < d2 && d1.clone().addDays($P.getDaysInMonth(d1.getYear(), d1.getMonth()) ) < d2) {
 	                d1.addMonths(1);
 	                this.months++;
 	            }
@@ -4310,6 +4338,333 @@
 	    return this;
 	};
 
+// #endregion
+	
+// #region *********************************      Extras      *********************************
+
+	(function () {
+	    var $D = Date, 
+	        $P = $D.prototype, 
+	        $C = $D.CultureInfo,
+	        $f = [],
+	        p = function (s, l) {
+	            if (!l) {
+	                l = 2;
+	            }
+	            return ("000" + s).slice(l * -1);
+	        };
+	
+	    /**
+	     * Converts a PHP format string to Java/.NET format string. 
+	     * A PHP format string can be used with .$format or .format.
+	     * A Java/.NET format string can be used with .toString().
+	     * The .parseExact function will only accept a Java/.NET format string
+	     *
+	     * Example
+	     <pre>
+	     var f1 = "%m/%d/%y"
+	     var f2 = Date.normalizeFormat(f1); // "MM/dd/yy"
+	     
+	     new Date().format(f1);    // "04/13/08"
+	     new Date().$format(f1);   // "04/13/08"
+	     new Date().toString(f2);  // "04/13/08"
+	     
+	     var date = Date.parseExact("04/13/08", f2); // Sun Apr 13 2008
+	     </pre>
+	     * @param {String}   A PHP format string consisting of one or more format spcifiers.
+	     * @return {String}  The PHP format converted to a Java/.NET format string.
+	     */        
+	    $D.normalizeFormat = function (format) {
+	        $f = [];
+	        var t = new Date().$format(format);
+	        return $f.join("");
+	    };
+	
+	    /**
+	     * Format a local Unix timestamp according to locale settings
+	     * 
+	     * Example
+	     <pre>
+	     Date.strftime("%m/%d/%y", new Date());       // "04/13/08"
+	     Date.strftime("c", "2008-04-13T17:52:03Z");  // "04/13/08"
+	     </pre>
+	     * @param {String}   A format string consisting of one or more format spcifiers [Optional].
+	     * @param {Number}   The number representing the number of seconds that have elapsed since January 1, 1970 (local time). 
+	     * @return {String}  A string representation of the current Date object.
+	     */
+	    $D.strftime = function (format, time) {
+	        return new Date(time * 1000).$format(format);
+	    };
+	
+	    /**
+	     * Parse any textual datetime description into a Unix timestamp. 
+	     * A Unix timestamp is the number of seconds that have elapsed since January 1, 1970 (midnight UTC/GMT).
+	     * 
+	     * Example
+	     <pre>
+	     Date.strtotime("04/13/08");              // 1208044800
+	     Date.strtotime("1970-01-01T00:00:00Z");  // 0
+	     </pre>
+	     * @param {String}   A format string consisting of one or more format spcifiers [Optional].
+	     * @param {Object}   A string or date object.
+	     * @return {String}  A string representation of the current Date object.
+	     */
+	    $D.strtotime = function (time) {
+	        var d = $D.parse(time);
+	        d.addMinutes(d.getTimezoneOffset() * -1);
+	        return Math.round($D.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds(), d.getUTCMilliseconds()) / 1000);
+	    };
+	
+	    /**
+	     * Converts the value of the current Date object to its equivalent string representation using a PHP/Unix style of date format specifiers.
+	     *
+	     * The following descriptions are from http://www.php.net/strftime and http://www.php.net/manual/en/function.date.php. 
+	     * Copyright � 2001-2008 The PHP Group
+	     * 
+	     * Format Specifiers
+	     <pre>
+	    Format  Description                                                                  Example
+	    ------  ---------------------------------------------------------------------------  -----------------------
+	     %a     abbreviated weekday name according to the current localed                    "Mon" through "Sun"
+	     %A     full weekday name according to the current locale                            "Sunday" through "Saturday"
+	     %b     abbreviated month name according to the current locale                       "Jan" through "Dec"
+	     %B     full month name according to the current locale                              "January" through "December"
+	     %c     preferred date and time representation for the current locale                "4/13/2008 12:33 PM"
+	     %C     century number (the year divided by 100 and truncated to an integer)         "00" to "99"
+	     %d     day of the month as a decimal number                                         "01" to "31"
+	     %D     same as %m/%d/%y                                                             "04/13/08"
+	     %e     day of the month as a decimal number, a single digit is preceded by a space  "1" to "31"
+	     %g     like %G, but without the century                                             "08"
+	     %G     The 4-digit year corresponding to the ISO week number (see %V).              "2008"
+	            This has the same format and value as %Y, except that if the ISO week number 
+	            belongs to the previous or next year, that year is used instead.
+	     %h     same as %b                                                                   "Jan" through "Dec"
+	     %H     hour as a decimal number using a 24-hour clock                               "00" to "23"
+	     %I     hour as a decimal number using a 12-hour clock                               "01" to "12"
+	     %j     day of the year as a decimal number                                          "001" to "366"
+	     %m     month as a decimal number                                                    "01" to "12"
+	     %M     minute as a decimal number                                                   "00" to "59"
+	     %n     newline character                                                            "\n"
+	     %p     either "am" or "pm" according to the given time value, or the                "am" or "pm"
+	            corresponding strings for the current locale
+	     %r     time in a.m. and p.m. notation                                               "8:44 PM"
+	     %R     time in 24 hour notation                                                     "20:44"
+	     %S     second as a decimal number                                                   "00" to "59"
+	     %t     tab character                                                                "\t"
+	     %T     current time, equal to %H:%M:%S                                              "12:49:11"
+	     %u     weekday as a decimal number ["1", "7"], with "1" representing Monday         "1" to "7"
+	     %U     week number of the current year as a decimal number, starting with the       "0" to ("52" or "53")
+	            first Sunday as the first day of the first week
+	     %V     The ISO 8601:1988 week number of the current year as a decimal number,       "00" to ("52" or "53")
+	            range 01 to 53, where week 1 is the first week that has at least 4 days 
+	            in the current year, and with Monday as the first day of the week. 
+	            (Use %G or %g for the year component that corresponds to the week number 
+	            for the specified timestamp.)
+	     %W     week number of the current year as a decimal number, starting with the       "00" to ("52" or "53")
+	            first Monday as the first day of the first week
+	     %w     day of the week as a decimal, Sunday being "0"                               "0" to "6"
+	     %x     preferred date representation for the current locale without the time        "4/13/2008"
+	     %X     preferred time representation for the current locale without the date        "12:53:05"
+	     %y     year as a decimal number without a century                                   "00" "99"
+	     %Y     year as a decimal number including the century                               "2008"
+	     %Z     time zone or name or abbreviation                                            "UTC", "EST", "PST"
+	     %z     same as %Z 
+	     %%     a literal "%" character                                                      "%"
+	      
+	     d      Day of the month, 2 digits with leading zeros                                "01" to "31"
+	     D      A textual representation of a day, three letters                             "Mon" through "Sun"
+	     j      Day of the month without leading zeros                                       "1" to "31"
+	     l      A full textual representation of the day of the week (lowercase "L")         "Sunday" through "Saturday"
+	     N      ISO-8601 numeric representation of the day of the week (added in PHP 5.1.0)  "1" (for Monday) through "7" (for Sunday)
+	     S      English ordinal suffix for the day of the month, 2 characters                "st", "nd", "rd" or "th". Works well with j
+	     w      Numeric representation of the day of the week                                "0" (for Sunday) through "6" (for Saturday)
+	     z      The day of the year (starting from "0")                                      "0" through "365"      
+	     W      ISO-8601 week number of year, weeks starting on Monday                       "00" to ("52" or "53")
+	     F      A full textual representation of a month, such as January or March           "January" through "December"
+	     m      Numeric representation of a month, with leading zeros                        "01" through "12"
+	     M      A short textual representation of a month, three letters                     "Jan" through "Dec"
+	     n      Numeric representation of a month, without leading zeros                     "1" through "12"
+	     t      Number of days in the given month                                            "28" through "31"
+	     L      Whether it's a leap year                                                     "1" if it is a leap year, "0" otherwise
+	     o      ISO-8601 year number. This has the same value as Y, except that if the       "2008"
+	            ISO week number (W) belongs to the previous or next year, that year 
+	            is used instead.
+	     Y      A full numeric representation of a year, 4 digits                            "2008"
+	     y      A two digit representation of a year                                         "08"
+	     a      Lowercase Ante meridiem and Post meridiem                                    "am" or "pm"
+	     A      Uppercase Ante meridiem and Post meridiem                                    "AM" or "PM"
+	     B      Swatch Internet time                                                         "000" through "999"
+	     g      12-hour format of an hour without leading zeros                              "1" through "12"
+	     G      24-hour format of an hour without leading zeros                              "0" through "23"
+	     h      12-hour format of an hour with leading zeros                                 "01" through "12"
+	     H      24-hour format of an hour with leading zeros                                 "00" through "23"
+	     i      Minutes with leading zeros                                                   "00" to "59"
+	     s      Seconds, with leading zeros                                                  "00" through "59"
+	     u      Milliseconds                                                                 "54321"
+	     e      Timezone identifier                                                          "UTC", "EST", "PST"
+	     I      Whether or not the date is in daylight saving time (uppercase i)             "1" if Daylight Saving Time, "0" otherwise
+	     O      Difference to Greenwich time (GMT) in hours                                  "+0200", "-0600"
+	     P      Difference to Greenwich time (GMT) with colon between hours and minutes      "+02:00", "-06:00"
+	     T      Timezone abbreviation                                                        "UTC", "EST", "PST"
+	     Z      Timezone offset in seconds. The offset for timezones west of UTC is          "-43200" through "50400"
+	            always negative, and for those east of UTC is always positive.
+	     c      ISO 8601 date                                                                "2004-02-12T15:19:21+00:00"
+	     r      RFC 2822 formatted date                                                      "Thu, 21 Dec 2000 16:01:07 +0200"
+	     U      Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT)                   "0"     
+	     </pre>
+	     * @param {String}   A format string consisting of one or more format spcifiers [Optional].
+	     * @return {String}  A string representation of the current Date object.
+	     */
+	    $P.$format = function (format) { 
+	        var x = this, 
+	            y,
+	            t = function (v) {
+	                $f.push(v);
+	                return x.toString(v);
+	            };
+	
+	        return format ? format.replace(/(%|\\)?.|%%/g, 
+	        function (m) {
+	            if (m.charAt(0) === "\\" || m.substring(0, 2) === "%%") {
+	                return m.replace("\\", "").replace("%%", "%");
+	            }
+	            switch (m) {
+	            case "d":
+	            case "%d":
+	                return t("dd");
+	            case "D":
+	            case "%a":
+	                return t("ddd");
+	            case "j":
+	            case "%e":
+	                return t("d");
+	            case "l":
+	            case "%A":
+	                return t("dddd");
+	            case "N":
+	            case "%u":
+	                return x.getDay() + 1;
+	            case "S":
+	                return t("S");
+	            case "w":
+	            case "%w":
+	                return x.getDay();
+	            case "z":
+	                return x.getOrdinalNumber();
+	            case "%j":
+	                return p(x.getOrdinalNumber(), 3);
+	            case "%U":
+	                var d1 = x.clone().set({month: 0, day: 1}).addDays(-1).moveToDayOfWeek(0),
+	                    d2 = x.clone().addDays(1).moveToDayOfWeek(0, -1);
+	                return (d2 < d1) ? "00" : p((d2.getOrdinalNumber() - d1.getOrdinalNumber()) / 7 + 1);                
+	            case "W":
+	            case "%V":
+	                return x.getISOWeek();
+	            case "%W":
+	                return p(x.getWeek());
+	            case "F":
+	            case "%B":
+	                return t("MMMM");
+	            case "m":
+	            case "%m":
+	                return t("MM");
+	            case "M":
+	            case "%b":
+	            case "%h":
+	                return t("MMM");
+	            case "n":
+	                return t("M");
+	            case "t":
+	                return $D.getDaysInMonth(x.getFullYear(), x.getMonth());
+	            case "L":
+	                return ($D.isLeapYear(x.getFullYear())) ? 1 : 0;
+	            case "o":
+	            case "%G":
+	                return x.setWeek(x.getISOWeek()).toString("yyyy");
+	            case "%g":
+	                return x.$format("%G").slice(-2);
+	            case "Y":
+	            case "%Y":
+	                return t("yyyy");
+	            case "y":
+	            case "%y":
+	                return t("yy");
+	            case "a":
+	            case "%p":
+	                return t("tt").toLowerCase();
+	            case "A":
+	                return t("tt").toUpperCase();
+	            case "g":
+	            case "%I":
+	                return t("h");
+	            case "G":
+	                return t("H");
+	            case "h":
+	                return t("hh");
+	            case "H":
+	            case "%H":
+	                return t("HH");
+	            case "i":
+	            case "%M":
+	                return t("mm");
+	            case "s":
+	            case "%S":
+	                return t("ss");
+	            case "u":
+	                return p(x.getMilliseconds(), 3);
+	            case "I":
+	                return (x.isDaylightSavingTime()) ? 1 : 0;
+	            case "O":
+	                return x.getUTCOffset();
+	            case "P":
+	                y = x.getUTCOffset();
+	                return y.substring(0, y.length - 2) + ":" + y.substring(y.length - 2);
+	            case "e":
+	            case "T":
+	            case "%z":
+	            case "%Z":            
+	                return x.getTimezone();
+	            case "Z":
+	                return x.getTimezoneOffset() * -60;
+	            case "B":
+	                var now = new Date();
+	                return Math.floor(((now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds() + (now.getTimezoneOffset() + 60) * 60) / 86.4);
+	            case "c":
+	                return x.toISOString().replace(/\"/g, "");
+	            case "U":
+	                return $D.strtotime("now");
+	            case "%c":
+	                return t("d") + " " + t("t");
+	            case "%C":
+	                return Math.floor(x.getFullYear() / 100 + 1);
+	            case "%D":
+	                return t("MM/dd/yy");
+	            case "%n":
+	                return "\\n";
+	            case "%t":
+	                return "\\t";
+	            case "%r":
+	                return t("hh:mm tt");                
+	            case "%R":
+	                return t("H:mm");
+	            case "%T":
+	                return t("H:mm:ss");
+	            case "%x":
+	                return t("d");
+	            case "%X":
+	                return t("t");
+	            default:
+	                $f.push(m);
+				    return m;
+	            }
+	        }
+	        ) : this._toString();
+	    };
+	    
+	    if (!$P.format) {
+	        $P.format = $P.$format;
+	    }
+	}()); 
 // #endregion
 	
 	]]>
@@ -4484,6 +4839,9 @@
 		
 		if (locationQuery.ZipCode != "")
 			return locationQuery.ZipCode;
+			
+		if (locationQuery.ID != "")
+			return locationQuery.ID;		
 			
 		if (locationQuery.City != "" && locationQuery.State != "")
 			return locationQuery.City + ", " + locationQuery.State;
@@ -4977,13 +5335,16 @@
 		var i = 0;	
 		
 		// FIXME: merge forecast text & forecast into the first x objects
-		//  we need to check the forecast number to now where to put things
+		//  we need to check the forecast number to know where to put things
 		
 		// Parse text forecast (today / tonight)
 		var text_forecast = m_request.selectNodes("forecast/txt_forecast");
 		if (text_forecast.length != 0) {
 			
-			var date = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(text_forecast[0], "date/text()"), ["h:mm tt Z", "h:mm tt"]);		
+			var date = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(text_forecast[0], "date/text()"), "h:mm tt zzz");
+			
+			if (date == null)
+				date = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(text_forecast[0], "date/text()"), "h:mm tt");
 			
 			var textforecastEnumerator = new Enumerator(text_forecast[0].getElementsByTagName("forecastday"));
 			for (var enumerator = textforecastEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
@@ -5323,7 +5684,7 @@
 		var type = m_helper.GetNodeValue(promo[0], "@type/text()");
 		if (type != "prmo")
 		{
-			m_errorCallback(ErrorCode.E_PARSERERROR, "Unknow type of link encoutered: " + type);
+			m_errorCallback(ErrorCode.E_WARNING, "Unknow type of link encoutered: " + type);
 			return null;
 		}			
 			
@@ -5356,6 +5717,63 @@
 	{
 		// TODO parse code
 		return code;
+	}
+	
+	function parseSharedData()
+	{
+		var weather = getComponent("WeatherInfo");
+		
+		// Save update time
+		weather.LastUpdateTime = m_dateHelper.GetDate();
+				
+		// Location
+		var location = m_request.getElementsByTagName("loc");
+		if (location.length != 0) {
+			
+			weather.Location = getComponent("WeatherLocation");
+			
+			weather.Location.ID 		= m_helper.GetNodeValue(location[0], "@id/text()");			
+			weather.Location.Name  		= m_helper.GetNodeValue(location[0], "dnam/text()");		
+			weather.Location.Latitude  	= m_helper.GetNodeValue(location[0], "lat/text()");		
+			weather.Location.Longitude 	= m_helper.GetNodeValue(location[0], "lon/text()");			
+			
+			// TODO store the zone number
+			
+			// sunrise & sunset times are stored without conversion, so they relate to the location timezone
+			// even though they will have the local time zone
+			// TODO: convert to GMT if possible (we get the location time, maybe there is a way to infer the delta to GMT)
+			
+			// Sunrise & Sunset				
+			weather.Sunrise 			= m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(location[0], "sunr/text()"), "h:mm tt");
+			weather.Sunset 				= m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(location[0], "suns/text()"), "h:mm tt");			
+		}
+		
+		// Links
+		weather.Links = parseLinks();
+		
+		return weather;
+	}
+	
+	function cleanupDate(date)
+	{
+		var index = date.search("Local Time");
+		if (index != -1)
+			return date = date.substr(0, index - 1); 
+			
+		return date;
+	}
+	
+	function parseFullDate(date)
+	{
+		// Remove end of date string if present
+		var cleaned = cleanupDate(date);
+			
+		var res = m_dateHelper.GetDate().parseExact(cleaned, "M/dd/yy h:mm tt zzz");
+		
+		if (res == null)
+			res = m_dateHelper.GetDate().parseExact(cleaned, "M/dd/yy h:mm tt");
+		
+		return res;
 	}
 	
 	///////////////////////////////
@@ -5510,41 +5928,13 @@
 		if (checkFeedError())
 			return;
 			
-		var weather = getComponent("WeatherInfo");
-		
-		// Save update time
-		weather.LastUpdateTime = m_dateHelper.GetDate();
-		
-		// Location
-		var location = m_request.getElementsByTagName("loc");
-		if (location.length != 0) {
-			
-			weather.Location = getComponent("WeatherLocation");
-			
-			weather.Location.ID 		= m_helper.GetNodeValue(location[0], "@id/text()");			
-			weather.Location.Name  		= m_helper.GetNodeValue(location[0], "dnam/text()");		
-			weather.Location.Latitude  	= m_helper.GetNodeValue(location[0], "lat/text()");		
-			weather.Location.Longitude 	= m_helper.GetNodeValue(location[0], "lon/text()");			
-			
-			// TODO store the zone number
-			// Use the "tm" value to adjust sunrise & sunset to local timezone
-			
-			// Sunrise & Sunset				
-			weather.Sunrise 			= m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(location[0], "sunr/text()"), "h:mm tt");
-			weather.Sunset 				= m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(location[0], "suns/text()"), "h:mm tt");			
-		}
+		var weather = parseSharedData();
 		
 		// Weather data
 		var info = m_request.getElementsByTagName("cc");
 		if (info.length != 0) {
-			
-			// Remove end of date string if present
-			var date = m_helper.GetNodeValue(info[0], "lsup/text()");
-			var index = date.search("Local Time");
-			if (index != -1)
-				date = date.substr(0, index - 1); 
 									
-			weather.Date 				= m_dateHelper.GetDate().parseExact(date, ["d/mm/yy h:mm tt", "d/mm/yy h:mm tt zzz"]);				
+			weather.Date 				= parseFullDate(m_helper.GetNodeValue(info[0], "lsup/text()"));
 			weather.Station				= m_helper.GetNodeValue(info[0], "obst/text()");
 			weather.Temperature			= m_helper.GetNodeValue(info[0], "tmp/text()");
 			weather.TemperatureFeel		= m_helper.GetNodeValue(info[0], "flik/text()");
@@ -5571,9 +5961,6 @@
 			weather.MoonPhaseDescription = m_helper.GetNodeValue(info[0], "moon/t/text()");			
 		}
 		
-		// Links
-		weather.Links = parseLinks();
-		
 		// Update weather cache
 		if (weather.Location.ID != null)
 			m_weather(weather.Location.ID) = weather;
@@ -5593,8 +5980,8 @@
 		m_request.abort();
 		
 		// Check cache
-		if (m_helper.CheckCache(m_forecast, locationQuery.ID, getResource("refresh_forecast"))) {
-			m_weatherCallback(m_forecast.Item(locationQuery.ID));
+		if (m_helper.CheckCache(m_forecast, locationQuery.ID, getResource("refresh_forecast"), true)) {
+			m_forecastCallback(m_forecast.Item(locationQuery.ID));
 			
 			return ErrorCode.E_OK;
 		}
@@ -5612,13 +5999,59 @@
 			
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
 			return;
+			
+		if (checkFeedError())
+			return;
+			
+		// Dictionary for forecast data
+		var forecasts = new ActiveXObject("Scripting.Dictionary");
 		
-		// TODO: Implementation
+		var forecastNode = m_request.getElementsByTagName("dayf");
+		if (forecastNode.length == 0) {
+			m_errorCallback(ErrorCode.E_ERROR, "No forecast results!");
+			return;
+		}
 		
-		//if (location.id != null)
-		//	m_forecast(location.id) = forecast;
+		// Links & Location information will only be present in the first forecast objects
+		var sharedData = parseSharedData();		
 		
-		m_forecastCallback(forecast);		
+		var forecastStartTime = parseFullDate(m_helper.GetNodeValue(forecastNode[0], "lsup/text()"));	
+		
+		var i = 0;
+		var forecastEnumerator = new Enumerator(forecastNode[0].getElementsByTagName("day"));		
+		for (var enumerator = forecastEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
+		{						
+		    var entry = enumerator.item();
+		    
+		    // We have one forecast for day and night
+		    var forecast_day;
+		    var forecast_night =  getComponent("WeatherInfo");		    
+		    if (i == 0)
+		    	forecast_day = sharedData;
+		    else
+		    	forecast_day = getComponent("WeatherInfo");
+		    	
+		    // Forecast date
+		    forecast_day.Date = forecast_night.Date = forecastStartTime.clone().addDays(m_helper.GetNodeValue(entry, "@d/text()"));		    
+		    	
+		    // Shared data: hi/low and sunrise/sunset as well as name&date
+		    forecast_day.ForecastHigh = forecast_night.ForecastHigh = m_helper.GetNodeValue(entry, "hi/text()");
+		    forecast_day.ForecastLow  = forecast_night.ForecastLow  = m_helper.GetNodeValue(entry, "low/text()");
+		  	forecast_day.Sunrise = forecast_night.Sunrise = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(entry, "sunr/text()"), "h:mm tt");
+			forecast_day.Sunset  = forecast_night.Sunset  = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(entry, "suns/text()"), "h:mm tt");	
+		    
+		    
+		
+			forecasts.Add(i, forecast_day);		    
+			forecasts.Add(i + 1, forecast_night);		    
+		    i = i + 2;
+		}
+		
+		// Cache data		
+		if (sharedData.Location.ID != null)
+			m_forecast(sharedData.Location.ID) = forecasts;
+		
+		m_forecastCallback(forecasts);		
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////		

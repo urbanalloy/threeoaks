@@ -158,7 +158,7 @@ Sub ParseRetCode(code)
 			AppendInfo "Error!"  & vbNewLine
 			
 		Case ErrorCode.E_INVALIDLICENSE
-			AppendInfo "Invalid license info!"  & vbNewLine
+			AppendInfo "Invalid license info (check your licenses.ini)!"  & vbNewLine
 			
 		Case ErrorCode.E_PARSEERROR
 			AppendInfo "Parsing error!" & vbNewLine
