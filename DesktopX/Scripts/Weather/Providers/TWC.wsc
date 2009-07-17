@@ -301,16 +301,18 @@
 		return links;		
 	}
 	
-	function parseCode(code)
+	function parseCodeMoon(code)
 	{
 		// TODO parse code
 		return code;
 	}
 	
-	function parseCodeMoon(code)
+	function parseGust(gust)
 	{
-		// TODO parse code
-		return code;
+		if (gust == "N/A")
+			return null;
+			
+		return gust;
 	}
 	
 	function parseSharedData()
@@ -533,7 +535,7 @@
 			weather.Temperature			= m_helper.GetNodeValue(info[0], "tmp/text()");
 			weather.TemperatureFeel		= m_helper.GetNodeValue(info[0], "flik/text()");
 			weather.Description			= m_helper.GetNodeValue(info[0], "t/text()");
-			weather.Code				= parseCode(m_helper.GetNodeValue(info[0], "icon/text()"));
+			weather.Code				= m_helper.GetNodeValue(info[0], "icon/text()");
 			
 			weather.Pressure			= m_helper.GetNodeValue(info[0], "bar/r/text()");
 			weather.PressureTrend		= m_helper.GetNodeValue(info[0], "bar/d/text()");
@@ -633,9 +635,36 @@
 		    forecast_day.ForecastLow  = forecast_night.ForecastLow  = m_helper.GetNodeValue(entry, "low/text()");
 		  	forecast_day.Sunrise = forecast_night.Sunrise = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(entry, "sunr/text()"), "h:mm tt");
 			forecast_day.Sunset  = forecast_night.Sunset  = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(entry, "suns/text()"), "h:mm tt");	
-		    
-		    
-		
+
+		    // Get each day part
+		    var forecastArray = [forecast_day, forecast_night];
+		    for (forecast in forecastArray)
+		    {
+		    	var type;		    	
+		    	if (forecast == "0") {
+		    		type = 'd';
+		    		forecastArray[forecast].DayPart = forecast_day.DAY_PART_DAY;
+		    	} else {		    	
+		    		type = 'n';
+		    		forecastArray[forecast].DayPart = forecast_day.DAY_PART_NIGHT;
+		    	}
+		    		
+		    	var dayNode = entry.selectNodes("part[@p='" + type + "']");
+		    	if (dayNode.length != 0)
+		    	{
+		    		forecastArray[forecast].Code 				=  m_helper.GetNodeValue(dayNode[0], "icon/text()");
+		    		forecastArray[forecast].Description 		=  m_helper.GetNodeValue(dayNode[0], "t/text()");
+		    		
+		    		forecastArray[forecast].WindSpeed 			=  m_helper.GetNodeValue(dayNode[0], "wind/s/text()");
+		    		forecastArray[forecast].WindGust 			=  parseGust(m_helper.GetNodeValue(dayNode[0], "wind/gust/text()"));
+		    		forecastArray[forecast].WindDegrees 		=  m_helper.GetNodeValue(dayNode[0], "wind/d/text()");
+		    		forecastArray[forecast].WindDirection		=  m_helper.GetNodeValue(dayNode[0], "wind/t/text()");
+		    		
+		    		forecastArray[forecast].PrecipitationToday  =  m_helper.GetNodeValue(dayNode[0], "ppcp/text()");
+		    		forecastArray[forecast].Humidity 			=  m_helper.GetNodeValue(dayNode[0], "hmid/text()");
+		    	}
+		    }
+		    	
 			forecasts.Add(i, forecast_day);		    
 			forecasts.Add(i + 1, forecast_night);		    
 		    i = i + 2;

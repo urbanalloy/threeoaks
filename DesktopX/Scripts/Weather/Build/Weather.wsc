@@ -661,8 +661,8 @@
 	/*********************************
 	 * Properties
 	 *********************************/	
-	var DAY_PART_DAY = 0;
-	var DAY_PART_NIGHT = 1;
+	var DAY_PART_DAY = 1;
+	var DAY_PART_NIGHT = 2;
 	
 	function get_DAY_PART_DAY()
 	{
@@ -681,61 +681,61 @@
 	var m_location = null;	
 	var m_links    = null;		
 			
-	var m_station = "";
-	var m_type = "";
+	var m_station = null;
+	var m_type = null;
 	
-	var m_description = "";
-	var m_code = "";
+	var m_description = null;
+	var m_code = null;
 
-	var m_temperature = "";
-	var m_temperatureFeel = "";
+	var m_temperature = null;
+	var m_temperatureFeel = null;
 	
-	var m_humidity = "";
-	var m_precipitation_1h = "";
-	var m_precipitation_today = "";
+	var m_humidity = null;
+	var m_precipitation_1h = null;
+	var m_precipitation_today = null;
 
-	var m_visibility = "";
+	var m_visibility = null;
 	
-	var m_windDescription = "";
-	var m_windDirection = "";
-	var m_windDegrees = "";
-	var m_windSpeed = "";
-	var m_windGust = "";
+	var m_windDescription = null;
+	var m_windDirection = null;
+	var m_windDegrees = null;
+	var m_windSpeed = null;
+	var m_windGust = null;
 
-	var m_windChillDescription = "";
-	var m_windChill = "";
+	var m_windChillDescription = null;
+	var m_windChill = null;
 	
-	var m_pressure = "";
-	var m_pressureTrend = "";
+	var m_pressure = null;
+	var m_pressureTrend = null;
 			
-	var m_dewPointDescription = "";
-	var m_dewPoint = "";
+	var m_dewPointDescription = null;
+	var m_dewPoint = null;
 			
-	var m_heatDescription = "";
-	var m_heatIndex = "";
+	var m_heatDescription = null;
+	var m_heatIndex = null;
 	
-	var m_solarRadiation = "";
-	var m_UV = "";
-	var m_UVDescription = "";
+	var m_solarRadiation = null;
+	var m_UV = null;
+	var m_UVDescription = null;
 	
-	var m_sunrise = "";
-	var m_sunset = "";
+	var m_sunrise = null;
+	var m_sunset = null;
 	
-	var m_moonPhaseDescription = "";
-	var m_moonPhaseCode = "";
-	var m_moonIlluminated = "";
-	var m_moonAge = "";
+	var m_moonPhaseDescription = null;
+	var m_moonPhaseCode = null;
+	var m_moonIlluminated = null;
+	var m_moonAge = null;
 	
-	var m_dayOfWeek = "";
-	var m_dayPart = "";
-	var m_date = "";
+	var m_dayOfWeek = null;
+	var m_dayPart = null;
+	var m_date = null;
 	
-	var m_forecastDescription = "";
-	var m_forecastCode = "";
-	var m_forecastHigh = "";	
-	var m_forecastLow = "";
+	var m_forecastDescription = null;
+	var m_forecastCode = null;
+	var m_forecastHigh = null;	
+	var m_forecastLow = null;
 	
-	var m_lastUpdateTime = "";
+	var m_lastUpdateTime = null;
 	
 	/*********************************
 	 * Functions
@@ -759,7 +759,7 @@
 		text += append("Code", m_code);
 			
 		// Date & Time
-		if (m_date != null && m_date != "")
+		if (m_date != null)
 			text += append("Date", m_date.format("%A, %c %Z"));
 			
 		// Temperature / Humidity / Precipitation / Visibility
@@ -793,16 +793,25 @@
 		text += append("UV", m_UV);		
 		
 		text += append("Day of week", m_dayOfWeek);
-		text += append("Day part", m_dayPart);
 		
+		if (m_dayPart != null)
+		{
+			if (m_dayPart == DAY_PART_DAY)
+				text += append("Day part", "Day");
+			else if (m_dayPart == DAY_PART_NIGHT)
+				text += append("Day part", "Night");
+			else
+				text += append("Day part", "Invalid!");
+		}
+				
 		text += append("Forecast", m_forecastDescription);
 		text += append("High", m_forecastHigh);
 		text += append("Low", m_forecastLow);
 		
 		// Sunrise / Sunset / Moon / Day
-		if (m_sunrise != null && m_sunrise != "")
+		if (m_sunrise != null)
 			text += append("Sunrise", m_sunrise.format("%r"));
-		if (m_sunset != null && m_sunset != "")
+		if (m_sunset != null)
 			text += append("Sunset", m_sunset.format("%r"));
 			
 		text += append("Moonphase", m_moonPhaseDescription);
@@ -822,7 +831,7 @@
 	
 	function append(title, value)
 	{
-		if (value == null || value == "")
+		if (value == null)
 			return "";
 			
 		return title + ": " + value + "\n";
@@ -4911,7 +4920,7 @@
 		var trimmed = m_helper.Trim(heat);
 		
 		if (heat == "NA")
-			return "";
+			return null;
 			
 		return heat;
 	}
@@ -5707,16 +5716,18 @@
 		return links;		
 	}
 	
-	function parseCode(code)
+	function parseCodeMoon(code)
 	{
 		// TODO parse code
 		return code;
 	}
 	
-	function parseCodeMoon(code)
+	function parseGust(gust)
 	{
-		// TODO parse code
-		return code;
+		if (gust == "N/A")
+			return null;
+			
+		return gust;
 	}
 	
 	function parseSharedData()
@@ -5939,7 +5950,7 @@
 			weather.Temperature			= m_helper.GetNodeValue(info[0], "tmp/text()");
 			weather.TemperatureFeel		= m_helper.GetNodeValue(info[0], "flik/text()");
 			weather.Description			= m_helper.GetNodeValue(info[0], "t/text()");
-			weather.Code				= parseCode(m_helper.GetNodeValue(info[0], "icon/text()"));
+			weather.Code				= m_helper.GetNodeValue(info[0], "icon/text()");
 			
 			weather.Pressure			= m_helper.GetNodeValue(info[0], "bar/r/text()");
 			weather.PressureTrend		= m_helper.GetNodeValue(info[0], "bar/d/text()");
@@ -6039,9 +6050,36 @@
 		    forecast_day.ForecastLow  = forecast_night.ForecastLow  = m_helper.GetNodeValue(entry, "low/text()");
 		  	forecast_day.Sunrise = forecast_night.Sunrise = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(entry, "sunr/text()"), "h:mm tt");
 			forecast_day.Sunset  = forecast_night.Sunset  = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(entry, "suns/text()"), "h:mm tt");	
-		    
-		    
-		
+
+		    // Get each day part
+		    var forecastArray = [forecast_day, forecast_night];
+		    for (forecast in forecastArray)
+		    {
+		    	var type;		    	
+		    	if (forecast == "0") {
+		    		type = 'd';
+		    		forecastArray[forecast].DayPart = forecast_day.DAY_PART_DAY;
+		    	} else {		    	
+		    		type = 'n';
+		    		forecastArray[forecast].DayPart = forecast_day.DAY_PART_NIGHT;
+		    	}
+		    		
+		    	var dayNode = entry.selectNodes("part[@p='" + type + "']");
+		    	if (dayNode.length != 0)
+		    	{
+		    		forecastArray[forecast].Code 				=  m_helper.GetNodeValue(dayNode[0], "icon/text()");
+		    		forecastArray[forecast].Description 		=  m_helper.GetNodeValue(dayNode[0], "t/text()");
+		    		
+		    		forecastArray[forecast].WindSpeed 			=  m_helper.GetNodeValue(dayNode[0], "wind/s/text()");
+		    		forecastArray[forecast].WindGust 			=  parseGust(m_helper.GetNodeValue(dayNode[0], "wind/gust/text()"));
+		    		forecastArray[forecast].WindDegrees 		=  m_helper.GetNodeValue(dayNode[0], "wind/d/text()");
+		    		forecastArray[forecast].WindDirection		=  m_helper.GetNodeValue(dayNode[0], "wind/t/text()");
+		    		
+		    		forecastArray[forecast].PrecipitationToday  =  m_helper.GetNodeValue(dayNode[0], "ppcp/text()");
+		    		forecastArray[forecast].Humidity 			=  m_helper.GetNodeValue(dayNode[0], "hmid/text()");
+		    	}
+		    }
+		    	
 			forecasts.Add(i, forecast_day);		    
 			forecasts.Add(i + 1, forecast_night);		    
 		    i = i + 2;
