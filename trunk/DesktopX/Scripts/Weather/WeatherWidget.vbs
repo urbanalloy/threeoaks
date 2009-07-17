@@ -4,6 +4,8 @@ Dim WeatherController
 Dim ErrorCode
 Dim IniFile
 
+Dim m_providerID
+
 '#include "licences.ini.sample"
 
 Dim LIB_FOLDER
@@ -14,6 +16,7 @@ Sub Object_OnScriptEnter
 	Set WeatherController = Nothing
 	Set ErrorCode = Nothing
 	Set IniFile = Nothing
+	m_providerID = ""
 
 	Object.Visible = False
 	
@@ -104,8 +107,10 @@ Sub OnSelectProvider(item, value)
 	
 	' Get the provider ids
 	keys = WeatherController.Providers.Keys
+	
+	m_providerID = keys(item)
 
-	retCode = WeatherController.SetProvider(keys(item))
+	retCode = WeatherController.SetProvider(m_providerID)
 	
 	If retCode <> ErrorCode.E_OK Then
 		AppendInfo "Error setting provider: " & retCode & vbNewLine
@@ -113,7 +118,7 @@ Sub OnSelectProvider(item, value)
 	End If
 	
 	' Set license info
-	retCode = SetLicenceInfo(keys(item))
+	retCode = SetLicenceInfo(m_providerID)
 	
 	If retCode <> ErrorCode.E_OK Then
 		ParseRetCode retCode
@@ -213,7 +218,12 @@ Sub GetForecast()
 	
 	Dim query, retCode
 	Set query = WeatherController.GetQueryObject()	
-	query.ID = DesktopX.ScriptObject("DXWeather_Query").Control.Text
+	
+	If (m_providerID = "WUnderground") Then
+		query.AirportCode = DesktopX.ScriptObject("DXWeather_Query").Control.Text
+	Else
+		query.ID = DesktopX.ScriptObject("DXWeather_Query").Control.Text
+	End If
 	retCode = WeatherController.GetForecast(query)
 	
 	ParseRetCode retCode
@@ -224,7 +234,11 @@ Sub GetWeather()
 	
 	Dim query, retCode
 	Set query = WeatherController.GetQueryObject()	
-	query.ID = DesktopX.ScriptObject("DXWeather_Query").Control.Text ' Force to ID, since there are different calls for Airport and weather station
+	If (m_providerID = "WUnderground") Then
+		query.AirportCode = DesktopX.ScriptObject("DXWeather_Query").Control.Text
+	Else
+		query.ID = DesktopX.ScriptObject("DXWeather_Query").Control.Text
+	End If
 	retCode = WeatherController.GetWeather(query)
 	
 	ParseRetCode retCode
@@ -277,6 +291,8 @@ Sub OnForecast(forecastInfo)
 		AppendInfo "No forecast!"
 		Exit Sub
 	End If
+	
+	AppendInfo "Number of forecasts: " & forecastInfo.Count & vbNewLine
 	
 	Dim forecast
 	For Each forecast In forecastInfo.Items

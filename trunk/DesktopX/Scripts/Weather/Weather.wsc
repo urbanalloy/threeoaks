@@ -489,7 +489,10 @@
 		<property name="E_PARSEERROR">
 			<get />
 		</property>
-		
+				
+		<property name="E_WARNING">
+			<get />
+		</property>
 		
 	</public>
 	
@@ -505,6 +508,8 @@
 	var E_NOTIMPLEMENTED = -2;
 	var E_INVALIDLICENSE = -3;
 	var E_PARSEERROR	 = -4;
+	
+	var E_WARNING		 = -100;
 	
 	function get_E_OK()
 	{
@@ -534,6 +539,11 @@
 	function get_E_PARSEERROR()
 	{
 		return E_PARSEERROR;
+	}
+	
+	function get_E_WARNING()
+	{
+		return E_WARNING;
 	}
 	
 	]]>
@@ -751,8 +761,8 @@
 		text += append("Code", m_code);
 			
 		// Date & Time
-		if (m_date != null)
-			text += append("Date", m_date.toISOString());
+		if (m_date != null && m_date != "")
+			text += append("Date", m_date.format("%A, %c %Z"));
 			
 		// Temperature / Humidity / Precipitation / Visibility
 		text += append("Temperature", m_temperature);
@@ -792,8 +802,11 @@
 		text += append("Low", m_forecastLow);
 		
 		// Sunrise / Sunset / Moon / Day
-		text += append("Sunrise", m_sunrise);
-		text += append("Sunset", m_sunset);
+		if (m_sunrise != null && m_sunrise != "")
+			text += append("Sunrise", m_sunrise.format("%r"));
+		if (m_sunset != null && m_sunset != "")
+			text += append("Sunset", m_sunset.format("%r"));
+			
 		text += append("Moonphase", m_moonPhaseDescription);
 		text += append("Moon Code", m_moonPhaseCode);
 		text += append("Moon Illumination", m_moonIlluminated);
@@ -858,9 +871,14 @@
 	
 	function ToString()
 	{
-		var text = m_description + " (" + m_type + ")" + "\n";		
-		text += "Date: " + m_date + "\n";
-		text += "Expiration: " + m_expiration + "\n";
+		var text = m_description + " (" + m_type + ")" + "\n";	
+		
+		if (m_date != null && m_date != "")
+			text += "Date: " + m_date.format("%A, %c %Z");		
+			
+		if (m_expiration != null && m_expiration != "")
+			text += "Expiration: " + m_expiration.format("%A, %c %Z");				
+			
 		text += "Phenomena: " + m_phenomena + "\n";
 		text += "Significance: " + m_significance + "\n";
 		text += "Message: " + m_message + "\n";
@@ -1240,14 +1258,24 @@
 	//
 	/////////////////////////////////////////////////////////////////////////////////////////////	
 	
-	function CheckCache(cache, id, rate)
+	function CheckCache(cache, id, rate, isSublevel)
 	{
 		// check if item exists in the cache
 		if (!cache.Exists(id))
 			return false;
-			
-		// Get item last update time
-		var updateTime = cache.Item(id).LastUpdateTime;
+					
+		// Get cached item
+		var updateTime = null;
+		var cachedObject = cache.Item(id);
+		
+		// Check for items in a dictionnary under the cache
+		if (isSublevel) {
+			if (!cachedObject.Exists(0))
+				return false;
+				
+			updateTime = cachedObject.Item(0).LastUpdateTime;			
+		} else
+			updateTime = cachedObject.LastUpdateTime;
 		
 		if (updateTime == null || updateTime == "")
 			return false;

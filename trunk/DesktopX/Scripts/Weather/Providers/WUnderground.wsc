@@ -220,6 +220,9 @@
 		if (locationQuery.ZipCode != "")
 			return locationQuery.ZipCode;
 			
+		if (locationQuery.ID != "")
+			return locationQuery.ID;		
+			
 		if (locationQuery.City != "" && locationQuery.State != "")
 			return locationQuery.City + ", " + locationQuery.State;
 			
@@ -712,13 +715,16 @@
 		var i = 0;	
 		
 		// FIXME: merge forecast text & forecast into the first x objects
-		//  we need to check the forecast number to now where to put things
+		//  we need to check the forecast number to know where to put things
 		
 		// Parse text forecast (today / tonight)
 		var text_forecast = m_request.selectNodes("forecast/txt_forecast");
 		if (text_forecast.length != 0) {
 			
-			var date = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(text_forecast[0], "date/text()"), ["h:mm tt Z", "h:mm tt"]);		
+			var date = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(text_forecast[0], "date/text()"), "h:mm tt zzz");
+			
+			if (date == null)
+				date = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(text_forecast[0], "date/text()"), "h:mm tt");
 			
 			var textforecastEnumerator = new Enumerator(text_forecast[0].getElementsByTagName("forecastday"));
 			for (var enumerator = textforecastEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 

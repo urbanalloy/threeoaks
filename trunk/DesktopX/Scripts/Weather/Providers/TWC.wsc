@@ -278,7 +278,7 @@
 		var type = m_helper.GetNodeValue(promo[0], "@type/text()");
 		if (type != "prmo")
 		{
-			m_errorCallback(ErrorCode.E_PARSERERROR, "Unknow type of link encoutered: " + type);
+			m_errorCallback(ErrorCode.E_WARNING, "Unknow type of link encoutered: " + type);
 			return null;
 		}			
 			
@@ -311,6 +311,63 @@
 	{
 		// TODO parse code
 		return code;
+	}
+	
+	function parseSharedData()
+	{
+		var weather = getComponent("WeatherInfo");
+		
+		// Save update time
+		weather.LastUpdateTime = m_dateHelper.GetDate();
+				
+		// Location
+		var location = m_request.getElementsByTagName("loc");
+		if (location.length != 0) {
+			
+			weather.Location = getComponent("WeatherLocation");
+			
+			weather.Location.ID 		= m_helper.GetNodeValue(location[0], "@id/text()");			
+			weather.Location.Name  		= m_helper.GetNodeValue(location[0], "dnam/text()");		
+			weather.Location.Latitude  	= m_helper.GetNodeValue(location[0], "lat/text()");		
+			weather.Location.Longitude 	= m_helper.GetNodeValue(location[0], "lon/text()");			
+			
+			// TODO store the zone number
+			
+			// sunrise & sunset times are stored without conversion, so they relate to the location timezone
+			// even though they will have the local time zone
+			// TODO: convert to GMT if possible (we get the location time, maybe there is a way to infer the delta to GMT)
+			
+			// Sunrise & Sunset				
+			weather.Sunrise 			= m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(location[0], "sunr/text()"), "h:mm tt");
+			weather.Sunset 				= m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(location[0], "suns/text()"), "h:mm tt");			
+		}
+		
+		// Links
+		weather.Links = parseLinks();
+		
+		return weather;
+	}
+	
+	function cleanupDate(date)
+	{
+		var index = date.search("Local Time");
+		if (index != -1)
+			return date = date.substr(0, index - 1); 
+			
+		return date;
+	}
+	
+	function parseFullDate(date)
+	{
+		// Remove end of date string if present
+		var cleaned = cleanupDate(date);
+			
+		var res = m_dateHelper.GetDate().parseExact(cleaned, "M/dd/yy h:mm tt zzz");
+		
+		if (res == null)
+			res = m_dateHelper.GetDate().parseExact(cleaned, "M/dd/yy h:mm tt");
+		
+		return res;
 	}
 	
 	///////////////////////////////
@@ -465,41 +522,13 @@
 		if (checkFeedError())
 			return;
 			
-		var weather = getComponent("WeatherInfo");
-		
-		// Save update time
-		weather.LastUpdateTime = m_dateHelper.GetDate();
-		
-		// Location
-		var location = m_request.getElementsByTagName("loc");
-		if (location.length != 0) {
-			
-			weather.Location = getComponent("WeatherLocation");
-			
-			weather.Location.ID 		= m_helper.GetNodeValue(location[0], "@id/text()");			
-			weather.Location.Name  		= m_helper.GetNodeValue(location[0], "dnam/text()");		
-			weather.Location.Latitude  	= m_helper.GetNodeValue(location[0], "lat/text()");		
-			weather.Location.Longitude 	= m_helper.GetNodeValue(location[0], "lon/text()");			
-			
-			// TODO store the zone number
-			// Use the "tm" value to adjust sunrise & sunset to local timezone
-			
-			// Sunrise & Sunset				
-			weather.Sunrise 			= m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(location[0], "sunr/text()"), "h:mm tt");
-			weather.Sunset 				= m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(location[0], "suns/text()"), "h:mm tt");			
-		}
+		var weather = parseSharedData();
 		
 		// Weather data
 		var info = m_request.getElementsByTagName("cc");
 		if (info.length != 0) {
-			
-			// Remove end of date string if present
-			var date = m_helper.GetNodeValue(info[0], "lsup/text()");
-			var index = date.search("Local Time");
-			if (index != -1)
-				date = date.substr(0, index - 1); 
 									
-			weather.Date 				= m_dateHelper.GetDate().parseExact(date, ["d/mm/yy h:mm tt", "d/mm/yy h:mm tt zzz"]);				
+			weather.Date 				= parseFullDate(m_helper.GetNodeValue(info[0], "lsup/text()"));
 			weather.Station				= m_helper.GetNodeValue(info[0], "obst/text()");
 			weather.Temperature			= m_helper.GetNodeValue(info[0], "tmp/text()");
 			weather.TemperatureFeel		= m_helper.GetNodeValue(info[0], "flik/text()");
@@ -526,9 +555,6 @@
 			weather.MoonPhaseDescription = m_helper.GetNodeValue(info[0], "moon/t/text()");			
 		}
 		
-		// Links
-		weather.Links = parseLinks();
-		
 		// Update weather cache
 		if (weather.Location.ID != null)
 			m_weather(weather.Location.ID) = weather;
@@ -548,8 +574,8 @@
 		m_request.abort();
 		
 		// Check cache
-		if (m_helper.CheckCache(m_forecast, locationQuery.ID, getResource("refresh_forecast"))) {
-			m_weatherCallback(m_forecast.Item(locationQuery.ID));
+		if (m_helper.CheckCache(m_forecast, locationQuery.ID, getResource("refresh_forecast"), true)) {
+			m_forecastCallback(m_forecast.Item(locationQuery.ID));
 			
 			return ErrorCode.E_OK;
 		}
@@ -567,13 +593,59 @@
 			
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
 			return;
+			
+		if (checkFeedError())
+			return;
+			
+		// Dictionary for forecast data
+		var forecasts = new ActiveXObject("Scripting.Dictionary");
 		
-		// TODO: Implementation
+		var forecastNode = m_request.getElementsByTagName("dayf");
+		if (forecastNode.length == 0) {
+			m_errorCallback(ErrorCode.E_ERROR, "No forecast results!");
+			return;
+		}
 		
-		//if (location.id != null)
-		//	m_forecast(location.id) = forecast;
+		// Links & Location information will only be present in the first forecast objects
+		var sharedData = parseSharedData();		
 		
-		m_forecastCallback(forecast);		
+		var forecastStartTime = parseFullDate(m_helper.GetNodeValue(forecastNode[0], "lsup/text()"));	
+		
+		var i = 0;
+		var forecastEnumerator = new Enumerator(forecastNode[0].getElementsByTagName("day"));		
+		for (var enumerator = forecastEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
+		{						
+		    var entry = enumerator.item();
+		    
+		    // We have one forecast for day and night
+		    var forecast_day;
+		    var forecast_night =  getComponent("WeatherInfo");		    
+		    if (i == 0)
+		    	forecast_day = sharedData;
+		    else
+		    	forecast_day = getComponent("WeatherInfo");
+		    	
+		    // Forecast date
+		    forecast_day.Date = forecast_night.Date = forecastStartTime.clone().addDays(m_helper.GetNodeValue(entry, "@d/text()"));		    
+		    	
+		    // Shared data: hi/low and sunrise/sunset as well as name&date
+		    forecast_day.ForecastHigh = forecast_night.ForecastHigh = m_helper.GetNodeValue(entry, "hi/text()");
+		    forecast_day.ForecastLow  = forecast_night.ForecastLow  = m_helper.GetNodeValue(entry, "low/text()");
+		  	forecast_day.Sunrise = forecast_night.Sunrise = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(entry, "sunr/text()"), "h:mm tt");
+			forecast_day.Sunset  = forecast_night.Sunset  = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(entry, "suns/text()"), "h:mm tt");	
+		    
+		    
+		
+			forecasts.Add(i, forecast_day);		    
+			forecasts.Add(i + 1, forecast_night);		    
+		    i = i + 2;
+		}
+		
+		// Cache data		
+		if (sharedData.Location.ID != null)
+			m_forecast(sharedData.Location.ID) = forecasts;
+		
+		m_forecastCallback(forecasts);		
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////		
