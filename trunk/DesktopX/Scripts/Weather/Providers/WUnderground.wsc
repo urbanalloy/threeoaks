@@ -47,9 +47,10 @@
       			  version="1"
       	    	  classid="{DFF07170-3A66-41e8-9685-67CC07173146}"/>  
       	    	  
-    <object id="m_locations" 	progid="Scripting.Dictionary" />  
-    <object id="m_alerts" 		progid="Scripting.Dictionary" />  
+    <object id="m_locations" 	progid="Scripting.Dictionary" />      
+	<object id="m_weather" 		progid="Scripting.Dictionary" />  
     <object id="m_forecast" 	progid="Scripting.Dictionary" />  
+    <object id="m_alerts" 		progid="Scripting.Dictionary" />  
     <object id="m_cameras" 		progid="Scripting.Dictionary" />  
     
     <object id="m_request" 		progid="Microsoft.XmlDom" /> 
@@ -154,6 +155,12 @@
 	<resource id="url_station">http://api.wunderground.com/weatherstation/WXCurrentObXML.asp?ID=</resource>
 	<resource id="url_alerts">http://api.wunderground.com/auto/wui/geo/AlertsXML/index.xml?query=</resource>
 	<resource id="url_forecast">http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml?query=</resource>
+
+	<comment>
+		Refresh rate in minutes
+	</comment>
+	<resource id="refresh_weather">25</resource>
+	<resource id="refresh_forecast">210</resource>
 	
 	<script language="JScript">
 	<![CDATA[
@@ -161,10 +168,6 @@
 	//**Start Encode**
 	
 	var Constants 			= getComponent("WeatherConstants");
-	
-	// Data
-	var m_weather   		= null;
-	var m_lastUpdateTime	= null;
 	
 	// Helper
 	var m_helper			= getComponent("WeatherHelper");
@@ -211,34 +214,34 @@
 	function getQueryString(locationQuery) {
 		
 		// Check that location query is not null
-		if (locationQuery == null)
+		if (m_helper.IsNullOrEmpty(locationQuery))
 			return "";
 				
-		if (locationQuery.CustomQueryString != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.CustomQueryString))
 			return locationQuery.CustomQueryString;
 		
-		if (locationQuery.ZipCode != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.ZipCode))
 			return locationQuery.ZipCode;
 			
-		if (locationQuery.ID != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.ID))
 			return locationQuery.ID;		
 			
-		if (locationQuery.City != "" && locationQuery.State != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.City) && !m_helper.IsNullOrEmpty(locationQuery.State))
 			return locationQuery.City + ", " + locationQuery.State;
 			
-		if (locationQuery.City != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.City))
 			return locationQuery.City;
 			
-		if (locationQuery.State != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.State))
 		 	return locationQuery.State;
 		 	
-		if (locationQuery.Country != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.Country))
 			return locationQuery.Country;
 			
-		if (locationQuery.AirportCode != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.AirportCode))
 			return locationQuery.AirportCode;
 			
-		if (locationQuery.Latitude != "" && locationQuery.Longitude != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.Latitude) && !m_helper.IsNullOrEmpty(locationQuery.Longitude))
 			return locationQuery.Latitude + "," + locationQuery.Longitude;
 			
 		return "";		
@@ -248,13 +251,13 @@
 	function getWeatherQueryString(locationQuery)
 	{		
 		// Check that location query is not null
-		if (locationQuery == null)
+		if (m_helper.IsNullOrEmpty(locationQuery))
 			return "";
 			
-		if (locationQuery.AirportCode != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.AirportCode))
 			return getResource("url_weather") + locationQuery.AirportCode;
 		
-		if (locationQuery.ID != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.ID))
 			return getResource("url_station") + locationQuery.ID;
 		
 		return "";
@@ -473,6 +476,19 @@
 		// Reset DOM
 		m_request.abort();
 		
+		// Check cache
+		if (m_helper.CheckCache(m_weather, locationQuery.ID, getResource("refresh_weather"))) {
+			m_weatherCallback(m_weather.Item(locationQuery.ID));
+			
+			return Constants.E_OK;
+		}
+		
+		if (m_helper.CheckCache(m_weather, locationQuery.AirportCode, getResource("refresh_weather"))) {
+			m_weatherCallback(m_weather.Item(locationQuery.AirportCode));
+			
+			return Constants.E_OK;
+		}
+
 		m_request.onreadystatechange = OnWeatherResponse;
 		m_request.async = true;
 		m_request.load(getWeatherQueryString(locationQuery));
@@ -486,20 +502,18 @@
 			
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
-
-		// Reset weather object
-		m_weather = null;
-		m_weather = getComponent("WeatherInfo");
-			
+		
 		// Parse weather
+		var weather = getComponent("WeatherInfo");			
+		
 		var observation = m_request.selectNodes("current_observation");
 		if (observation.length == 0) {
-			m_weatherCallback(m_weather);	
+			m_errorCallback(Constants.E_ERROR, "No weather results!");	
 			return;
 		}
 		
 		// Set unit system
-		m_weather.UseMetricSystem = m_useMetricSystem;
+		weather.UseMetricSystem = m_useMetricSystem;
 		
 		///////////////////////////
 		//  Parse location data  //
@@ -517,38 +531,38 @@
 		var location = observation[0].getElementsByTagName("display_location");
 		if (location.length != 0) {
 			
-			m_weather.Location = getComponent("WeatherLocation");
+			weather.Location = getComponent("WeatherLocation");
 			
-			m_weather.Location.City  	 = m_helper.GetNodeValue(location[0], "city/text()");		
-			m_weather.Location.State	 = m_helper.GetNodeValue(location[0], "state_name/text()");		
-			m_weather.Location.Country   = m_helper.GetNodeValue(location[0], "country/text()");		
-			m_weather.Location.ZipCode   = m_helper.GetNodeValue(location[0], "zip/text()");		
-			m_weather.Location.Latitude  = m_helper.GetNodeValue(location[0], "latitude/text()");		
-			m_weather.Location.Longitude = m_helper.GetNodeValue(location[0], "longitude/text()");		
+			weather.Location.City  	 = m_helper.GetNodeValue(location[0], "city/text()");		
+			weather.Location.State	 = m_helper.GetNodeValue(location[0], "state_name/text()");		
+			weather.Location.Country   = m_helper.GetNodeValue(location[0], "country/text()");		
+			weather.Location.ZipCode   = m_helper.GetNodeValue(location[0], "zip/text()");		
+			weather.Location.Latitude  = m_helper.GetNodeValue(location[0], "latitude/text()");		
+			weather.Location.Longitude = m_helper.GetNodeValue(location[0], "longitude/text()");		
 						
-			m_weather.Location.Elevation = parseElevation(m_helper.GetNodeValue(location[0], "elevation/text()"));
+			weather.Location.Elevation = parseElevation(m_helper.GetNodeValue(location[0], "elevation/text()"));
 			
 			// Station ID goes into the location airport code
-			m_weather.Location.AirportCode = station_id;
+			weather.Location.AirportCode = station_id;
 		} 
 		
 		// Personal weather station
 		location = observation[0].getElementsByTagName("location");
 		if (location.length != 0) {
 			
-			m_weather.Location = getComponent("WeatherLocation");
+			weather.Location = getComponent("WeatherLocation");
 			
-			m_weather.Location.Name 	 = m_helper.GetNodeValue(location[0], "neighborhood/text()");		
-			m_weather.Location.City  	 = m_helper.GetNodeValue(location[0], "city/text()");		
-			m_weather.Location.State	 = m_helper.GetNodeValue(location[0], "state/text()");					
-			m_weather.Location.ZipCode   = m_helper.GetNodeValue(location[0], "zip/text()");		
-			m_weather.Location.Latitude  = m_helper.GetNodeValue(location[0], "latitude/text()");		
-			m_weather.Location.Longitude = m_helper.GetNodeValue(location[0], "longitude/text()");		
+			weather.Location.Name 	 = m_helper.GetNodeValue(location[0], "neighborhood/text()");		
+			weather.Location.City  	 = m_helper.GetNodeValue(location[0], "city/text()");		
+			weather.Location.State	 = m_helper.GetNodeValue(location[0], "state/text()");					
+			weather.Location.ZipCode   = m_helper.GetNodeValue(location[0], "zip/text()");		
+			weather.Location.Latitude  = m_helper.GetNodeValue(location[0], "latitude/text()");		
+			weather.Location.Longitude = m_helper.GetNodeValue(location[0], "longitude/text()");		
 						
-			m_weather.Location.Elevation = parseElevation(m_helper.GetNodeValue(location[0], "elevation/text()"));				
+			weather.Location.Elevation = parseElevation(m_helper.GetNodeValue(location[0], "elevation/text()"));				
 			
 			// Station ID goes into the location ID
-			m_weather.Location.ID        =  station_id;
+			weather.Location.ID        =  station_id;
 		}
 		
 		//////////////////////////
@@ -556,75 +570,75 @@
 		//////////////////////////
 		
 		// Use credit name as a weather station name
-		m_weather.Station		  = m_helper.GetNodeValue(observation[0], "credit/text()");
-		m_weather.Type 			  = m_helper.GetNodeValue(observation[0], "station_type/text()");
+		weather.Station		  = m_helper.GetNodeValue(observation[0], "credit/text()");
+		weather.Type 			  = m_helper.GetNodeValue(observation[0], "station_type/text()");
 		
 		// Observation date
-		m_weather.Date = m_dateHelper.FromEpoch(m_helper.GetNodeValue(observation[0],  "observation_epoch/text()"));
+		weather.Date = m_dateHelper.FromEpoch(m_helper.GetNodeValue(observation[0],  "observation_epoch/text()"));
 		
 		// Temperature
 		if (m_useMetricSystem)
-			m_weather.Temperature = m_helper.GetNodeValue(observation[0], "temp_c/text()");
+			weather.Temperature = m_helper.GetNodeValue(observation[0], "temp_c/text()");
 		else
-			m_weather.Temperature = m_helper.GetNodeValue(observation[0], "temp_f/text()");
+			weather.Temperature = m_helper.GetNodeValue(observation[0], "temp_f/text()");
 			
 		// Humidity
-		m_weather.Humidity 		  = removeUnit(m_helper.GetNodeValue(observation[0], "relative_humidity/text()"), "%");
+		weather.Humidity 		  = removeUnit(m_helper.GetNodeValue(observation[0], "relative_humidity/text()"), "%");
 		
 		// Wind
-		m_weather.WindDescription = m_helper.GetNodeValue(observation[0], "wind_string/text()");
-		m_weather.WindDirection   = m_helper.GetNodeValue(observation[0], "wind_dir/text()");
-		m_weather.WindDegrees 	  = m_helper.GetNodeValue(observation[0], "wind_degrees/text()");
-		m_weather.WindSpeed		  = parseSpeed(m_helper.GetNodeValue(observation[0], "wind_mph/text()"));
-		m_weather.WindGust 		  = parseSpeed(m_helper.GetNodeValue(observation[0], "wind_gust_mph/text()"));
+		weather.WindDescription = m_helper.GetNodeValue(observation[0], "wind_string/text()");
+		weather.WindDirection   = m_helper.GetNodeValue(observation[0], "wind_dir/text()");
+		weather.WindDegrees 	  = m_helper.GetNodeValue(observation[0], "wind_degrees/text()");
+		weather.WindSpeed		  = parseSpeed(m_helper.GetNodeValue(observation[0], "wind_mph/text()"));
+		weather.WindGust 		  = parseSpeed(m_helper.GetNodeValue(observation[0], "wind_gust_mph/text()"));
 	    
 	    // Pressure
 	    if (m_useMetricSystem)
-	    	m_weather.Pressure	  = m_helper.GetNodeValue(observation[0], "pressure_mb/text()");
+	    	weather.Pressure	  = m_helper.GetNodeValue(observation[0], "pressure_mb/text()");
 	    else
-	    	m_weather.Pressure	  = m_helper.GetNodeValue(observation[0], "pressure_in/text()");
+	    	weather.Pressure	  = m_helper.GetNodeValue(observation[0], "pressure_in/text()");
 	    	
 	    // Dew Point
-	    m_weather.DewPointDescription = m_helper.GetNodeValue(observation[0], "dewpoint_string/text()");
+	    weather.DewPointDescription = m_helper.GetNodeValue(observation[0], "dewpoint_string/text()");
 	    if (m_useMetricSystem)
-	    	m_weather.DewPoint	  = m_helper.GetNodeValue(observation[0], "dewpoint_c/text()");
+	    	weather.DewPoint	  = m_helper.GetNodeValue(observation[0], "dewpoint_c/text()");
 	    else
-	    	m_weather.DewPoint	  = m_helper.GetNodeValue(observation[0], "dewpoint_f/text()");
+	    	weather.DewPoint	  = m_helper.GetNodeValue(observation[0], "dewpoint_f/text()");
 	    	
 	    // Heat index
-	    m_weather.HeatDescription = parseHeat(m_helper.GetNodeValue(observation[0], "heat_index_string/text()"));
+	    weather.HeatDescription = parseHeat(m_helper.GetNodeValue(observation[0], "heat_index_string/text()"));
 		if (m_useMetricSystem)
-	    	m_weather.HeatIndex	  = parseHeat(m_helper.GetNodeValue(observation[0], "heat_index_c/text()"));
+	    	weather.HeatIndex	  = parseHeat(m_helper.GetNodeValue(observation[0], "heat_index_c/text()"));
 	    else
-	    	m_weather.HeatIndex	  = parseHeat(m_helper.GetNodeValue(observation[0], "heat_index_f/text()"));			
+	    	weather.HeatIndex	  = parseHeat(m_helper.GetNodeValue(observation[0], "heat_index_f/text()"));			
 	    	
 	    // Solar Radiation & UV	
-	    m_weather.SolarRadiation  = m_helper.GetNodeValue(observation[0], "solar_radiation/text()");			
-	    m_weather.UV	  		  = m_helper.GetNodeValue(observation[0], "UV/text()");			
+	    weather.SolarRadiation  = m_helper.GetNodeValue(observation[0], "solar_radiation/text()");			
+	    weather.UV	  		  = m_helper.GetNodeValue(observation[0], "UV/text()");			
 	    	
 	    // Wind chill
-	    m_weather.WindChillDescription = parseHeat(m_helper.GetNodeValue(observation[0], "windchill_string/text()"));
+	    weather.WindChillDescription = parseHeat(m_helper.GetNodeValue(observation[0], "windchill_string/text()"));
 		if (m_useMetricSystem)
-	    	m_weather.WindChill	  = parseHeat(m_helper.GetNodeValue(observation[0], "windchill_c/text()"));
+	    	weather.WindChill	  = parseHeat(m_helper.GetNodeValue(observation[0], "windchill_c/text()"));
 	    else
-	    	m_weather.WindChill	  = parseHeat(m_helper.GetNodeValue(observation[0], "windchill_f/text()"));		
+	    	weather.WindChill	  = parseHeat(m_helper.GetNodeValue(observation[0], "windchill_f/text()"));		
 	    		    
 	    // Visibility
 	    if (m_useMetricSystem)
-	    	m_weather.Visibility  = m_helper.GetNodeValue(observation[0], "visibility_km/text()");
+	    	weather.Visibility  = m_helper.GetNodeValue(observation[0], "visibility_km/text()");
 	    else
-	    	m_weather.Visibility  = m_helper.GetNodeValue(observation[0], "visibility_mi/text()");
+	    	weather.Visibility  = m_helper.GetNodeValue(observation[0], "visibility_mi/text()");
 	    		    	
 	    // Weather code
-	    m_weather.Code    		  = parseCode(m_helper.GetNodeValue(observation[0], "icon/text()"));
+	    weather.Code    		  = parseCode(m_helper.GetNodeValue(observation[0], "icon/text()"));
 	    
 	    // Precipitation
 		if (m_useMetricSystem) {
-	    	m_weather.Precipitation1H     = m_helper.GetNodeValue(observation[0], "precip_1hr_metric/text()");
-	    	m_weather.PrecipitationToday  = m_helper.GetNodeValue(observation[0], "precip_today_metric/text()");	    	
+	    	weather.Precipitation1H     = m_helper.GetNodeValue(observation[0], "precip_1hr_metric/text()");
+	    	weather.PrecipitationToday  = m_helper.GetNodeValue(observation[0], "precip_today_metric/text()");	    	
 	    } else {
-	    	m_weather.Precipitation1H     = m_helper.GetNodeValue(observation[0], "precip_1hr_in/text()");
-	    	m_weather.PrecipitationToday  = m_helper.GetNodeValue(observation[0], "precip_today_in/text()");	    
+	    	weather.Precipitation1H     = m_helper.GetNodeValue(observation[0], "precip_1hr_in/text()");
+	    	weather.PrecipitationToday  = m_helper.GetNodeValue(observation[0], "precip_today_in/text()");	    
 	    }
 	    
 	    //////////////////////////////
@@ -638,9 +652,15 @@
 		links.Credit			 = m_helper.GetNodeValue(observation[0], "credit_URL/text()");
 		links.Logo				 = m_helper.GetNodeValue(observation[0], "ob_url/text()");
 		
-		m_weather.Links = links;
+		weather.Links = links;
 	    	
-		m_weatherCallback(m_weather);	
+		// Update weather cache
+		if (weather.Location.ID != null)
+			m_weather(weather.Location.ID) = weather;
+		else if (weather.Location.AirportCode != null)
+			m_weather(weather.Location.AirportCode) = weather;
+		 	
+		m_weatherCallback(weather);		
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////		
@@ -707,6 +727,13 @@
 		
 		// Reset DOM
 		m_request.abort();
+
+		// Check cache
+		if (m_helper.CheckCache(m_forecast, locationQuery.ID, getResource("refresh_forecast"), true)) {
+			m_forecastCallback(m_forecast.Item(locationQuery.ID));
+			
+			return Constants.E_OK;
+		}
 		
 		m_request.onreadystatechange = OnForecastResponse;
 		m_request.async = true;
@@ -722,8 +749,8 @@
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 
-		// Clear any previous results
-		m_forecast.RemoveAll();
+		// Dictionary for forecast data
+		var forecasts = new ActiveXObject("Scripting.Dictionary");
 			
 		// forecast index
 		var i = 0;	
@@ -764,7 +791,7 @@
 									
 				forecast.Date = date;
 			    			    
-			  	m_forecast.Add(i, forecast);    
+			  	forecasts.Add(i, forecast);    
 			    i++;
 			}
 		}			
@@ -797,7 +824,7 @@
 			    // Date
 			    forecast.Date = m_dateHelper.FromEpoch(m_helper.GetNodeValue(entry, "date/epoch/text()"));			    
 			    
-			    m_forecast.Add(i, forecast);		    
+			    forecasts.Add(i, forecast);		    
 			    i++;
 			}
 		}
@@ -831,11 +858,14 @@
 									 hour: parseInt(sunset_hour),
 									 minute: parseInt(sunset_minute)});
 			
-			m_forecast.Item(0) = forecast;		
+			forecasts.Item(0) = forecast;		
 		}
 		
-			
-		m_forecastCallback(m_forecast);		
+		// Cache data		
+		if (sharedData.Location.ID != null)
+			m_forecast(sharedData.Location.ID) = forecasts;
+		
+		m_forecastCallback(forecasts);		
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
@@ -845,7 +875,6 @@
 		// TODO we should cache results from GetLocations and only make a new call if the query differs.		
 		return Constants.E_NOTIMPLEMENTED;
 	}	
-	
 	
 	]]>
 	</script>
