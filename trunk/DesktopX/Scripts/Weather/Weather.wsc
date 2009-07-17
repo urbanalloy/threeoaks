@@ -235,7 +235,7 @@
 	//**Start Encode**	
 	
 	// Error
-	var ErrorCode = createComponent("WeatherError");
+	var Constants = createComponent("WeatherConstants");
 	
 	// Callbacks
 	var m_locationsCallback = null;
@@ -296,7 +296,7 @@
 		
 		// Update license information
 		if (m_currentProvider == null)
-			return ErrorCode.E_ERROR;
+			return Constants.E_ERROR;
 		
 		return m_currentProvider.SetLicense(m_id, m_key);		
 	}
@@ -307,7 +307,7 @@
 			// Reset the current provider
 			m_currentProvider = null;
 			
-			return ErrorCode.E_ERROR;
+			return Constants.E_ERROR;
 		}
 		
 		m_currentProvider = m_providers.Item(id);
@@ -324,7 +324,7 @@
 											OnCameras,
 											OnError);
 		
-		return ErrorCode.E_OK;
+		return Constants.E_OK;
 	}
 	
 	// Set the callbacks
@@ -345,17 +345,17 @@
 		// we use a separate provider list to not expose the providers directly to the user script
 		m_providerList.Add(provider.ID, provider.Name);
 		
-		return ErrorCode.E_OK;
+		return Constants.E_OK;
 	}
 	
 	// Abort any call in progress
 	function Abort() {
 		if (m_currentProvider == null)		
-			return ErrorCode.E_ERROR;
+			return Constants.E_ERROR;
 		
 		m_currentProvider.Abort();
 	
-		return ErrorCode.E_OK;
+		return Constants.E_OK;
 	}	
 	
 	// Get a WeatherLocation object
@@ -371,7 +371,7 @@
 	// Get a list of locations
 	function GetLocations(locationQuery) {
 		if (m_currentProvider == null)		
-			return ErrorCode.E_ERROR;
+			return Constants.E_ERROR;
 		
 		locationQuery.TrimValues();
 		return m_currentProvider.GetLocations(locationQuery);
@@ -380,7 +380,7 @@
 	// Get the current weather
 	function GetWeather(locationQuery) {
 		if (m_currentProvider == null)		
-			return ErrorCode.E_ERROR;
+			return Constants.E_ERROR;
 		
 		locationQuery.TrimValues();
 		return m_currentProvider.GetWeather(locationQuery);
@@ -389,7 +389,7 @@
 	// Get a list of alerts
 	function GetAlerts(locationQuery) {
 		if (m_currentProvider == null)		
-			return ErrorCode.E_ERROR;
+			return Constants.E_ERROR;
 		
 		locationQuery.TrimValues();
 		return m_currentProvider.GetAlerts(locationQuery);
@@ -398,7 +398,7 @@
 	// Get the forecast
 	function GetForecast(locationQuery) {
 		if (m_currentProvider == null)		
-			return ErrorCode.E_ERROR;
+			return Constants.E_ERROR;
 		
 		locationQuery.TrimValues();
 		return m_currentProvider.GetForecast(locationQuery);
@@ -407,7 +407,7 @@
 	// Get a list of cameras
 	function GetCameras(locationQuery) {
 		if (m_currentProvider == null)		
-			return ErrorCode.E_ERROR;
+			return Constants.E_ERROR;
 		
 		locationQuery.TrimValues();
 		return m_currentProvider.GetCameras(locationQuery);
@@ -456,43 +456,186 @@
 
 </component>
 
-<component id="WeatherError">
+<component id="WeatherConstants">
 	<comment>
-	Weather error codes
+	Weather constants (error codes, icons code, etc.)
 	</comment>
-	<registration description="Weather Error codes"
-      			  progid="DXWeather.Error"
+	<registration description="Weather Constants"
+      			  progid="DXWeather.Constants"
       			  version="1"
       	    	  classid="{20AAB6F5-77DB-414e-8469-5D57441BFD19}"/>  
       	    	        	    
 	<public>
 		<property name="E_OK">
 			<get />
-		</property>
-		
+		</property>		
 		<property name="E_ERROR">
 			<get />
-		</property>
-		
+		</property>		
 		<property name="E_NOTAVAILABLE">
 			<get />
-		</property>
-		
+		</property>		
 		<property name="E_NOTIMPLEMENTED">
 			<get />
-		</property>
-		
+		</property>		
 		<property name="E_INVALIDLICENSE">
 			<get />
-		</property>
-		
+		</property>		
 		<property name="E_PARSEERROR">
 			<get />
-		</property>
-				
+		</property>				
 		<property name="E_WARNING">
 			<get />
 		</property>
+		
+		<property name="ICON_TORNADO">
+			<get />
+		</property>
+		<property name="ICON_TROPICAL_STORM">
+			<get />
+		</property>
+		<property name="ICON_HURRICANE">
+			<get />
+		</property>
+		<property name="ICON_SEVERE_THUNDERSTORMS">
+			<get />
+		</property>
+		<property name="ICON_THUNDERSTORMS">
+			<get />
+		</property>
+		<property name="ICON_MIXED_RAIN_AND_SNOW">
+			<get />
+		</property>
+		<property name="ICON_MIXED_RAIN_AND_SLEET">
+			<get />
+		</property>
+		<property name="ICON_MIXED_SNOW_AND_SLEET">
+			<get />
+		</property>
+		<property name="ICON_FREEZING_DRIZZLE">
+			<get />
+		</property>
+		<property name="ICON_DRIZZLE">
+			<get />
+		</property>
+		<property name="ICON_FREEZING_RAIN">
+			<get />
+		</property>
+		<property name="ICON_SHOWERS">
+			<get />
+		</property>
+		<property name="ICON_SHOWERS_2">
+			<get />
+		</property>
+		<property name="ICON_SNOW_FLURRIES">
+			<get />
+		</property>
+		<property name="ICON_LIGHT_SNOW_SHOWERS">
+			<get />
+		</property>
+		<property name="ICON_BLOWING_SNOW">
+			<get />
+		</property>
+		<property name="ICON_SNOW">
+			<get />
+		</property>
+		<property name="ICON_HAIL">
+			<get />
+		</property>
+		<property name="ICON_SLEET">
+			<get />
+		</property>
+		<property name="ICON_DUST">
+			<get />
+		</property>
+		<property name="ICON_FOGGY">
+			<get />
+		</property>
+		<property name="ICON_HAZE">
+			<get />
+		</property>
+		<property name="ICON_SMOKY">
+			<get />
+		</property>
+		<property name="ICON_BLUSTERY">
+			<get />
+		</property>
+		<property name="ICON_WINDY">
+			<get />
+		</property>
+		<property name="ICON_COLD">
+			<get />
+		</property>
+		<property name="ICON_CLOUDY">
+			<get />
+		</property>
+		<property name="ICON_MOSTLY_CLOUDY_NIGHT">
+			<get />
+		</property>
+		<property name="ICON_MOSTLY_CLOUDY_DAY">
+			<get />
+		</property>
+		<property name="ICON_PARTLY_CLOUDY_NIGHT">
+			<get />
+		</property>
+		<property name="ICON_PARTLY_CLOUDY_DAY">
+			<get />
+		</property>
+		<property name="ICON_CLEAR_NIGHT">
+			<get />
+		</property>
+		<property name="ICON_SUNNY">
+			<get />
+		</property>
+		<property name="ICON_FAIR_NIGHT">
+			<get />
+		</property>
+		<property name="ICON_FAIR_DAY">
+			<get />
+		</property>
+		<property name="ICON_MIXED_RAIN_AND_HAIL">
+			<get />
+		</property>
+		<property name="ICON_HOT">
+			<get />
+		</property>
+		<property name="ICON_ISOLATED_THUNDERSTORMS">
+			<get />
+		</property>
+		<property name="ICON_SCATTERED_THUNDERSTORMS_1">
+			<get />
+		</property>
+		<property name="ICON_SCATTERED_THUNDERSTORMS_2">
+			<get />
+		</property>
+		<property name="ICON_SCATTERED_SHOWERS">
+			<get />
+		</property>
+		<property name="ICON_HEAVY_SNOW_1">
+			<get />
+		</property>
+		<property name="ICON_SCATTERED_SNOW_SHOWERS">
+			<get />
+		</property>
+		<property name="ICON_HEAVY_SNOW_2">
+			<get />
+		</property>
+		<property name="ICON_PARTLY_CLOUDY">
+			<get />
+		</property>
+		<property name="ICON_THUNDERSHOWERS">
+			<get />
+		</property>
+		<property name="ICON_SNOW_SHOWERS">
+			<get />
+		</property>
+		<property name="ICON_ISOLATED_THUNDERSHOWERS">
+			<get />
+		</property>
+		<property name="ICON_NOT_AVAILABLE">
+			<get />
+		</property>
+		
 		
 	</public>
 	
@@ -501,14 +644,15 @@
 	
 	//**Start Encode**
 	
-	// Constants
+	/*********************************
+	 * Error codes
+	 *********************************/	
 	var E_OK 			 = 1;
 	var E_ERROR 		 = 0;
 	var E_NOTAVAILABLE   = -1;
 	var E_NOTIMPLEMENTED = -2;
 	var E_INVALIDLICENSE = -3;
 	var E_PARSEERROR	 = -4;
-	
 	var E_WARNING		 = -100;
 	
 	function get_E_OK()
@@ -544,7 +688,210 @@
 	function get_E_WARNING()
 	{
 		return E_WARNING;
+	}	
+	
+	/*********************************
+	 * Icons
+	 *********************************/
+	 
+	var ICON_TORNADO					 = "00";
+	var ICON_TROPICAL_STORM				 = "01";
+	var ICON_HURRICANE					 = "02";
+	var ICON_SEVERE_THUNDERSTORMS		 = "03";
+	var ICON_THUNDERSTORMS				 = "04";
+	var ICON_MIXED_RAIN_AND_SNOW		 = "05";
+	var ICON_MIXED_RAIN_AND_SLEET		 = "06";
+	var ICON_MIXED_SNOW_AND_SLEET		 = "07";
+	var ICON_FREEZING_DRIZZLE			 = "08";
+	var ICON_DRIZZLE					 = "09";
+	var ICON_FREEZING_RAIN				 = "10";
+	var ICON_SHOWERS					 = "11";
+	var ICON_SHOWERS_2					 = "12";
+	var ICON_SNOW_FLURRIES				 = "13";
+	var ICON_LIGHT_SNOW_SHOWERS			 = "14";
+	var ICON_BLOWING_SNOW				 = "15";
+	var ICON_SNOW						 = "16";
+	var ICON_HAIL						 = "17";
+	var ICON_SLEET						 = "18";	
+	var ICON_DUST						 = "19";
+	var ICON_FOGGY						 = "20";
+	var ICON_HAZE						 = "21";
+	var ICON_SMOKY						 = "22";
+	var ICON_BLUSTERY					 = "23";
+	var ICON_WINDY						 = "24";
+	var ICON_COLD						 = "25";
+	var ICON_CLOUDY						 = "26";
+	var ICON_MOSTLY_CLOUDY_NIGHT		 = "27";
+	var ICON_MOSTLY_CLOUDY_DAY			 = "28";
+	var ICON_PARTLY_CLOUDY_NIGHT 		 = "29";
+	var ICON_PARTLY_CLOUDY_DAY			 = "30";
+	var ICON_CLEAR_NIGHT				 = "31";
+	var ICON_SUNNY						 = "32";
+	var ICON_FAIR_NIGHT					 = "33";
+	var ICON_FAIR_DAY					 = "34";
+	var ICON_MIXED_RAIN_AND_HAIL		 = "35";
+	var ICON_HOT						 = "36";
+	var ICON_ISOLATED_THUNDERSTORMS		 = "37";
+	var ICON_SCATTERED_THUNDERSTORMS_1	 = "38";
+	var ICON_SCATTERED_THUNDERSTORMS_2	 = "39";
+	var ICON_SCATTERED_SHOWERS 			 = "40";
+	var ICON_HEAVY_SNOW_1				 = "41";
+	var ICON_SCATTERED_SNOW_SHOWERS		 = "42";
+	var ICON_HEAVY_SNOW_2				 = "43";
+	var ICON_PARTLY_CLOUDY				 = "44";
+	var ICON_THUNDERSHOWERS				 = "45";
+	var ICON_SNOW_SHOWERS				 = "46";
+	var ICON_ISOLATED_THUNDERSHOWERS	 = "47";
+	var ICON_NOT_AVAILABLE				 = "NA";
+	
+	function get_ICON_TORNADO() {
+		return ICON_TORNADO;
 	}
+	function get_ICON_TROPICAL_STORM() {
+		return ICON_TROPICAL_STORM;
+	}
+	function get_ICON_HURRICANE() {
+		return ICON_HURRICANE;
+	}
+	function get_ICON_SEVERE_THUNDERSTORMS() {
+		return ICON_SEVERE_THUNDERSTORMS;
+	}
+	function get_ICON_THUNDERSTORMS() {
+		return ICON_THUNDERSTORMS;
+	}
+	function get_ICON_MIXED_RAIN_AND_SNOW() {
+		return ICON_MIXED_RAIN_AND_SNOW;
+	}
+	function get_ICON_MIXED_RAIN_AND_SLEET() {
+		return ICON_MIXED_RAIN_AND_SLEET;
+	}
+	function get_ICON_MIXED_SNOW_AND_SLEET() {
+		return ICON_MIXED_SNOW_AND_SLEET;
+	}
+	function get_ICON_FREEZING_DRIZZLE() {
+		return ICON_FREEZING_DRIZZLE;
+	}
+	function get_ICON_DRIZZLE() {
+		return ICON_DRIZZLE;
+	}
+	function get_ICON_FREEZING_RAIN() {
+		return ICON_FREEZING_RAIN;
+	}
+	function get_ICON_SHOWERS() {
+		return ICON_SHOWERS;
+	}
+	function get_ICON_SHOWERS_2() {
+		return ICON_SHOWERS_2;
+	}
+	function get_ICON_SNOW_FLURRIES() {
+		return ICON_SNOW_FLURRIES;
+	}
+	function get_ICON_LIGHT_SNOW_SHOWERS() {
+		return ICON_LIGHT_SNOW_SHOWERS;
+	}
+	function get_ICON_BLOWING_SNOW() {
+		return ICON_BLOWING_SNOW;
+	}
+	function get_ICON_SNOW() {
+		return ICON_SNOW;
+	}
+	function get_ICON_HAIL() {
+		return ICON_HAIL;
+	}
+	function get_ICON_SLEET() {
+		return ICON_SLEET;
+	}
+	function get_ICON_DUST() {
+		return ICON_DUST;
+	}
+	function get_ICON_FOGGY() {
+		return ICON_FOGGY;
+	}
+	function get_ICON_HAZE() {
+		return ICON_HAZE;
+	}
+	function get_ICON_SMOKY() {
+		return ICON_SMOKY;
+	}
+	function get_ICON_BLUSTERY() {
+		return ICON_BLUSTERY;
+	}
+	function get_ICON_WINDY() {
+		return ICON_WINDY;
+	}
+	function get_ICON_COLD() {
+		return ICON_COLD;
+	}
+	function get_ICON_CLOUDY() {
+		return ICON_CLOUDY;
+	}
+	function get_ICON_MOSTLY_CLOUDY_NIGHT() {
+		return ICON_MOSTLY_CLOUDY_NIGHT;
+	}
+	function get_ICON_MOSTLY_CLOUDY_DAY() {
+		return ICON_MOSTLY_CLOUDY_DAY;
+	}
+	function get_ICON_PARTLY_CLOUDY_NIGHT() {
+		return ICON_PARTLY_CLOUDY_NIGHT;
+	}
+	function get_ICON_PARTLY_CLOUDY_DAY() {
+		return ICON_PARTLY_CLOUDY_DAY;
+	}
+	function get_ICON_CLEAR_NIGHT() {
+		return ICON_CLEAR_NIGHT;
+	}
+	function get_ICON_SUNNY() {
+		return ICON_SUNNY;
+	}
+	function get_ICON_FAIR_NIGHT() {
+		return ICON_FAIR_NIGHT;
+	}
+	function get_ICON_FAIR_DAY() {
+		return ICON_FAIR_DAY;
+	}
+	function get_ICON_MIXED_RAIN_AND_HAIL() {
+		return ICON_MIXED_RAIN_AND_HAIL;
+	}
+	function get_ICON_HOT() {
+		return ICON_HOT;
+	}
+	function get_ICON_ISOLATED_THUNDERSTORMS() {
+		return ICON_ISOLATED_THUNDERSTORMS;
+	}
+	function get_ICON_SCATTERED_THUNDERSTORMS_1() {
+		return ICON_SCATTERED_THUNDERSTORMS_1;
+	}
+	function get_ICON_SCATTERED_THUNDERSTORMS_2() {
+		return ICON_SCATTERED_THUNDERSTORMS_2;
+	}
+	function get_ICON_SCATTERED_SHOWERS() {
+		return ICON_SCATTERED_SHOWERS;
+	}
+	function get_ICON_HEAVY_SNOW_1() {
+		return ICON_HEAVY_SNOW_1;
+	}
+	function get_ICON_SCATTERED_SNOW_SHOWERS() {
+		return ICON_SCATTERED_SNOW_SHOWERS;
+	}
+	function get_ICON_HEAVY_SNOW_2() {
+		return ICON_HEAVY_SNOW_2;
+	}
+	function get_ICON_PARTLY_CLOUDY() {
+		return ICON_PARTLY_CLOUDY;
+	}
+	function get_ICON_THUNDERSHOWERS() {
+		return ICON_THUNDERSHOWERS;
+	}
+	function get_ICON_SNOW_SHOWERS() {
+		return ICON_SNOW_SHOWERS;
+	}
+	function get_ICON_ISOLATED_THUNDERSHOWERS() {
+		return ICON_ISOLATED_THUNDERSHOWERS;
+	}
+	function get_ICON_NOT_AVAILABLE() {
+		return ICON_NOT_AVAILABLE;
+	}
+	
 	
 	]]>
 	</script>
@@ -833,7 +1180,7 @@
 	
 	function append(title, value)
 	{
-		if (value == null)
+		if (value == null || value == "")
 			return "";
 			
 		return title + ": " + value + "\n";
@@ -1317,13 +1664,13 @@
 			return true;
 		
 		if (request.text == "")
-			callback(ErrorCode.E_ERROR, "Received empty response!");
+			callback(Constants.E_ERROR, "Received empty response!");
 		else {	
-			var error = "Error parsing response xml: Error " + request.parseError.errorCode + ": " + request.parseError.reason;
+			var error = "Error parsing response xml: Error " + request.parseError.Constants + ": " + request.parseError.reason;
 			error += "/ Line " + request.parseError.line + " - position " + request.parseError.linepos;
 			error += "/ Source: " + escape(request.parseError.srcText);
 		
-			callback(ErrorCode.E_PARSEERROR, error);
+			callback(Constants.E_PARSEERROR, error);
 		}
 		
 		return false;
@@ -1348,62 +1695,62 @@
 	
 	function CtoF(temperature)
 	{
-		return FormatNumber((9/5) * temperature + 32, 1);
+		return ((9/5) * temperature + 32).toFixed(1);
 	}
 	
 	function FtoC(temperature)
 	{
-		return FormatNumber((5/9) * (temperature - 32) , 1);
+		return ((5/9) * (temperature - 32)).toFixed(1);
 	}
 	
 	function MtoFT(length)
 	{
-		return FormatNumber(length * 3.280839895013123, 0);
+		return (length * 3.280839895013123).toFixed(0);
 	}
 	
 	function FTtoM(length)
 	{
-		return FormatNumber(length * 0.3048, 0);
+		return (length * 0.3048).toFixed(0);
 	}
 	
 	function KMtoMI(distance)
 	{
-		return FormatNumber(distance * 0.621371192237334, 1);
+		return (distance * 0.621371192237334).toFixed(1);
 	}
 	
 	function MItoKM(distance)
 	{
-		return FormatNumber(distance * 1.609344, 1);
+		return (distance * 1.609344).toFixed(1);
 	}
 	
 	function MBtoIN(pressure)
 	{
-		return FormatNumber(pressure * 0.0295300, 2);
+		return (pressure * 0.0295300).toFixed(2);
 	}
 	
 	function INtoMB(pressure)
 	{
-		return FormatNumber(pressure * 33.8639, 2);
+		return (pressure * 33.8639).toFixed(2);
 	}
 	
 	function MMtoIN(length)
 	{
-		return FormatNumber(length * 0.0393700787401575, 2);
+		return (length * 0.0393700787401575).toFixed(2);
 	}
 	
 	function INtoMM(length)
 	{
-		return FormatNumber(length * 25.4, 2);
+		return (length * 25.4).toFixed(2);
 	}
 	
 	function KMHtoMPH(speed)
 	{
-		return FormatNumber(speed * 0.621371192237334, 1);
+		return (speed * 0.621371192237334).toFixed(1);
 	}
 	
 	function MPHtoKMH(speed)
 	{
-		return FormatNumber(speed * 1.609344, 1);
+		return (speed * 1.609344).toFixed(1);
 	}	
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////
