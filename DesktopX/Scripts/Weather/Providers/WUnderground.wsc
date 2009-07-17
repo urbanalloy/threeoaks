@@ -160,7 +160,7 @@
 	
 	//**Start Encode**
 	
-	var ErrorCode 			= getComponent("WeatherError");
+	var Constants 			= getComponent("WeatherConstants");
 	
 	// Data
 	var m_weather   		= null;
@@ -264,25 +264,38 @@
 	// Misc parsing functions
 	///////////////////////////////	
 	
-	// Parse elevation string and remove unit at the end / convert to metric system if needed
-	function parseElevation(elevation)
+	// Remove unit at the end of the string
+	function removeUnit(str, end)
 	{
-		// TODO: remove "ft" at the end of the elevation data and Trim the string
-		return m_helper.Trim(elevation);
+		var cleaned = m_helper.Trim(str);
+		
+		var index = cleaned.search(end)
+		if (index == -1)
+			return cleaned;
+			
+		return cleaned.substr(0, index - 1); 	
 	}
 	
-	// Parse humidity string and remove % at the end
-	function parseHumidity(humidity)
+	// Parse elevation string, remove unit at the end / convert to metric system if needed
+	function parseElevation(elevation)
 	{
-		// TODO: remove "%" at the end if present
-		return m_helper.Trim(humidity);
+		var parsed = removeUnit(elevation, "ft");
+		
+		if (!m_useMetricSystem)
+			return parsed;
+		
+		return m_helper.FTtoM(parsed);
 	}
 	
 	// Parse speed string, remove unit at the end / convert to metric system if needed
 	function parseSpeed(speed)
 	{
-		// TODO: remove "mph" at the end if present, and convert to metric if needed
-		return m_helper.Trim(speed);
+		var parsed = removeUnit(speed, "mph");
+		
+		if (!m_useMetricSystem)
+			return parsed;
+		
+		return m_helper.MPHtoKMH(parsed);
 	}
 	
 	// Parse speed heat/windchill
@@ -293,7 +306,8 @@
 		if (heat == "NA")
 			return null;
 			
-		return heat;
+		if (m_useMetricSystem)		
+			return heat;
 	}
 	
 	// Parse weather code and return a code number
@@ -310,7 +324,7 @@
 	// Setup license
 	function SetLicense(id, key) {
 		// Not used by this provider: always return E_OK
-		return ErrorCode.E_OK;
+		return Constants.E_OK;
 	}
 	
 	// Set callbacks
@@ -335,7 +349,7 @@
 	function GetLocations(locationQuery) {
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
-			return ErrorCode.E_NOTAVAILABLE;
+			return Constants.E_NOTAVAILABLE;
 		
 		// Reset DOM
 		m_request.abort();
@@ -344,14 +358,14 @@
 		m_request.async = true;
 		m_request.load(getResource("url_locations") + getQueryString(locationQuery));
 		
-		return ErrorCode.E_OK;		
+		return Constants.E_OK;		
 	}
 	
 	function OnLocationsResponse() {
 		if (m_request.readyState != 4) 
 			return;
 			
-		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 			
 		// Clear any previous results
@@ -454,7 +468,7 @@
 	function GetWeather(locationQuery) {				
 		// Check query for validity
 		if (getWeatherQueryString(locationQuery) == "")
-			return ErrorCode.E_NOTAVAILABLE;
+			return Constants.E_NOTAVAILABLE;
 					
 		// Reset DOM
 		m_request.abort();
@@ -463,14 +477,14 @@
 		m_request.async = true;
 		m_request.load(getWeatherQueryString(locationQuery));
 		
-		return ErrorCode.E_OK;		
+		return Constants.E_OK;		
 	}
 	
 	function OnWeatherResponse() {
 		if (m_request.readyState != 4) 
 			return;
 			
-		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 
 		// Reset weather object
@@ -495,7 +509,7 @@
 		var station_id = m_helper.GetNodeValue(observation[0], "station_id/text()");
 		if (station_id == "")
 		{
-			m_errorCallback(ErrorCode.E_ERROR, "Response is empty. Please check that the station code you used is valid!");
+			m_errorCallback(Constants.E_ERROR, "Response is empty. Please check that the station code you used is valid!");
 			return;
 		}		
 		
@@ -555,7 +569,7 @@
 			m_weather.Temperature = m_helper.GetNodeValue(observation[0], "temp_f/text()");
 			
 		// Humidity
-		m_weather.Humidity 		  = parseHumidity(m_helper.GetNodeValue(observation[0], "relative_humidity/text()"));
+		m_weather.Humidity 		  = removeUnit(m_helper.GetNodeValue(observation[0], "relative_humidity/text()"), "%");
 		
 		// Wind
 		m_weather.WindDescription = m_helper.GetNodeValue(observation[0], "wind_string/text()");
@@ -636,7 +650,7 @@
 		
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
-			return ErrorCode.E_NOTAVAILABLE;
+			return Constants.E_NOTAVAILABLE;
 		
 		// Reset DOM
 		m_request.abort();
@@ -645,14 +659,14 @@
 		m_request.async = true;
 		m_request.load(getResource("url_alerts") + getQueryString(locationQuery));
 		
-		return ErrorCode.E_OK;		
+		return Constants.E_OK;		
 	}
 	
 	function OnAlertsResponse() {
 		if (m_request.readyState != 4) 
 			return;
 			
-		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 
 		// Clear any previous results
@@ -689,7 +703,7 @@
 	function GetForecast(locationQuery) {				
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
-			return ErrorCode.E_NOTAVAILABLE;
+			return Constants.E_NOTAVAILABLE;
 		
 		// Reset DOM
 		m_request.abort();
@@ -698,14 +712,14 @@
 		m_request.async = true;
 		m_request.load(getResource("url_forecast") + getQueryString(locationQuery));
 		
-		return ErrorCode.E_OK;	
+		return Constants.E_OK;	
 	}
 	
 	function OnForecastResponse() {
 		if (m_request.readyState != 4) 
 			return;
 			
-		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 
 		// Clear any previous results
@@ -829,7 +843,7 @@
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	function GetCameras(locationQuery) {
 		// TODO we should cache results from GetLocations and only make a new call if the query differs.		
-		return ErrorCode.E_NOTIMPLEMENTED;
+		return Constants.E_NOTIMPLEMENTED;
 	}	
 	
 	

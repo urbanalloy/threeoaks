@@ -135,7 +135,7 @@
 	
 	//**Start Encode**
 	
-	var ErrorCode 			= getComponent("WeatherError");
+	var Constants 			= getComponent("WeatherConstants");
 	
 	// Data
 	var m_weather   		= null;
@@ -189,7 +189,7 @@
 	// Setup license
 	function SetLicense(id, key) {	
 		// Not used by this provider: always return E_OK
-		return ErrorCode.E_OK;
+		return Constants.E_OK;
 	}
 	
 	// Set callbacks
@@ -217,7 +217,7 @@
 		
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
-			return ErrorCode.E_NOTAVAILABLE;
+			return Constants.E_NOTAVAILABLE;
 		
 		// Reset dom
 		m_request.abort();
@@ -226,14 +226,14 @@
 		m_request.async = true;
 		m_request.load(getResource("url_locations") + getQueryString(locationQuery));
 		
-		return ErrorCode.E_OK;		
+		return Constants.E_OK;		
 	}
 	
 	function OnLocationsResponse() {
 		if (m_request.readyState != 4) 
 			return;
 			
-		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 		
 		// TODO: Implementation
@@ -252,7 +252,7 @@
 				
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
-			return ErrorCode.E_NOTAVAILABLE;
+			return Constants.E_NOTAVAILABLE;
 					
 		// Reset dom
 		m_request.abort();
@@ -261,14 +261,14 @@
 		m_request.async = true;
 		m_request.load(getResource("url_weather") + getQueryString(locationQuery));
 		
-		return ErrorCode.E_OK;		
+		return Constants.E_OK;		
 	}
 	
 	function OnWeatherResponse() {
 		if (m_request.readyState != 4) 
 			return;
 			
-		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 			
 		// TODO: Implementation
@@ -280,7 +280,7 @@
 	// Get a list of alerts
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	function GetAlerts(locationQuery) {
-		return ErrorCode.E_NOTIMPLEMENTED;
+		return Constants.E_NOTIMPLEMENTED;
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
@@ -292,7 +292,7 @@
 		
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
-			return ErrorCode.E_NOTAVAILABLE;
+			return Constants.E_NOTAVAILABLE;
 		
 		// Reset dom
 		m_request.abort();
@@ -301,14 +301,14 @@
 		m_request.async = true;
 		m_request.load(getResource("url_forecast") + getQueryString(locationQuery));
 		
-		return ErrorCode.E_OK;	
+		return Constants.E_OK;	
 	}
 	
 	function OnForecastResponse() {
 		if (m_request.readyState != 4) 
 			return;
 			
-		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 		
 		// TODO: Implementation
@@ -320,7 +320,7 @@
 	// Get a list of cameras
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	function GetCameras(locationQuery) {		
-		return ErrorCode.E_NOTIMPLEMENTED;
+		return Constants.E_NOTIMPLEMENTED;
 	}	
 		
 	]]>

@@ -1,7 +1,7 @@
 Option Explicit
 
 Dim WeatherController
-Dim ErrorCode
+Dim Constants
 Dim IniFile
 
 Dim m_providerID
@@ -14,7 +14,7 @@ LIB_FOLDER = "D:/Sources/Company/src/trunk/src/DesktopX/DXScriptLibrary/Weather/
 'Called when the script is executed
 Sub Object_OnScriptEnter	
 	Set WeatherController = Nothing
-	Set ErrorCode = Nothing
+	Set Constants = Nothing
 	Set IniFile = Nothing
 	m_providerID = ""
 
@@ -29,7 +29,7 @@ End Sub
 
 'Called when the script is terminated
 Sub Object_OnScriptExit
-	Set ErrorCode = Nothing
+	Set Constants = Nothing
 	Set WeatherController = Nothing
 	Set IniFile = Nothing
 End Sub
@@ -63,7 +63,7 @@ Sub InitWidget()
 	Object.Visible = True
 	Cleanup()
 
-	Set ErrorCode = GetObject("script:" & LIB_FOLDER & "Weather.wsc#WeatherError")
+	Set Constants = GetObject("script:" & LIB_FOLDER & "Weather.wsc#WeatherConstants")
 	Set WeatherController = GetObject("script:" & LIB_FOLDER & "Weather.wsc")
 	
 	'#ifdef DEBUG
@@ -112,7 +112,7 @@ Sub OnSelectProvider(item, value)
 
 	retCode = WeatherController.SetProvider(m_providerID)
 	
-	If retCode <> ErrorCode.E_OK Then
+	If retCode <> Constants.E_OK Then
 		AppendInfo "Error setting provider: " & retCode & vbNewLine
 		Exit Sub
 	End If
@@ -120,7 +120,7 @@ Sub OnSelectProvider(item, value)
 	' Set license info
 	retCode = SetLicenceInfo(m_providerID)
 	
-	If retCode <> ErrorCode.E_OK Then
+	If retCode <> Constants.E_OK Then
 		ParseRetCode retCode
 		DesktopX.ScriptObject("DXWeather_Query").Control.Enabled = False
 	Else
@@ -145,22 +145,22 @@ End Sub
 
 Sub ParseRetCode(code)
 	Select Case code
-		Case ErrorCode.E_OK ' query accepted and request sent
+		Case Constants.E_OK ' query accepted and request sent
 			AppendInfo "Request Sent!" & vbNewLine
 		
-		Case ErrorCode.E_NOTIMPLEMENTED ' the chosen provider does not implement this method
+		Case Constants.E_NOTIMPLEMENTED ' the chosen provider does not implement this method
 			AppendInfo "Method not implemented!"  & vbNewLine	' should not happen with GetWeather obviously!
 			
-		Case ErrorCode.E_NOTAVAILABLE ' the query you used is not supported by this provider/method (for example, you called GetWeather with a country name only)
+		Case Constants.E_NOTAVAILABLE ' the query you used is not supported by this provider/method (for example, you called GetWeather with a country name only)
 			AppendInfo "Query type not available!"  & vbNewLine
 			
-		Case ErrorCode.E_ERROR ' you forgot to set a provider or your query is empty
+		Case Constants.E_ERROR ' you forgot to set a provider or your query is empty
 			AppendInfo "Error!"  & vbNewLine
 			
-		Case ErrorCode.E_INVALIDLICENSE
+		Case Constants.E_INVALIDLICENSE
 			AppendInfo "Invalid license info (check your licenses.ini)!"  & vbNewLine
 			
-		Case ErrorCode.E_PARSEERROR
+		Case Constants.E_PARSEERROR
 			AppendInfo "Parsing error!" & vbNewLine
 	End Select
 End Sub
