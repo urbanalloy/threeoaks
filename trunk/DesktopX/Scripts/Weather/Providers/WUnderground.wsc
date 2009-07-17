@@ -267,21 +267,21 @@
 	// Parse elevation string and remove unit at the end / convert to metric system if needed
 	function parseElevation(elevation)
 	{
-		// FIXME: remove "ft" at the end of the elevation data and Trim the string
+		// TODO: remove "ft" at the end of the elevation data and Trim the string
 		return m_helper.Trim(elevation);
 	}
 	
 	// Parse humidity string and remove % at the end
 	function parseHumidity(humidity)
 	{
-		// FIXME: remove "%" at the end if present
+		// TODO: remove "%" at the end if present
 		return m_helper.Trim(humidity);
 	}
 	
 	// Parse speed string, remove unit at the end / convert to metric system if needed
 	function parseSpeed(speed)
 	{
-		// FIXME: remove "mph" at the end if present, and convert to metric if needed
+		// TODO: remove "mph" at the end if present, and convert to metric if needed
 		return m_helper.Trim(speed);
 	}
 	
@@ -291,7 +291,7 @@
 		var trimmed = m_helper.Trim(heat);
 		
 		if (heat == "NA")
-			return "";
+			return null;
 			
 		return heat;
 	}
@@ -299,7 +299,7 @@
 	// Parse weather code and return a code number
 	function parseCode(code)
 	{
-		// FIXME: convert from string code to weather icon number
+		// TODO: convert from string code to weather icon number
 		return m_helper.Trim(code);
 	}	
 	
@@ -714,7 +714,7 @@
 		// forecast index
 		var i = 0;	
 		
-		// FIXME: merge forecast text & forecast into the first x objects
+		// TODO: merge forecast text & forecast into the first x objects
 		//  we need to check the forecast number to know where to put things
 		
 		// Parse text forecast (today / tonight)
