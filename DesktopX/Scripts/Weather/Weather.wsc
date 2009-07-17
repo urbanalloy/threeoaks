@@ -1217,13 +1217,13 @@
 	
 	//**Start Encode**
 	
-	var m_type = "";
-	var m_description = "";
-	var m_date = "";
-	var m_expiration = "";
-	var m_message = "";
-	var m_phenomena = "";
-	var m_significance = "";
+	var m_type = null;
+	var m_description = null;
+	var m_date = null;
+	var m_expiration = null;
+	var m_message = null;
+	var m_phenomena = null;
+	var m_significance = null;
 	
 	function ToString()
 	{
@@ -1289,26 +1289,26 @@
 	
 	// TODO add function to check if a string is a US zip code
     
-	var m_ID = "";
+	var m_ID = null;
 
-	var m_country = "";
-	var m_state = "";
-	var m_city = "";
+	var m_country = null;
+	var m_state = null;
+	var m_city = null;
 	
-	var m_latitude = "";
-	var m_longitude = "";
+	var m_latitude = null;
+	var m_longitude = null;
 	
-	var m_airportCode = "";
-	var m_zipCode = "";
-	var m_cityCode = "";
+	var m_airportCode = null;
+	var m_zipCode = null;
+	var m_cityCode = null;
 	
-	var m_customQueryString = "";
+	var m_customQueryString = null;
 	
 	// Results-only data
-	var m_name = "";
-	var m_timezone = "";
-	var m_elevation = "";
-	var m_distance = "";
+	var m_name = null;
+	var m_timezone = null;
+	var m_elevation = null;
+	var m_distance = null;
 
 	// Trim values used in query
 	function TrimValues()
@@ -1573,12 +1573,19 @@
 		</method>
 		
 		<comment>
+			Check is string is null or empty
+		</comment>
+		<method name="IsNullOrEmpty">
+			<parameter name="str" />
+		</method>
+		
+		<comment>
 			Check XmlDom object for parsing errors and report them
 		</comment>
 		<method name="CheckParserError">
 			<parameter name="request" />
 			<parameter name="callback" />
-			<parameter name="ErrorCode" />
+			<parameter name="Constants" />
 		</method>
 		
 		<comment>
@@ -1658,8 +1665,7 @@
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// Check the request for parser errors
-	function CheckParserError(request, callback, ErrorCode) {
-
+	function CheckParserError(request, callback, Constants) {
 		if (request.parseError.errorCode == 0)
 			return true;
 		
@@ -1761,6 +1767,9 @@
 	
 	// Remove multiple, leading or trailing spaces
 	function Trim(s) {
+		if (s == null)
+			return null;
+		
 		s = s.replace(/(^\s*)|(\s*$)/gi,"");
 		s = s.replace(/[ ]{2,}/gi," ");
 		s = s.replace(/\n /,"\n");
@@ -1769,7 +1778,21 @@
 	
 	// Remove all spaces
 	function RemoveSpaces(s) {
+		if (s == null)
+			return null;
+		
 		return s.replace(/(\s|\n)+/g,'');
+	}
+	
+	function IsNullOrEmpty(str)
+	{
+		if (str == null)
+			return true;
+			
+		if (typeof(str) != "string")
+			return false;
+			
+		return (str == "");
 	}
 		
 	]]>

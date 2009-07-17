@@ -197,22 +197,22 @@
 	function getLocationQueryString(query)
 	{
 		// Check that location query is not null
-		if (query == null)
+		if (m_helper.IsNullOrEmpty(query))
 			return "";
 			
-		if (query.CustomQueryString != "")
+		if (!m_helper.IsNullOrEmpty(query.CustomQueryString))
 			return query.CustomQueryString;	
 						
-		if (query.ZipCode != "")
+		if (!m_helper.IsNullOrEmpty(query.ZipCode))
 			return query.ZipCode;
 			
-		if (query.City != "" && query.State != "")
+		if (!m_helper.IsNullOrEmpty(query.City) && !m_helper.IsNullOrEmpty(query.State))
 			return query.City + ", " + query.State;
 			
-		if (query.City != ""  && query.Country != "")
+		if (!m_helper.IsNullOrEmpty(query.City)  && !m_helper.IsNullOrEmpty(query.Country))
 			return query.City + ", " + query.Country;
 			
-		if (query.City != "")
+		if (!m_helper.IsNullOrEmpty(query.City))
 		 	return query.City;			
 			
 		return "";
@@ -221,7 +221,10 @@
 	function getQueryString(queryLocation, isForecast)
 	{
 		// Check that location query is not null
-		if (queryLocation == null || queryLocation.ID == "")
+		if (m_helper.IsNullOrEmpty(queryLocation))
+			return "";
+			
+		if (m_helper.IsNullOrEmpty(queryLocation.ID))
 			return "";
 
 		var query = getResource("url_weather");
@@ -316,7 +319,7 @@
 	
 	function parseCodeMoon(code)
 	{
-		// TODO parse code
+		// TODO parse moon code
 		return code;
 	}
 	
@@ -424,7 +427,7 @@
 		if (getLocationQueryString(locationQuery) == "")
 			return Constants.E_NOTAVAILABLE;
 		
-		// Reset dom
+		// Reset DOM
 		m_request.abort();
 		
 		m_request.onreadystatechange = OnLocationsResponse;
@@ -510,7 +513,7 @@
 		if (getQueryString(locationQuery, false) == "")
 			return Constants.E_NOTAVAILABLE;
 					
-		// Reset dom
+		// Reset DOM
 		m_request.abort();
 		
 		// Check cache
@@ -585,7 +588,7 @@
 		if (getQueryString(locationQuery, true) == "")
 			return Constants.E_NOTAVAILABLE;
 					
-		// Reset dom
+		// Reset DOM
 		m_request.abort();
 		
 		// Check cache
