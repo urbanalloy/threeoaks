@@ -1336,50 +1336,49 @@
 	{
 		var text = "";
 		
-		if (m_ID != "")
-			text += "ID: " + m_ID + "\n";
-			
-		if (m_name != "")
-			text += "Name: " + m_name + "\n";;
+		text += append("ID", m_ID)
+		text += append("Name", m_name);
 		
 		// City	
-		if (m_city != "" || m_state != "" || m_country !="") {
+		if ((m_city != "" && m_city != null) ||
+			(m_state != "" && m_state != null)  ||
+			(m_country != "" && m_country != null)) {
 			text += "City: " + m_city;
 			
-			if (m_state != "")
+			if (m_state != "" && m_state != null)
 				text += ", " + m_state;
 				 
-			if (m_country != "")
+			if (m_country != "" && m_country != null)
 				text += " (" + m_country + ")"
 				
 			text += "\n";
 		}
 		
 		// Coordinates
-		if (m_latitude != "" || m_longitude != "")
-			text += "Coordinates: " + m_latitude + ", " + m_longitude + "\n";
+		if ((m_latitude != "" && m_latitude != null) ||
+			(m_longitude != "" && m_longitude != null))
+			text += append("Coordinates", m_latitude + ", " + m_longitude);
 			
 		// Distance & Elevation
-		if (m_distance != "")
-			text += "Distance: " + m_distance + "\n";
-			
-		if (m_elevation != "")
-			text += "Elevation: " + m_elevation + "\n";
+		text += append("Distance", m_distance);
+		text += append("Elevation", m_elevation);
 						
 		// Codes
-		if (m_zipCode != "")
-			text += "Zipcode: " + m_zipCode + "\n";
-			
-		if (m_airportCode != "")
-			text += "Airport: " + m_airportCode + "\n";
-			
-		if (m_cityCode != "")
-			text += "City Code: " + m_cityCode + "\n";
-			
-		if (m_customQueryString != "")
-			text += "Custom: " + m_customQueryString + "\n";
+		text += append("Zipcode", m_zipCode);
+		text += append("Airport", m_airportCode);
+		text += append("City Code", m_cityCode);
+		
+		text += append("Custom", m_customQueryString);
 
 		return text;
+	}
+	
+	function append(title, value)
+	{
+		if (value == null || value == "")
+			return "";
+			
+		return title + ": " + value + "\n";
 	}
 
 	]]>
