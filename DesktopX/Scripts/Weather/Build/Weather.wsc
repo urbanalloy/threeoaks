@@ -235,7 +235,7 @@
 	//**Start Encode**	
 	
 	// Error
-	var ErrorCode = createComponent("WeatherError");
+	var Constants = createComponent("WeatherConstants");
 	
 	// Callbacks
 	var m_locationsCallback = null;
@@ -294,7 +294,7 @@
 		
 		// Update license information
 		if (m_currentProvider == null)
-			return ErrorCode.E_ERROR;
+			return Constants.E_ERROR;
 		
 		return m_currentProvider.SetLicense(m_id, m_key);		
 	}
@@ -305,7 +305,7 @@
 			// Reset the current provider
 			m_currentProvider = null;
 			
-			return ErrorCode.E_ERROR;
+			return Constants.E_ERROR;
 		}
 		
 		m_currentProvider = m_providers.Item(id);
@@ -322,7 +322,7 @@
 											OnCameras,
 											OnError);
 		
-		return ErrorCode.E_OK;
+		return Constants.E_OK;
 	}
 	
 	// Set the callbacks
@@ -343,17 +343,17 @@
 		// we use a separate provider list to not expose the providers directly to the user script
 		m_providerList.Add(provider.ID, provider.Name);
 		
-		return ErrorCode.E_OK;
+		return Constants.E_OK;
 	}
 	
 	// Abort any call in progress
 	function Abort() {
 		if (m_currentProvider == null)		
-			return ErrorCode.E_ERROR;
+			return Constants.E_ERROR;
 		
 		m_currentProvider.Abort();
 	
-		return ErrorCode.E_OK;
+		return Constants.E_OK;
 	}	
 	
 	// Get a WeatherLocation object
@@ -369,7 +369,7 @@
 	// Get a list of locations
 	function GetLocations(locationQuery) {
 		if (m_currentProvider == null)		
-			return ErrorCode.E_ERROR;
+			return Constants.E_ERROR;
 		
 		locationQuery.TrimValues();
 		return m_currentProvider.GetLocations(locationQuery);
@@ -378,7 +378,7 @@
 	// Get the current weather
 	function GetWeather(locationQuery) {
 		if (m_currentProvider == null)		
-			return ErrorCode.E_ERROR;
+			return Constants.E_ERROR;
 		
 		locationQuery.TrimValues();
 		return m_currentProvider.GetWeather(locationQuery);
@@ -387,7 +387,7 @@
 	// Get a list of alerts
 	function GetAlerts(locationQuery) {
 		if (m_currentProvider == null)		
-			return ErrorCode.E_ERROR;
+			return Constants.E_ERROR;
 		
 		locationQuery.TrimValues();
 		return m_currentProvider.GetAlerts(locationQuery);
@@ -396,7 +396,7 @@
 	// Get the forecast
 	function GetForecast(locationQuery) {
 		if (m_currentProvider == null)		
-			return ErrorCode.E_ERROR;
+			return Constants.E_ERROR;
 		
 		locationQuery.TrimValues();
 		return m_currentProvider.GetForecast(locationQuery);
@@ -405,7 +405,7 @@
 	// Get a list of cameras
 	function GetCameras(locationQuery) {
 		if (m_currentProvider == null)		
-			return ErrorCode.E_ERROR;
+			return Constants.E_ERROR;
 		
 		locationQuery.TrimValues();
 		return m_currentProvider.GetCameras(locationQuery);
@@ -454,43 +454,186 @@
 
 </component>
 
-<component id="WeatherError">
+<component id="WeatherConstants">
 	<comment>
-	Weather error codes
+	Weather constants (error codes, icons code, etc.)
 	</comment>
-	<registration description="Weather Error codes"
-      			  progid="DXWeather.Error"
+	<registration description="Weather Constants"
+      			  progid="DXWeather.Constants"
       			  version="1"
       	    	  classid="{20AAB6F5-77DB-414e-8469-5D57441BFD19}"/>  
       	    	        	    
 	<public>
 		<property name="E_OK">
 			<get />
-		</property>
-		
+		</property>		
 		<property name="E_ERROR">
 			<get />
-		</property>
-		
+		</property>		
 		<property name="E_NOTAVAILABLE">
 			<get />
-		</property>
-		
+		</property>		
 		<property name="E_NOTIMPLEMENTED">
 			<get />
-		</property>
-		
+		</property>		
 		<property name="E_INVALIDLICENSE">
 			<get />
-		</property>
-		
+		</property>		
 		<property name="E_PARSEERROR">
 			<get />
-		</property>
-				
+		</property>				
 		<property name="E_WARNING">
 			<get />
 		</property>
+		
+		<property name="ICON_TORNADO">
+			<get />
+		</property>
+		<property name="ICON_TROPICAL_STORM">
+			<get />
+		</property>
+		<property name="ICON_HURRICANE">
+			<get />
+		</property>
+		<property name="ICON_SEVERE_THUNDERSTORMS">
+			<get />
+		</property>
+		<property name="ICON_THUNDERSTORMS">
+			<get />
+		</property>
+		<property name="ICON_MIXED_RAIN_AND_SNOW">
+			<get />
+		</property>
+		<property name="ICON_MIXED_RAIN_AND_SLEET">
+			<get />
+		</property>
+		<property name="ICON_MIXED_SNOW_AND_SLEET">
+			<get />
+		</property>
+		<property name="ICON_FREEZING_DRIZZLE">
+			<get />
+		</property>
+		<property name="ICON_DRIZZLE">
+			<get />
+		</property>
+		<property name="ICON_FREEZING_RAIN">
+			<get />
+		</property>
+		<property name="ICON_SHOWERS">
+			<get />
+		</property>
+		<property name="ICON_SHOWERS_2">
+			<get />
+		</property>
+		<property name="ICON_SNOW_FLURRIES">
+			<get />
+		</property>
+		<property name="ICON_LIGHT_SNOW_SHOWERS">
+			<get />
+		</property>
+		<property name="ICON_BLOWING_SNOW">
+			<get />
+		</property>
+		<property name="ICON_SNOW">
+			<get />
+		</property>
+		<property name="ICON_HAIL">
+			<get />
+		</property>
+		<property name="ICON_SLEET">
+			<get />
+		</property>
+		<property name="ICON_DUST">
+			<get />
+		</property>
+		<property name="ICON_FOGGY">
+			<get />
+		</property>
+		<property name="ICON_HAZE">
+			<get />
+		</property>
+		<property name="ICON_SMOKY">
+			<get />
+		</property>
+		<property name="ICON_BLUSTERY">
+			<get />
+		</property>
+		<property name="ICON_WINDY">
+			<get />
+		</property>
+		<property name="ICON_COLD">
+			<get />
+		</property>
+		<property name="ICON_CLOUDY">
+			<get />
+		</property>
+		<property name="ICON_MOSTLY_CLOUDY_NIGHT">
+			<get />
+		</property>
+		<property name="ICON_MOSTLY_CLOUDY_DAY">
+			<get />
+		</property>
+		<property name="ICON_PARTLY_CLOUDY_NIGHT">
+			<get />
+		</property>
+		<property name="ICON_PARTLY_CLOUDY_DAY">
+			<get />
+		</property>
+		<property name="ICON_CLEAR_NIGHT">
+			<get />
+		</property>
+		<property name="ICON_SUNNY">
+			<get />
+		</property>
+		<property name="ICON_FAIR_NIGHT">
+			<get />
+		</property>
+		<property name="ICON_FAIR_DAY">
+			<get />
+		</property>
+		<property name="ICON_MIXED_RAIN_AND_HAIL">
+			<get />
+		</property>
+		<property name="ICON_HOT">
+			<get />
+		</property>
+		<property name="ICON_ISOLATED_THUNDERSTORMS">
+			<get />
+		</property>
+		<property name="ICON_SCATTERED_THUNDERSTORMS_1">
+			<get />
+		</property>
+		<property name="ICON_SCATTERED_THUNDERSTORMS_2">
+			<get />
+		</property>
+		<property name="ICON_SCATTERED_SHOWERS">
+			<get />
+		</property>
+		<property name="ICON_HEAVY_SNOW_1">
+			<get />
+		</property>
+		<property name="ICON_SCATTERED_SNOW_SHOWERS">
+			<get />
+		</property>
+		<property name="ICON_HEAVY_SNOW_2">
+			<get />
+		</property>
+		<property name="ICON_PARTLY_CLOUDY">
+			<get />
+		</property>
+		<property name="ICON_THUNDERSHOWERS">
+			<get />
+		</property>
+		<property name="ICON_SNOW_SHOWERS">
+			<get />
+		</property>
+		<property name="ICON_ISOLATED_THUNDERSHOWERS">
+			<get />
+		</property>
+		<property name="ICON_NOT_AVAILABLE">
+			<get />
+		</property>
+		
 		
 	</public>
 	
@@ -499,14 +642,15 @@
 	
 	//**Start Encode**
 	
-	// Constants
+	/*********************************
+	 * Error codes
+	 *********************************/	
 	var E_OK 			 = 1;
 	var E_ERROR 		 = 0;
 	var E_NOTAVAILABLE   = -1;
 	var E_NOTIMPLEMENTED = -2;
 	var E_INVALIDLICENSE = -3;
 	var E_PARSEERROR	 = -4;
-	
 	var E_WARNING		 = -100;
 	
 	function get_E_OK()
@@ -542,7 +686,210 @@
 	function get_E_WARNING()
 	{
 		return E_WARNING;
+	}	
+	
+	/*********************************
+	 * Icons
+	 *********************************/
+	 
+	var ICON_TORNADO					 = "00";
+	var ICON_TROPICAL_STORM				 = "01";
+	var ICON_HURRICANE					 = "02";
+	var ICON_SEVERE_THUNDERSTORMS		 = "03";
+	var ICON_THUNDERSTORMS				 = "04";
+	var ICON_MIXED_RAIN_AND_SNOW		 = "05";
+	var ICON_MIXED_RAIN_AND_SLEET		 = "06";
+	var ICON_MIXED_SNOW_AND_SLEET		 = "07";
+	var ICON_FREEZING_DRIZZLE			 = "08";
+	var ICON_DRIZZLE					 = "09";
+	var ICON_FREEZING_RAIN				 = "10";
+	var ICON_SHOWERS					 = "11";
+	var ICON_SHOWERS_2					 = "12";
+	var ICON_SNOW_FLURRIES				 = "13";
+	var ICON_LIGHT_SNOW_SHOWERS			 = "14";
+	var ICON_BLOWING_SNOW				 = "15";
+	var ICON_SNOW						 = "16";
+	var ICON_HAIL						 = "17";
+	var ICON_SLEET						 = "18";	
+	var ICON_DUST						 = "19";
+	var ICON_FOGGY						 = "20";
+	var ICON_HAZE						 = "21";
+	var ICON_SMOKY						 = "22";
+	var ICON_BLUSTERY					 = "23";
+	var ICON_WINDY						 = "24";
+	var ICON_COLD						 = "25";
+	var ICON_CLOUDY						 = "26";
+	var ICON_MOSTLY_CLOUDY_NIGHT		 = "27";
+	var ICON_MOSTLY_CLOUDY_DAY			 = "28";
+	var ICON_PARTLY_CLOUDY_NIGHT 		 = "29";
+	var ICON_PARTLY_CLOUDY_DAY			 = "30";
+	var ICON_CLEAR_NIGHT				 = "31";
+	var ICON_SUNNY						 = "32";
+	var ICON_FAIR_NIGHT					 = "33";
+	var ICON_FAIR_DAY					 = "34";
+	var ICON_MIXED_RAIN_AND_HAIL		 = "35";
+	var ICON_HOT						 = "36";
+	var ICON_ISOLATED_THUNDERSTORMS		 = "37";
+	var ICON_SCATTERED_THUNDERSTORMS_1	 = "38";
+	var ICON_SCATTERED_THUNDERSTORMS_2	 = "39";
+	var ICON_SCATTERED_SHOWERS 			 = "40";
+	var ICON_HEAVY_SNOW_1				 = "41";
+	var ICON_SCATTERED_SNOW_SHOWERS		 = "42";
+	var ICON_HEAVY_SNOW_2				 = "43";
+	var ICON_PARTLY_CLOUDY				 = "44";
+	var ICON_THUNDERSHOWERS				 = "45";
+	var ICON_SNOW_SHOWERS				 = "46";
+	var ICON_ISOLATED_THUNDERSHOWERS	 = "47";
+	var ICON_NOT_AVAILABLE				 = "NA";
+	
+	function get_ICON_TORNADO() {
+		return ICON_TORNADO;
 	}
+	function get_ICON_TROPICAL_STORM() {
+		return ICON_TROPICAL_STORM;
+	}
+	function get_ICON_HURRICANE() {
+		return ICON_HURRICANE;
+	}
+	function get_ICON_SEVERE_THUNDERSTORMS() {
+		return ICON_SEVERE_THUNDERSTORMS;
+	}
+	function get_ICON_THUNDERSTORMS() {
+		return ICON_THUNDERSTORMS;
+	}
+	function get_ICON_MIXED_RAIN_AND_SNOW() {
+		return ICON_MIXED_RAIN_AND_SNOW;
+	}
+	function get_ICON_MIXED_RAIN_AND_SLEET() {
+		return ICON_MIXED_RAIN_AND_SLEET;
+	}
+	function get_ICON_MIXED_SNOW_AND_SLEET() {
+		return ICON_MIXED_SNOW_AND_SLEET;
+	}
+	function get_ICON_FREEZING_DRIZZLE() {
+		return ICON_FREEZING_DRIZZLE;
+	}
+	function get_ICON_DRIZZLE() {
+		return ICON_DRIZZLE;
+	}
+	function get_ICON_FREEZING_RAIN() {
+		return ICON_FREEZING_RAIN;
+	}
+	function get_ICON_SHOWERS() {
+		return ICON_SHOWERS;
+	}
+	function get_ICON_SHOWERS_2() {
+		return ICON_SHOWERS_2;
+	}
+	function get_ICON_SNOW_FLURRIES() {
+		return ICON_SNOW_FLURRIES;
+	}
+	function get_ICON_LIGHT_SNOW_SHOWERS() {
+		return ICON_LIGHT_SNOW_SHOWERS;
+	}
+	function get_ICON_BLOWING_SNOW() {
+		return ICON_BLOWING_SNOW;
+	}
+	function get_ICON_SNOW() {
+		return ICON_SNOW;
+	}
+	function get_ICON_HAIL() {
+		return ICON_HAIL;
+	}
+	function get_ICON_SLEET() {
+		return ICON_SLEET;
+	}
+	function get_ICON_DUST() {
+		return ICON_DUST;
+	}
+	function get_ICON_FOGGY() {
+		return ICON_FOGGY;
+	}
+	function get_ICON_HAZE() {
+		return ICON_HAZE;
+	}
+	function get_ICON_SMOKY() {
+		return ICON_SMOKY;
+	}
+	function get_ICON_BLUSTERY() {
+		return ICON_BLUSTERY;
+	}
+	function get_ICON_WINDY() {
+		return ICON_WINDY;
+	}
+	function get_ICON_COLD() {
+		return ICON_COLD;
+	}
+	function get_ICON_CLOUDY() {
+		return ICON_CLOUDY;
+	}
+	function get_ICON_MOSTLY_CLOUDY_NIGHT() {
+		return ICON_MOSTLY_CLOUDY_NIGHT;
+	}
+	function get_ICON_MOSTLY_CLOUDY_DAY() {
+		return ICON_MOSTLY_CLOUDY_DAY;
+	}
+	function get_ICON_PARTLY_CLOUDY_NIGHT() {
+		return ICON_PARTLY_CLOUDY_NIGHT;
+	}
+	function get_ICON_PARTLY_CLOUDY_DAY() {
+		return ICON_PARTLY_CLOUDY_DAY;
+	}
+	function get_ICON_CLEAR_NIGHT() {
+		return ICON_CLEAR_NIGHT;
+	}
+	function get_ICON_SUNNY() {
+		return ICON_SUNNY;
+	}
+	function get_ICON_FAIR_NIGHT() {
+		return ICON_FAIR_NIGHT;
+	}
+	function get_ICON_FAIR_DAY() {
+		return ICON_FAIR_DAY;
+	}
+	function get_ICON_MIXED_RAIN_AND_HAIL() {
+		return ICON_MIXED_RAIN_AND_HAIL;
+	}
+	function get_ICON_HOT() {
+		return ICON_HOT;
+	}
+	function get_ICON_ISOLATED_THUNDERSTORMS() {
+		return ICON_ISOLATED_THUNDERSTORMS;
+	}
+	function get_ICON_SCATTERED_THUNDERSTORMS_1() {
+		return ICON_SCATTERED_THUNDERSTORMS_1;
+	}
+	function get_ICON_SCATTERED_THUNDERSTORMS_2() {
+		return ICON_SCATTERED_THUNDERSTORMS_2;
+	}
+	function get_ICON_SCATTERED_SHOWERS() {
+		return ICON_SCATTERED_SHOWERS;
+	}
+	function get_ICON_HEAVY_SNOW_1() {
+		return ICON_HEAVY_SNOW_1;
+	}
+	function get_ICON_SCATTERED_SNOW_SHOWERS() {
+		return ICON_SCATTERED_SNOW_SHOWERS;
+	}
+	function get_ICON_HEAVY_SNOW_2() {
+		return ICON_HEAVY_SNOW_2;
+	}
+	function get_ICON_PARTLY_CLOUDY() {
+		return ICON_PARTLY_CLOUDY;
+	}
+	function get_ICON_THUNDERSHOWERS() {
+		return ICON_THUNDERSHOWERS;
+	}
+	function get_ICON_SNOW_SHOWERS() {
+		return ICON_SNOW_SHOWERS;
+	}
+	function get_ICON_ISOLATED_THUNDERSHOWERS() {
+		return ICON_ISOLATED_THUNDERSHOWERS;
+	}
+	function get_ICON_NOT_AVAILABLE() {
+		return ICON_NOT_AVAILABLE;
+	}
+	
 	
 	]]>
 	</script>
@@ -831,7 +1178,7 @@
 	
 	function append(title, value)
 	{
-		if (value == null)
+		if (value == null || value == "")
 			return "";
 			
 		return title + ": " + value + "\n";
@@ -868,13 +1215,13 @@
 	
 	//**Start Encode**
 	
-	var m_type = "";
-	var m_description = "";
-	var m_date = "";
-	var m_expiration = "";
-	var m_message = "";
-	var m_phenomena = "";
-	var m_significance = "";
+	var m_type = null;
+	var m_description = null;
+	var m_date = null;
+	var m_expiration = null;
+	var m_message = null;
+	var m_phenomena = null;
+	var m_significance = null;
 	
 	function ToString()
 	{
@@ -940,26 +1287,26 @@
 	
 	// TODO add function to check if a string is a US zip code
     
-	var m_ID = "";
+	var m_ID = null;
 
-	var m_country = "";
-	var m_state = "";
-	var m_city = "";
+	var m_country = null;
+	var m_state = null;
+	var m_city = null;
 	
-	var m_latitude = "";
-	var m_longitude = "";
+	var m_latitude = null;
+	var m_longitude = null;
 	
-	var m_airportCode = "";
-	var m_zipCode = "";
-	var m_cityCode = "";
+	var m_airportCode = null;
+	var m_zipCode = null;
+	var m_cityCode = null;
 	
-	var m_customQueryString = "";
+	var m_customQueryString = null;
 	
 	// Results-only data
-	var m_name = "";
-	var m_timezone = "";
-	var m_elevation = "";
-	var m_distance = "";
+	var m_name = null;
+	var m_timezone = null;
+	var m_elevation = null;
+	var m_distance = null;
 
 	// Trim values used in query
 	function TrimValues()
@@ -987,50 +1334,49 @@
 	{
 		var text = "";
 		
-		if (m_ID != "")
-			text += "ID: " + m_ID + "\n";
-			
-		if (m_name != "")
-			text += "Name: " + m_name + "\n";;
+		text += append("ID", m_ID)
+		text += append("Name", m_name);
 		
 		// City	
-		if (m_city != "" || m_state != "" || m_country !="") {
+		if ((m_city != "" && m_city != null) ||
+			(m_state != "" && m_state != null)  ||
+			(m_country != "" && m_country != null)) {
 			text += "City: " + m_city;
 			
-			if (m_state != "")
+			if (m_state != "" && m_state != null)
 				text += ", " + m_state;
 				 
-			if (m_country != "")
+			if (m_country != "" && m_country != null)
 				text += " (" + m_country + ")"
 				
 			text += "\n";
 		}
 		
 		// Coordinates
-		if (m_latitude != "" || m_longitude != "")
-			text += "Coordinates: " + m_latitude + ", " + m_longitude + "\n";
+		if ((m_latitude != "" && m_latitude != null) ||
+			(m_longitude != "" && m_longitude != null))
+			text += append("Coordinates", m_latitude + ", " + m_longitude);
 			
 		// Distance & Elevation
-		if (m_distance != "")
-			text += "Distance: " + m_distance + "\n";
-			
-		if (m_elevation != "")
-			text += "Elevation: " + m_elevation + "\n";
+		text += append("Distance", m_distance);
+		text += append("Elevation", m_elevation);
 						
 		// Codes
-		if (m_zipCode != "")
-			text += "Zipcode: " + m_zipCode + "\n";
-			
-		if (m_airportCode != "")
-			text += "Airport: " + m_airportCode + "\n";
-			
-		if (m_cityCode != "")
-			text += "City Code: " + m_cityCode + "\n";
-			
-		if (m_customQueryString != "")
-			text += "Custom: " + m_customQueryString + "\n";
+		text += append("Zipcode", m_zipCode);
+		text += append("Airport", m_airportCode);
+		text += append("City Code", m_cityCode);
+		
+		text += append("Custom", m_customQueryString);
 
 		return text;
+	}
+	
+	function append(title, value)
+	{
+		if (value == null || value == "")
+			return "";
+			
+		return title + ": " + value + "\n";
 	}
 
 	]]>
@@ -1224,12 +1570,19 @@
 		</method>
 		
 		<comment>
+			Check is string is null or empty
+		</comment>
+		<method name="IsNullOrEmpty">
+			<parameter name="str" />
+		</method>
+		
+		<comment>
 			Check XmlDom object for parsing errors and report them
 		</comment>
 		<method name="CheckParserError">
 			<parameter name="request" />
 			<parameter name="callback" />
-			<parameter name="ErrorCode" />
+			<parameter name="Constants" />
 		</method>
 		
 		<comment>
@@ -1309,19 +1662,18 @@
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// Check the request for parser errors
-	function CheckParserError(request, callback, ErrorCode) {
-
+	function CheckParserError(request, callback, Constants) {
 		if (request.parseError.errorCode == 0)
 			return true;
 		
 		if (request.text == "")
-			callback(ErrorCode.E_ERROR, "Received empty response!");
+			callback(Constants.E_ERROR, "Received empty response!");
 		else {	
-			var error = "Error parsing response xml: Error " + request.parseError.errorCode + ": " + request.parseError.reason;
+			var error = "Error parsing response xml: Error " + request.parseError.Constants + ": " + request.parseError.reason;
 			error += "/ Line " + request.parseError.line + " - position " + request.parseError.linepos;
 			error += "/ Source: " + escape(request.parseError.srcText);
 		
-			callback(ErrorCode.E_PARSEERROR, error);
+			callback(Constants.E_PARSEERROR, error);
 		}
 		
 		return false;
@@ -1346,62 +1698,62 @@
 	
 	function CtoF(temperature)
 	{
-		return FormatNumber((9/5) * temperature + 32, 1);
+		return ((9/5) * temperature + 32).toFixed(1);
 	}
 	
 	function FtoC(temperature)
 	{
-		return FormatNumber((5/9) * (temperature - 32) , 1);
+		return ((5/9) * (temperature - 32)).toFixed(1);
 	}
 	
 	function MtoFT(length)
 	{
-		return FormatNumber(length * 3.280839895013123, 0);
+		return (length * 3.280839895013123).toFixed(0);
 	}
 	
 	function FTtoM(length)
 	{
-		return FormatNumber(length * 0.3048, 0);
+		return (length * 0.3048).toFixed(0);
 	}
 	
 	function KMtoMI(distance)
 	{
-		return FormatNumber(distance * 0.621371192237334, 1);
+		return (distance * 0.621371192237334).toFixed(1);
 	}
 	
 	function MItoKM(distance)
 	{
-		return FormatNumber(distance * 1.609344, 1);
+		return (distance * 1.609344).toFixed(1);
 	}
 	
 	function MBtoIN(pressure)
 	{
-		return FormatNumber(pressure * 0.0295300, 2);
+		return (pressure * 0.0295300).toFixed(2);
 	}
 	
 	function INtoMB(pressure)
 	{
-		return FormatNumber(pressure * 33.8639, 2);
+		return (pressure * 33.8639).toFixed(2);
 	}
 	
 	function MMtoIN(length)
 	{
-		return FormatNumber(length * 0.0393700787401575, 2);
+		return (length * 0.0393700787401575).toFixed(2);
 	}
 	
 	function INtoMM(length)
 	{
-		return FormatNumber(length * 25.4, 2);
+		return (length * 25.4).toFixed(2);
 	}
 	
 	function KMHtoMPH(speed)
 	{
-		return FormatNumber(speed * 0.621371192237334, 1);
+		return (speed * 0.621371192237334).toFixed(1);
 	}
 	
 	function MPHtoKMH(speed)
 	{
-		return FormatNumber(speed * 1.609344, 1);
+		return (speed * 1.609344).toFixed(1);
 	}	
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////
@@ -1412,6 +1764,9 @@
 	
 	// Remove multiple, leading or trailing spaces
 	function Trim(s) {
+		if (s == null)
+			return null;
+		
 		s = s.replace(/(^\s*)|(\s*$)/gi,"");
 		s = s.replace(/[ ]{2,}/gi," ");
 		s = s.replace(/\n /,"\n");
@@ -1420,7 +1775,21 @@
 	
 	// Remove all spaces
 	function RemoveSpaces(s) {
+		if (s == null)
+			return null;
+		
 		return s.replace(/(\s|\n)+/g,'');
+	}
+	
+	function IsNullOrEmpty(str)
+	{
+		if (str == null)
+			return true;
+			
+		if (typeof(str) != "string")
+			return false;
+			
+		return (str == "");
 	}
 		
 	]]>
@@ -4685,9 +5054,10 @@
 	</comment>
 	<registration description="Weather Underground Provider" progid="DXWeatherProvider.WUnderground" version="1" classid="{DFF07170-3A66-41e8-9685-67CC07173146}" />  
       	    	  
-    <object id="m_locations" progid="Scripting.Dictionary" />  
-    <object id="m_alerts" progid="Scripting.Dictionary" />  
+    <object id="m_locations" progid="Scripting.Dictionary" />      
+	<object id="m_weather" progid="Scripting.Dictionary" />  
     <object id="m_forecast" progid="Scripting.Dictionary" />  
+    <object id="m_alerts" progid="Scripting.Dictionary" />  
     <object id="m_cameras" progid="Scripting.Dictionary" />  
     
     <object id="m_request" progid="Microsoft.XmlDom" /> 
@@ -4792,17 +5162,19 @@
 	<resource id="url_station">http://api.wunderground.com/weatherstation/WXCurrentObXML.asp?ID=</resource>
 	<resource id="url_alerts">http://api.wunderground.com/auto/wui/geo/AlertsXML/index.xml?query=</resource>
 	<resource id="url_forecast">http://api.wunderground.com/auto/wui/geo/ForecastXML/index.xml?query=</resource>
+
+	<comment>
+		Refresh rate in minutes
+	</comment>
+	<resource id="refresh_weather">25</resource>
+	<resource id="refresh_forecast">210</resource>
 	
 	<script language="JScript">
 	<![CDATA[
 	
 	//**Start Encode**
 	
-	var ErrorCode 			= getComponent("WeatherError");
-	
-	// Data
-	var m_weather   		= null;
-	var m_lastUpdateTime	= null;
+	var Constants 			= getComponent("WeatherConstants");
 	
 	// Helper
 	var m_helper			= getComponent("WeatherHelper");
@@ -4815,6 +5187,8 @@
 	var m_forecastCallback  = null;
 	var m_camerasCallback   = null;
 	var m_errorCallback 	= null;
+	
+	var m_cache_id = null;
 	
 	var m_useMetricSystem = true;
 	
@@ -4840,34 +5214,34 @@
 	function getQueryString(locationQuery) {
 		
 		// Check that location query is not null
-		if (locationQuery == null)
+		if (m_helper.IsNullOrEmpty(locationQuery))
 			return "";
 				
-		if (locationQuery.CustomQueryString != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.CustomQueryString))
 			return locationQuery.CustomQueryString;
 		
-		if (locationQuery.ZipCode != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.ZipCode))
 			return locationQuery.ZipCode;
 			
-		if (locationQuery.ID != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.ID))
 			return locationQuery.ID;		
 			
-		if (locationQuery.City != "" && locationQuery.State != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.City) && !m_helper.IsNullOrEmpty(locationQuery.State))
 			return locationQuery.City + ", " + locationQuery.State;
 			
-		if (locationQuery.City != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.City))
 			return locationQuery.City;
 			
-		if (locationQuery.State != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.State))
 		 	return locationQuery.State;
 		 	
-		if (locationQuery.Country != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.Country))
 			return locationQuery.Country;
 			
-		if (locationQuery.AirportCode != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.AirportCode))
 			return locationQuery.AirportCode;
 			
-		if (locationQuery.Latitude != "" && locationQuery.Longitude != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.Latitude) && !m_helper.IsNullOrEmpty(locationQuery.Longitude))
 			return locationQuery.Latitude + "," + locationQuery.Longitude;
 			
 		return "";		
@@ -4877,13 +5251,13 @@
 	function getWeatherQueryString(locationQuery)
 	{		
 		// Check that location query is not null
-		if (locationQuery == null)
+		if (m_helper.IsNullOrEmpty(locationQuery))
 			return "";
 			
-		if (locationQuery.AirportCode != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.AirportCode))
 			return getResource("url_weather") + locationQuery.AirportCode;
 		
-		if (locationQuery.ID != "")
+		if (!m_helper.IsNullOrEmpty(locationQuery.ID))
 			return getResource("url_station") + locationQuery.ID;
 		
 		return "";
@@ -4893,25 +5267,38 @@
 	// Misc parsing functions
 	///////////////////////////////	
 	
-	// Parse elevation string and remove unit at the end / convert to metric system if needed
-	function parseElevation(elevation)
+	// Remove unit at the end of the string
+	function removeUnit(str, end)
 	{
-		// FIXME: remove "ft" at the end of the elevation data and Trim the string
-		return m_helper.Trim(elevation);
+		var cleaned = m_helper.Trim(str);
+		
+		var index = cleaned.search(end)
+		if (index == -1)
+			return cleaned;
+			
+		return cleaned.substr(0, index - 1); 	
 	}
 	
-	// Parse humidity string and remove % at the end
-	function parseHumidity(humidity)
+	// Parse elevation string, remove unit at the end / convert to metric system if needed
+	function parseElevation(elevation)
 	{
-		// FIXME: remove "%" at the end if present
-		return m_helper.Trim(humidity);
+		var parsed = removeUnit(elevation, "ft");
+		
+		if (!m_useMetricSystem)
+			return parsed;
+		
+		return m_helper.FTtoM(parsed);
 	}
 	
 	// Parse speed string, remove unit at the end / convert to metric system if needed
 	function parseSpeed(speed)
 	{
-		// FIXME: remove "mph" at the end if present, and convert to metric if needed
-		return m_helper.Trim(speed);
+		var parsed = removeUnit(speed, "mph");
+		
+		if (!m_useMetricSystem)
+			return parsed;
+		
+		return m_helper.MPHtoKMH(parsed);
 	}
 	
 	// Parse speed heat/windchill
@@ -4922,13 +5309,14 @@
 		if (heat == "NA")
 			return null;
 			
-		return heat;
+		if (m_useMetricSystem)		
+			return heat;
 	}
 	
 	// Parse weather code and return a code number
 	function parseCode(code)
 	{
-		// FIXME: convert from string code to weather icon number
+		// TODO: convert from string code to weather icon number
 		return m_helper.Trim(code);
 	}	
 	
@@ -4939,7 +5327,7 @@
 	// Setup license
 	function SetLicense(id, key) {
 		// Not used by this provider: always return E_OK
-		return ErrorCode.E_OK;
+		return Constants.E_OK;
 	}
 	
 	// Set callbacks
@@ -4964,7 +5352,7 @@
 	function GetLocations(locationQuery) {
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
-			return ErrorCode.E_NOTAVAILABLE;
+			return Constants.E_NOTAVAILABLE;
 		
 		// Reset DOM
 		m_request.abort();
@@ -4973,14 +5361,14 @@
 		m_request.async = true;
 		m_request.load(getResource("url_locations") + getQueryString(locationQuery));
 		
-		return ErrorCode.E_OK;		
+		return Constants.E_OK;		
 	}
 	
 	function OnLocationsResponse() {
 		if (m_request.readyState != 4) 
 			return;
 			
-		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 			
 		// Clear any previous results
@@ -5083,39 +5471,39 @@
 	function GetWeather(locationQuery) {				
 		// Check query for validity
 		if (getWeatherQueryString(locationQuery) == "")
-			return ErrorCode.E_NOTAVAILABLE;
+			return Constants.E_NOTAVAILABLE;
 					
 		// Reset DOM
 		m_request.abort();
 		
+		// Check cache
+		m_cache_id = getQueryString(locationQuery);
+		if (m_helper.CheckCache(m_weather, m_cache_id, getResource("refresh_weather"))) {
+			m_weatherCallback(m_weather.Item(m_cache_id));
+			
+			return Constants.E_OK;
+		}
+
 		m_request.onreadystatechange = OnWeatherResponse;
 		m_request.async = true;
 		m_request.load(getWeatherQueryString(locationQuery));
 		
-		return ErrorCode.E_OK;		
+		return Constants.E_OK;		
 	}
 	
 	function OnWeatherResponse() {
 		if (m_request.readyState != 4) 
 			return;
 			
-		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
-			return;
-
-		// Reset weather object
-		m_weather = null;
-		m_weather = getComponent("WeatherInfo");
-			
-		// Parse weather
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
+			return;	
+		
 		var observation = m_request.selectNodes("current_observation");
 		if (observation.length == 0) {
-			m_weatherCallback(m_weather);	
+			m_errorCallback(Constants.E_ERROR, "No weather results!");	
 			return;
 		}
-		
-		// Set unit system
-		m_weather.UseMetricSystem = m_useMetricSystem;
-		
+
 		///////////////////////////
 		//  Parse location data  //
 		///////////////////////////
@@ -5124,46 +5512,55 @@
 		var station_id = m_helper.GetNodeValue(observation[0], "station_id/text()");
 		if (station_id == "")
 		{
-			m_errorCallback(ErrorCode.E_ERROR, "Response is empty. Please check that the station code you used is valid!");
+			m_errorCallback(Constants.E_ERROR, "Response is empty. Please check that the station code you used is valid!");
 			return;
 		}		
+		
+		// Parse weather
+		var weather = getComponent("WeatherInfo");				
+		
+		// Set unit system
+		weather.UseMetricSystem = m_useMetricSystem;
+		
+		// Save update time
+		weather.LastUpdateTime = m_dateHelper.GetDate();
 		
 		// Airport location
 		var location = observation[0].getElementsByTagName("display_location");
 		if (location.length != 0) {
 			
-			m_weather.Location = getComponent("WeatherLocation");
+			weather.Location = getComponent("WeatherLocation");
 			
-			m_weather.Location.City  	 = m_helper.GetNodeValue(location[0], "city/text()");		
-			m_weather.Location.State	 = m_helper.GetNodeValue(location[0], "state_name/text()");		
-			m_weather.Location.Country   = m_helper.GetNodeValue(location[0], "country/text()");		
-			m_weather.Location.ZipCode   = m_helper.GetNodeValue(location[0], "zip/text()");		
-			m_weather.Location.Latitude  = m_helper.GetNodeValue(location[0], "latitude/text()");		
-			m_weather.Location.Longitude = m_helper.GetNodeValue(location[0], "longitude/text()");		
+			weather.Location.City  	 = m_helper.GetNodeValue(location[0], "city/text()");		
+			weather.Location.State	 = m_helper.GetNodeValue(location[0], "state_name/text()");		
+			weather.Location.Country   = m_helper.GetNodeValue(location[0], "country/text()");		
+			weather.Location.ZipCode   = m_helper.GetNodeValue(location[0], "zip/text()");		
+			weather.Location.Latitude  = m_helper.GetNodeValue(location[0], "latitude/text()");		
+			weather.Location.Longitude = m_helper.GetNodeValue(location[0], "longitude/text()");		
 						
-			m_weather.Location.Elevation = parseElevation(m_helper.GetNodeValue(location[0], "elevation/text()"));
+			weather.Location.Elevation = parseElevation(m_helper.GetNodeValue(location[0], "elevation/text()"));
 			
 			// Station ID goes into the location airport code
-			m_weather.Location.AirportCode = station_id;
+			weather.Location.AirportCode = station_id;
 		} 
 		
 		// Personal weather station
 		location = observation[0].getElementsByTagName("location");
 		if (location.length != 0) {
 			
-			m_weather.Location = getComponent("WeatherLocation");
+			weather.Location = getComponent("WeatherLocation");
 			
-			m_weather.Location.Name 	 = m_helper.GetNodeValue(location[0], "neighborhood/text()");		
-			m_weather.Location.City  	 = m_helper.GetNodeValue(location[0], "city/text()");		
-			m_weather.Location.State	 = m_helper.GetNodeValue(location[0], "state/text()");					
-			m_weather.Location.ZipCode   = m_helper.GetNodeValue(location[0], "zip/text()");		
-			m_weather.Location.Latitude  = m_helper.GetNodeValue(location[0], "latitude/text()");		
-			m_weather.Location.Longitude = m_helper.GetNodeValue(location[0], "longitude/text()");		
+			weather.Location.Name 	 = m_helper.GetNodeValue(location[0], "neighborhood/text()");		
+			weather.Location.City  	 = m_helper.GetNodeValue(location[0], "city/text()");		
+			weather.Location.State	 = m_helper.GetNodeValue(location[0], "state/text()");					
+			weather.Location.ZipCode   = m_helper.GetNodeValue(location[0], "zip/text()");		
+			weather.Location.Latitude  = m_helper.GetNodeValue(location[0], "latitude/text()");		
+			weather.Location.Longitude = m_helper.GetNodeValue(location[0], "longitude/text()");		
 						
-			m_weather.Location.Elevation = parseElevation(m_helper.GetNodeValue(location[0], "elevation/text()"));				
+			weather.Location.Elevation = parseElevation(m_helper.GetNodeValue(location[0], "elevation/text()"));				
 			
 			// Station ID goes into the location ID
-			m_weather.Location.ID        =  station_id;
+			weather.Location.ID        =  station_id;
 		}
 		
 		//////////////////////////
@@ -5171,75 +5568,75 @@
 		//////////////////////////
 		
 		// Use credit name as a weather station name
-		m_weather.Station		  = m_helper.GetNodeValue(observation[0], "credit/text()");
-		m_weather.Type 			  = m_helper.GetNodeValue(observation[0], "station_type/text()");
+		weather.Station		  = m_helper.GetNodeValue(observation[0], "credit/text()");
+		weather.Type 			  = m_helper.GetNodeValue(observation[0], "station_type/text()");
 		
 		// Observation date
-		m_weather.Date = m_dateHelper.FromEpoch(m_helper.GetNodeValue(observation[0],  "observation_epoch/text()"));
+		weather.Date = m_dateHelper.FromEpoch(m_helper.GetNodeValue(observation[0],  "observation_epoch/text()"));
 		
 		// Temperature
 		if (m_useMetricSystem)
-			m_weather.Temperature = m_helper.GetNodeValue(observation[0], "temp_c/text()");
+			weather.Temperature = m_helper.GetNodeValue(observation[0], "temp_c/text()");
 		else
-			m_weather.Temperature = m_helper.GetNodeValue(observation[0], "temp_f/text()");
+			weather.Temperature = m_helper.GetNodeValue(observation[0], "temp_f/text()");
 			
 		// Humidity
-		m_weather.Humidity 		  = parseHumidity(m_helper.GetNodeValue(observation[0], "relative_humidity/text()"));
+		weather.Humidity 		  = removeUnit(m_helper.GetNodeValue(observation[0], "relative_humidity/text()"), "%");
 		
 		// Wind
-		m_weather.WindDescription = m_helper.GetNodeValue(observation[0], "wind_string/text()");
-		m_weather.WindDirection   = m_helper.GetNodeValue(observation[0], "wind_dir/text()");
-		m_weather.WindDegrees 	  = m_helper.GetNodeValue(observation[0], "wind_degrees/text()");
-		m_weather.WindSpeed		  = parseSpeed(m_helper.GetNodeValue(observation[0], "wind_mph/text()"));
-		m_weather.WindGust 		  = parseSpeed(m_helper.GetNodeValue(observation[0], "wind_gust_mph/text()"));
+		weather.WindDescription = m_helper.GetNodeValue(observation[0], "wind_string/text()");
+		weather.WindDirection   = m_helper.GetNodeValue(observation[0], "wind_dir/text()");
+		weather.WindDegrees 	  = m_helper.GetNodeValue(observation[0], "wind_degrees/text()");
+		weather.WindSpeed		  = parseSpeed(m_helper.GetNodeValue(observation[0], "wind_mph/text()"));
+		weather.WindGust 		  = parseSpeed(m_helper.GetNodeValue(observation[0], "wind_gust_mph/text()"));
 	    
 	    // Pressure
 	    if (m_useMetricSystem)
-	    	m_weather.Pressure	  = m_helper.GetNodeValue(observation[0], "pressure_mb/text()");
+	    	weather.Pressure	  = m_helper.GetNodeValue(observation[0], "pressure_mb/text()");
 	    else
-	    	m_weather.Pressure	  = m_helper.GetNodeValue(observation[0], "pressure_in/text()");
+	    	weather.Pressure	  = m_helper.GetNodeValue(observation[0], "pressure_in/text()");
 	    	
 	    // Dew Point
-	    m_weather.DewPointDescription = m_helper.GetNodeValue(observation[0], "dewpoint_string/text()");
+	    weather.DewPointDescription = m_helper.GetNodeValue(observation[0], "dewpoint_string/text()");
 	    if (m_useMetricSystem)
-	    	m_weather.DewPoint	  = m_helper.GetNodeValue(observation[0], "dewpoint_c/text()");
+	    	weather.DewPoint	  = m_helper.GetNodeValue(observation[0], "dewpoint_c/text()");
 	    else
-	    	m_weather.DewPoint	  = m_helper.GetNodeValue(observation[0], "dewpoint_f/text()");
+	    	weather.DewPoint	  = m_helper.GetNodeValue(observation[0], "dewpoint_f/text()");
 	    	
 	    // Heat index
-	    m_weather.HeatDescription = parseHeat(m_helper.GetNodeValue(observation[0], "heat_index_string/text()"));
+	    weather.HeatDescription = parseHeat(m_helper.GetNodeValue(observation[0], "heat_index_string/text()"));
 		if (m_useMetricSystem)
-	    	m_weather.HeatIndex	  = parseHeat(m_helper.GetNodeValue(observation[0], "heat_index_c/text()"));
+	    	weather.HeatIndex	  = parseHeat(m_helper.GetNodeValue(observation[0], "heat_index_c/text()"));
 	    else
-	    	m_weather.HeatIndex	  = parseHeat(m_helper.GetNodeValue(observation[0], "heat_index_f/text()"));			
+	    	weather.HeatIndex	  = parseHeat(m_helper.GetNodeValue(observation[0], "heat_index_f/text()"));			
 	    	
 	    // Solar Radiation & UV	
-	    m_weather.SolarRadiation  = m_helper.GetNodeValue(observation[0], "solar_radiation/text()");			
-	    m_weather.UV	  		  = m_helper.GetNodeValue(observation[0], "UV/text()");			
+	    weather.SolarRadiation  = m_helper.GetNodeValue(observation[0], "solar_radiation/text()");			
+	    weather.UV	  		  = m_helper.GetNodeValue(observation[0], "UV/text()");			
 	    	
 	    // Wind chill
-	    m_weather.WindChillDescription = parseHeat(m_helper.GetNodeValue(observation[0], "windchill_string/text()"));
+	    weather.WindChillDescription = parseHeat(m_helper.GetNodeValue(observation[0], "windchill_string/text()"));
 		if (m_useMetricSystem)
-	    	m_weather.WindChill	  = parseHeat(m_helper.GetNodeValue(observation[0], "windchill_c/text()"));
+	    	weather.WindChill	  = parseHeat(m_helper.GetNodeValue(observation[0], "windchill_c/text()"));
 	    else
-	    	m_weather.WindChill	  = parseHeat(m_helper.GetNodeValue(observation[0], "windchill_f/text()"));		
+	    	weather.WindChill	  = parseHeat(m_helper.GetNodeValue(observation[0], "windchill_f/text()"));		
 	    		    
 	    // Visibility
 	    if (m_useMetricSystem)
-	    	m_weather.Visibility  = m_helper.GetNodeValue(observation[0], "visibility_km/text()");
+	    	weather.Visibility  = m_helper.GetNodeValue(observation[0], "visibility_km/text()");
 	    else
-	    	m_weather.Visibility  = m_helper.GetNodeValue(observation[0], "visibility_mi/text()");
+	    	weather.Visibility  = m_helper.GetNodeValue(observation[0], "visibility_mi/text()");
 	    		    	
 	    // Weather code
-	    m_weather.Code    		  = parseCode(m_helper.GetNodeValue(observation[0], "icon/text()"));
+	    weather.Code    		  = parseCode(m_helper.GetNodeValue(observation[0], "icon/text()"));
 	    
 	    // Precipitation
 		if (m_useMetricSystem) {
-	    	m_weather.Precipitation1H     = m_helper.GetNodeValue(observation[0], "precip_1hr_metric/text()");
-	    	m_weather.PrecipitationToday  = m_helper.GetNodeValue(observation[0], "precip_today_metric/text()");	    	
+	    	weather.Precipitation1H     = m_helper.GetNodeValue(observation[0], "precip_1hr_metric/text()");
+	    	weather.PrecipitationToday  = m_helper.GetNodeValue(observation[0], "precip_today_metric/text()");	    	
 	    } else {
-	    	m_weather.Precipitation1H     = m_helper.GetNodeValue(observation[0], "precip_1hr_in/text()");
-	    	m_weather.PrecipitationToday  = m_helper.GetNodeValue(observation[0], "precip_today_in/text()");	    
+	    	weather.Precipitation1H     = m_helper.GetNodeValue(observation[0], "precip_1hr_in/text()");
+	    	weather.PrecipitationToday  = m_helper.GetNodeValue(observation[0], "precip_today_in/text()");	    
 	    }
 	    
 	    //////////////////////////////
@@ -5253,9 +5650,12 @@
 		links.Credit			 = m_helper.GetNodeValue(observation[0], "credit_URL/text()");
 		links.Logo				 = m_helper.GetNodeValue(observation[0], "ob_url/text()");
 		
-		m_weather.Links = links;
+		weather.Links = links;
 	    	
-		m_weatherCallback(m_weather);	
+		// Update weather cache
+		m_weather(m_cache_id) = weather;
+		 	
+		m_weatherCallback(weather);		
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////		
@@ -5265,7 +5665,7 @@
 		
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
-			return ErrorCode.E_NOTAVAILABLE;
+			return Constants.E_NOTAVAILABLE;
 		
 		// Reset DOM
 		m_request.abort();
@@ -5274,14 +5674,14 @@
 		m_request.async = true;
 		m_request.load(getResource("url_alerts") + getQueryString(locationQuery));
 		
-		return ErrorCode.E_OK;		
+		return Constants.E_OK;		
 	}
 	
 	function OnAlertsResponse() {
 		if (m_request.readyState != 4) 
 			return;
 			
-		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 
 		// Clear any previous results
@@ -5318,32 +5718,43 @@
 	function GetForecast(locationQuery) {				
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
-			return ErrorCode.E_NOTAVAILABLE;
+			return Constants.E_NOTAVAILABLE;
 		
 		// Reset DOM
 		m_request.abort();
+
+		// Check cache		
+		m_cache_id = getQueryString(locationQuery);
+		if (m_helper.CheckCache(m_forecast, m_cache_id, getResource("refresh_forecast"), true)) {
+			m_forecastCallback(m_forecast.Item(m_cache_id));
+			
+			return Constants.E_OK;
+		}
 		
 		m_request.onreadystatechange = OnForecastResponse;
 		m_request.async = true;
 		m_request.load(getResource("url_forecast") + getQueryString(locationQuery));
 		
-		return ErrorCode.E_OK;	
+		return Constants.E_OK;	
 	}
 	
 	function OnForecastResponse() {
 		if (m_request.readyState != 4) 
 			return;
 			
-		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 
-		// Clear any previous results
-		m_forecast.RemoveAll();
+		// Dictionary for forecast data
+		var forecasts = new ActiveXObject("Scripting.Dictionary");
 			
 		// forecast index
 		var i = 0;	
+				
+		// update time
+		var lastUpdateTime = m_dateHelper.GetDate();
 		
-		// FIXME: merge forecast text & forecast into the first x objects
+		// TODO: merge forecast text & forecast into the first x objects
 		//  we need to check the forecast number to know where to put things
 		
 		// Parse text forecast (today / tonight)
@@ -5378,8 +5789,10 @@
 					forecast.DayPart = forecast.DAY_PART_NIGHT;
 									
 				forecast.Date = date;
+				
+				forecast.LastUpdateTime = lastUpdateTime;
 			    			    
-			  	m_forecast.Add(i, forecast);    
+			  	forecasts.Add(i, forecast);    
 			    i++;
 			}
 		}			
@@ -5410,9 +5823,11 @@
 			    }
 			    
 			    // Date
-			    forecast.Date = m_dateHelper.FromEpoch(m_helper.GetNodeValue(entry, "date/epoch/text()"));			    
+			    forecast.Date = m_dateHelper.FromEpoch(m_helper.GetNodeValue(entry, "date/epoch/text()"));		
 			    
-			    m_forecast.Add(i, forecast);		    
+			    forecast.LastUpdateTime = lastUpdateTime;	    
+			    
+			    forecasts.Add(i, forecast);		    
 			    i++;
 			}
 		}
@@ -5422,7 +5837,7 @@
 		if (moon_phase.length != 0)
 		{
 			// Get the first forecast
-			var forecast = m_forecast.Item(0);			
+			var forecast = forecasts.Item(0);			
 			if (forecast == null)
 				forecast = getComponent("WeatherInfo");
 				
@@ -5445,12 +5860,16 @@
 				forecast.Sunset = m_dateHelper.GetDate().set({ 
 									 hour: parseInt(sunset_hour),
 									 minute: parseInt(sunset_minute)});
+									 
+			forecast.LastUpdateTime = lastUpdateTime;	 
 			
-			m_forecast.Item(0) = forecast;		
+			forecasts.Item(0) = forecast;		
 		}
 		
-			
-		m_forecastCallback(m_forecast);		
+		// Cache data		
+		m_forecast(m_cache_id) = forecasts;
+		
+		m_forecastCallback(forecasts);		
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
@@ -5458,9 +5877,8 @@
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	function GetCameras(locationQuery) {
 		// TODO we should cache results from GetLocations and only make a new call if the query differs.		
-		return ErrorCode.E_NOTIMPLEMENTED;
+		return Constants.E_NOTIMPLEMENTED;
 	}	
-	
 	
 	]]>
 	</script>
@@ -5568,7 +5986,7 @@
 	
 	//**Start Encode**	
 	
-	var ErrorCode 			= getComponent("WeatherError");
+	var Constants 			= getComponent("WeatherConstants");
 	
 	// Helper
 	var m_helper			= getComponent("WeatherHelper");
@@ -5612,22 +6030,22 @@
 	function getLocationQueryString(query)
 	{
 		// Check that location query is not null
-		if (query == null)
+		if (m_helper.IsNullOrEmpty(query))
 			return "";
 			
-		if (query.CustomQueryString != "")
+		if (!m_helper.IsNullOrEmpty(query.CustomQueryString))
 			return query.CustomQueryString;	
 						
-		if (query.ZipCode != "")
+		if (!m_helper.IsNullOrEmpty(query.ZipCode))
 			return query.ZipCode;
 			
-		if (query.City != "" && query.State != "")
+		if (!m_helper.IsNullOrEmpty(query.City) && !m_helper.IsNullOrEmpty(query.State))
 			return query.City + ", " + query.State;
 			
-		if (query.City != ""  && query.Country != "")
+		if (!m_helper.IsNullOrEmpty(query.City)  && !m_helper.IsNullOrEmpty(query.Country))
 			return query.City + ", " + query.Country;
 			
-		if (query.City != "")
+		if (!m_helper.IsNullOrEmpty(query.City))
 		 	return query.City;			
 			
 		return "";
@@ -5636,7 +6054,10 @@
 	function getQueryString(queryLocation, isForecast)
 	{
 		// Check that location query is not null
-		if (queryLocation == null || queryLocation.ID == "")
+		if (m_helper.IsNullOrEmpty(queryLocation))
+			return "";
+			
+		if (m_helper.IsNullOrEmpty(queryLocation.ID))
 			return "";
 
 		var query = getResource("url_weather");
@@ -5669,7 +6090,7 @@
 		// Get err node
 		var msg = m_request.getElementsByTagName("err");
 		if (msg.length == 0) {
-			m_errorCallback(ErrorCode.E_ERROR, "The provider returned an error!");
+			m_errorCallback(Constants.E_ERROR, "The provider returned an error!");
 			return true;
 		}
 		
@@ -5677,7 +6098,11 @@
 		var type	 = m_helper.GetNodeValue(msg[0], "@type/text()");	
 		var message  = m_helper.GetNodeValue(msg[0], "text()");	
 		
-		m_errorCallback(ErrorCode.E_ERROR, "The provider returned an error: " + message + "(" + type + ")");
+		var err = Constants.E_ERROR;
+		if (type == 100 || type == 102)
+			err = Constants.E_INVALIDLICENSE;
+		
+		m_errorCallback(err, "The provider returned an error: " + message + "(" + type + ")");
 		
 		return true;		
 	}
@@ -5693,7 +6118,7 @@
 		var type = m_helper.GetNodeValue(promo[0], "@type/text()");
 		if (type != "prmo")
 		{
-			m_errorCallback(ErrorCode.E_WARNING, "Unknow type of link encoutered: " + type);
+			m_errorCallback(Constants.E_WARNING, "Unknow type of link encoutered: " + type);
 			return null;
 		}			
 			
@@ -5716,9 +6141,18 @@
 		return links;		
 	}
 	
+	function parseCode(code)
+	{
+		// Add 0 at the beginning of the code
+		if (code * 1 < 10)
+			return "0" + code * 1;
+			
+		return code;
+	}
+	
 	function parseCodeMoon(code)
 	{
-		// TODO parse code
+		// TODO parse moon code
 		return code;
 	}
 	
@@ -5794,12 +6228,12 @@
 	// Setup license
 	function SetLicense(id, key) {			
 		if (id == "" || key == "")
-			return ErrorCode.E_INVALIDLICENSE;
+			return Constants.E_INVALIDLICENSE;
 		
 		m_id = id;
 		m_key = key;	
 		
-		return ErrorCode.E_OK;
+		return Constants.E_OK;
 	}
 	
 	// Set callbacks
@@ -5824,23 +6258,23 @@
 	function GetLocations(locationQuery) {
 		// Check query for validity
 		if (getLocationQueryString(locationQuery) == "")
-			return ErrorCode.E_NOTAVAILABLE;
+			return Constants.E_NOTAVAILABLE;
 		
-		// Reset dom
+		// Reset DOM
 		m_request.abort();
 		
 		m_request.onreadystatechange = OnLocationsResponse;
 		m_request.async = true;
 		m_request.load(getResource("url_locations") + getLocationQueryString(locationQuery));
 		
-		return ErrorCode.E_OK;		
+		return Constants.E_OK;		
 	}
 	
 	function OnLocationsResponse() {
 		if (m_request.readyState != 4) 
 			return;
 			
-		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 			
 		if (checkFeedError())
@@ -5852,7 +6286,7 @@
 		// Get search node
 		var search = m_request.getElementsByTagName("search");
 		if (search.length == 0) {
-			m_errorCallback(ErrorCode.E_ERROR, "No search results!");
+			m_errorCallback(Constants.E_ERROR, "No search results!");
 			return;
 		}
 		
@@ -5887,7 +6321,7 @@
 		    	// Unknown type
 		    	default:
 		    		// report with an error message
-		    		m_errorCallback(ErrorCode.E_PARSERERROR, "Unknown location type: " + type);
+		    		m_errorCallback(Constants.E_PARSERERROR, "Unknown location type: " + type);
 		    		return;		    				    
 		    }
 		    
@@ -5897,7 +6331,7 @@
 		
 		// If we didn't get any location
 		if (m_locations.Count == 0) {
-			m_errorCallback(ErrorCode.E_ERROR, "No search results!");
+			m_errorCallback(Constants.E_ERROR, "No search results!");
 			return;
 		}
 			
@@ -5910,30 +6344,30 @@
 	function GetWeather(locationQuery) {				
 		// Check query for validity
 		if (getQueryString(locationQuery, false) == "")
-			return ErrorCode.E_NOTAVAILABLE;
+			return Constants.E_NOTAVAILABLE;
 					
-		// Reset dom
+		// Reset DOM
 		m_request.abort();
 		
 		// Check cache
 		if (m_helper.CheckCache(m_weather, locationQuery.ID, getResource("refresh_weather"))) {
 			m_weatherCallback(m_weather.Item(locationQuery.ID));
 			
-			return ErrorCode.E_OK;
+			return Constants.E_OK;
 		}
 
 		m_request.onreadystatechange = OnWeatherResponse;
 		m_request.async = true;
 		m_request.load(getQueryString(locationQuery, false));
 		
-		return ErrorCode.E_OK;		
+		return Constants.E_OK;		
 	}
 	
 	function OnWeatherResponse() {
 		if (m_request.readyState != 4) 
 			return;
 			
-		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 			
 		if (checkFeedError())
@@ -5950,7 +6384,7 @@
 			weather.Temperature			= m_helper.GetNodeValue(info[0], "tmp/text()");
 			weather.TemperatureFeel		= m_helper.GetNodeValue(info[0], "flik/text()");
 			weather.Description			= m_helper.GetNodeValue(info[0], "t/text()");
-			weather.Code				= m_helper.GetNodeValue(info[0], "icon/text()");
+			weather.Code				= parseCode(m_helper.GetNodeValue(info[0], "icon/text()"));
 			
 			weather.Pressure			= m_helper.GetNodeValue(info[0], "bar/r/text()");
 			weather.PressureTrend		= m_helper.GetNodeValue(info[0], "bar/d/text()");
@@ -5985,30 +6419,30 @@
 	function GetForecast(locationQuery) {		
 		// Check query for validity
 		if (getQueryString(locationQuery, true) == "")
-			return ErrorCode.E_NOTAVAILABLE;
+			return Constants.E_NOTAVAILABLE;
 					
-		// Reset dom
+		// Reset DOM
 		m_request.abort();
 		
 		// Check cache
 		if (m_helper.CheckCache(m_forecast, locationQuery.ID, getResource("refresh_forecast"), true)) {
 			m_forecastCallback(m_forecast.Item(locationQuery.ID));
 			
-			return ErrorCode.E_OK;
+			return Constants.E_OK;
 		}
 
 		m_request.onreadystatechange = OnForecastResponse;
 		m_request.async = true;
 		m_request.load(getQueryString(locationQuery, true));
 		
-		return ErrorCode.E_OK;		
+		return Constants.E_OK;		
 	}
 	
 	function OnForecastResponse() {
 		if (m_request.readyState != 4) 
 			return;
 			
-		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 			
 		if (checkFeedError())
@@ -6019,7 +6453,7 @@
 		
 		var forecastNode = m_request.getElementsByTagName("dayf");
 		if (forecastNode.length == 0) {
-			m_errorCallback(ErrorCode.E_ERROR, "No forecast results!");
+			m_errorCallback(Constants.E_ERROR, "No forecast results!");
 			return;
 		}
 		
@@ -6067,7 +6501,7 @@
 		    	var dayNode = entry.selectNodes("part[@p='" + type + "']");
 		    	if (dayNode.length != 0)
 		    	{
-		    		forecastArray[forecast].Code 				=  m_helper.GetNodeValue(dayNode[0], "icon/text()");
+		    		forecastArray[forecast].Code 				=  parseCode(m_helper.GetNodeValue(dayNode[0], "icon/text()"));
 		    		forecastArray[forecast].Description 		=  m_helper.GetNodeValue(dayNode[0], "t/text()");
 		    		
 		    		forecastArray[forecast].WindSpeed 			=  m_helper.GetNodeValue(dayNode[0], "wind/s/text()");
@@ -6096,14 +6530,14 @@
 	// Get a list of alerts
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	function GetAlerts(locationQuery) {
-		return ErrorCode.E_NOTIMPLEMENTED;
+		return Constants.E_NOTIMPLEMENTED;
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
 	// Get a list of cameras
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	function GetCameras(locationQuery) {		
-		return ErrorCode.E_NOTIMPLEMENTED;
+		return Constants.E_NOTIMPLEMENTED;
 	}	
 		
 	]]>
@@ -6203,7 +6637,7 @@
 	
 	//**Start Encode**
 	
-	var ErrorCode 			= getComponent("WeatherError");
+	var Constants 			= getComponent("WeatherConstants");
 	
 	// Data
 	var m_weather   		= null;
@@ -6252,7 +6686,7 @@
 	// Setup license
 	function SetLicense(id, key) {	
 		// Not used by this provider: always return E_OK
-		return ErrorCode.E_OK;
+		return Constants.E_OK;
 	}
 	
 	// Set callbacks
@@ -6280,7 +6714,7 @@
 		
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
-			return ErrorCode.E_NOTAVAILABLE;
+			return Constants.E_NOTAVAILABLE;
 		
 		// Reset dom
 		m_request.abort();
@@ -6289,14 +6723,14 @@
 		m_request.async = true;
 		m_request.load(getResource("url_locations") + getQueryString(locationQuery));
 		
-		return ErrorCode.E_OK;		
+		return Constants.E_OK;		
 	}
 	
 	function OnLocationsResponse() {
 		if (m_request.readyState != 4) 
 			return;
 			
-		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 		
 		// TODO: Implementation
@@ -6315,7 +6749,7 @@
 				
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
-			return ErrorCode.E_NOTAVAILABLE;
+			return Constants.E_NOTAVAILABLE;
 					
 		// Reset dom
 		m_request.abort();
@@ -6324,14 +6758,14 @@
 		m_request.async = true;
 		m_request.load(getResource("url_weather") + getQueryString(locationQuery));
 		
-		return ErrorCode.E_OK;		
+		return Constants.E_OK;		
 	}
 	
 	function OnWeatherResponse() {
 		if (m_request.readyState != 4) 
 			return;
 			
-		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 			
 		// TODO: Implementation
@@ -6343,7 +6777,7 @@
 	// Get a list of alerts
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	function GetAlerts(locationQuery) {
-		return ErrorCode.E_NOTIMPLEMENTED;
+		return Constants.E_NOTIMPLEMENTED;
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
@@ -6355,7 +6789,7 @@
 		
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
-			return ErrorCode.E_NOTAVAILABLE;
+			return Constants.E_NOTAVAILABLE;
 		
 		// Reset dom
 		m_request.abort();
@@ -6364,14 +6798,14 @@
 		m_request.async = true;
 		m_request.load(getResource("url_forecast") + getQueryString(locationQuery));
 		
-		return ErrorCode.E_OK;	
+		return Constants.E_OK;	
 	}
 	
 	function OnForecastResponse() {
 		if (m_request.readyState != 4) 
 			return;
 			
-		if (!m_helper.CheckParserError(m_request, m_errorCallback, ErrorCode))
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 		
 		// TODO: Implementation
@@ -6383,7 +6817,7 @@
 	// Get a list of cameras
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	function GetCameras(locationQuery) {		
-		return ErrorCode.E_NOTIMPLEMENTED;
+		return Constants.E_NOTIMPLEMENTED;
 	}	
 		
 	]]>

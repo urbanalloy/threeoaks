@@ -181,6 +181,8 @@
 	var m_camerasCallback   = null;
 	var m_errorCallback 	= null;
 	
+	var m_cache_id = null;
+	
 	var m_useMetricSystem = true;
 	
 	///////////////////////////////
@@ -477,14 +479,9 @@
 		m_request.abort();
 		
 		// Check cache
-		if (m_helper.CheckCache(m_weather, locationQuery.ID, getResource("refresh_weather"))) {
-			m_weatherCallback(m_weather.Item(locationQuery.ID));
-			
-			return Constants.E_OK;
-		}
-		
-		if (m_helper.CheckCache(m_weather, locationQuery.AirportCode, getResource("refresh_weather"))) {
-			m_weatherCallback(m_weather.Item(locationQuery.AirportCode));
+		m_cache_id = getQueryString(locationQuery);
+		if (m_helper.CheckCache(m_weather, m_cache_id, getResource("refresh_weather"))) {
+			m_weatherCallback(m_weather.Item(m_cache_id));
 			
 			return Constants.E_OK;
 		}
@@ -501,20 +498,14 @@
 			return;
 			
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
-			return;
-		
-		// Parse weather
-		var weather = getComponent("WeatherInfo");			
+			return;	
 		
 		var observation = m_request.selectNodes("current_observation");
 		if (observation.length == 0) {
 			m_errorCallback(Constants.E_ERROR, "No weather results!");	
 			return;
 		}
-		
-		// Set unit system
-		weather.UseMetricSystem = m_useMetricSystem;
-		
+
 		///////////////////////////
 		//  Parse location data  //
 		///////////////////////////
@@ -526,6 +517,15 @@
 			m_errorCallback(Constants.E_ERROR, "Response is empty. Please check that the station code you used is valid!");
 			return;
 		}		
+		
+		// Parse weather
+		var weather = getComponent("WeatherInfo");				
+		
+		// Set unit system
+		weather.UseMetricSystem = m_useMetricSystem;
+		
+		// Save update time
+		weather.LastUpdateTime = m_dateHelper.GetDate();
 		
 		// Airport location
 		var location = observation[0].getElementsByTagName("display_location");
@@ -655,10 +655,7 @@
 		weather.Links = links;
 	    	
 		// Update weather cache
-		if (weather.Location.ID != null)
-			m_weather(weather.Location.ID) = weather;
-		else if (weather.Location.AirportCode != null)
-			m_weather(weather.Location.AirportCode) = weather;
+		m_weather(m_cache_id) = weather;
 		 	
 		m_weatherCallback(weather);		
 	}
@@ -728,9 +725,10 @@
 		// Reset DOM
 		m_request.abort();
 
-		// Check cache
-		if (m_helper.CheckCache(m_forecast, locationQuery.ID, getResource("refresh_forecast"), true)) {
-			m_forecastCallback(m_forecast.Item(locationQuery.ID));
+		// Check cache		
+		m_cache_id = getQueryString(locationQuery);
+		if (m_helper.CheckCache(m_forecast, m_cache_id, getResource("refresh_forecast"), true)) {
+			m_forecastCallback(m_forecast.Item(m_cache_id));
 			
 			return Constants.E_OK;
 		}
@@ -754,6 +752,9 @@
 			
 		// forecast index
 		var i = 0;	
+				
+		// update time
+		var lastUpdateTime = m_dateHelper.GetDate();
 		
 		// TODO: merge forecast text & forecast into the first x objects
 		//  we need to check the forecast number to know where to put things
@@ -790,6 +791,8 @@
 					forecast.DayPart = forecast.DAY_PART_NIGHT;
 									
 				forecast.Date = date;
+				
+				forecast.LastUpdateTime = lastUpdateTime;
 			    			    
 			  	forecasts.Add(i, forecast);    
 			    i++;
@@ -822,7 +825,9 @@
 			    }
 			    
 			    // Date
-			    forecast.Date = m_dateHelper.FromEpoch(m_helper.GetNodeValue(entry, "date/epoch/text()"));			    
+			    forecast.Date = m_dateHelper.FromEpoch(m_helper.GetNodeValue(entry, "date/epoch/text()"));		
+			    
+			    forecast.LastUpdateTime = lastUpdateTime;	    
 			    
 			    forecasts.Add(i, forecast);		    
 			    i++;
@@ -834,7 +839,7 @@
 		if (moon_phase.length != 0)
 		{
 			// Get the first forecast
-			var forecast = m_forecast.Item(0);			
+			var forecast = forecasts.Item(0);			
 			if (forecast == null)
 				forecast = getComponent("WeatherInfo");
 				
@@ -857,13 +862,14 @@
 				forecast.Sunset = m_dateHelper.GetDate().set({ 
 									 hour: parseInt(sunset_hour),
 									 minute: parseInt(sunset_minute)});
+									 
+			forecast.LastUpdateTime = lastUpdateTime;	 
 			
 			forecasts.Item(0) = forecast;		
 		}
 		
 		// Cache data		
-		if (sharedData.Location.ID != null)
-			m_forecast(sharedData.Location.ID) = forecasts;
+		m_forecast(m_cache_id) = forecasts;
 		
 		m_forecastCallback(forecasts);		
 	}
