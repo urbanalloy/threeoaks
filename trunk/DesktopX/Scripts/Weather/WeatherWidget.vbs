@@ -244,6 +244,17 @@ Sub GetWeather()
 	ParseRetCode retCode
 End Sub
 
+Sub GetCameras()
+	ClearInfo()
+	
+	Dim query, retCode
+	Set query = WeatherController.GetQueryObject()	
+	query.CustomQueryString = DesktopX.ScriptObject("DXWeather_Query").Control.Text
+	retCode = WeatherController.GetCameras(query)
+	
+	ParseRetCode retCode
+End Sub
+
 Sub GetAlerts()
 	ClearInfo()
 	
@@ -263,6 +274,8 @@ Sub OnLocations(locationInfo)
 		AppendInfo "No location!"
 		Exit Sub
 	End If
+	
+	AppendInfo "Number of locations: " & locationInfo.Count & vbNewLine
 	
 	Dim location
 	For Each location In locationInfo.Items
@@ -306,10 +319,12 @@ Sub OnCameras(cameraInfo)
 		Exit Sub
 	End If
 	
+	AppendInfo "Number of cameras: " & cameraInfo.Count & vbNewLine
+	
 	Dim camera
 	For Each camera In cameraInfo.Items
 		AppendInfo camera.ToString() 
-	Next
+	Next	
 End Sub
 
 Sub OnError(code, value)

@@ -159,6 +159,7 @@
 	<comment>
 		Refresh rate in minutes
 	</comment>
+	<resource id="refresh_locations"></resource>
 	<resource id="refresh_weather">25</resource>
 	<resource id="refresh_forecast">210</resource>
 	
@@ -181,7 +182,9 @@
 	var m_camerasCallback   = null;
 	var m_errorCallback 	= null;
 	
-	var m_cache_id = null;
+	var m_locations_cache_id = null;
+	var m_weather_cache_id = null;
+	var m_forecast_cache_id = null;
 	
 	var m_useMetricSystem = true;
 	
@@ -359,6 +362,14 @@
 		// Reset DOM
 		m_request.abort();
 		
+		// Check cache
+		m_locations_cache_id = getQueryString(locationQuery);
+		if (m_helper.CheckCache(m_locations, m_locations_cache_id, getResource("refresh_locations"))) {
+			m_locationsCallback(m_locations.Item(m_locations_cache_id));
+			
+			return Constants.E_OK;
+		}
+		
 		m_request.onreadystatechange = OnLocationsResponse;
 		m_request.async = true;
 		m_request.load(getResource("url_locations") + getQueryString(locationQuery));
@@ -373,17 +384,20 @@
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 			
-		// Clear any previous results
-		m_locations.RemoveAll();	
-		
-		// locations index
-		var i = 0;
+		ParseLocations(true);
+	}
+	
+	function ParseLocations(isLocations) {			
+		var locations = new ActiveXObject("Scripting.Dictionary");		// Dictionary for locations data
+		var cameras   = new ActiveXObject("Scripting.Dictionary");		// Dictionary for cameras data
+		var lastUpdateTime = m_dateHelper.GetDate();					// update time
+		var i = 0;														// locations index
 		
 		// Check if we got an intermediate list and parse it
-		var locations = m_request.getElementsByTagName("locations");
-		if (locations.length != 0) {			
+		var locationsNode = m_request.getElementsByTagName("locations");
+		if (locationsNode.length != 0) {			
 			
-			var locationsEnumerator = new Enumerator(locations[0].getElementsByTagName("location"));		
+			var locationsEnumerator = new Enumerator(locationsNode[0].getElementsByTagName("location"));		
 			for (var enumerator = locationsEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
 			{						
 			    var entry = enumerator.item();
@@ -394,77 +408,153 @@
 			    
 			    // TODO if type == CITY, this is a US city and the second part is a state
 			    // for INTLCITY, we cannot say whether this is a state or a country (ex: London, Ontario => in Canada)
-			    city.CustomQueryString =  m_helper.GetNodeValue(entry, "name/text()");				  
+			    city.CustomQueryString =  m_helper.GetNodeValue(entry, "name/text()");	
 			    
-			    m_locations.Add(i, city);		    
+			    city.LastUpdateTime = lastUpdateTime;
+			    
+			    locations.Add(i, city);		    
 			    i++;
 			}
 			
-			m_locationsCallback(m_locations);
+			// If this is a location call, we need results!
+			if (isLocations && locations.Count == 0) {
+				m_errorCallback(Constants.E_ERROR, "No locations results!");
+				return;
+			}
+			
+			// Cache results
+			m_locations(m_locations_cache_id) = locations;
+			
+			// If this is a camera call, we need to return an error			
+			if (isLocations)
+				m_locationsCallback(locations);
+			else
+				m_errorCallback(Constants.E_ERROR, "No cameras results!");
+				
 			return;
 		}
 				
-			
-		// Get the weather stations
+		///////////////////////////
+		//  Weather stations 
+		///////////////////////////
 		var stations = m_request.getElementsByTagName("nearby_weather_stations");
-		if (stations.length == 0) {
-			m_locationsCallback(m_locations);
-			return;
-		}
+		if (stations.length != 0) {
+	
+			// List airports
+			var airportNode = stations[0].getElementsByTagName("airport");
 			
-		// List airports
-		var airportNode = stations[0].getElementsByTagName("airport");
-		if (airportNode.length == 0) {
-			m_locationsCallback(m_locations);
-			return;
-		}	
-		
-		var airportEnumerator = new Enumerator(airportNode[0].getElementsByTagName("station"));		
-		for (var enumerator = airportEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
-		{						
-		    var entry = enumerator.item();
-		    var airport = getComponent("WeatherLocation");
-		    
-		    airport.City 		 = m_helper.GetNodeValue(entry, "city/text()");	
-		    airport.State  		 = m_helper.GetNodeValue(entry, "state/text()");	
-		    airport.Country 	 = m_helper.GetNodeValue(entry, "country/text()");	
-		    airport.AirportCode  = m_helper.GetNodeValue(entry, "icao/text()");	
-		    airport.Latitude 	 = m_helper.GetNodeValue(entry, "lat/text()");	
-		    airport.Longitude    = m_helper.GetNodeValue(entry, "lon/text()");			    
-		    
-		    m_locations.Add(i, airport);		    
-		    i++;
-		}
-		
-		// List personal weather stations
-		var personalStations = stations[0].getElementsByTagName("pws");
-		if (personalStations.length == 0) {
-			m_locationsCallback(m_locations);
-			return;
-		}
+			if (airportNode.length != 0) {		
+				var airportEnumerator = new Enumerator(airportNode[0].getElementsByTagName("station"));		
+				for (var enumerator = airportEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
+				{						
+				    var entry = enumerator.item();
+				    var airport = getComponent("WeatherLocation");
+				    
+				    airport.City 		 = m_helper.GetNodeValue(entry, "city/text()");	
+				    airport.State  		 = m_helper.GetNodeValue(entry, "state/text()");	
+				    airport.Country 	 = m_helper.GetNodeValue(entry, "country/text()");	
+				    airport.AirportCode  = m_helper.GetNodeValue(entry, "icao/text()");	
+				    airport.Latitude 	 = m_helper.GetNodeValue(entry, "lat/text()");	
+				    airport.Longitude    = m_helper.GetNodeValue(entry, "lon/text()");			    
+				    
+				    locations.Add(i, airport);		    
+				    i++;
+				}
+			}
 			
-		var pwsEnumerator = new Enumerator(personalStations[0].getElementsByTagName("station"));		
-		for (var enumerator = pwsEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
-		{						
-		    var entry = enumerator.item();
-		    var pws = getComponent("WeatherLocation");
-		    
-		    pws.Name	  = m_helper.GetNodeValue(entry, "neighborhood/text()");	
-		    pws.City 	  = m_helper.GetNodeValue(entry, "city/text()");	
-		    pws.State  	  = m_helper.GetNodeValue(entry, "state/text()");	
-		    pws.Country   = m_helper.GetNodeValue(entry, "country/text()");	
-		    pws.ID  	  = m_helper.GetNodeValue(entry, "id/text()");	
-		    
-		    if (m_useMetricSystem)
-		    	pws.Distance  = m_helper.GetNodeValue(entry, "distance_km/text()");			    
-		    else
-		    	pws.Distance  = m_helper.GetNodeValue(entry, "distance_mi/text()");
-		    
-		    m_locations.Add(i, pws);		    
-		    i++;
+			// List personal weather stations
+			var personalStations = stations[0].getElementsByTagName("pws");
+			
+			if (personalStations.length != 0) {
+				var pwsEnumerator = new Enumerator(personalStations[0].getElementsByTagName("station"));		
+				for (var enumerator = pwsEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
+				{						
+				    var entry = enumerator.item();
+				    var pws = getComponent("WeatherLocation");
+				    
+				    pws.Name	  = m_helper.GetNodeValue(entry, "neighborhood/text()");	
+				    pws.City 	  = m_helper.GetNodeValue(entry, "city/text()");	
+				    pws.State  	  = m_helper.GetNodeValue(entry, "state/text()");	
+				    pws.Country   = m_helper.GetNodeValue(entry, "country/text()");	
+				    pws.ID  	  = m_helper.GetNodeValue(entry, "id/text()");	
+				    
+				    if (m_useMetricSystem)
+				    	pws.Distance  = m_helper.GetNodeValue(entry, "distance_km/text()");			    
+				    else
+				    	pws.Distance  = m_helper.GetNodeValue(entry, "distance_mi/text()");
+				    
+				    locations.Add(i, pws);		    
+				    i++;
+				}
+			}
+			
+		} 
+
+		///////////////////////////
+		//  Cameras
+		///////////////////////////
+		i = 0;	// reset index
+		var camerasNode = m_request.getElementsByTagName("webcams");
+		if (camerasNode.length != 0) {
+	
+			// List cameras
+			var camerasEnumerator = new Enumerator(camerasNode[0].getElementsByTagName("cam"));		
+			for (var enumerator = camerasEnumerator; !enumerator.atEnd(); enumerator.moveNext()) 
+			{						
+			    var entry = enumerator.item();
+			    var camera = getComponent("WeatherCamera");			    
+			    var location = getComponent("WeatherLocation");
+			    
+			    camera.Handle 			= m_helper.GetNodeValue(entry, "handle/text()");	
+			    camera.ID 				= m_helper.GetNodeValue(entry, "camid/text()");	
+			    camera.StationID 		= m_helper.GetNodeValue(entry, "assoc_station_id/text()");	
+			    camera.Type 			= m_helper.GetNodeValue(entry, "cameratype/text()");	
+			    camera.Organization 	= m_helper.GetNodeValue(entry, "organization/text()");				    			    
+			    camera.IsRecent			= m_helper.GetNodeValue(entry, "isrecent/text()");	
+			    camera.UrlImage 		= m_helper.GetNodeValue(entry, "CURRENTIMAGEURL/text()");	
+			    camera.UrlWidgetImage	= m_helper.GetNodeValue(entry, "WIDGETCURRENTIMAGEURL/text()");	
+			    camera.UrlCamera 		= m_helper.GetNodeValue(entry, "CAMURL/text()");
+
+			    camera.Updated = m_dateHelper.GetDate().parseExact(m_helper.GetNodeValue(entry, "updated/text()"), "yyyy-MM-dd hh:mm:ss");
+			    
+			    location.Name 		 	= m_helper.GetNodeValue(entry, "neighborhood/text()");	
+			    location.Address	 	= m_helper.GetNodeValue(entry, "address/text()");	
+			    location.ZipCode	 	= m_helper.GetNodeValue(entry, "zip/text()");	
+		   		location.City 		 	= m_helper.GetNodeValue(entry, "city/text()");	
+			    location.State  		= m_helper.GetNodeValue(entry, "state/text()");	
+			    location.Country 		= m_helper.GetNodeValue(entry, "country/text()");				    
+			    location.Latitude 		= m_helper.GetNodeValue(entry, "lat/text()");	
+			    location.Longitude   	= m_helper.GetNodeValue(entry, "lon/text()");	
+			    camera.Location = location;			    
+			    
+			    cameras.Add(i, camera);
+			    i++;
+			}
 		}
 		
-		m_locationsCallback(m_locations);
+		// Cache results
+		if (locations.Count != 0)
+			m_locations(m_locations_cache_id) = locations;
+		if (cameras.Count != 0)
+			m_cameras(m_locations_cache_id) = cameras;
+		
+		// if a location call, we need results!
+		if (isLocations && (stations.length == 0 || locations.Count == 0)) {
+			m_errorCallback(Constants.E_ERROR, "No locations results!");
+			return;
+		}
+		
+		// if a camera call, we need results too!
+		if (!isLocations && (camerasNode.length == 0 || cameras.Count == 0)) {
+			m_errorCallback(Constants.E_ERROR, "No cameras results!");
+			return;
+		}
+		
+		// Return results
+		if (isLocations)
+			m_locationsCallback(locations);			
+		else
+			m_camerasCallback(cameras);		
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
@@ -479,9 +569,9 @@
 		m_request.abort();
 		
 		// Check cache
-		m_cache_id = getQueryString(locationQuery);
-		if (m_helper.CheckCache(m_weather, m_cache_id, getResource("refresh_weather"))) {
-			m_weatherCallback(m_weather.Item(m_cache_id));
+		m_weather_cache_id = getQueryString(locationQuery);
+		if (m_helper.CheckCache(m_weather, m_weather_cache_id, getResource("refresh_weather"))) {
+			m_weatherCallback(m_weather.Item(m_weather_cache_id));
 			
 			return Constants.E_OK;
 		}
@@ -512,8 +602,7 @@
 		
 		// Check that station ID is not empty
 		var station_id = m_helper.GetNodeValue(observation[0], "station_id/text()");
-		if (station_id == "")
-		{
+		if (station_id == "") {
 			m_errorCallback(Constants.E_ERROR, "Response is empty. Please check that the station code you used is valid!");
 			return;
 		}		
@@ -655,7 +744,7 @@
 		weather.Links = links;
 	    	
 		// Update weather cache
-		m_weather(m_cache_id) = weather;
+		m_weather(m_weather_cache_id) = weather;
 		 	
 		m_weatherCallback(weather);		
 	}
@@ -726,9 +815,9 @@
 		m_request.abort();
 
 		// Check cache		
-		m_cache_id = getQueryString(locationQuery);
-		if (m_helper.CheckCache(m_forecast, m_cache_id, getResource("refresh_forecast"), true)) {
-			m_forecastCallback(m_forecast.Item(m_cache_id));
+		m_forecast_cache_id = getQueryString(locationQuery);
+		if (m_helper.CheckCache(m_forecast, m_forecast_cache_id, getResource("refresh_forecast"), true)) {
+			m_forecastCallback(m_forecast.Item(m_forecast_cache_id));
 			
 			return Constants.E_OK;
 		}
@@ -869,7 +958,7 @@
 		}
 		
 		// Cache data		
-		m_forecast(m_cache_id) = forecasts;
+		m_forecast(m_forecast_cache_id) = forecasts;
 		
 		m_forecastCallback(forecasts);		
 	}
@@ -878,9 +967,37 @@
 	// Get a list of cameras
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	function GetCameras(locationQuery) {
-		// TODO we should cache results from GetLocations and only make a new call if the query differs.		
-		return Constants.E_NOTIMPLEMENTED;
-	}	
+		// Check query for validity
+		if (getQueryString(locationQuery) == "")
+			return Constants.E_NOTAVAILABLE;
+		
+		// Reset DOM
+		m_request.abort();
+		
+		// Check cache
+		m_locations_cache_id = getQueryString(locationQuery);
+		if (m_helper.CheckCache(m_cameras, m_locations_cache_id, getResource("refresh_locations"))) {
+			m_camerasCallback(m_cameras.Item(m_locations_cache_id));
+			
+			return Constants.E_OK;
+		}
+		
+		m_request.onreadystatechange = OnCamerasResponse;
+		m_request.async = true;
+		m_request.load(getResource("url_locations") + getQueryString(locationQuery));
+		
+		return Constants.E_OK;		
+	}
+	
+	function OnCamerasResponse() {
+		if (m_request.readyState != 4) 
+			return;
+			
+		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
+			return;
+			
+		ParseLocations(false);
+	}
 	
 	]]>
 	</script>

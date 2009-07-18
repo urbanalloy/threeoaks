@@ -1201,13 +1201,13 @@
       	    	  classid="{D4F984BF-A90A-45da-A695-ACBD974B9924}"/>    
       	    
 	<public>
-		<property name="Type" internalname="m_type" />
-		<property name="Description" internalname="m_description" />
-		<property name="Date" internalname="m_date" />
-		<property name="Expiration" internalname="m_expiration" />
-		<property name="Message" internalname="m_message" />
-		<property name="Phenomena" internalname="m_phenomena" />
-		<property name="Significance" internalname="m_significance" />		
+		<property name="Type" 			internalname="m_type" />
+		<property name="Description" 	internalname="m_description" />
+		<property name="Date" 			internalname="m_date" />
+		<property name="Expiration" 	internalname="m_expiration" />
+		<property name="Message" 		internalname="m_message" />
+		<property name="Phenomena" 		internalname="m_phenomena" />
+		<property name="Significance" 	internalname="m_significance" />		
 		
 		<method name="ToString" />
 	</public>
@@ -1247,6 +1247,91 @@
 
 </component>
 
+<component id="WeatherCamera">
+	<comment>
+	Weather camera container
+	</comment>
+	<registration description="Weather camera"
+      			  progid="DXWeather.Camera"
+      			  version="1"
+      	    	  classid="{4B4C0F6A-0888-4963-B432-B8F4DF38D8CB}"/>    
+      	    
+	<public>
+		<property name="Handle" 		internalname="m_handle" />
+		<property name="ID" 			internalname="m_ID" />
+		<property name="StationID" 		internalname="m_stationID" />
+		<property name="Type" 			internalname="m_type" />
+		<property name="Organization" 	internalname="m_organization" />
+		<property name="Location"		internalname="m_location" />
+		<property name="Updated" 		internalname="m_updated" />	
+		<property name="IsRecent" 		internalname="m_isRecent" />	
+		<property name="UrlImage" 		internalname="m_urlImage" />	
+		<property name="UrlWidgetImage" internalname="m_urlWidgetImage" />	
+		<property name="UrlCamera" 		internalname="m_urlCamera" />			
+		
+		<comment>
+			Time when this object was retrieved (used for caching purposes)
+		</comment>
+		<property name="LastUpdateTime" 		internalName="m_lastUpdateTime" />	
+		
+		<method name="ToString" />
+	</public>
+	
+	<script language="JScript">
+	<![CDATA[
+	
+	//**Start Encode**
+	
+	var m_handle = null;
+	var m_ID = null;
+	var m_stationID = null;
+	var m_type = null;
+	var m_organization = null;
+	var m_location = null;
+	var m_updated = null;
+	var m_isRecent = null;
+	var m_urlImage = null;
+	var m_urlWidgetImage = null;
+	var m_urlCamera = null;
+	
+	var m_lastUpdateTime = null;
+	
+	function ToString()
+	{		var txt = "";
+		
+		txt += append("Handle: ", 		m_handle);
+		txt += append("ID: ",	 		m_ID);
+		txt += append("Station ID: ", 	m_stationID);
+		txt += append("Type: ",			m_type);
+		txt += append("Organization: ", m_organization);
+		txt += append("IsRecent: ",		m_isRecent);
+		
+		if (m_updated != null && m_updated != "")
+			txt += "Updated: " + m_updated.format("%A, %c %Z");		
+		
+		if (m_location != null)
+			txt += m_location.ToString();
+		
+		txt += append("Image: ",  m_urlImage);
+		txt += append("Widget: ", m_urlWidgetImage);
+		txt += append("Camera: ", m_urlCamera);
+
+		return txt;
+	}
+	
+	function append(title, value)
+	{
+		if (value == null || value == "")
+			return "";
+			
+		return title + ": " + value + "\n";
+	}
+	
+	]]>
+	</script>
+
+</component>
+
 <component id="WeatherLocation">
 	<comment>
 	Weather location/query container
@@ -1257,26 +1342,32 @@
       	    	  classid="{BC017AA1-3732-4d88-89EC-68823C27ECD3}"/>  
       	    	   
 	<public>
-		<property name="ID" internalname="m_ID" />		
-		<property name="Name" internalname="m_name" />
+		<property name="ID" 					internalname="m_ID" />		
+		<property name="Name" 					internalname="m_name" />
 	
-		<property name="Country" internalname="m_country" />		
-		<property name="State" internalname="m_state" />
-		<property name="City" internalname="m_city" />
+		<property name="Country" 				internalname="m_country" />		
+		<property name="State" 					internalname="m_state" />
+		<property name="City" 					internalname="m_city" />
+		<property name="Address" 				internalname="m_address" />
 		
-		<property name="Timezone" internalname="m_timezone" />
+		<property name="Timezone" 				internalname="m_timezone" />
 		
-		<property name="Latitude" internalname="m_latitude" />
-		<property name="Longitude" internalname="m_longitude" />
-		<property name="Elevation" internalname="m_elevation" />
+		<property name="Latitude" 				internalname="m_latitude" />
+		<property name="Longitude" 				internalname="m_longitude" />
+		<property name="Elevation" 				internalname="m_elevation" />
 		
-		<property name="Distance" internalname="m_distance" />	
+		<property name="Distance" 				internalname="m_distance" />	
 		
-		<property name="AirportCode" internalname="m_airportCode" />
-		<property name="ZipCode" internalname="m_zipCode" />		
-		<property name="CityCode" internalname="m_cityCode" />
+		<property name="AirportCode" 			internalname="m_airportCode" />
+		<property name="ZipCode" 				internalname="m_zipCode" />		
+		<property name="CityCode" 				internalname="m_cityCode" />
 		
-		<property name="CustomQueryString" internalname="m_customQueryString" />	
+		<property name="CustomQueryString" 		internalname="m_customQueryString" />	
+		
+		<comment>
+			Time when this object was retrieved (used for caching purposes)
+		</comment>
+		<property name="LastUpdateTime" 		internalName="m_lastUpdateTime" />
 				
 		<method name="TrimValues" />
 		<method name="ToString" />
@@ -1294,6 +1385,7 @@
 	var m_country = null;
 	var m_state = null;
 	var m_city = null;
+	var m_address = null;
 	
 	var m_latitude = null;
 	var m_longitude = null;
@@ -1309,6 +1401,8 @@
 	var m_timezone = null;
 	var m_elevation = null;
 	var m_distance = null;
+	
+	var m_lastUpdateTime = null;
 
 	// Trim values used in query
 	function TrimValues()
@@ -1353,6 +1447,7 @@
 				
 			text += "\n";
 		}
+		text += append("Address", m_address);
 		
 		// Coordinates
 		if ((m_latitude != "" && m_latitude != null) ||
@@ -1419,29 +1514,29 @@
 	
 	//**Start Encode**
 	
-	var m_current = "";
-	var m_forecast = "";
-	var m_history = "";
-	var m_credit = "";
-	var m_logo = "";	
+	var m_current = null;
+	var m_forecast = null;
+	var m_history = null;
+	var m_credit = null;
+	var m_logo = null;	
 	
 	function ToString()
 	{
 		var text = "";
 		
-		if (m_current != "")
+		if (m_current != "" && m_current != null)
 			text += "Current: " + m_current + "\n";
 			
-		if (m_forecast != "")
+		if (m_forecast != "" && m_current != null)
 			text += "Forecast: " + m_forecast + "\n";
 			
-		if (m_history != "")
+		if (m_history != "" && m_current != null)
 			text += "History: " + m_history + "\n";
 		
-		if (m_credit != "")
+		if (m_credit != "" && m_current != null)
 			text += "Credit: " + m_credit + "\n";
 			
-		if (m_logo != "")
+		if (m_logo != "" && m_current != null)
 			text += "Logo: " + m_logo + "\n";
 			
 		if (m_promo.Count != 0) {
