@@ -258,9 +258,9 @@
 	/////////////////////////////////////////////////////////////////////////////////////////
 	// Provider registration
 	function Init() {				
-		//#ifndef DEBUG
-		//AddProvider(createComponent("WUnderground"));
+		//#ifndef DEBUG		
 		//AddProvider(createComponent("TWC"));
+		//AddProvider(createComponent("WUnderground"));
 		//AddProvider(createComponent("NOAA"));
 		//#endif
 	}	
@@ -1299,22 +1299,22 @@
 	function ToString()
 	{		var txt = "";
 		
-		txt += append("Handle: ", 		m_handle);
-		txt += append("ID: ",	 		m_ID);
-		txt += append("Station ID: ", 	m_stationID);
-		txt += append("Type: ",			m_type);
-		txt += append("Organization: ", m_organization);
-		txt += append("IsRecent: ",		m_isRecent);
+		txt += append("Handle", 		m_handle);
+		txt += append("ID",	 			m_ID);
+		txt += append("Station ID", 	m_stationID);
+		txt += append("Type",			m_type);
+		txt += append("Organization",   m_organization);
+		txt += append("IsRecent",		m_isRecent);
 		
 		if (m_updated != null && m_updated != "")
-			txt += "Updated: " + m_updated.format("%A, %c %Z") + "\n";		
+			txt += append("Updated", m_updated.format("%A, %c %Z"));
 		
 		if (m_location != null)
 			txt += m_location.ToString();
 		
-		txt += append("Image: ",  m_urlImage);
-		txt += append("Widget: ", m_urlWidgetImage);
-		txt += append("Camera: ", m_urlCamera);
+		txt += append("Image",  m_urlImage);
+		txt += append("Widget", m_urlWidgetImage);
+		txt += append("Camera", m_urlCamera);
 
 		return txt;
 	}

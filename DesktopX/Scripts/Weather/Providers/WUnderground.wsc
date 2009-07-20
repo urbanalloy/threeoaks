@@ -159,7 +159,7 @@
 	<comment>
 		Refresh rate in minutes
 	</comment>
-	<resource id="refresh_locations"></resource>
+	<resource id="refresh_locations">360</resource>
 	<resource id="refresh_weather">25</resource>
 	<resource id="refresh_forecast">210</resource>
 	
@@ -440,7 +440,7 @@
 		
 		// Check cache
 		m_locations_cache_id = getQueryString(locationQuery);
-		if (m_helper.CheckCache(m_locations, m_locations_cache_id, getResource("refresh_locations"))) {
+		if (m_helper.CheckCache(m_locations, m_locations_cache_id, getResource("refresh_locations"), true)) {
 			m_locationsCallback(m_locations.Item(m_locations_cache_id));
 			
 			return Constants.E_OK;
@@ -531,7 +531,9 @@
 				    airport.Country 	 = m_helper.GetNodeValue(entry, "country/text()");	
 				    airport.AirportCode  = m_helper.GetNodeValue(entry, "icao/text()");	
 				    airport.Latitude 	 = m_helper.GetNodeValue(entry, "lat/text()");	
-				    airport.Longitude    = m_helper.GetNodeValue(entry, "lon/text()");			    
+				    airport.Longitude    = m_helper.GetNodeValue(entry, "lon/text()");	
+				    
+				    airport.LastUpdateTime = lastUpdateTime;		    
 				    
 				    locations.Add(i, airport);		    
 				    i++;
@@ -558,6 +560,8 @@
 				    	pws.Distance  = m_helper.GetNodeValue(entry, "distance_km/text()");			    
 				    else
 				    	pws.Distance  = m_helper.GetNodeValue(entry, "distance_mi/text()");
+				    	
+				    pws.LastUpdateTime = lastUpdateTime;	
 				    
 				    locations.Add(i, pws);		    
 				    i++;
@@ -601,7 +605,9 @@
 			    location.Country 		= m_helper.GetNodeValue(entry, "country/text()");				    
 			    location.Latitude 		= m_helper.GetNodeValue(entry, "lat/text()");	
 			    location.Longitude   	= m_helper.GetNodeValue(entry, "lon/text()");	
-			    camera.Location = location;			    
+			    camera.Location = location;	
+			    
+			    camera.LastUpdateTime = lastUpdateTime;		    
 			    
 			    cameras.Add(i, camera);
 			    i++;
@@ -1051,7 +1057,7 @@
 		
 		// Check cache
 		m_locations_cache_id = getQueryString(locationQuery);
-		if (m_helper.CheckCache(m_cameras, m_locations_cache_id, getResource("refresh_locations"))) {
+		if (m_helper.CheckCache(m_cameras, m_locations_cache_id, getResource("refresh_locations"), true)) {
 			m_camerasCallback(m_cameras.Item(m_locations_cache_id));
 			
 			return Constants.E_OK;
