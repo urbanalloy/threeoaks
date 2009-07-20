@@ -557,7 +557,7 @@
 			weather.PressureTrend		= m_helper.GetNodeValue(info[0], "bar/d/text()");
 			
 			weather.WindSpeed			= m_helper.GetNodeValue(info[0], "wind/s/text()");
-			weather.WindGust			= m_helper.GetNodeValue(info[0], "wind/gust/text()");
+			weather.WindGust			= parseGust(m_helper.GetNodeValue(info[0], "wind/gust/text()"));
 			weather.WindDirection		= m_helper.GetNodeValue(info[0], "wind/d/text()");
 			weather.WindDescription		= m_helper.GetNodeValue(info[0], "wind/t/text()");
 			
