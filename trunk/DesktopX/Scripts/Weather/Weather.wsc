@@ -488,6 +488,13 @@
 			<get />
 		</property>
 		
+		<property name="DAYPART_DAY">
+			<get/>
+		</property>
+		<property name="DAYPART_NIGHT">
+			<get/>
+		</property>	
+		
 		<property name="ICON_TORNADO">
 			<get />
 		</property>
@@ -689,6 +696,22 @@
 	{
 		return E_WARNING;
 	}	
+	
+	/*********************************
+	 * Day part
+	 *********************************/
+	var DAYPART_DAY = 1;
+	var DAYPART_NIGHT = 2;
+	
+	function get_DAYPART_DAY()
+	{
+		return DAYPART_DAY;
+	}
+	
+	function get_DAYPART_NIGHT()
+	{
+		return DAYPART_NIGHT;
+	}
 	
 	/*********************************
 	 * Icons
@@ -909,16 +932,6 @@
       	    	      
 	<public>
 		<comment>
-			Constants
-		</comment>
-		<property name="DAY_PART_DAY">
-			<get/>
-		</property>
-		<property name="DAY_PART_NIGHT">
-			<get/>
-		</property>	
-	
-		<comment>
 			Weather location info (WeatherLocation object)
 		</comment>
 		<property name="Location" 				internalname="m_location" />
@@ -1010,19 +1023,6 @@
 	/*********************************
 	 * Properties
 	 *********************************/	
-	var DAY_PART_DAY = 1;
-	var DAY_PART_NIGHT = 2;
-	
-	function get_DAY_PART_DAY()
-	{
-		return DAY_PART_DAY;
-	}
-	
-	function get_DAY_PART_NIGHT()
-	{
-		return DAY_PART_NIGHT;
-	}
-	
 	var m_useMetricSystem = true;
 
 	
@@ -1145,9 +1145,9 @@
 		
 		if (m_dayPart != null)
 		{
-			if (m_dayPart == DAY_PART_DAY)
+			if (m_dayPart == 1)
 				text += append("Day part", "Day");
-			else if (m_dayPart == DAY_PART_NIGHT)
+			else if (m_dayPart == 2)
 				text += append("Day part", "Night");
 			else
 				text += append("Day part", "Invalid!");
@@ -1307,7 +1307,7 @@
 		txt += append("IsRecent: ",		m_isRecent);
 		
 		if (m_updated != null && m_updated != "")
-			txt += "Updated: " + m_updated.format("%A, %c %Z");		
+			txt += "Updated: " + m_updated.format("%A, %c %Z") + "\n";		
 		
 		if (m_location != null)
 			txt += m_location.ToString();
@@ -1378,8 +1378,6 @@
 	
 	//**Start Encode**
 	
-	// TODO add function to check if a string is a US zip code
-    
 	var m_ID = null;
 
 	var m_country = null;
