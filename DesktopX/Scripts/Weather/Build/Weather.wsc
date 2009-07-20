@@ -486,6 +486,13 @@
 			<get />
 		</property>
 		
+		<property name="DAYPART_DAY">
+			<get/>
+		</property>
+		<property name="DAYPART_NIGHT">
+			<get/>
+		</property>	
+		
 		<property name="ICON_TORNADO">
 			<get />
 		</property>
@@ -687,6 +694,22 @@
 	{
 		return E_WARNING;
 	}	
+	
+	/*********************************
+	 * Day part
+	 *********************************/
+	var DAYPART_DAY = 1;
+	var DAYPART_NIGHT = 2;
+	
+	function get_DAYPART_DAY()
+	{
+		return DAYPART_DAY;
+	}
+	
+	function get_DAYPART_NIGHT()
+	{
+		return DAYPART_NIGHT;
+	}
 	
 	/*********************************
 	 * Icons
@@ -907,16 +930,6 @@
       	    	      
 	<public>
 		<comment>
-			Constants
-		</comment>
-		<property name="DAY_PART_DAY">
-			<get/>
-		</property>
-		<property name="DAY_PART_NIGHT">
-			<get/>
-		</property>	
-	
-		<comment>
 			Weather location info (WeatherLocation object)
 		</comment>
 		<property name="Location" 				internalname="m_location" />
@@ -1008,19 +1021,6 @@
 	/*********************************
 	 * Properties
 	 *********************************/	
-	var DAY_PART_DAY = 1;
-	var DAY_PART_NIGHT = 2;
-	
-	function get_DAY_PART_DAY()
-	{
-		return DAY_PART_DAY;
-	}
-	
-	function get_DAY_PART_NIGHT()
-	{
-		return DAY_PART_NIGHT;
-	}
-	
 	var m_useMetricSystem = true;
 
 	
@@ -1143,9 +1143,9 @@
 		
 		if (m_dayPart != null)
 		{
-			if (m_dayPart == DAY_PART_DAY)
+			if (m_dayPart == 1)
 				text += append("Day part", "Day");
-			else if (m_dayPart == DAY_PART_NIGHT)
+			else if (m_dayPart == 2)
 				text += append("Day part", "Night");
 			else
 				text += append("Day part", "Invalid!");
@@ -1305,7 +1305,7 @@
 		txt += append("IsRecent: ",		m_isRecent);
 		
 		if (m_updated != null && m_updated != "")
-			txt += "Updated: " + m_updated.format("%A, %c %Z");		
+			txt += "Updated: " + m_updated.format("%A, %c %Z") + "\n";		
 		
 		if (m_location != null)
 			txt += m_location.ToString();
@@ -1376,8 +1376,6 @@
 	
 	//**Start Encode**
 	
-	// TODO add function to check if a string is a US zip code
-    
 	var m_ID = null;
 
 	var m_country = null;
@@ -5412,10 +5410,86 @@
 	}
 	
 	// Parse weather code and return a code number
-	function parseCode(code)
+	function parseCode(code, dayPart)
 	{
-		// TODO: convert from string code to weather icon number
-		return m_helper.Trim(code);
+		switch (m_helper.Trim(code))
+		{
+			case "chanceflurries":
+				return Constants.ICON_SNOW_FLURRIES;
+				
+			case "chancerain":
+			case "nt_chancerain":
+				return Constants.ICON_SHOWERS;
+				
+			case "chancesleet":
+				return Constants.ICON_SLEET;
+				 
+			case "chancesnow":
+				return Constants.ICON_SNOW;
+				  
+			case "chancetstorms":
+				return Constants.ICON_THUNDERSTORMS;
+				 
+			case "clear":
+				if (dayPart == Constants.DAYPART_DAY)
+					return Constants.ICON_SUNNY;
+				else
+					return Constants.ICON_CLEAR_NIGHT;
+				 
+			case "cloudy":
+				return Constants.ICON_CLOUDY;
+				 
+			case "flurries":
+				return Constants.ICON_SNOW_FLURRIES;
+				 
+			case "fog":
+				return Constants.ICON_FOGGY;
+				 
+			case "hazy":
+				return Constants.ICON_HAZE;
+				 
+			case "mostlycloudy":
+				if (dayPart == Constants.DAYPART_DAY)
+					return Constants.ICON_MOSTLY_CLOUDY_DAY;
+				else
+					return Constants.ICON_MOSTLY_CLOUDY_NIGHT;
+				 
+			case "mostlysunny":
+				return Constants.ICON_FAIR_DAY;
+				 
+			case "partlycloudy":
+				if (dayPart == Constants.DAYPART_DAY)
+					return Constants.ICON_PARTLY_CLOUDY_DAY;
+				else
+					return Constants.ICON_PARTLY_CLOUDY_NIGHT;
+				 
+			case "partlysunny":
+				return Constants.ICON_PARTLY_CLOUDY;
+				  
+			case "rain":
+				return Constants.ICON_SHOWERS_2;	// more rain than ICON_SHOWERS
+				  
+			case "sleet":
+				return Constants.ICON_SLEET;
+				  
+			case "snow":
+				return Constants.ICON_SNOW;
+				  
+			case "sunny":
+				return Constants.ICON_SUNNY;
+				  
+			case "tstorms":
+				return Constants.ICON_SEVERE_THUNDERSTORMS;
+				  
+			case "unknown":
+				return Constants.ICON_NOT_AVAILABLE;	
+			
+			// warn about unknown code
+			default:
+				m_errorCallback(Constants.E_WARNING, "Unknow type of code: " + m_helper.Trim(code));
+				return null;
+				
+		}
 	}	
 	
 	///////////////////////////////
@@ -5812,7 +5886,7 @@
 	    	weather.Visibility  = m_helper.GetNodeValue(observation[0], "visibility_mi/text()");
 	    		    	
 	    // Weather code
-	    weather.Code    		  = parseCode(m_helper.GetNodeValue(observation[0], "icon/text()"));
+	    weather.Code    		  = parseCode(m_helper.GetNodeValue(observation[0], "icon/text()"), Constants.DAYPART_DAY);
 	    
 	    // Precipitation
 		if (m_useMetricSystem) {
@@ -5956,22 +6030,21 @@
 			    var entry = enumerator.item();
 			    var forecast = getComponent("WeatherInfo");
 				
-				// Description
-			    forecast.Description = m_helper.GetNodeValue(entry, "title/text()");
+				// Title (we put it in day of week)
+			    forecast.DayOfWeek = m_helper.GetNodeValue(entry, "title/text()");
+			    
+			    // Set day part
+				if (forecast.DayOfWeek.search("Tonight") != -1)
+					forecast.DayPart = Constants.DAYPART_NIGHT;
+				else
+					forecast.DayPart = Constants.DAYPART_DAY;
 			    
 			    // Weather code
-	   			forecast.Code     = parseCode(m_helper.GetNodeValue(entry, "icon/text()"));
+	   			forecast.Code     = parseCode(m_helper.GetNodeValue(entry, "icon/text()"), forecast.DayPart);
 				
 				// Forecast text
 				forecast.ForecastDescription = m_helper.GetNodeValue(entry, "fcttext/text()");
-				
-				// Set day part
-				if (forecast.Description == "Today")
-					forecast.DayPart = forecast.DAY_PART_DAY;
-				
-				if (forecast.Description.search("Tonight") != -1)
-					forecast.DayPart = forecast.DAY_PART_NIGHT;
-									
+			
 				forecast.Date = date;
 				
 				forecast.LastUpdateTime = lastUpdateTime;
@@ -5995,7 +6068,7 @@
 			    forecast.Description = m_helper.GetNodeValue(entry, "conditions/text()");
 			    
 			    // Weather code
-	   			forecast.Code     = parseCode(m_helper.GetNodeValue(entry, "icon/text()"));
+	   			forecast.Code     = parseCode(m_helper.GetNodeValue(entry, "icon/text()"), Constants.DAYPART_DAY);
 			    			    			   
 			    // High & Low
 			    if (m_useMetricSystem) {
@@ -6704,10 +6777,10 @@
 		    	var type;		    	
 		    	if (forecast == "0") {
 		    		type = 'd';
-		    		forecastArray[forecast].DayPart = forecast_day.DAY_PART_DAY;
+		    		forecastArray[forecast].DayPart = Contants.DAYPART_DAY;
 		    	} else {		    	
 		    		type = 'n';
-		    		forecastArray[forecast].DayPart = forecast_day.DAY_PART_NIGHT;
+		    		forecastArray[forecast].DayPart = Contants.DAYPART_NIGHT;
 		    	}
 		    		
 		    	var dayNode = entry.selectNodes("part[@p='" + type + "']");
