@@ -488,8 +488,9 @@
 		    	// Unknown type
 		    	default:
 		    		// report with an error message
-		    		m_errorCallback(Constants.E_PARSERERROR, "Unknown location type: " + type);
-		    		return;		    				    
+		    		m_errorCallback(Constants.E_WARNING, "Unknown location type: " + type);
+		    		location.CustomQueryString = m_helper.GetNodeValue(entry, "text()");    				    
+		    		break;
 		    }
 		    
 		    m_locations.Add(i, location);		    
