@@ -318,11 +318,72 @@
 			return heat;
 	}
 	
+	///////////////////////////////////////////////////////
+	// Parse alert category
+	function parseCategory(category)
+	{
+		switch (m_helper.Trim(category))
+		{
+			case "":
+				return null;
+				
+			case "WND":
+				return Constants.ALERT_CATEGORY_MET;
+				
+			case "FIR":
+				return Constants.ALERT_CATEGORY_FIRE;
+				
+			case "FLO":
+				return Constants.ALERT_CATEGORY_ENV;
+				
+			// warn about unknown code
+			default:
+				m_errorCallback(Constants.E_WARNING, "Unknow type of category: " + m_helper.Trim(category));
+				return null;
+		}
+	}
+	
+	///////////////////////////////////////////////////////
+	// Parse alert category
+	function parseCategory(category)
+	{
+		switch (m_helper.Trim(category))
+		{
+			case "":
+				return null;
+				
+			// warn about unknown code
+			default:
+				m_errorCallback(Constants.E_WARNING, "Unknow type of category: " + m_helper.Trim(category));
+				return null;
+		}
+	}	
+	
+	///////////////////////////////////////////////////////
+	// Parse alert severity
+	function parseSeverity(severity)
+	{
+		switch (m_helper.Trim(severity))
+		{
+			case "":
+				return null;
+				
+			// warn about unknown code
+			default:
+				m_errorCallback(Constants.E_WARNING, "Unknow type of severity: " + m_helper.Trim(severity));
+				return null;
+		}
+	}
+	
+	///////////////////////////////////////////////////////
 	// Parse weather code and return a code number
 	function parseCode(code, dayPart)
 	{
 		switch (m_helper.Trim(code))
 		{
+			case "":
+				return null;
+				
 			case "chanceflurries":
 				return Constants.ICON_SNOW_FLURRIES;
 				
@@ -868,16 +929,15 @@
 		    var entry = enumerator.item();
 		    var alert = getComponent("WeatherAlert");
 		    
-		    alert.Type 		   = m_helper.GetNodeValue(entry, "type/text()");	
-		    alert.Description  = m_helper.GetNodeValue(entry, "description/text()");	
-		    
-		    alert.Date 		   = m_dateHelper.FromEpoch(m_helper.GetNodeValue(entry, "date/@epoch/text()"));	
+		    alert.Type 		   = parseType(m_helper.GetNodeValue(entry, "type/text()"));	
+		    alert.Category     = parseCategory(m_helper.GetNodeValue(entry, "phenomena/text()"));	
+		    alert.Severity 	   = parseSeverity(m_helper.GetNodeValue(entry, "significance/text()"));	
+		    		    
+		    alert.Title  	   = m_helper.GetNodeValue(entry, "description/text()");	
+		    alert.Summary 	   = m_helper.GetNodeValue(entry, "message/text()");
+		    alert.Effective    = m_dateHelper.FromEpoch(m_helper.GetNodeValue(entry, "date/@epoch/text()"));	
 		    alert.Expiration   = m_dateHelper.FromEpoch(m_helper.GetNodeValue(entry, "expires/@epoch/text()"));
 		    	
-		    alert.Message 	   = m_helper.GetNodeValue(entry, "message/text()");	
-		    alert.Phenomena    = m_helper.GetNodeValue(entry, "phenomena/text()");	
-		    alert.Significance = m_helper.GetNodeValue(entry, "significance/text()");	
-		    
 		    m_alerts.Add(i, alert);		    
 		    i++;
 		}

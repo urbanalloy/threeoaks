@@ -643,6 +643,151 @@
 			<get />
 		</property>
 		
+		<property name="ALERT_STATUS_ACTUAL">
+			<get />
+		</property>
+		<property name="ALERT_STATUS_EXERCISE">
+			<get />
+		</property>
+		<property name="ALERT_STATUS_SYSTEM">
+			<get />
+		</property>
+		<property name="ALERT_STATUS_TEST">
+			<get />
+		</property>
+		<property name="ALERT_STATUS_DRAFT">
+			<get />
+		</property>
+		          
+		<property name="ALERT_MSG_ALERT">
+			<get />
+		</property>
+		<property name="ALERT_MSG_UPDATE">
+			<get />
+		</property>
+		<property name="ALERT_MSG_CANCEL">
+			<get />
+		</property>
+		<property name="ALERT_MSG_ACK">
+			<get />
+		</property>
+		<property name="ALERT_MSG_ERROR">
+			<get />
+		</property>
+		             
+		<property name="ALERT_SCOPE_PUBLIC">
+			<get />
+		</property>
+		<property name="ALERT_SCOPE_RESTRICTED">
+			<get />
+		</property>
+		<property name="ALERT_SCOPE_PRIVATE">
+			<get />
+		</property>
+		             
+		<property name="ALERT_CATEGORY_GEO">
+			<get />
+		</property>
+		<property name="ALERT_CATEGORY_MET">
+			<get />
+		</property>
+		<property name="ALERT_CATEGORY_SAFETY">
+			<get />
+		</property>
+		<property name="ALERT_CATEGORY_SECURITY">
+			<get />
+		</property>
+		<property name="ALERT_CATEGORY_RESCUE">
+			<get />
+		</property>
+		<property name="ALERT_CATEGORY_FIRE">
+			<get />
+		</property>
+		<property name="ALERT_CATEGORY_HEALTH">
+			<get />
+		</property>
+		<property name="ALERT_CATEGORY_ENV">
+			<get />
+		</property>
+		<property name="ALERT_CATEGORY_TRANSPORT">
+			<get />
+		</property>
+		<property name="ALERT_CATEGORY_INFRA">
+			<get />
+		</property>
+		<property name="ALERT_CATEGORY_CBRNE">
+			<get />
+		</property>
+		<property name="ALERT_CATEGORY_OTHER">
+			<get />
+		</property>
+		                     
+		<property name="ALERT_RESPONSE_SHELTER">
+			<get />
+		</property>
+		<property name="ALERT_RESPONSE_EVACUATE">
+			<get />
+		</property>
+		<property name="ALERT_RESPONSE_PREPARE">
+			<get />
+		</property>
+		<property name="ALERT_RESPONSE_EXECUTE">
+			<get />
+		</property>
+		<property name="ALERT_RESPONSE_MONITOR">
+			<get />
+		</property>
+		<property name="ALERT_RESPONSE_NONE">
+			<get />
+		</property>
+		                
+		<property name="ALERT_URGENCY_IMMEDIATE">
+			<get />
+		</property>
+		<property name="ALERT_URGENCY_EXPECTED">
+			<get />
+		</property>
+		<property name="ALERT_URGENCY_FUTURE">
+			<get />
+		</property>
+		<property name="ALERT_URGENCY_PAST">
+			<get />
+		</property>
+		<property name="ALERT_URGENCY_UNKNOWN">
+			<get />
+		</property>
+		                
+		<property name="ALERT_SEVERITY_EXTREME">
+			<get />
+		</property>
+		<property name="ALERT_SEVERITY_SEVERE">
+			<get />
+		</property>
+		<property name="ALERT_SEVERITY_MODERATE">
+			<get />
+		</property>
+		<property name="ALERT_SEVERITY_MINOR">
+			<get />
+		</property>
+		<property name="ALERT_SEVERITY_UNKNOWN">
+			<get />
+		</property>
+		                
+		<property name="ALERT_CERTAINTY_OBSERVED">
+			<get />
+		</property>
+		<property name="ALERT_CERTAINTY_LIKELY">
+			<get />
+		</property>
+		<property name="ALERT_CERTAINTY_POSSIBLE">
+			<get />
+		</property>
+		<property name="ALERT_CERTAINTY_UNLIKELY">
+			<get />
+		</property>
+		<property name="ALERT_CERTAINTY_UNKNOWN">
+			<get />
+		</property>		
 		
 	</public>
 	
@@ -915,12 +1060,217 @@
 		return ICON_NOT_AVAILABLE;
 	}
 	
-	
-	]]>
-	</script>
-
-</component>
-
+	/*********************************
+	 * Alerts
+	 *********************************/
+	 
+	 var ALERT_STATUS_ACTUAL 			= "Actual";
+	 var ALERT_STATUS_EXERCISE 			= "Exercise";
+	 var ALERT_STATUS_SYSTEM 			= "System";
+	 var ALERT_STATUS_TEST 				= "Test";
+	 var ALERT_STATUS_DRAFT 			= "Draft";
+	              
+	 var ALERT_MSG_ALERT 				= "Alert";
+	 var ALERT_MSG_UPDATE 				= "Update";
+	 var ALERT_MSG_CANCEL 				= "Cancel";
+	 var ALERT_MSG_ACK 					= "Ack";
+	 var ALERT_MSG_ERROR 				= "Error";
+	                 
+	 var ALERT_SCOPE_PUBLIC 			= "Public";
+	 var ALERT_SCOPE_RESTRICTED			= "Restricted";
+	 var ALERT_SCOPE_PRIVATE 			= "Private";
+	                 
+	 var ALERT_CATEGORY_GEO 			= "Geo";
+	 var ALERT_CATEGORY_MET 			= "Met";
+	 var ALERT_CATEGORY_SAFETY 			= "Safety";
+	 var ALERT_CATEGORY_SECURITY 		= "Security";
+	 var ALERT_CATEGORY_RESCUE 			= "Rescue";
+	 var ALERT_CATEGORY_FIRE 			= "Fire";
+	 var ALERT_CATEGORY_HEALTH 			= "Health";
+	 var ALERT_CATEGORY_ENV 			= "Env";
+	 var ALERT_CATEGORY_TRANSPORT 		= "Transport";
+	 var ALERT_CATEGORY_INFRA 			= "Infra";
+	 var ALERT_CATEGORY_CBRNE 			= "CBRNE";
+	 var ALERT_CATEGORY_OTHER 			= "Other";
+	                         
+	 var ALERT_RESPONSE_SHELTER 		= "Shelter";
+	 var ALERT_RESPONSE_EVACUATE 		= "Evacuate";
+	 var ALERT_RESPONSE_PREPARE			= "Prepare";
+	 var ALERT_RESPONSE_EXECUTE 		= "Execute";
+	 var ALERT_RESPONSE_MONITOR 		= "Monitor";
+	 var ALERT_RESPONSE_NONE 			= "None";
+	                    
+	 var ALERT_URGENCY_IMMEDIATE 		= "Immediate";
+	 var ALERT_URGENCY_EXPECTED 		= "Expected";
+	 var ALERT_URGENCY_FUTURE 			= "Future";
+	 var ALERT_URGENCY_PAST 			= "Past";
+	 var ALERT_URGENCY_UNKNOWN 			= "Unknown";
+	                    
+	 var ALERT_SEVERITY_EXTREME 		= "Extreme";
+	 var ALERT_SEVERITY_SEVERE 			= "Severe";
+	 var ALERT_SEVERITY_MODERATE 		= "Moderate";
+	 var ALERT_SEVERITY_MINOR 			= "Minor";
+	 var ALERT_SEVERITY_UNKNOWN 		= "Unknown";
+	                    
+	 var ALERT_CERTAINTY_OBSERVED 		= "Observed";
+	 var ALERT_CERTAINTY_LIKELY			= "Likely";
+	 var ALERT_CERTAINTY_POSSIBLE 		= "Possible";
+	 var ALERT_CERTAINTY_UNLIKELY 		= "Unlikely";
+	 var ALERT_CERTAINTY_UNKNOWN 		= "Unknown";
+	 
+	 
+	 function get_ALERT_STATUS_ACTUAL() {
+		return ALERT_STATUS_ACTUAL;
+	 }	
+	 function get_ALERT_STATUS_EXERCISE() {
+		return ALERT_STATUS_EXERCISE;
+	 }
+	 function get_ALERT_STATUS_SYSTEM() {
+		return ALERT_STATUS_SYSTEM;
+	 }
+	 function get_ALERT_STATUS_TEST() {
+		return ALERT_STATUS_TEST;
+	 }
+	 function get_ALERT_STATUS_DRAFT() {
+		return ALERT_STATUS_DRAFT;
+	 }
+	              
+	 function get_ALERT_MSG_ALERT() {
+		return ALERT_MSG_ALERT;
+	 }
+	 function get_ALERT_MSG_UPDATE() {
+		return ALERT_MSG_UPDATE;
+	 }
+	 function get_ALERT_MSG_CANCEL() {
+		return ALERT_MSG_CANCEL;
+	 }
+	 function get_ALERT_MSG_ACK() {
+		return ALERT_MSG_ACK;
+	 }
+	 function get_ALERT_MSG_ERROR() {
+		return ALERT_MSG_ERROR;
+	 }
+	                 
+	 function get_ALERT_SCOPE_PUBLIC() {
+		return ALERT_SCOPE_PUBLIC;
+	 }
+	 function get_ALERT_SCOPE_RESTRICTED() {
+		return ALERT_SCOPE_RESTRICTED;
+	 }
+	 function get_ALERT_SCOPE_PRIVATE() {
+		return ALERT_SCOPE_PRIVATE;
+	 }
+	                 
+	 function get_ALERT_CATEGORY_GEO() {
+		return ALERT_CATEGORY_GEO;
+	 }
+	 function get_ALERT_CATEGORY_MET() {
+		return ALERT_CATEGORY_MET;
+	 }
+	 function get_ALERT_CATEGORY_SAFETY() {
+		return ALERT_CATEGORY_SAFETY;
+	 }
+	 function get_ALERT_CATEGORY_SECURITY() {
+		return ALERT_CATEGORY_SECURITY;
+	 }
+	 function get_ALERT_CATEGORY_RESCUE() {
+		return ALERT_CATEGORY_RESCUE;
+	 }
+	 function get_ALERT_CATEGORY_FIRE() {
+		return ALERT_CATEGORY_FIRE;
+	 }
+	 function get_ALERT_CATEGORY_HEALTH() {
+		return ALERT_CATEGORY_HEALTH;
+	 }
+	 function get_ALERT_CATEGORY_ENV() {
+		return ALERT_CATEGORY_ENV;
+	 }
+	 function get_ALERT_CATEGORY_TRANSPORT() {
+		return ALERT_CATEGORY_TRANSPORT;
+	 }
+	 function get_ALERT_CATEGORY_INFRA() {
+		return ALERT_CATEGORY_INFRA;
+	 }
+	 function get_ALERT_CATEGORY_CBRNE() {
+		return ALERT_CATEGORY_CBRNE;
+	 }
+	 function get_ALERT_CATEGORY_OTHER() {
+		return ALERT_CATEGORY_OTHER;
+	 }
+	                         
+	 function get_ALERT_RESPONSE_SHELTER() {
+		return ALERT_RESPONSE_SHELTER;
+	 }
+	 function get_ALERT_RESPONSE_EVACUATE() {
+		return ALERT_RESPONSE_EVACUATE;
+	 }
+	 function get_ALERT_RESPONSE_PREPARE() {
+		return ALERT_RESPONSE_PREPARE;
+	 }
+	 function get_ALERT_RESPONSE_EXECUTE() {
+		return ALERT_RESPONSE_EXECUTE;
+	 }
+	 function get_ALERT_RESPONSE_MONITOR() {
+		return ALERT_RESPONSE_MONITOR;
+	 }
+	 function get_ALERT_RESPONSE_NONE() {
+		return ALERT_RESPONSE_NONE;
+	 }
+	                    
+	 function get_ALERT_URGENCY_IMMEDIATE() {
+		return ALERT_URGENCY_IMMEDIATE;
+	 }
+	 function get_ALERT_URGENCY_EXPECTED() {
+		return ALERT_URGENCY_EXPECTED;
+	 }
+	 function get_ALERT_URGENCY_FUTURE() {
+		return ALERT_URGENCY_FUTURE;
+	 }
+	 function get_ALERT_URGENCY_PAST() {
+		return ALERT_URGENCY_PAST;
+	 }
+	 function get_ALERT_URGENCY_UNKNOWN() {
+		return ALERT_URGENCY_UNKNOWN;
+	 }
+	                    
+	 function get_ALERT_SEVERITY_EXTREME() {
+		return ALERT_SEVERITY_EXTREME;
+	 }
+	 function get_ALERT_SEVERITY_SEVERE() {
+		return ALERT_SEVERITY_SEVERE;
+	 }
+	 function get_ALERT_SEVERITY_MODERATE() {
+		return ALERT_SEVERITY_MODERATE;
+	 }
+	 function get_ALERT_SEVERITY_MINOR() {
+		return ALERT_SEVERITY_MINOR;
+	 }
+	 function get_ALERT_SEVERITY_UNKNOWN() {
+		return ALERT_SEVERITY_UNKNOWN;
+	 }
+	                    
+	 function get_ALERT_CERTAINTY_OBSERVED() {
+		return ALERT_CERTAINTY_OBSERVED;
+	 }
+	 function get_ALERT_CERTAINTY_LIKELY() {
+		return ALERT_CERTAINTY_LIKELY;
+	 }
+	 function get_ALERT_CERTAINTY_POSSIBLE() {
+		return ALERT_CERTAINTY_POSSIBLE;
+	 }
+	 function get_ALERT_CERTAINTY_UNLIKELY() {
+		return ALERT_CERTAINTY_UNLIKELY;
+	 }
+	 function get_ALERT_CERTAINTY_UNKNOWN() {
+		return ALERT_CERTAINTY_UNKNOWN;
+	 }
+	                             
+	                             
+	]]>                         
+	</script>                 
+                             
+</component>                
+                           
 <component id="WeatherInfo">
 	<comment>
 	Weather information
@@ -934,74 +1284,74 @@
 		<comment>
 			Weather location info (WeatherLocation object)
 		</comment>
-		<property name="Location" 				internalname="m_location" />
+		<property name="Location" 				internalName="m_location" />
 		
 		<comment>
 			Weather station name
 		</comment>
-		<property name="Station" 				internalname="m_station" />
+		<property name="Station" 				internalName="m_station" />
 		
 		<comment>
 			Weather station type
 		</comment>
-		<property name="Type" 					internalname="m_type" />
+		<property name="Type" 					internalName="m_type" />
 		
 		<comment>
 			Weather info links (WeatherLinks object)
 		</comment>
-		<property name="Links" 					internalname="m_links" />
+		<property name="Links" 					internalName="m_links" />
 		
-		<property name="Description"	 		internalname="m_description" />
-		<property name="Code" 					internalname="m_code" />
+		<property name="Description"	 		internalName="m_description" />
+		<property name="Code" 					internalName="m_code" />
 		
-		<property name="Date" 					internalname="m_date" />
+		<property name="Date" 					internalName="m_date" />
 		
-		<property name="Temperature" 			internalname="m_temperature" />
-		<property name="TemperatureFeel" 		internalname="m_temperatureFeel" />
+		<property name="Temperature" 			internalName="m_temperature" />
+		<property name="TemperatureFeel" 		internalName="m_temperatureFeel" />
 		
-		<property name="Humidity" 				internalname="m_humidity" />
+		<property name="Humidity" 				internalName="m_humidity" />
 		
-		<property name="Precipitation1H" 		internalname="m_precipitation_1h" />
-		<property name="PrecipitationToday" 	internalname="m_precipitation_today" />
+		<property name="Precipitation1H" 		internalName="m_precipitation_1h" />
+		<property name="PrecipitationToday" 	internalName="m_precipitation_today" />
 
-		<property name="Visibility" 			internalname="m_visibility" />
+		<property name="Visibility" 			internalName="m_visibility" />
 		
-		<property name="WindDescription" 		internalname="m_windDescription" />
-		<property name="WindDirection" 			internalname="m_windDirection" />
-		<property name="WindDegrees" 			internalname="m_windDegrees" />
-		<property name="WindSpeed" 				internalname="m_windSpeed" />
-		<property name="WindGust" 				internalname="m_windGust" />
+		<property name="WindDescription" 		internalName="m_windDescription" />
+		<property name="WindDirection" 			internalName="m_windDirection" />
+		<property name="WindDegrees" 			internalName="m_windDegrees" />
+		<property name="WindSpeed" 				internalName="m_windSpeed" />
+		<property name="WindGust" 				internalName="m_windGust" />
 
-		<property name="WindChillDescription" 	internalname="m_windChillDescription" />
-		<property name="WindChill" 				internalname="m_windChill" />
+		<property name="WindChillDescription" 	internalName="m_windChillDescription" />
+		<property name="WindChill" 				internalName="m_windChill" />
 		
-		<property name="Pressure" 				internalname="m_pressure" />
-		<property name="PressureTrend"			internalname="m_pressure" />
+		<property name="Pressure" 				internalName="m_pressure" />
+		<property name="PressureTrend"			internalName="m_pressure" />
 				
-		<property name="DewPointDescription" 	internalname="m_dewPointDescription" />
-		<property name="DewPoint" 				internalname="m_dewPoint" />
+		<property name="DewPointDescription" 	internalName="m_dewPointDescription" />
+		<property name="DewPoint" 				internalName="m_dewPoint" />
 				
-		<property name="HeatDescription" 		internalname="m_heatDescription" />
-		<property name="HeatIndex" 				internalname="m_heatIndex" />	
+		<property name="HeatDescription" 		internalName="m_heatDescription" />
+		<property name="HeatIndex" 				internalName="m_heatIndex" />	
 		
-		<property name="SolarRadiation" 		internalname="m_solarRadiation" />
-		<property name="UV" 					internalname="m_UV" />	
-		<property name="UVDescription"			internalname="m_UVDescription" />	
+		<property name="SolarRadiation" 		internalName="m_solarRadiation" />
+		<property name="UV" 					internalName="m_UV" />	
+		<property name="UVDescription"			internalName="m_UVDescription" />	
 		
-		<property name="Sunrise" 				internalname="m_sunrise" />
-		<property name="Sunset"					internalname="m_sunset" />
+		<property name="Sunrise" 				internalName="m_sunrise" />
+		<property name="Sunset"					internalName="m_sunset" />
 		
-		<property name="MoonPhaseDescription" 	internalname="m_moonPhaseDescription" />
-		<property name="MoonPhaseCode" 			internalname="m_moonPhaseCode" />
-		<property name="MoonIlluminated" 		internalname="m_moonIlluminated" />
-		<property name="MoonAge" 				internalname="m_moonAge" />
+		<property name="MoonPhaseDescription" 	internalName="m_moonPhaseDescription" />
+		<property name="MoonPhaseCode" 			internalName="m_moonPhaseCode" />
+		<property name="MoonIlluminated" 		internalName="m_moonIlluminated" />
+		<property name="MoonAge" 				internalName="m_moonAge" />
 		
-		<property name="DayOfWeek" 				internalname="m_dayOfWeek" />
-		<property name="DayPart" 				internalname="m_dayPart" />	
+		<property name="DayOfWeek" 				internalName="m_dayOfWeek" />
+		<property name="DayPart" 				internalName="m_dayPart" />	
 		
-		<property name="ForecastDescription" 	internalname="m_forecastDescription" />		
-		<property name="ForecastHigh"			internalname="m_forecastHigh" />		
-		<property name="ForecastLow" 			internalname="m_forecastLow" />
+		<property name="ForecastDescription" 	internalName="m_forecastDescription" />		
+		<property name="ForecastHigh"			internalName="m_forecastHigh" />		
+		<property name="ForecastLow" 			internalName="m_forecastLow" />
 		
 		<property name="UseMetricSystem" 		internalName="m_useMetricSystem" />
 		
@@ -1201,13 +1551,19 @@
       	    	  classid="{D4F984BF-A90A-45da-A695-ACBD974B9924}"/>    
       	    
 	<public>
-		<property name="Type" 			internalname="m_type" />
-		<property name="Description" 	internalname="m_description" />
-		<property name="Date" 			internalname="m_date" />
-		<property name="Expiration" 	internalname="m_expiration" />
-		<property name="Message" 		internalname="m_message" />
-		<property name="Phenomena" 		internalname="m_phenomena" />
-		<property name="Significance" 	internalname="m_significance" />		
+		<property name="Status" 		internalName="m_status" />
+		<property name="Type" 			internalName="m_type" />		
+		<property name="Category" 		internalName="m_category" />
+		<property name="Urgency" 		internalName="m_urgency" />
+		<property name="Severity" 		internalName="m_severity" />		
+		<property name="Certainty" 		internalName="m_certainty" />
+		
+		<property name="Area" 			internalName="m_area" />
+		
+		<property name="Title" 			internalName="m_title" />
+		<property name="Summary" 		internalName="m_summary" />
+		<property name="Effective" 		internalName="m_effective" />
+		<property name="Expiration" 	internalName="m_expiration" />
 		
 		<method name="ToString" />
 	</public>
@@ -1217,29 +1573,52 @@
 	
 	//**Start Encode**
 	
+	var m_status = null;
 	var m_type = null;
-	var m_description = null;
-	var m_date = null;
+	var m_category = null;
+	var m_urgency = null;
+	var m_severity = null;
+	var m_certainty = null;
+	
+	var m_area = null;
+	
+	var m_title = null;
+	var m_summary = null;
+	var m_effective = null;
 	var m_expiration = null;
-	var m_message = null;
-	var m_phenomena = null;
-	var m_significance = null;
 	
 	function ToString()
 	{
-		var text = m_description + " (" + m_type + ")" + "\n";	
+		var text = "";
 		
-		if (m_date != null && m_date != "")
-			text += "Date: " + m_date.format("%A, %c %Z");		
+		text += append("Status", m_status);
+		text += append("Type", m_type);
+		text += append("Category", m_category);
+		text += append("Urgency", m_urgency);
+		text += append("Severity", m_severity);
+		text += append("Certainty", m_certainty);
+		
+		text += append("Area", m_area);
+		
+		text += append("Title", m_title);
+		text += append("Summary", m_summary);
+		
+		if (m_effective != null && m_effective != "")
+			text += append("Effective", m_effective.format("%A, %c %Z"));		
 			
 		if (m_expiration != null && m_expiration != "")
-			text += "Expiration: " + m_expiration.format("%A, %c %Z");				
-			
-		text += "Phenomena: " + m_phenomena + "\n";
-		text += "Significance: " + m_significance + "\n";
-		text += "Message: " + m_message + "\n";
+			text += append("Expiration", m_expiration.format("%A, %c %Z"));
+		
 		
 		return text;
+	}
+	
+	function append(title, value)
+	{
+		if (value == null || value == "")
+			return "";
+			
+		return title + ": " + value + "\n";
 	}
 	
 	]]>
@@ -1257,17 +1636,17 @@
       	    	  classid="{4B4C0F6A-0888-4963-B432-B8F4DF38D8CB}"/>    
       	    
 	<public>
-		<property name="Handle" 		internalname="m_handle" />
-		<property name="ID" 			internalname="m_ID" />
-		<property name="StationID" 		internalname="m_stationID" />
-		<property name="Type" 			internalname="m_type" />
-		<property name="Organization" 	internalname="m_organization" />
-		<property name="Location"		internalname="m_location" />
-		<property name="Updated" 		internalname="m_updated" />	
-		<property name="IsRecent" 		internalname="m_isRecent" />	
-		<property name="UrlImage" 		internalname="m_urlImage" />	
-		<property name="UrlWidgetImage" internalname="m_urlWidgetImage" />	
-		<property name="UrlCamera" 		internalname="m_urlCamera" />			
+		<property name="Handle" 		internalName="m_handle" />
+		<property name="ID" 			internalName="m_ID" />
+		<property name="StationID" 		internalName="m_stationID" />
+		<property name="Type" 			internalName="m_type" />
+		<property name="Organization" 	internalName="m_organization" />
+		<property name="Location"		internalName="m_location" />
+		<property name="Updated" 		internalName="m_updated" />	
+		<property name="IsRecent" 		internalName="m_isRecent" />	
+		<property name="UrlImage" 		internalName="m_urlImage" />	
+		<property name="UrlWidgetImage" internalName="m_urlWidgetImage" />	
+		<property name="UrlCamera" 		internalName="m_urlCamera" />			
 		
 		<comment>
 			Time when this object was retrieved (used for caching purposes)
@@ -1342,27 +1721,27 @@
       	    	  classid="{BC017AA1-3732-4d88-89EC-68823C27ECD3}"/>  
       	    	   
 	<public>
-		<property name="ID" 					internalname="m_ID" />		
-		<property name="Name" 					internalname="m_name" />
+		<property name="ID" 					internalName="m_ID" />		
+		<property name="Name" 					internalName="m_name" />
 	
-		<property name="Country" 				internalname="m_country" />		
-		<property name="State" 					internalname="m_state" />
-		<property name="City" 					internalname="m_city" />
-		<property name="Address" 				internalname="m_address" />
+		<property name="Country" 				internalName="m_country" />		
+		<property name="State" 					internalName="m_state" />
+		<property name="City" 					internalName="m_city" />
+		<property name="Address" 				internalName="m_address" />
 		
-		<property name="Timezone" 				internalname="m_timezone" />
+		<property name="Timezone" 				internalName="m_timezone" />
 		
-		<property name="Latitude" 				internalname="m_latitude" />
-		<property name="Longitude" 				internalname="m_longitude" />
-		<property name="Elevation" 				internalname="m_elevation" />
+		<property name="Latitude" 				internalName="m_latitude" />
+		<property name="Longitude" 				internalName="m_longitude" />
+		<property name="Elevation" 				internalName="m_elevation" />
 		
-		<property name="Distance" 				internalname="m_distance" />	
+		<property name="Distance" 				internalName="m_distance" />	
 		
-		<property name="AirportCode" 			internalname="m_airportCode" />
-		<property name="ZipCode" 				internalname="m_zipCode" />		
-		<property name="CityCode" 				internalname="m_cityCode" />
+		<property name="AirportCode" 			internalName="m_airportCode" />
+		<property name="ZipCode" 				internalName="m_zipCode" />		
+		<property name="CityCode" 				internalName="m_cityCode" />
 		
-		<property name="CustomQueryString" 		internalname="m_customQueryString" />	
+		<property name="CustomQueryString" 		internalName="m_customQueryString" />	
 		
 		<comment>
 			Time when this object was retrieved (used for caching purposes)
@@ -1496,13 +1875,13 @@
     <object id="m_promo" 	progid="Scripting.Dictionary" />   	    	  
       	    
 	<public>
-		<property name="Current" 		internalname="m_current" />
-		<property name="Forecast" 		internalname="m_forecast" />
-		<property name="History" 		internalname="m_history" />
-		<property name="Credit" 		internalname="m_credit" />
-		<property name="Logo" 			internalname="m_logo" />
+		<property name="Current" 		internalName="m_current" />
+		<property name="Forecast" 		internalName="m_forecast" />
+		<property name="History" 		internalName="m_history" />
+		<property name="Credit" 		internalName="m_credit" />
+		<property name="Logo" 			internalName="m_logo" />
 
-		<property name="Promo" 			internalname="m_promo" />		
+		<property name="Promo" 			internalName="m_promo" />		
 		
 		<method name="ToString" />
 	</public>
