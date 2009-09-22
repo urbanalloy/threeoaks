@@ -46,7 +46,8 @@
 #include <vector>
 using namespace std;
 
-// CAeroColor
+/////////////////////////////////////////////////////////////////////////////
+// CMonitorInfo
 class ATL_NO_VTABLE CMonitorInfo :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMonitorInfo, &CLSID_MonitorInfo>,

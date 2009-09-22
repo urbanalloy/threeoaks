@@ -62,3 +62,9 @@
 #define TO_I4_VARIANT(var, value)\
 	var->vt = VT_I4;\
 	var->lVal = value;
+
+#define ClearBSTR(bstr) \
+	if (bstr != NULL) { \
+		SysFreeString(bstr); \
+		bstr = NULL; \
+	}

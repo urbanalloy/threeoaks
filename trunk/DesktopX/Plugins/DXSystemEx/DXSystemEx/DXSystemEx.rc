@@ -90,7 +90,7 @@ END
 // REGISTRY
 //
 
-IDR_SystemEx         REGISTRY                "DXSystemEx.rgs"
+IDR_SYSTEMEX         REGISTRY                "DXSystemEx.rgs"
 
 /////////////////////////////////////////////////////////////////////////////
 //

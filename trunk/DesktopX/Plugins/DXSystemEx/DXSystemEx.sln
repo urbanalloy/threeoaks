@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{16766E93-10EE-4AAB-9236-03EBD6DB80E0}") = "DXSystemEx", "DXSystemEx\DXSystemEx.vcproj", "{46131C74-7C47-49E2-ACE4-F705CA2B575E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DXSystemEx", "DXSystemEx\DXSystemEx.vcproj", "{46131C74-7C47-49E2-ACE4-F705CA2B575E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

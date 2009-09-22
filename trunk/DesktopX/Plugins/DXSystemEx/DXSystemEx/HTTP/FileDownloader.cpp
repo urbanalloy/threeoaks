@@ -75,9 +75,7 @@ FileDownloader::FileDownloader(DWORD objID) : m_objID(objID),
 
 FileDownloader::~FileDownloader(void)
 {
-	// Check if any connection is still open	
-	bool isRequestsEmpty = m_requests.empty();
-
+	// Check if any connection is still open		
 	if (!m_requests.empty()) 
 	{
 		// Wait until all connections have been closed

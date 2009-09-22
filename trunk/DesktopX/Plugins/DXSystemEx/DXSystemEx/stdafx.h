@@ -36,5 +36,5 @@
 #include <atlcom.h>
 using namespace ATL;
 
-#include "HelperMacros.h"
+#include "Utils/HelperMacros.h"
 
