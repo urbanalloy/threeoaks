@@ -44,7 +44,7 @@
 #define GLIB_MAJOR_VERSION 2
 
 /* Define to the GLIB micro version */
-#define GLIB_MICRO_VERSION 1
+#define GLIB_MICRO_VERSION 4
 
 /* Define to the GLIB minor version */
 #define GLIB_MINOR_VERSION 20

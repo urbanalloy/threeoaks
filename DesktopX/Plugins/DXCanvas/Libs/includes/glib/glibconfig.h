@@ -139,10 +139,6 @@ typedef unsigned __int64 guintptr;
 
 #define g_memmove(dest,src,len) G_STMT_START { memmove ((dest), (src), (len)); } G_STMT_END
 
-#define GLIB_MAJOR_VERSION 2
-#define GLIB_MINOR_VERSION 20
-#define GLIB_MICRO_VERSION 1
-
 #define G_OS_WIN32
 #define G_PLATFORM_WIN32
 
