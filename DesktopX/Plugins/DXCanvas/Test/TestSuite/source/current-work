@@ -116,7 +116,7 @@
      }
      return null;
    }
-   var current_revision = "r" + "$Revision: 3068 $".substr(11);
+   var current_revision = "r" + "$Revision$".substr(11);
    current_revision = current_revision.substr(0, current_revision.length - 2);
    var last_known_revision = current_revision;
    function getRemoteString(url, callback) {
