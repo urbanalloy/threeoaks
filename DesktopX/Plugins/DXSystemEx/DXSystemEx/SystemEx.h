@@ -42,10 +42,10 @@
 #include "DXSystemEx.h"
 #include "resource.h"
 
-#include "MonitorInfo.h"
+#include "Monitor/MonitorInfo.h"
 #include "Volume/IVolumeEventsConnectionPoint.h"
-#include "CSingleInstance.h"
-#include "FileDownloader.h"
+#include "Instance/CSingleInstance.h"
+#include "HTTP/FileDownloader.h"
 
 #include <string>
 #include <vector>
@@ -124,7 +124,7 @@ END_CONNECTION_POINT_MAP()
 
 		// Downloads
 		FileDownloader* m_pFileDownloader;		
-
+		
 		void UpdateInstanceInfo();
 		static BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData);	
 		static bool hasEnding(wstring const &fullString, wstring const &ending);

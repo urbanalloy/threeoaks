@@ -50,7 +50,7 @@
 #include <EndpointVolume.h>
 #include "Volume/MixerAPI.h"
 
-#include "VersionCheck.h"
+#include "Utils/VersionCheck.h"
 
 // HACK !
 static CSystemEx *pSystemEx;
@@ -259,27 +259,24 @@ STDMETHODIMP CSystemEx::InterfaceSupportsErrorInfo(REFIID riid)
 /************************************************************************/
 STDMETHODIMP CSystemEx::DownloadFile(int id, BSTR remoteUrl, BSTR localPath)
 {
-	// FIXME: disabled in 1.0
-	return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Disabled in 1.0"), "This function is not available in DXSystem 1.0!", 0, NULL);
+	// Check input
+	if (CComBSTR(remoteUrl) == CComBSTR(""))
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid remote url"), "Remote url is empty!", 0, NULL);	
 
-	//// Check input
-	//if (CComBSTR(remoteUrl) == CComBSTR(""))
-	//	return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid remote url"), "Remote url is empty!", 0, NULL);	
+	if (CComBSTR(localPath) == CComBSTR(""))
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid file path"), "File path is empty!", 0, NULL);
 
-	//if (CComBSTR(localPath) == CComBSTR(""))
-	//	return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid file path"), "File path is empty!", 0, NULL);
+	if (m_pFileDownloader == NULL)
+		m_pFileDownloader = new FileDownloader(m_objID);
 
-	//if (m_pFileDownloader == NULL)
-	//	m_pFileDownloader = new FileDownloader(m_objID);
+	USES_CONVERSION;
+	if (!m_pFileDownloader->IsValid(id))
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("ID already exists"), "A download is already in progress with this ID", 0, NULL);
 
-	//USES_CONVERSION;
-	//if (!m_pFileDownloader->IsValid(id))
-	//	return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("ID already exists"), "A download is already in progress with this ID", 0, NULL);
+	// Add to the list of file to download
+	m_pFileDownloader->Download(id, OLE2A(remoteUrl), OLE2A(localPath));
 
-	//// Add to the list of file to download
-	//m_pFileDownloader->Download(id, OLE2A(remoteUrl), OLE2A(localPath));
-
-	//return S_OK;
+	return S_OK;
 }
 
 STDMETHODIMP CSystemEx::StopDownload(int id)
@@ -432,6 +429,8 @@ STDMETHODIMP CSystemEx::get_IsFirstInstance(VARIANT_BOOL* isFirstInstance)
 *************************************/
 STDMETHODIMP CSystemEx::get_CommandLine(BSTR* commandLine)
 {
+	ClearBSTR(*commandLine);
+
 	LPSTR str = GetCommandLine();
 
 	CComBSTR bstr(str);
@@ -447,6 +446,8 @@ STDMETHODIMP CSystemEx::get_CommandLineArgs(VARIANT* pArgs)
 
 STDMETHODIMP CSystemEx::get_ExecutableFolder(BSTR* directory)
 {
+	ClearBSTR(*directory);
+
 	if (m_executableDirectory.empty())
 		ExtractCommandLine(GetCommandLineW(), NULL, false);	
 
@@ -458,6 +459,8 @@ STDMETHODIMP CSystemEx::get_ExecutableFolder(BSTR* directory)
 
 STDMETHODIMP CSystemEx::get_ExecutableName(BSTR* name)
 {
+	ClearBSTR(*name);
+
 	if (m_executableName.empty())
 		ExtractCommandLine(GetCommandLineW(), NULL, false);	
 

@@ -34,6 +34,39 @@ interface IMonitorInfo : IDispatch{
 
 [
 	object,
+	uuid(B9A55D32-CAD4-4a1f-AE82-F592554B40F9),
+	dual,
+	helpstring("IZipUtility Interface"),
+	pointer_default(unique)
+]
+interface IZipUtility : IDispatch
+{
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Properties
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	[propget, id(1), helpstring("Get the input path")] HRESULT InputPath([out, retval] BSTR *pVal);
+	[propput, id(1), helpstring("Set the input path")] HRESULT InputPath([in] BSTR newVal);
+	[propget, id(2), helpstring("Get the output path")] HRESULT OutputPath([out, retval] BSTR *pVal);
+	[propput, id(2), helpstring("Set the output path")] HRESULT OutputPath([in] BSTR newVal);
+	[propget, id(3), helpstring("Set the filename")] HRESULT FileName([out, retval] BSTR *pVal);
+	[propput, id(3), helpstring("Get the filename")] HRESULT FileName([in] BSTR newVal);
+	[propget, id(4), helpstring("Get the number of files in the zip file")] HRESULT Count([out, retval] long *pVal);
+	[propget, id(5), helpstring("Get the full filename (output path + filename)")] HRESULT FullFileName([out, retval] BSTR *pVal);
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Methods
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	[id(6), helpstring("Add a new file to the zip file")] HRESULT AddFile(BSTR strFileName, BSTR strNewName);	
+	[helpstring("Zip the contents of InputPath")] HRESULT Zip();
+	[helpstring("Unzip the contents of Filename to OutputPath")] HRESULT Unzip();	
+	[helpstring("Open an existing zip file")] HRESULT Open();
+	[helpstring("Check if a file exists in the zip file")] HRESULT ExistsFile(BSTR strFileName, [out, retval] BOOL* pVal);
+};
+
+[
+	object,
 	uuid(1EA1FEB9-07DF-4080-A578-9B5A15294146),
 	dual,
 	nonextensible,
@@ -120,6 +153,17 @@ library DXSystemExLib
 	coclass MonitorInfo
 	{
 		[default] interface IMonitorInfo;
+		interface ISupportErrorInfo;
+	};
+
+	importlib("stdole2.tlb");
+	[
+		uuid(674E4C28-957C-4564-9DAF-4960947129E6),
+		helpstring("ZipUtility Class")
+	]
+	coclass ZipUtility
+	{
+		[default] interface IZipUtility;
 		interface ISupportErrorInfo;
 	};
 };
