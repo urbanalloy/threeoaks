@@ -5,10 +5,10 @@
 #include "config.h"
 
 #define PANGO_VERSION_MAJOR 1
-#define PANGO_VERSION_MINOR 24
-#define PANGO_VERSION_MICRO 2
+#define PANGO_VERSION_MINOR 26
+#define PANGO_VERSION_MICRO 0
 
-#define PANGO_VERSION_STRING "1.24.2"
+#define PANGO_VERSION_STRING "1.26.0"
 
 
 #endif
