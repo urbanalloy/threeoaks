@@ -65,9 +65,6 @@ void CSystemEx::Init(DWORD objID, string guiId, HWND hwnd)
 	// Init instance information
 	UpdateInstanceInfo();
 
-	// Downloads
-	m_pFileDownloader = NULL;
-
 	// Init the config mutex
 	if (m_hConfigMutex == NULL) {
 		char name[MAX_PATH];

@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="COM/Functions">
+      <UniqueIdentifier>{4ab934cc-e6f8-4123-9309-7928722b971f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="COM/Functions\HTTP">
+      <UniqueIdentifier>{d64211e7-4e4a-4999-a846-b8cf5e41e71f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="COM/Functions\Instance">
+      <UniqueIdentifier>{6c878a09-d0a0-40ef-9545-88af987fe8be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="COM/Functions\Monitor">
+      <UniqueIdentifier>{ae217ce4-43ae-4a9b-be32-a97c814e0948}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="COM/Functions\Utils">
+      <UniqueIdentifier>{caad1e2d-f6f4-4d0b-9088-5e84cdc15ad6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="COM/Functions\Volume">
+      <UniqueIdentifier>{6685420c-1717-409b-952b-39ef59230bda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="COM/Functions\Zip">
+      <UniqueIdentifier>{657a2379-94a5-43a9-bead-16db1000b343}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Docs">
+      <UniqueIdentifier>{17d3c54d-b23a-424d-8916-f4fcf2abdb70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{70e32173-82f4-427f-a45a-f60ec06fa2e3}</UniqueIdentifier>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="SDK">
+      <UniqueIdentifier>{fd6ea4f3-ae94-415a-b016-9741106f9e39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\SDK\COMError.cpp">
+      <Filter>SDK</Filter>
+    </ClCompile>
+    <ClCompile Include="dlldatax.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DXSystemEx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DXSystemEx_i.c">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HTTP\FileDownloader.cpp">
+      <Filter>COM/Functions\HTTP</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance\CSingleInstance.cpp">
+      <Filter>COM/Functions\Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="Monitor\MonitorInfo.cpp">
+      <Filter>COM/Functions\Monitor</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemEx.cpp">
+      <Filter>COM/Functions</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\VersionCheck.cpp">
+      <Filter>COM/Functions\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Volume\MixerAPI.cpp">
+      <Filter>COM/Functions\Volume</Filter>
+    </ClCompile>
+    <ClCompile Include="Volume\VistaCallBackSetup.cpp">
+      <Filter>COM/Functions\Volume</Filter>
+    </ClCompile>
+    <ClCompile Include="Volume\VistaVolumeCallback.cpp">
+      <Filter>COM/Functions\Volume</Filter>
+    </ClCompile>
+    <ClCompile Include="Zip\XUnzip.cpp">
+      <Filter>COM/Functions\Zip</Filter>
+    </ClCompile>
+    <ClCompile Include="Zip\XZip.cpp">
+      <Filter>COM/Functions\Zip</Filter>
+    </ClCompile>
+    <ClCompile Include="Zip\ZipUtility.cpp">
+      <Filter>COM/Functions\Zip</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\SDK\COMError.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SDK\SDPlugin.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SDK\SDScriptedPlugin.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dlldatax.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXSystemEx.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HTTP\FileDownloader.h">
+      <Filter>COM/Functions\HTTP</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance\CSingleInstance.h">
+      <Filter>COM/Functions\Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="Monitor\MonitorInfo.h">
+      <Filter>COM/Functions\Monitor</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemEx.h">
+      <Filter>COM/Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\HelperMacros.h">
+      <Filter>COM/Functions\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\VersionCheck.h">
+      <Filter>COM/Functions\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Volume\IVolumeEventsConnectionPoint.h">
+      <Filter>COM/Functions\Volume</Filter>
+    </ClInclude>
+    <ClInclude Include="Volume\MixerAPI.h">
+      <Filter>COM/Functions\Volume</Filter>
+    </ClInclude>
+    <ClInclude Include="Volume\VistaCallBackSetup.h">
+      <Filter>COM/Functions\Volume</Filter>
+    </ClInclude>
+    <ClInclude Include="Volume\VistaVolumeCallback.h">
+      <Filter>COM/Functions\Volume</Filter>
+    </ClInclude>
+    <ClInclude Include="Zip\XUnzip.h">
+      <Filter>COM/Functions\Zip</Filter>
+    </ClInclude>
+    <ClInclude Include="Zip\XZip.h">
+      <Filter>COM/Functions\Zip</Filter>
+    </ClInclude>
+    <ClInclude Include="Zip\ZipUtility.h">
+      <Filter>COM/Functions\Zip</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Docs\DXSystemExDefines.vbs">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="..\Docs\Readme.txt">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="DXSystemEx.def">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="DXSystemEx.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DXSystemEx.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="DXSystemEx.idl">
+      <Filter>COM/Functions</Filter>
+    </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Config.tpl">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
