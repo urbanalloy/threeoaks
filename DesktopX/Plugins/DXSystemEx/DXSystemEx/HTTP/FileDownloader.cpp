@@ -95,8 +95,8 @@ void FileDownloader::Cleanup(void)
 	// Set all connection to close	
 	m_fClosing = TRUE;
 
-	for (RequestIterator it = m_requests.begin(); it != m_requests.end(); it++)
-		CloseConnection((*it).second);
+	for (int id = 0; id < (signed)m_requests.size(); id++)
+		StopDownload(id);		
 
 	if (m_hSession) {
 		WinHttpCloseHandle(m_hSession);
@@ -202,14 +202,14 @@ void FileDownloader::CloseConnection(REQUEST_CONTEXT* context)
 		return;
 
 	if (context->hRequest) {
-		WinHttpSetStatusCallback(context->hRequest, NULL, NULL, NULL);
-		WinHttpCloseHandle(context->hRequest);
+		//WinHttpSetStatusCallback(context->hRequest, NULL, NULL, NULL);
 		context->hRequest = NULL;
+		WinHttpCloseHandle(context->hRequest);		
 	}
 
 	if (context->hConnect) {
-		WinHttpCloseHandle(context->hConnect);
 		context->hConnect = NULL;
+		WinHttpCloseHandle(context->hConnect);		
 	}
 
 	if (context->buffer) {
