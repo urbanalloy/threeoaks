@@ -194,6 +194,32 @@ label_expiration:
 
 			switch(msg->message)
 			{
+				case WM_ACTIVATEAPP:
+				{
+					CComObject<CTaskbar7>* pTaskbar7 = (CComObject<CTaskbar7>*) *pluginIndex;
+
+					if (msg->wParam)
+						ShowWindow(pTaskbar7->GetParentHWND(), SW_SHOWNORMAL);
+					
+					SD_SCRIPTABLE_EVENT se;
+					se.cbSize = sizeof(SD_SCRIPTABLE_EVENT);
+					lstrcpy(se.szEventName, "Taskbar_OnShowTab");
+					se.flags=0;
+
+					memset(&se.dp, 0, sizeof(DISPPARAMS));
+
+					se.dp.cArgs = 0;
+
+					SDHostMessage(SD_SCRIPTABLE_PLUGIN_EVENT, objID, (DWORD) &se);
+
+					free(se.dp.rgvarg);						
+
+					return TRUE;
+					
+					break;
+				}
+
+
 				case WM_CLOSE:
 				{
 					SD_SCRIPTABLE_EVENT se;
