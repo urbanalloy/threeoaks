@@ -94,30 +94,6 @@ void CTaskbar7::Cleanup()
 	SAFE_RELEASE(m_pApplicationDestinations);
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Getters & Setters
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void CTaskbar7::SetHWND(HWND hwnd)
-{
-	this->m_hwnd = hwnd;
-}
-
-void CTaskbar7::SetMainHwnd(HWND hwnd)
-{
-	this->m_parentHwnd = hwnd;
-}
-
-void CTaskbar7::SetObjectID(DWORD id)
-{
-	this->m_objectID = id;
-}
-
-DWORD CTaskbar7::GetProcessID()
-{
-	return m_processID;
-}
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Main window handling
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -617,7 +593,7 @@ STDMETHODIMP CTaskbar7::DeleteList(BSTR appID)
 		return S_OK;
 
 	USES_CONVERSION;
-	HRESULT hr = m_pCustomDestinationList->DeleteList(OLE2W(appID));
+	/*HRESULT hr = */m_pCustomDestinationList->DeleteList(OLE2W(appID));
 
 	return S_OK;
 }
@@ -692,7 +668,7 @@ STDMETHODIMP CTaskbar7::CommitList()
 			KNOWNDESTCATEGORY knownDestination;
 			category.compare(DESTINATION_FREQUENT) == 0 ? knownDestination = KDC_FREQUENT : knownDestination = KDC_RECENT;
 
-			HRESULT hr = m_pCustomDestinationList->AppendKnownCategory(knownDestination);
+			/*HRESULT hr = */m_pCustomDestinationList->AppendKnownCategory(knownDestination);
 
 			iterator++;
 			continue;
@@ -735,7 +711,7 @@ STDMETHODIMP CTaskbar7::CommitList()
 			else
 				hr = m_pCustomDestinationList->AppendCategory(category.c_str(), poa);	
 
-			int err = GetLastError();
+			//int err = GetLastError();
 
 			poa->Release();
 		}
@@ -806,7 +782,10 @@ HRESULT CTaskbar7::CreateShellLink(Destination destination, IShellLink **ppShell
 {
 	USES_CONVERSION;
 
-	IShellLink *pShellLink;
+	IShellLink *pShellLink = NULL;
+	IPropertyStore *pPropertyStore = NULL;
+	PROPVARIANT propVariant;
+
 	HRESULT hr = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pShellLink));
 	EXIT_ON_ERROR(hr);
 
@@ -832,12 +811,11 @@ HRESULT CTaskbar7::CreateShellLink(Destination destination, IShellLink **ppShell
 		EXIT_ON_ERROR(hr);
 	}
 	
-	IPropertyStore *pPropertyStore;
+	
 	hr = pShellLink->QueryInterface(IID_PPV_ARGS(&pPropertyStore));
 	EXIT_ON_ERROR(hr);
 					
-	// Name
-	PROPVARIANT propVariant;
+	// Name	
 	hr = InitPropVariantFromString(destination.name.c_str(), &propVariant);
 	EXIT_ON_ERROR(hr);
 	

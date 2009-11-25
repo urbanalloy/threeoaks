@@ -196,14 +196,16 @@ END_COM_MAP()
 	public:
 
 		// Used by DXTaskbar
-		void SetHWND(HWND hwnd);				
-		void SetObjectID(DWORD id);
+		void SetHWND(HWND hwnd) { m_hwnd = hwnd; }
+		HWND GetHWND() { return m_hwnd; }
+		HWND GetParentHWND() { return m_parentHwnd; }
+		void SetObjectID(DWORD id) { m_objectID = id; }
 		void Init();
 		void Cleanup();
 
 		// Internal use by static methods
-		void SetMainHwnd(HWND hwnd);
-		DWORD GetProcessID();
+		void SetMainHwnd(HWND hwnd) { m_parentHwnd = hwnd; }
+		DWORD GetProcessID() { return m_processID; }
 		void HookMainWindowMessages();
 		
 		//////////////////////////////////////////////////////////////////////////
