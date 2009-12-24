@@ -319,6 +319,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\SDK\HelperMacros.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\SDK\SDPlugin.h"
 				>
 			</File>
@@ -401,10 +405,6 @@
 			<Filter
 				Name="Utils"
 				>
-				<File
-					RelativePath=".\Utils\HelperMacros.h"
-					>
-				</File>
 				<File
 					RelativePath=".\Utils\VersionCheck.cpp"
 					>
