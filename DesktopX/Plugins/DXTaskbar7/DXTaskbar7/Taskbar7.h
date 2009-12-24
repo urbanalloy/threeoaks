@@ -2,7 +2,7 @@
 //
 // DXTaskbar7 - Extended Taskbar Support for Windows 7
 //
-// Copyright (c) 2009, Julien Templier
+// Copyright (c) 2009-2010, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -10,16 +10,16 @@
 // * $LastChangedDate$
 // * $LastChangedBy$
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification, are
 // permitted provided that the following conditions are met:
 //  1. Redistributions of source code must retain the above copyright notice, this list of
-//     conditions and the following disclaimer. 
+//     conditions and the following disclaimer.
 //  2. Redistributions in binary form must reproduce the above copyright notice, this list
 //     of conditions and the following disclaimer in the documentation and/or other materials
-//     provided with the distribution. 
+//     provided with the distribution.
 //  3. The name of the author may not be used to endorse or promote products derived from this
-//     software without specific prior written permission. 
+//     software without specific prior written permission.
 //
 //  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
 //  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -96,12 +96,12 @@ public:
 
 		GetVersionEx(&versionInfo);
 		if (versionInfo.dwMajorVersion == 6 && versionInfo.dwMinorVersion == 1)
-			m_isWindows7 = true;		
+			m_isWindows7 = true;
 
 		return S_OK;
 	}
 
-	void FinalRelease() 
+	void FinalRelease()
 	{
 		GdiplusShutdown(m_gdiplusToken);
 	}
@@ -150,7 +150,7 @@ END_COM_MAP()
 						path(path),
 						arguments(arguments),
 						icon(icon),
-						iconIndex(iconIndex),						
+						iconIndex(iconIndex),
 						workingFolder(workingFolder) {};
 			~Destination() {};
 		};
@@ -161,12 +161,12 @@ END_COM_MAP()
 		// The COM instances
 		ITaskbarList3* m_pTaskbarList;
 		ICustomDestinationList* m_pCustomDestinationList;
-		IApplicationDestinations* m_pApplicationDestinations;		
-		
+		IApplicationDestinations* m_pApplicationDestinations;
+
 		// Handle to the DX window
 		HWND m_hwnd;
 		DWORD m_objectID;
-		
+
 		// Main process window (the one with the taskbar icon)
 		HWND m_parentHwnd;
 		DWORD m_processID;
@@ -180,8 +180,8 @@ END_COM_MAP()
 		map<wstring, vector<Destination>> destinations;
 
 		bool IsWindows7();
-	
-		void GetMainWindowHandle();	
+
+		void GetMainWindowHandle();
 		static BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam);
 		static LRESULT CALLBACK WindowProc(int nCode, WPARAM wParam, LPARAM lParam);
 
@@ -207,11 +207,11 @@ END_COM_MAP()
 		void SetMainHwnd(HWND hwnd) { m_parentHwnd = hwnd; }
 		DWORD GetProcessID() { return m_processID; }
 		void HookMainWindowMessages();
-		
+
 		//////////////////////////////////////////////////////////////////////////
 		// ISupportErrorInfo
 		//////////////////////////////////////////////////////////////////////////
-		STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);	
+		STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 		//////////////////////////////////////////////////////////////////////////
 		// ITaskbar7
@@ -223,8 +223,8 @@ END_COM_MAP()
 		STDMETHOD(RemoveTab)();
 
 		// ThumbBar
-		STDMETHOD(SetupButton)(int id, BSTR image, BSTR tooltip, int flags);	
-		STDMETHOD(UpdateButton)(int id, BSTR image, BSTR tooltip, int flags);	
+		STDMETHOD(SetupButton)(int id, BSTR image, BSTR tooltip, int flags);
+		STDMETHOD(UpdateButton)(int id, BSTR image, BSTR tooltip, int flags);
 		STDMETHOD(AddButtons)();
 
 		// Overlay
@@ -237,9 +237,9 @@ END_COM_MAP()
 		// Tasks and destinations
 		STDMETHOD(RemoveAllDestinations)();
 		STDMETHOD(DeleteList)(BSTR appID);
-	
+
 		STDMETHOD(CommitList)();
-		STDMETHOD(AbortList)();		
+		STDMETHOD(AbortList)();
 		STDMETHOD(AddUserTask)(BSTR name, BSTR path, BSTR arguments, BSTR icon, int iconIndex, BSTR workingFolder);
 		STDMETHOD(AddDestination)(BSTR category, BSTR name, BSTR path, BSTR arguments, BSTR icon, int iconIndex, BSTR workingFolder);
 		STDMETHOD(AddSeparator)(BSTR category);

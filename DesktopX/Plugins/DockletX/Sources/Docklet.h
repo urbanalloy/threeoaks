@@ -2,7 +2,7 @@
 //
 // DockletX - Docklet support plugin for DesktopX
 //
-// Copyright (c) 2006-2009, Three Oaks Crossing
+// Copyright (c) 2006-2010, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -10,6 +10,29 @@
 // * $LastChangedDate$
 // * $LastChangedBy$
 ///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Redistribution and use in source and binary forms, with or without modification, are
+// permitted provided that the following conditions are met:
+//  1. Redistributions of source code must retain the above copyright notice, this list of
+//     conditions and the following disclaimer.
+//  2. Redistributions in binary form must reproduce the above copyright notice, this list
+//     of conditions and the following disclaimer in the documentation and/or other materials
+//     provided with the distribution.
+//  3. The name of the author may not be used to endorse or promote products derived from this
+//     software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+//  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+//  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+//  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+//  GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+//  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+//  OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+//  POSSIBILITY OF SUCH DAMAGE.
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
+
 #pragma once
 
 #include "stdafx.h"
@@ -51,9 +74,9 @@ class Docklet
 		typedef void	(__stdcall *OD_DROPFILES)			(void *lpData, HDROP hDrop);
 		typedef HRESULT (__stdcall *OD_DROPDATA)			(IDataObject *pDataObject, DWORD grfKeyState, DWORD *pdwEffect);
 		typedef void	(__stdcall *OD_PROCESSMESSAGE)		(void *lpData, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-		typedef void	(__stdcall *OD_NOTIFYSIZECHANGE)	(void *lpData, int size, BOOL hasChanged);		
+		typedef void	(__stdcall *OD_NOTIFYSIZECHANGE)	(void *lpData, int size, BOOL hasChanged);
 		typedef IDataObject* (__stdcall *OD_DRAGDROPGETSOURCEOBJECT) (DWORD *pdwDropEffect);
-		
+
 		// Docklet functions
 		OD_GETINFORMATION OnGetInformation;
 		OD_GETREQUIREDVERSION OnGetRequiredVersion;
@@ -71,7 +94,7 @@ class Docklet
 		OD_PROCESSMESSAGE OnProcessMessage;
 		OD_DROPDATA OnDropData;
 		OD_NOTIFYSIZECHANGE NotifySizeChange;
-		OD_DRAGDROPGETSOURCEOBJECT OnDragDropGetSourceObject;		
+		OD_DRAGDROPGETSOURCEOBJECT OnDragDropGetSourceObject;
 
 public:
 
@@ -95,8 +118,8 @@ public:
 		//////////////////////////////////////////////////////////////////////////
 		// Informations
 		struct DOCKLET_INFO {
-			char name[MAX_PATH];	
-			char author[MAX_PATH];	
+			char name[MAX_PATH];
+			char author[MAX_PATH];
 			int version;
 			char notes[MAX_PATH];
 			bool valid;
@@ -120,7 +143,7 @@ private:
 			char rootFolder[MAX_PATH];
 			char relativeFolder[MAX_PATH];
 			char iniFile[MAX_PATH];
-			int size;					
+			int size;
 			EDGE edge;
 			ALIGN align;
 			string label;
@@ -141,11 +164,11 @@ private:
 
 		//////////////////////////////////////////////////////////////////////////
 		// Docklet instance
-		HINSTANCE hLibrary;		
+		HINSTANCE hLibrary;
 		void* docklet_data;
 
 		// State
-		BOOL initialized;		
+		BOOL initialized;
 		int objID;
 		HWND hwnd;
 		BOOL locked;
@@ -196,7 +219,7 @@ private:
 
 		// Drawing
 		void Redraw();
-		void Draw(HDC hdc, HBITMAP hBitmap);	
+		void Draw(HDC hdc, HBITMAP hBitmap);
 
 		// Accessors
 		void SetSize(int size);
@@ -213,7 +236,7 @@ private:
 
 		// Misc
 		static void GetObjectDockFolder(char* path);
-		void ShowDefaultImage();	
+		void ShowDefaultImage();
 
 		//////////////////////////////////////////////////////////////////////////
 		// Host functions
@@ -254,13 +277,13 @@ private:
 		void DoubleClick(POINT ptCursor);
 		void LeftButtonHeld(POINT ptCursor);
 		BOOL RightButtonClick(POINT ptCursor);
-		
+
 		void Configure();
 		void Save(char* ini, BOOL isForExport);
 
 		BOOL AcceptDropFiles();
 		BOOL Drop(IDataObject *pDataObject, DWORD grfKeyState, DWORD *pdwEffect);
-		
+
 		void ProcessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 
@@ -274,7 +297,7 @@ private:
 		static HINSTANCE LoadPluginInstance(char* dll, INT nCount, ...);
 		static void LoadInformation(OD_GETINFORMATION funcPointer, DOCKLET_INFO* info);
 
-		// Drawing			
+		// Drawing
 		void DrawBitmap(Bitmap* bitmap, RectF rect, Graphics* graphics);
 
 		// GetModuleHandle Hook

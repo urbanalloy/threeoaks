@@ -1,5 +1,5 @@
 DXVistaAeroColor plugin for DesktopX
- (c) 2006 Julien TEMPLIER aka Littleboy
+ Copyright (c) 2006-2010 Julien Templier
 ---------------------------------------
 
 The DXVistaAeroColor plugin is a scripting plugin that exposes Vista Glass
@@ -26,7 +26,7 @@ The plugin works by making four new functions available for use in your scripts:
 	- AeroColor.GetDefaultColor(id, alpha, red, green, blue)
 	- AeroColor.SetColorization(alpha, red, green, blue, transparencyEnabled)
 	- AeroColor.GetColorization(alpha, red, green, blue, transparencyEnabled)
-	
+
 
 SetDefaultColor(id)
 -------------------
@@ -42,8 +42,8 @@ id should be one of the following:
  5 : Orange
  6 : Pink
  7 : Frost
- 
- 
+
+
 GetDefaultColor(id, alpha, red, green, blue)
 --------------------------------------------
 
@@ -82,7 +82,7 @@ Each value is between 0 and 255. Transparency will be TRUE or FALSE
 Version 1.0.1: First released version
 
 ***************************************************************************
-** Licence
+** License
 ***************************************************************************
 This work is licensed under the Creative Commons
 Attribution-ShareAlike License. To view a copy of this license, visit

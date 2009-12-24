@@ -2,7 +2,7 @@
 //
 // Canvas Plugin for DesktopX
 //
-// Copyright (c) 2008-2009, Three Oaks Crossing
+// Copyright (c) 2008-2010, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -10,14 +10,16 @@
 // * $LastChangedDate$
 // * $LastChangedBy$
 ///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Uses code from a Cairo example (public domain?)
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "CanvasPath.h"
-
-
 
 /* Returns Euclidean distance between two points */
 double CanvasPath::two_points_distance (cairo_path_data_t *a, cairo_path_data_t *b)
@@ -82,7 +84,7 @@ double CanvasPath::curve_length (double x0, double y0, double x1, double y1, dou
 #pragma warning(push)
 #pragma warning(disable: 4701)
 
-/* Compute parametrization info.  That is, for each part of the 
+/* Compute parametrization info.  That is, for each part of the
  * cairo path, tags it with its length.
  *
  * Free returned value with g_free().
@@ -322,7 +324,7 @@ void CanvasPath::map_path_onto (cairo_t *cr, cairo_path_t *path, float x, float 
 	transform_path (current_path, (transform_point_func_t) point_on_path, &param);
 
 	cairo_append_path (cr, current_path);
-	
+
 	cairo_path_destroy (current_path);
 	free (param.parametrization);
 }

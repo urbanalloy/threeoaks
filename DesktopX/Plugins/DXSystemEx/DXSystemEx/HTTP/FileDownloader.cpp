@@ -2,7 +2,7 @@
 //
 // DXSystemEx - Extended System Information
 //
-// Copyright (c) 2009, Julien Templier
+// Copyright (c) 2009-2010, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -10,16 +10,16 @@
 // * $LastChangedDate$
 // * $LastChangedBy$
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification, are
 // permitted provided that the following conditions are met:
 //  1. Redistributions of source code must retain the above copyright notice, this list of
-//     conditions and the following disclaimer. 
+//     conditions and the following disclaimer.
 //  2. Redistributions in binary form must reproduce the above copyright notice, this list
 //     of conditions and the following disclaimer in the documentation and/or other materials
-//     provided with the distribution. 
+//     provided with the distribution.
 //  3. The name of the author may not be used to endorse or promote products derived from this
-//     software without specific prior written permission. 
+//     software without specific prior written permission.
 //
 //  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
 //  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -44,7 +44,7 @@
 static FileDownloader* pFileDownloader;
 extern BOOL (__stdcall *SDHostMessage)(UINT, DWORD, DWORD);
 
-FileDownloader::FileDownloader(DWORD objID) : m_objID(objID),											 
+FileDownloader::FileDownloader(DWORD objID) : m_objID(objID),
 											  m_hSession(NULL),
 											  m_fClosing(FALSE)
 {
@@ -75,8 +75,8 @@ FileDownloader::FileDownloader(DWORD objID) : m_objID(objID),
 
 FileDownloader::~FileDownloader(void)
 {
-	// Check if any connection is still open		
-	if (!m_requests.empty()) 
+	// Check if any connection is still open
+	if (!m_requests.empty())
 	{
 		// Wait until all connections have been closed
 		//WaitForSingleObject(m_hShutdownEvent, /*60000*/INFINITE);
@@ -92,11 +92,11 @@ FileDownloader::~FileDownloader(void)
 
 void FileDownloader::Cleanup(void)
 {
-	// Set all connection to close	
+	// Set all connection to close
 	m_fClosing = TRUE;
 
 	for (int id = 0; id < (signed)m_requests.size(); id++)
-		StopDownload(id);		
+		StopDownload(id);
 
 	if (m_hSession) {
 		WinHttpCloseHandle(m_hSession);
@@ -136,7 +136,7 @@ void FileDownloader::CompletionCallback(REQUEST_CONTEXT* context, DownloadStatus
 	memset(&se.dp, 0, sizeof(DISPPARAMS));
 	se.dp.cArgs = 3;
 	VARIANT* lpvt = (VARIANT*)malloc(sizeof(VARIANT)*3);
-	VariantInit(&lpvt[0]);	
+	VariantInit(&lpvt[0]);
 	VariantInit(&lpvt[1]);
 	VariantInit(&lpvt[2]);
 
@@ -154,7 +154,7 @@ void FileDownloader::CompletionCallback(REQUEST_CONTEXT* context, DownloadStatus
 
 	SDHostMessage(SD_SCRIPTABLE_PLUGIN_EVENT, m_objID, (DWORD) &se);
 
-	free(se.dp.rgvarg);	
+	free(se.dp.rgvarg);
 }
 
 // SystemEx_OnDownloadProgress(id, completed, total)
@@ -172,7 +172,7 @@ void FileDownloader::ProgressCallback(REQUEST_CONTEXT* context)
 	memset(&se.dp, 0, sizeof(DISPPARAMS));
 	se.dp.cArgs = 3;
 	VARIANT* lpvt = (VARIANT*)malloc(sizeof(VARIANT)*3);
-	VariantInit(&lpvt[0]);	
+	VariantInit(&lpvt[0]);
 	VariantInit(&lpvt[1]);
 	VariantInit(&lpvt[2]);
 
@@ -189,7 +189,7 @@ void FileDownloader::ProgressCallback(REQUEST_CONTEXT* context)
 
 	SDHostMessage(SD_SCRIPTABLE_PLUGIN_EVENT, m_objID, (DWORD) &se);
 
-	free(se.dp.rgvarg);	
+	free(se.dp.rgvarg);
 }
 
 
@@ -204,12 +204,12 @@ void FileDownloader::CloseConnection(REQUEST_CONTEXT* context)
 	if (context->hRequest) {
 		//WinHttpSetStatusCallback(context->hRequest, NULL, NULL, NULL);
 		context->hRequest = NULL;
-		WinHttpCloseHandle(context->hRequest);		
+		WinHttpCloseHandle(context->hRequest);
 	}
 
 	if (context->hConnect) {
 		context->hConnect = NULL;
-		WinHttpCloseHandle(context->hConnect);		
+		WinHttpCloseHandle(context->hConnect);
 	}
 
 	if (context->buffer) {
@@ -230,7 +230,7 @@ void FileDownloader::Download(int id, string remoteUrl, string localPath)
 	context->localPath = localPath;
 
 	m_requests[id] = context;
-	
+
 	// check that the downloading session is opened correctly
 	if (!m_hSession) {
 		CompletionCallback(context, InternalError);
@@ -260,7 +260,7 @@ void FileDownloader::Download(int id, string remoteUrl, string localPath)
 		CompletionCallback(context, InvalidUrl);
 		goto error_exit;
 	}
-	
+
 	// Connect to the server
 	WCHAR wCharSave = UrlComponents.lpszHostName[UrlComponents.dwHostNameLength];
 	UrlComponents.lpszHostName[UrlComponents.dwHostNameLength] = L'\0';
@@ -276,7 +276,7 @@ void FileDownloader::Download(int id, string remoteUrl, string localPath)
 	}
 
 	// Open the request
-	context->hRequest = WinHttpOpenRequest(context->hConnect, 
+	context->hRequest = WinHttpOpenRequest(context->hConnect,
 										   L"GET",
 									       UrlComponents.lpszUrlPath,
 									       L"HTTP/1.1",
@@ -308,21 +308,21 @@ void FileDownloader::Download(int id, string remoteUrl, string localPath)
 	return;
 
 error_exit:
-	CloseConnection(context);	
+	CloseConnection(context);
 }
 
 void FileDownloader::StopDownload(int id)
 {
 	RequestIterator it = m_requests.find(id);
 	bool isDownloadPresent = !(it == m_requests.end());
-	
+
 	// If the download does not exist, do not do anything
-	if (!isDownloadPresent) {		
+	if (!isDownloadPresent) {
 		return;
 	}
 
 	REQUEST_CONTEXT* context = (*it).second;
-	CompletionCallback(context, DownloadCancelled);	
+	CompletionCallback(context, DownloadCancelled);
 	CloseConnection(context);
 }
 
@@ -341,8 +341,8 @@ void CALLBACK DownloadStatusCallback(HINTERNET,
 	{
 		case WINHTTP_CALLBACK_STATUS_SENDREQUEST_COMPLETE:
 		{
-			if (!context->hRequest || pFileDownloader->m_fClosing)							
-				return;			
+			if (!context->hRequest || pFileDownloader->m_fClosing)
+				return;
 
 			// Prepare the request handle to receive a response.
 			if(WinHttpReceiveResponse(context->hRequest, NULL ) == FALSE)
@@ -379,17 +379,17 @@ void CALLBACK DownloadStatusCallback(HINTERNET,
 					default:
 						break;
 				}
-					
+
 				pFileDownloader->CompletionCallback(context, status);
 				pFileDownloader->CloseConnection(context);
-			}		
+			}
 			break;
-		}		
+		}
 
 		case WINHTTP_CALLBACK_STATUS_HEADERS_AVAILABLE:
 		{
-			if (!context->hRequest || pFileDownloader->m_fClosing)							
-				return;		
+			if (!context->hRequest || pFileDownloader->m_fClosing)
+				return;
 
 			DWORD dwStatusCode = 0;
 			DWORD dwSize = sizeof(DWORD);
@@ -398,27 +398,27 @@ void CALLBACK DownloadStatusCallback(HINTERNET,
 
 			// Get the status code
 			if (WinHttpQueryHeaders(context->hRequest,
-									WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER, 
+									WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER,
 									NULL,
 									&dwStatusCode,
 									&dwSize,
 									NULL) == FALSE)
 			{
 				pFileDownloader->CompletionCallback(context, FileDownloader::QueryHeadersFailed);
-				pFileDownloader->CloseConnection(context);				
+				pFileDownloader->CloseConnection(context);
 				return;
 			}
 
 			if (dwStatusCode != HTTP_STATUS_OK)
 			{
 				pFileDownloader->CompletionCallback(context, FileDownloader::HttpError);
-				pFileDownloader->CloseConnection(context);				
+				pFileDownloader->CloseConnection(context);
 				return;
 			}
 
 			// Get the content-length
 			if (WinHttpQueryHeaders(context->hRequest,
-									WINHTTP_QUERY_CONTENT_LENGTH | WINHTTP_QUERY_FLAG_NUMBER, 
+									WINHTTP_QUERY_CONTENT_LENGTH | WINHTTP_QUERY_FLAG_NUMBER,
 									NULL,
 									&dwContentLength,
 									&dwCLSize,
@@ -448,15 +448,15 @@ void CALLBACK DownloadStatusCallback(HINTERNET,
 				}
 
 				pFileDownloader->CompletionCallback(context, status);
-				pFileDownloader->CloseConnection(context);				
-			}			
+				pFileDownloader->CloseConnection(context);
+			}
 			break;
 		}
 
 		case WINHTTP_CALLBACK_STATUS_DATA_AVAILABLE:
 		{
-			if (!context->hRequest || pFileDownloader->m_fClosing)							
-				return;		
+			if (!context->hRequest || pFileDownloader->m_fClosing)
+				return;
 
 			context->receivedSize = *((LPDWORD)lpvStatusInformation);
 
@@ -497,14 +497,14 @@ void CALLBACK DownloadStatusCallback(HINTERNET,
 					pFileDownloader->CompletionCallback(context, status);
 					pFileDownloader->CloseConnection(context);
 				}
-			}			
+			}
 			break;
 		}
 
 		case WINHTTP_CALLBACK_STATUS_READ_COMPLETE:
 		{
-			if (!context->hRequest || pFileDownloader->m_fClosing)							
-				return;		
+			if (!context->hRequest || pFileDownloader->m_fClosing)
+				return;
 
 			DWORD dwBytesRead  = dwStatusInformationLength;
 			LPSTR lpReadBuffer = (LPSTR) lpvStatusInformation;
@@ -539,10 +539,10 @@ void CALLBACK DownloadStatusCallback(HINTERNET,
 				pFileDownloader->ProgressCallback(context);
 			}
 
-			if (!context->hRequest || pFileDownloader->m_fClosing)							
-				return;		
+			if (!context->hRequest || pFileDownloader->m_fClosing)
+				return;
 
-			// Now check for more data. If there is no more, 
+			// Now check for more data. If there is no more,
 			// close the context
 			if (WinHttpQueryDataAvailable(context->hRequest, NULL) == FALSE)
 			{
@@ -564,8 +564,8 @@ void CALLBACK DownloadStatusCallback(HINTERNET,
 				}
 
 				pFileDownloader->CompletionCallback(context, status);
-				pFileDownloader->CloseConnection(context);				
-			}			
+				pFileDownloader->CloseConnection(context);
+			}
 			break;
 		}
 
@@ -574,7 +574,7 @@ void CALLBACK DownloadStatusCallback(HINTERNET,
 			pFileDownloader->OnHandleClosing(context);
 			break;
 		}
-			
+
 		default:
 			break;
 	}
@@ -643,9 +643,9 @@ FileDownloader::DownloadStatus FileDownloader::SaveFile(REQUEST_CONTEXT* context
 					   NULL,                   // default security
 					   CREATE_ALWAYS,          // overwrite existing
 					   FILE_ATTRIBUTE_NORMAL,  // normal file
-					   NULL); 
+					   NULL);
 
-	if (hFile == INVALID_HANDLE_VALUE) 
+	if (hFile == INVALID_HANDLE_VALUE)
 		return FileNotWritable;
 
 	// Loop until all the buffer is written to the file (in most case, will not repeat)
@@ -655,8 +655,8 @@ FileDownloader::DownloadStatus FileDownloader::SaveFile(REQUEST_CONTEXT* context
 					 context->buffer + dwBytesWritten,      // start of data to write
 					 dwBytesToWrite - dwBytesWritten,		// number of bytes to write
 					 &dwBytesWritten,						// number of bytes that were written
-					 NULL) == FALSE) 
-		{			
+					 NULL) == FALSE)
+		{
 			CloseHandle(hFile);
 			return FileNotWritable;
 		}

@@ -1,5 +1,5 @@
 DXTaskbar7 plugin for DesktopX
- (c) 2009 Julien TEMPLIER (Littleboy)
+ Copyright (c) 2009-2010 Julien Templier
 -------------------------------------------------------------------------------------------------------
 
 The DXTaskbar7 plugin is a scripting plugin that exposes Windows 7 taskbar
@@ -28,7 +28,7 @@ Get the handle for that tab (to be used in ConfigureTab)
 
 SetTabsIcon(image)
 ---------------------
-Set a global icon for all the tabs. 
+Set a global icon for all the tabs.
   - image: path to a 16x16 image file.
 
 ConfigureTab(name, insertAfter)
@@ -36,7 +36,7 @@ ConfigureTab(name, insertAfter)
 Setup the tab name and position.
   - name: title of the tab
   - insertAfter: handle of the tab after which the configured tab should be inserted. Use 0 to insert after the last tab
- 
+
 SetTabActive()
 --------------
 Set the tab as active and show it in the tab list.
@@ -55,12 +55,12 @@ ThumbBar
 
 SetupButton(id, image, tooltip, flags)
 --------------------------------------
-Setup a new tab button. 
+Setup a new tab button.
   - id is the internal id (to be passed in the Taskbar_OnButtonClicked callback when the button is clicked)
   - image: path to a 16x16 image file
   - tooltip: the tooltip to shown on mouse-over
   - flags: a list of flags (see DXTaskbarDefines.vbs)
-  
+
 UpdateButton(id, image, tooltip, flags)
 ---------------------------------------
 Update an existing tab button (only after buttons have been added).
@@ -83,25 +83,25 @@ Called when the user clicks on a thumbbar button.
 
 Overlay
 #######
-	
+
 SetOverlayIcon(path, description)
 ---------------------------------
 Applies an overlay to a taskbar button to indicate application status or a notification to the user.
-  - image: path to a 16x16 image file 
+  - image: path to a 16x16 image file
   - description: an alternative text version, for accessibility purposes
 
 SetProgressState(flag)
 ----------------------
 Sets the type and state of the progress indicator displayed on a taskbar button
-  - flag: a progress flag (see DXTaskbarDefines.vbs) 
+  - flag: a progress flag (see DXTaskbarDefines.vbs)
 
 SetProgressValue(completed, total)
 ----------------------------------
 Displays or updates a progress bar hosted in a taskbar button to show the specific percentage completed of the full operation
   - completed: number of steps completed
   - total: total number of steps
-  
-  
+
+
 Tasks and destinations
 ######################
 
@@ -114,12 +114,12 @@ Add a new user tasks (typically static links)
   - icon: path to .ico file to use as an icon
   - iconIndex: index of the icon to use in the .ico file (typically 0 if you only have 1 icon type)
   - workingFolder: working folder when executing the program
-  
+
 AddSeparator(category)
 ----------------------
 Add a separator
   - category: the category to add a separator to. To add a separator to the tasks, use “Tasks” as the category.
-  
+
 CommitList()
 ------------
 Declares that the Jump List is complete and ready for display
@@ -143,17 +143,17 @@ Version 1.0 Build 205:
 Version 1.0 Build 198: First released version
 
 *******************************************************************************************************
-** Licence
+** License
 *******************************************************************************************************
   Redistribution and use in source and binary forms, with or without modification, are
   permitted provided that the following conditions are met:
     1. Redistributions of source code must retain the above copyright notice, this list of
-       conditions and the following disclaimer. 
+       conditions and the following disclaimer.
     2. Redistributions in binary form must reproduce the above copyright notice, this list
        of conditions and the following disclaimer in the documentation and/or other materials
-       provided with the distribution. 
+       provided with the distribution.
     3. The name of the author may not be used to endorse or promote products derived from this
-       software without specific prior written permission. 
+       software without specific prior written permission.
 
   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
   OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF

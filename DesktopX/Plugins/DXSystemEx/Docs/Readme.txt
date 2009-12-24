@@ -1,5 +1,5 @@
 DXSystemEx plugin for DesktopX
- Copyright (c) 2009, Julien TEMPLIER
+ Copyright (c) 2009-2010 Julien Templier
 -------------------------------------------------------------------------------------------------------
 
 The DXSystemEx plugin is a scripting plugin that exposes extended system information to DesktopX plugins
@@ -43,8 +43,8 @@ Properties & Methods
    - Top
    - Bottom
    - Right
-   
-   
+
+
 Volume
 ------
 
@@ -56,7 +56,7 @@ Properties & Methods
 Callbacks
 	- SystemEx_OnVolumeEvent(volume)
 	- SystemEx_OnMuteEvent(isMuted)
-	
+
 Instance
 ----
 
@@ -67,14 +67,14 @@ Properties & Methods
 
 Callbacks
 	- SystemEx_OnNewInstance(commandLineArgs)
-	
+
 Misc
 ----
 
 Properties & Methods
 	- VerifySignature(path, signature, type)
-	
-	
+
+
 *******************************************************************************************************
 
 SystemEx_OnMouseWheel(rotation)
@@ -134,7 +134,7 @@ XP Compatibility: never called.
 SystemEx_OnMuteEvent(isMuted)
 ---------------------------------
 
-If the volume is muted, your object callback is called. 
+If the volume is muted, your object callback is called.
 isMuted will be True if the volume has been muted, false otherwise.
 
 XP Compatibility: never called.
@@ -145,7 +145,7 @@ SystemEx.Volume
 
 Sets or gets the master volume.
 
-Usage: 
+Usage:
  SystemEx.Volume = <volume>
  vol = SystemEx.Volume
 
@@ -157,7 +157,7 @@ SystemEx.Mute
 
 Mute or Unmute the audio stream
 
-Usage: 
+Usage:
  SystemEx.Mute = True
  isMuted = SystemEx.Mute
 
@@ -173,15 +173,15 @@ currently playing sample.
 
 Usage:
 	level = SystemEx.PeakValue
-	
+
 level will be between 0 and 100.
 
 XP Compatibility: might not work with some cards, in which case it will always
 			      returns 100.
 			      It reads from the waveout device, so it won't work when
 			      reading from a CD for example.
-			      
-			      
+
+
 *******************************************************************************************************
 
 SystemEx.CommandLine
@@ -208,7 +208,7 @@ SystemEx_OnNewInstance(commandLineArgs)
 Gets called when another instance is started. The command line arguments are passed in an array.
 
 *******************************************************************************************************
-		      
+
 SystemEx.VerifySignature(path, signature, type)
 -----------------------------------------------
 
@@ -230,17 +230,17 @@ Version 1.0 Build 240:
 Version 1.0 Build 204: First released version
 
 *******************************************************************************************************
-** Licence
+** License
 *******************************************************************************************************
   Redistribution and use in source and binary forms, with or without modification, are
   permitted provided that the following conditions are met:
     1. Redistributions of source code must retain the above copyright notice, this list of
-       conditions and the following disclaimer. 
+       conditions and the following disclaimer.
     2. Redistributions in binary form must reproduce the above copyright notice, this list
        of conditions and the following disclaimer in the documentation and/or other materials
-       provided with the distribution. 
+       provided with the distribution.
     3. The name of the author may not be used to endorse or promote products derived from this
-       software without specific prior written permission. 
+       software without specific prior written permission.
 
   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
   OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
