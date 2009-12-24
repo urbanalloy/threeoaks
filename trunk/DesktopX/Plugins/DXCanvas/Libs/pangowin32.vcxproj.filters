@@ -38,9 +38,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pango\config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="pango\pango\pangowin32-private.h">
       <Filter>Header Files</Filter>
     </ClInclude>

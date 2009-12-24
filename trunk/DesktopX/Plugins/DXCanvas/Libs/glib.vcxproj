@@ -51,9 +51,9 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CallingConvention>StdCall</CallingConvention>
-      <DisableSpecificWarnings>4018;4100;4152;4389;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4113;4005;4146;4018;4090;4100;4152;4389;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ForcedIncludeFiles>msvc_recommended_pragmas.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;GLIB_COMPILATION;DLL_EXPORT;HAVE_CONFIG_H;G_LOG_DOMAIN="Glib";G_ENABLE_DEBUG;G_DISABLE_DEPRECATED;PCRE_STATIC;LINK_SIZE=2;MAX_NAME_SIZE=32;MAX_NAME_COUNT=10000;NEWLINE=-1;POSIX_MALLOC_THRESHOLD=10;MATCH_LIMIT=10000000;MATCH_LIMIT_RECURSION=10000000;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;GLIB_COMPILATION;DLL_EXPORT;HAVE_CONFIG_H;G_LOG_DOMAIN="Glib";G_ENABLE_DEBUG;G_DISABLE_DEPRECATED;PCRE_STATIC;LINK_SIZE=2;MAX_NAME_SIZE=32;MAX_NAME_COUNT=10000;NEWLINE=-1;POSIX_MALLOC_THRESHOLD=10;MATCH_LIMIT=10000000;MATCH_LIMIT_RECURSION=10000000;LIBDIR="";%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Lib>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
@@ -61,6 +61,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="glib\glib\galiasdef.c" />
     <ClCompile Include="glib\glib\garray.c" />
     <ClCompile Include="glib\glib\gasyncqueue.c" />
     <ClCompile Include="glib\glib\gatomic.c" />
@@ -103,6 +104,7 @@
     <ClCompile Include="glib\glib\gshell.c" />
     <ClCompile Include="glib\glib\gslice.c" />
     <ClCompile Include="glib\glib\gslist.c" />
+    <ClCompile Include="glib\glib\gspawn-win32-helper.c" />
     <ClCompile Include="glib\glib\gspawn-win32.c" />
     <ClCompile Include="glib\glib\gstdio.c" />
     <ClCompile Include="glib\glib\gstrfuncs.c" />

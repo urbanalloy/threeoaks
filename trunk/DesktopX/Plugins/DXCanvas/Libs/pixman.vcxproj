@@ -54,7 +54,7 @@ D:\Apps\Perl\Perl64\bin\perl $(ProjectDir)\pixman\pixman\make-combine.pl 16 &lt;
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CallingConvention>StdCall</CallingConvention>
       <CompileAs>Default</CompileAs>
-      <DisableSpecificWarnings>4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4101;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>

@@ -47,7 +47,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CallingConvention>StdCall</CallingConvention>
-      <DisableSpecificWarnings>4018;4100;4152;4389;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4244;4018;4100;4152;4389;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
@@ -63,7 +63,6 @@
     <ClCompile Include="pango\pango\pangocairo-win32fontmap.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\pango\pango\config.h" />
     <ClInclude Include="pango\pango\pangocairo-private.h" />
     <ClInclude Include="pango\pango\pangocairo-win32.h" />
     <ClInclude Include="pango\pango\pangocairo.h" />

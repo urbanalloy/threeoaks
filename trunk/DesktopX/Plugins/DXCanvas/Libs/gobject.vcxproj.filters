@@ -27,6 +27,9 @@
     <ClCompile Include="glib\gobject\gobject.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="glib\gobject\gobjectaliasdef.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="glib\gobject\gobjectnotifyqueue.c">
       <Filter>Source Files</Filter>
     </ClCompile>

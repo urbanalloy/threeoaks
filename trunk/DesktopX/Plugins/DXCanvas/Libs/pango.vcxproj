@@ -36,7 +36,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <OmitFramePointers>true</OmitFramePointers>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)/include/glib;$(SolutionDir)/include/pango;$(SolutionDir)/include;$(SolutionDir)/pango;$(SolutionDir)/pango/pango;$(SolutionDir)/glib/glib;$(SolutionDir)/glib/;$(SolutionDir)/cairo/src;$(SolutionDir)/glib/gmodule;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/include/pango;$(SolutionDir)/include/glib;$(SolutionDir)/include;$(SolutionDir)/pango;$(SolutionDir)/pango/pango;$(SolutionDir)/glib/glib;$(SolutionDir)/glib/;$(SolutionDir)/cairo/src;$(SolutionDir)/glib/gmodule;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;HAVE_CAIRO_WIN32;PANGO_ENABLE_BACKEND;PANGO_ENABLE_ENGINE;PANGO_MODULE_PREFIX;DEFINE_PACKAGE_PANGO;DXCANVAS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -47,7 +47,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CallingConvention>StdCall</CallingConvention>
-      <DisableSpecificWarnings>4018;4100;4146;4152;4244;4389;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4101;4996;4018;4100;4146;4152;4244;4389;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Lib>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>

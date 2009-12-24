@@ -41,7 +41,7 @@ copy .\glib\gmodule\gmoduleconf.h.win32 .\glib\gmodule\gmoduleconf.h
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <OmitFramePointers>true</OmitFramePointers>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)/glib/glib;$(SolutionDir)/glib/gmodule;$(SolutionDir)/glib;$(SolutionDir)/include/glib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/include/glib;$(SolutionDir)/glib/glib;$(SolutionDir)/glib/gmodule;$(SolutionDir)/glib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;GMODULE_EXPORTS;HAVE_CONFIG_H;G_LOG_DOMAIN="GModule";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
