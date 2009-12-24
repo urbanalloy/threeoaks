@@ -35,9 +35,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\pango\pango\config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="pango\pango\pangocairo-private.h">
       <Filter>Header Files</Filter>
     </ClInclude>
