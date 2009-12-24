@@ -2,13 +2,35 @@
 //
 // Canvas Plugin for DesktopX
 //
-// Copyright (c) 2008-2009, Three Oaks Crossing
+// Copyright (c) 2008-2010, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // * $LastChangedRevision$
 // * $LastChangedDate$
 // * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Redistribution and use in source and binary forms, with or without modification, are
+// permitted provided that the following conditions are met:
+//  1. Redistributions of source code must retain the above copyright notice, this list of
+//     conditions and the following disclaimer.
+//  2. Redistributions in binary form must reproduce the above copyright notice, this list
+//     of conditions and the following disclaimer in the documentation and/or other materials
+//     provided with the distribution.
+//  3. The name of the author may not be used to endorse or promote products derived from this
+//     software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+//  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+//  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+//  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+//  GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+//  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+//  OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+//  POSSIBILITY OF SUCH DAMAGE.
+//
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -66,18 +88,18 @@ HRESULT CCanvasRenderingContext2D::processText(BSTR txt, float x, float y, VARIA
 	USES_CONVERSION;
 	string text(OLE2T(txt));
 
-	// Replace all the whitespace characters (with U+0020 SPACE) 
+	// Replace all the whitespace characters (with U+0020 SPACE)
 	replace(text.begin(), text.end(), '\x09', '\x20');	// character tabulation
 	replace(text.begin(), text.end(), '\x0A', '\x20'); // line feed
 	replace(text.begin(), text.end(), '\x0C', '\x20'); // form feed
-	replace(text.begin(), text.end(), '\x0D', '\x20'); // carriage return	
+	replace(text.begin(), text.end(), '\x0D', '\x20'); // carriage return
 
 	// Set the font and text
 	pango_layout_set_text(layout, text.c_str(), -1);
 
 	PangoFontDescription* desc = pango_font_description_from_string(currentState().fontDescription.c_str());
 	pango_layout_set_font_description(layout, desc);
-	
+
 	PangoContext* pangoContext = pango_layout_get_context(layout);
 	PangoLanguage* language = pango_context_get_language(pangoContext);
 
@@ -88,7 +110,7 @@ HRESULT CCanvasRenderingContext2D::processText(BSTR txt, float x, float y, VARIA
 	// cleanup
 	pango_font_metrics_unref(metrics);
 	pango_font_description_free(desc);
-	
+
 	// Measure the text
 	int mWidth, mHeight;
 	pango_cairo_update_layout (canvas->context, layout);
@@ -104,12 +126,12 @@ HRESULT CCanvasRenderingContext2D::processText(BSTR txt, float x, float y, VARIA
 
 		return S_OK;
 	}
-	
+
 	float anchorX = 0, anchorY = 0;
 	//////////////////////////////////////////////////////////////////////////
 	// Text alignment
 	switch (currentState().textAlign)
-	{	
+	{
 		case TEXT_ALIGN_START:
 			anchorX = 0;
 			break;
@@ -126,33 +148,33 @@ HRESULT CCanvasRenderingContext2D::processText(BSTR txt, float x, float y, VARIA
 			anchorX = 0.5;
 			break;
 		default:
-			return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": invalid value for text baseline", 0, NULL);		
+			return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": invalid value for text baseline", 0, NULL);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	// Text baseline
 	switch (currentState().textBaseline)
 	{
-		case TEXT_BASELINE_TOP:			// top of the em square 
-			anchorY = (float)fontAscent;		
+		case TEXT_BASELINE_TOP:			// top of the em square
+			anchorY = (float)fontAscent;
 			break;
 		case TEXT_BASELINE_HANGING:
-			//anchorY = 0; 
+			//anchorY = 0;
 			break;
-		case TEXT_BASELINE_MIDDLE:		// middle of the em square 
+		case TEXT_BASELINE_MIDDLE:		// middle of the em square
 			anchorY = (float)(fontAscent - fontDescent) * 0.5f;
 			break;
 		case TEXT_BASELINE_ALPHABETIC:
 			anchorY = 0;
 			break;
 		case TEXT_BASELINE_IDEOGRAPHIC:
-			//anchorY = 0; 
+			//anchorY = 0;
 			break;
-		case TEXT_BASELINE_BOTTOM:		// bottom of the em square 
+		case TEXT_BASELINE_BOTTOM:		// bottom of the em square
 			anchorY = -(float)fontDescent;
 			break;
 		default:
-			return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": invalid value for text baseline", 0, NULL);		
+			return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": invalid value for text baseline", 0, NULL);
 	}
 
 	// Text position
@@ -163,32 +185,32 @@ HRESULT CCanvasRenderingContext2D::processText(BSTR txt, float x, float y, VARIA
 
 	// if text is over maxWidth, then scale the text horizontally such that its width is precisely maxWidth
 	if (maxWidth != -1 && mWidth > maxWidth) {
-		
+
 		// translate the anchor point to 0, then scale and translate back
 		cairo_translate(canvas->context, x, 0);
 		cairo_scale(canvas->context, maxWidth/mWidth, 1);
-		cairo_translate(canvas->context, -x, 0);		
+		cairo_translate(canvas->context, -x, 0);
 	}
 
 	// Apply styles & draw text
-	if (operation == TEXT_OPERATION_STROKE) 
+	if (operation == TEXT_OPERATION_STROKE)
 	{
 		cairo_path_t* path = cairo_copy_path(canvas->context);
 
 		cairo_new_path(canvas->context);
 		cairo_move_to(canvas->context, x, y);
 
-		pango_cairo_update_layout(canvas->context, layout);				
-		pango_cairo_layout_path(canvas->context, layout);	
+		pango_cairo_update_layout(canvas->context, layout);
+		pango_cairo_layout_path(canvas->context, layout);
 
 		drawPath(STYLE_STROKE);
 
 		// Restore the path
 		cairo_new_path(canvas->context);
-		cairo_append_path(canvas->context, path);		
+		cairo_append_path(canvas->context, path);
 	}
 	else if (operation == TEXT_OPERATION_FILL)
-	{		
+	{
 		// Draw shadow if needed
 		if (canvas->state->isShadowVisible())
 		{
@@ -197,32 +219,32 @@ HRESULT CCanvasRenderingContext2D::processText(BSTR txt, float x, float y, VARIA
 			cairo_new_path(canvas->context);
 			cairo_move_to(canvas->context, x, y);
 
-			pango_cairo_update_layout(canvas->context, layout);				
-			pango_cairo_layout_path(canvas->context, layout);	
+			pango_cairo_update_layout(canvas->context, layout);
+			pango_cairo_layout_path(canvas->context, layout);
 
 			drawPath(STYLE_FILL);
 
 			// Restore the path
 			cairo_new_path(canvas->context);
-			cairo_append_path(canvas->context, path);	
+			cairo_append_path(canvas->context, path);
 		} else {
 			cairo_move_to(canvas->context, x, y);
 			pango_cairo_update_layout(canvas->context, layout);
 
 			canvas->state->applyStyle(STYLE_FILL);
 			pango_cairo_show_layout(canvas->context, layout);
-		}		
+		}
 	}
 	else if (operation == TEXT_OPERATION_PATH)
 	{
-		pango_cairo_update_layout(canvas->context, layout);				
+		pango_cairo_update_layout(canvas->context, layout);
 		pango_cairo_layout_path(canvas->context, layout);
 	}
 	else if (operation == TEXT_OPERATION_PATH_STROKE || operation == TEXT_OPERATION_PATH_FILL)
 	{
 		cairo_path_t* oldPath = cairo_copy_path(canvas->context);
 
-		/* Decrease tolerance a bit, since it's going to be magnified */ 
+		/* Decrease tolerance a bit, since it's going to be magnified */
 		cairo_set_tolerance (canvas->context, 0.01);
 
 		/* Using cairo_copy_path() here shows our deficiency in handling
@@ -232,21 +254,21 @@ HRESULT CCanvasRenderingContext2D::processText(BSTR txt, float x, float y, VARIA
 		 * flattening error with large off-path values. We decreased
 		 * tolerance for that reason. Increase tolerance to see that
 		 * artifact.
-		 */ 
-		cairo_path_t* path = cairo_copy_path_flat(canvas->context); 
+		 */
+		cairo_path_t* path = cairo_copy_path_flat(canvas->context);
 
-		cairo_new_path(canvas->context); 
+		cairo_new_path(canvas->context);
 
-		pango_cairo_update_layout(canvas->context, layout);		
+		pango_cairo_update_layout(canvas->context, layout);
 
 		PangoLayoutLine *line = pango_layout_get_line_readonly(layout, 0);
-		pango_cairo_layout_line_path(canvas->context, line); 
+		pango_cairo_layout_line_path(canvas->context, line);
 
-		CanvasPath::map_path_onto(canvas->context, path, x, y); 
-		
+		CanvasPath::map_path_onto(canvas->context, path, x, y);
+
 		cairo_path_destroy(path);
 
-		if (operation == TEXT_OPERATION_PATH_FILL)		
+		if (operation == TEXT_OPERATION_PATH_FILL)
 			drawPath(STYLE_FILL);
 		else
 			drawPath(STYLE_STROKE);
@@ -259,7 +281,7 @@ HRESULT CCanvasRenderingContext2D::processText(BSTR txt, float x, float y, VARIA
 	{
 		// Uh oh, FAIL!
 		cairo_restore(canvas->context);
-		return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": invalid text operation type", 0, NULL);		
+		return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": invalid text operation type", 0, NULL);
 	}
 
 	cairo_restore(canvas->context);
@@ -268,7 +290,7 @@ HRESULT CCanvasRenderingContext2D::processText(BSTR txt, float x, float y, VARIA
 
 	return S_OK;
 #else
-	return CCOMError::DispatchError(NOT_SUPPORTED_ERR, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": text rendering is not enabled", 0, NULL);		
+	return CCOMError::DispatchError(NOT_SUPPORTED_ERR, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": text rendering is not enabled", 0, NULL);
 #endif
 }
 
@@ -339,7 +361,7 @@ void CCanvasRenderingContext2D::drawPath(Style style)
 		cairo_identity_matrix(canvas->context);
 
 		EXTENTS_RECT extents;
-		
+
 		if (style == STYLE_FILL)
 			cairo_fill_extents(canvas->context, &extents.x1, &extents.y1, &extents.x2, &extents.y2);
 		else // STYLE_STROKE
@@ -366,7 +388,7 @@ void CCanvasRenderingContext2D::drawPath(Style style)
 			// Draw the shadow
 			canvas->state->applyStyle(STYLE_SHADOW);
 			shadow->draw();
-		}		
+		}
 	}
 
 	if (!canvas->state->isGlobalAlphaHandled(style))
@@ -407,7 +429,7 @@ void CCanvasRenderingContext2D::drawPath(Style style)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 STDMETHODIMP CCanvasRenderingContext2D::InterfaceSupportsErrorInfo(REFIID riid)
 {
-	static const IID* arr[] = 
+	static const IID* arr[] =
 	{
 		&IID_ICanvasRenderingContext2D
 	};
@@ -484,7 +506,7 @@ STDMETHODIMP CCanvasRenderingContext2D::get_globalCompositeOperation(BSTR* opera
 		CComBSTR bstr(name); \
 		*operation = bstr.Detach(); \
 	}
-		
+
 	IS_OPERATION("source-atop", ATOP)
 	IS_OPERATION("source-in", IN)
 	IS_OPERATION("source-out", OUT)
@@ -686,7 +708,7 @@ STDMETHODIMP CCanvasRenderingContext2D::put_shadowColor(VARIANT color)
 
 STDMETHODIMP CCanvasRenderingContext2D::get_shadowColor(VARIANT* color)
 {
-	return canvas->state->getStyle(color, STYLE_SHADOW);	
+	return canvas->state->getStyle(color, STYLE_SHADOW);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -717,7 +739,7 @@ STDMETHODIMP CCanvasRenderingContext2D::put_font(BSTR font)
 				return CCOMError::DispatchError(SYNTAX_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid font"), __FUNCTION__ ": the font size is invalid or missing!", 0, NULL);
 		}
 		else
-			return S_OK;		
+			return S_OK;
 	}
 
 	currentState().fontDescription = strFont;
@@ -732,7 +754,7 @@ STDMETHODIMP CCanvasRenderingContext2D::get_font(BSTR* font)
 	*font = strFont.Detach();
 
 	return S_OK;
-}	 
+}
 
 STDMETHODIMP CCanvasRenderingContext2D::put_textAlign(BSTR align)
 {
@@ -776,7 +798,7 @@ STDMETHODIMP CCanvasRenderingContext2D::put_textBaseline(BSTR baseline)
 	if (CComBSTR(baseline) == CComBSTR(name)) \
 		currentState().textBaseline = type; \
 	else \
-	
+
 	IS_TEXT_BASELINE("top", TEXT_BASELINE_TOP)
 	IS_TEXT_BASELINE("hanging", TEXT_BASELINE_HANGING)
 	IS_TEXT_BASELINE("middle", TEXT_BASELINE_MIDDLE)
@@ -785,7 +807,7 @@ STDMETHODIMP CCanvasRenderingContext2D::put_textBaseline(BSTR baseline)
 	IS_TEXT_BASELINE("bottom", TEXT_BASELINE_BOTTOM)
 	return (canvas->debugMode ? CCOMError::DispatchError(SYNTAX_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid text baseline"), __FUNCTION__ ": invalid type of baseline", 0, NULL) : S_OK);
 
-	return S_OK; 
+	return S_OK;
 }
 
 STDMETHODIMP CCanvasRenderingContext2D::get_textBaseline(BSTR* baseline)
@@ -804,7 +826,7 @@ STDMETHODIMP CCanvasRenderingContext2D::get_textBaseline(BSTR* baseline)
 	IS_TEXT_BASELINE("ideographic", TEXT_BASELINE_IDEOGRAPHIC);
 	IS_TEXT_BASELINE("bottom", TEXT_BASELINE_BOTTOM);
 
-	return S_OK; 
+	return S_OK;
 }
 
 STDMETHODIMP CCanvasRenderingContext2D::get_canvas(ICanvas** canvas)
@@ -861,7 +883,7 @@ STDMETHODIMP CCanvasRenderingContext2D::translate(float x, float y)
 
 STDMETHODIMP CCanvasRenderingContext2D::transform(float m11, float m12, float m21, float m22, float dx, float dy)
 {
-	cairo_matrix_t matrix = { m11, m12, m21, m22, dx, dy}; 
+	cairo_matrix_t matrix = { m11, m12, m21, m22, dx, dy};
 
 	cairo_transform(canvas->context, &matrix);
 
@@ -870,7 +892,7 @@ STDMETHODIMP CCanvasRenderingContext2D::transform(float m11, float m12, float m2
 
 STDMETHODIMP CCanvasRenderingContext2D::setTransform(float m11, float m12, float m21, float m22, float dx, float dy)
 {
-	cairo_matrix_t matrix = { m11, m12, m21, m22, dx, dy}; 
+	cairo_matrix_t matrix = { m11, m12, m21, m22, dx, dy};
 
 	cairo_set_matrix(canvas->context, &matrix);
 
@@ -915,7 +937,7 @@ STDMETHODIMP CCanvasRenderingContext2D::createPattern(VARIANT vInput, BSTR repea
 
 	//////////////////////////////////////////////////////////////////////////
 	// Check input
-	
+
 	// We only accept CCanvasImage and CCanvas
 	if (vInput.vt != VT_DISPATCH && vInput.vt != 0x400c)
 		return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
@@ -982,7 +1004,7 @@ pattern_loaded:
 
 	pPattern->QueryInterface(IID_ICanvasPattern, (void**)pattern);
 
-	return S_OK;	
+	return S_OK;
 }
 
 // rects
@@ -992,9 +1014,9 @@ STDMETHODIMP CCanvasRenderingContext2D::clearRect(float x, float y, float w, flo
 		return S_OK;
 
 	cairo_path_t* current_path = cairo_copy_path(canvas->context);
-	
+
 	cairo_save(canvas->context);
-	
+
 	// Create new path to clear the rectangle
 	cairo_new_path(canvas->context);
 	cairo_rectangle(canvas->context, x, y, w, h);
@@ -1078,16 +1100,16 @@ STDMETHODIMP CCanvasRenderingContext2D::quadraticCurveTo(float cpx, float cpy, f
 	   qp0 is the quadratic curve starting point (this is cx, cy - the current point coordinates).
 	   qp1 is the quadatric curve control point (this is the cpx,cpy ).
 	   qp2 is the quadratic curve ending point (this is the x,y).
-	
-	We will convert these points to compute the two needed cubic control points 
+
+	We will convert these points to compute the two needed cubic control points
 	(the starting/ending points	are the same for both the quadratic and cubic curves)
 
 	The equations for the two cubic control points are:
 	cp0=qp0 and cp3=qp2
 	cp1 = qp0 + 2/3 *(qp1-qp0)
-	cp2 = cp1 + 1/3 *(qp2-qp0) 
+	cp2 = cp1 + 1/3 *(qp2-qp0)
 
-	In the code below, we must compute both the x and y terms for each point separately. 
+	In the code below, we must compute both the x and y terms for each point separately.
 
 	cp1x = qp0x + 2.0/3.0*(qp1x - qp0x);
 	cp1y = qp0y + 2.0/3.0*(qp1y - qp0y);
@@ -1136,8 +1158,8 @@ STDMETHODIMP CCanvasRenderingContext2D::arcTo(float x1, float y1, float x2, floa
 	double dir, a2, b2, c2, cosx, sinx, d, anx, any, bnx, bny, x3, y3, x4, y4, cx, cy, angle0, angle1;
 	bool anticlockwise;
 
-	double x0, y0; 
-	cairo_get_current_point(canvas->context, &x0, &y0);	
+	double x0, y0;
+	cairo_get_current_point(canvas->context, &x0, &y0);
 
 	//////////////////////////////////////////////////////////////////////////
 	// Check if P0 = P1, if P1 = P2 or if radius = 0
@@ -1188,7 +1210,7 @@ STDMETHODIMP CCanvasRenderingContext2D::arcTo(float x1, float y1, float x2, floa
 		cairo_arc_negative(canvas->context, cx, cy, radius, angle0, angle1);
 	else
 		cairo_arc(canvas->context, cx, cy, radius, angle0, angle1);
-	
+
 	return S_OK;
 }
 
@@ -1244,7 +1266,7 @@ STDMETHODIMP CCanvasRenderingContext2D::clip()
 }
 
 STDMETHODIMP CCanvasRenderingContext2D::isPointInPath(float x, float y, VARIANT_BOOL* isPresent)
-{	
+{
 	cairo_in_fill(canvas->context, x, y) ? *isPresent = VARIANT_TRUE : *isPresent = VARIANT_FALSE;
 
 	return S_OK;
@@ -1285,7 +1307,7 @@ STDMETHODIMP CCanvasRenderingContext2D::measureText(BSTR text, ICanvasTextMetric
 
 	if (result != S_OK)
 		return result;
-		
+
 	CComObject<CCanvasTextMetrics>* pTextMetrics;
 	CComObject<CCanvasTextMetrics>::CreateInstance(&pTextMetrics);
 	pTextMetrics->setWidth(width);
@@ -1402,11 +1424,11 @@ STDMETHODIMP CCanvasRenderingContext2D::drawImageRegion(VARIANT vInput, float sx
 	result = input->pdispVal->QueryInterface(IID_ICanvasImage, (void**)&pImage);
 	if (result == E_NOINTERFACE || pImage == NULL)
 		return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
-	
+
 	imgWidth = (float)pImage->getWidth();
 	imgHeight = (float)pImage->getHeight();
 	pattern = createNewPatternFromSurface(pImage->getSurface(), pImage->getWidth(), pImage->getHeight());
-	
+
 pattern_loaded:
 	if (!pattern || cairo_pattern_status(pattern) != CAIRO_STATUS_SUCCESS)
 		return CCOMError::DispatchError(TYPE_MISMATCH_ERR, CLSID_CanvasRenderingContext2D, _T("Invalid input"), __FUNCTION__ ": input should be an image or a canvas", 0, NULL);
@@ -1492,7 +1514,7 @@ pattern_loaded:
 			ymax = max(ymax, y[i]);
 		}
 
-		EXTENTS_RECT extents = { xmin, 
+		EXTENTS_RECT extents = { xmin,
 							     ymin,
 							     xmax,
 							     ymax};
@@ -1514,7 +1536,7 @@ pattern_loaded:
 			// Draw the shadow
 			canvas->state->applyStyle(STYLE_SHADOW);
 			shadow->draw();
-		}		
+		}
 	}
 
 	// Clip to image region
@@ -1539,7 +1561,7 @@ cleanup:
 	if (pattern)
 		cairo_pattern_destroy(pattern);
 
-	return S_OK; 
+	return S_OK;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -1631,7 +1653,7 @@ STDMETHODIMP CCanvasRenderingContext2D::getImageData(float sx, float sy, float s
 	//	cairo_rotate(context, M_PI);
 	//else if (sw < 0 && sh > 0)
 	//else if (sw > 0 && sh < 0)
-		
+
 	// Create a new CCanvasImageData instance
 	CComObject<CCanvasImageData>* pImageData;
 	CComObject<CCanvasImageData>::CreateInstance(&pImageData);
@@ -1708,7 +1730,7 @@ STDMETHODIMP CCanvasRenderingContext2D::putImageData(ICanvasImageData* canvasIma
 	cairo_surface_t* surface = cairo_image_surface_create_for_data(imageData->getData(), CAIRO_FORMAT_ARGB32, imageData->getWidth(), imageData->getHeight(), stride);
 	if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS) {
 		cairo_surface_destroy(surface);
-		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": error while creating a surface from the image data", 0, NULL);		
+		return CCOMError::DispatchError(E_FAIL, CLSID_CanvasRenderingContext2D, _T("Internal error"), __FUNCTION__ ": error while creating a surface from the image data", 0, NULL);
 	}
 
 	// Save the current path
@@ -1716,7 +1738,7 @@ STDMETHODIMP CCanvasRenderingContext2D::putImageData(ICanvasImageData* canvasIma
 
 	// Copy the surface to our own
 	cairo_save(canvas->context);
-	
+
 	cairo_identity_matrix(canvas->context);
 	cairo_translate(canvas->context, dx, dy);
 
@@ -1736,9 +1758,9 @@ STDMETHODIMP CCanvasRenderingContext2D::putImageData(ICanvasImageData* canvasIma
 	// Restore the path
 	cairo_new_path(canvas->context);
 	cairo_append_path(canvas->context, path);
-	
+
 	canvas->queueDraw();
-	
+
 	// Cleanup
 	cairo_surface_destroy(surface);
 

@@ -1,5 +1,5 @@
 DockletX plugin for DesktopX
- Copyright (c) 2006-2009 Julien Templier
+ Copyright (c) 2006-2010 Julien Templier
 --------------------------------------------------------------------------
 
 DockletX is a DesktopX plugin that allows you to use ObjectDock docklets
@@ -18,7 +18,7 @@ under Additional Abilities, click "Add" and select the DockletX plugin.
 In the configuration, you can set the size for your docklet. By default, the
 docklet size will be 128x128.
 
-Select a docklet from the list and press OK. The docklet should load and 
+Select a docklet from the list and press OK. The docklet should load and
 appear in your object.
 
 To interact with the docklet, use CTRL+Click.
@@ -29,13 +29,13 @@ To open the default context menu, use CTRL+SHIFT+Right Click.
 ***************************************************************************
 
 PLEASE REPORT ALL BUGS IN THIS THREAD: http://forums.wincustomize.com/339574/
-  
-  - Weather is not working (the docklet is hardcoded inside ObjectDock)   
-  - Export is not working (ie. it doesn't package the docklet with the dxpack - disabled in ObjectDock anyway)   
-  - SetLabel/GetLabel update the tooltip rather than the label (not available from the plugin API) 
-  
+
+  - Weather is not working (the docklet is hardcoded inside ObjectDock)
+  - Export is not working (ie. it doesn't package the docklet with the dxpack - disabled in ObjectDock anyway)
+  - SetLabel/GetLabel update the tooltip rather than the label (not available from the plugin API)
+
   - Attention animations are not implemented
-  
+
   - Only ObjectDock docklet are supported. RocketDock and Y'z Dock docklets will not work and may crash DesktopX.
 
 ***************************************************************************
@@ -50,17 +50,17 @@ PLEASE REPORT ALL BUGS IN THIS THREAD: http://forums.wincustomize.com/339574/
 
 
 ***************************************************************************
-** Licence
+** License
 ***************************************************************************
  Redistribution and use in source and binary forms, with or without modification, are
  permitted provided that the following conditions are met:
   1. Redistributions of source code must retain the above copyright notice, this list of
-     conditions and the following disclaimer. 
+     conditions and the following disclaimer.
   2. Redistributions in binary form must reproduce the above copyright notice, this list
      of conditions and the following disclaimer in the documentation and/or other materials
-     provided with the distribution. 
+     provided with the distribution.
   3. The name of the author may not be used to endorse or promote products derived from this
-     software without specific prior written permission. 
+     software without specific prior written permission.
 
   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
   OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -76,7 +76,7 @@ PLEASE REPORT ALL BUGS IN THIS THREAD: http://forums.wincustomize.com/339574/
 ** Aknowledgments
 ***************************************************************************
 
- 
+
 ***************************************************************************
 ** Credits/Thanks
 ***************************************************************************

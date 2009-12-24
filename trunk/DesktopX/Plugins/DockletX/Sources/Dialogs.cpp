@@ -2,13 +2,35 @@
 //
 // DockletX - Docklet support plugin for DesktopX
 //
-// Copyright (c) 2006-2009, Three Oaks Crossing
+// Copyright (c) 2006-2010, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // * $LastChangedRevision$
 // * $LastChangedDate$
 // * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Redistribution and use in source and binary forms, with or without modification, are
+// permitted provided that the following conditions are met:
+//  1. Redistributions of source code must retain the above copyright notice, this list of
+//     conditions and the following disclaimer.
+//  2. Redistributions in binary form must reproduce the above copyright notice, this list
+//     of conditions and the following disclaimer in the documentation and/or other materials
+//     provided with the distribution.
+//  3. The name of the author may not be used to endorse or promote products derived from this
+//     software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+//  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+//  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+//  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+//  GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+//  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+//  OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+//  POSSIBILITY OF SUCH DAMAGE.
+//
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -36,10 +58,10 @@ int CALLBACK ConfigurePlugin(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		case WM_INITDIALOG:
 			// Get Data
 			SetProp(hDlg, L"data", (HANDLE) (char*) lParam);
-			data = (PLUGIN_DATA *) GetProp(hDlg, L"data");			
+			data = (PLUGIN_DATA *) GetProp(hDlg, L"data");
 
 			// Populate the listbox
-			for (int i = 0; i < (signed)data->docklets.size(); i++) {				
+			for (int i = 0; i < (signed)data->docklets.size(); i++) {
 				SendDlgItemMessageA( hDlg, IDC_DOCKLET_LIST, LB_ADDSTRING,
 								   (WPARAM)NULL, (LPARAM)data->docklets[i].info.name);
 			}
@@ -78,9 +100,9 @@ int CALLBACK ConfigurePlugin(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
 					// Get the selected docklet index & set docklet info
 					if ((signed)data->docklets.size() != 0) {
-						data->index = SendDlgItemMessage(hDlg, IDC_DOCKLET_LIST, LB_GETCURSEL, (WPARAM)NULL, (LPARAM)NULL);												
+						data->index = SendDlgItemMessage(hDlg, IDC_DOCKLET_LIST, LB_GETCURSEL, (WPARAM)NULL, (LPARAM)NULL);
 					}
-					
+
 					EndDialog(hDlg, 0);
 					return TRUE;
 				case ID_CANCEL:
@@ -116,8 +138,8 @@ int CALLBACK ConfigureDisplay(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam
 		{
 			// Prepare Data
 			SetProp(hDlg, L"data", (HANDLE) (char*) lParam);
-			data = (Docklet*) GetProp(hDlg, L"data");		
-			
+			data = (Docklet*) GetProp(hDlg, L"data");
+
 			char* path = (char*)malloc(MAX_PATH*sizeof(char));
 			strcpy_s(path, MAX_PATH*sizeof(char), "");
 			data->GetImageFile((char*)path);
@@ -128,8 +150,8 @@ int CALLBACK ConfigureDisplay(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam
 			showImage(hDlg, image, data);
 
 			// Init the slider control
-			SendDlgItemMessage(hDlg, IDC_DOCKLET_SIZE, TBM_SETRANGE, FALSE, MAKELONG(DOCKLET_SIZE_MIN, DOCKLET_SIZE_MAX));			
-			SendDlgItemMessage(hDlg, IDC_DOCKLET_SIZE, TBM_SETTICFREQ, DOCKLET_SIZE_MIN, NULL);			
+			SendDlgItemMessage(hDlg, IDC_DOCKLET_SIZE, TBM_SETRANGE, FALSE, MAKELONG(DOCKLET_SIZE_MIN, DOCKLET_SIZE_MAX));
+			SendDlgItemMessage(hDlg, IDC_DOCKLET_SIZE, TBM_SETTICFREQ, DOCKLET_SIZE_MIN, NULL);
 
 			SendDlgItemMessage(hDlg, IDC_DOCKLET_SIZE, TBM_SETPOS, TRUE, (LONG)data->GetSize());
 
@@ -142,14 +164,14 @@ int CALLBACK ConfigureDisplay(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam
 				case IDC_RESET_IMAGE:
 					strcpy_s(image, MAX_PATH*sizeof(char), "");
 					showImage(hDlg, image, data);
-					break;				
+					break;
 
-				case IDC_CHANGE_IMAGE:				
+				case IDC_CHANGE_IMAGE:
 					strcpy_s(image,  MAX_PATH*sizeof(char), "");
 					data->BrowseForImage(hDlg, image);
 
-					showImage(hDlg, image, data);					
-					break;				
+					showImage(hDlg, image, data);
+					break;
 
 				case ID_OK:
 					if(!data)
@@ -207,18 +229,18 @@ void showImage(HWND hDlg, char* image, Docklet* docklet)
 		CGdiPlusBitmapResource* res = new CGdiPlusBitmapResource();
 		res->Load(IDB_BACKGROUND, _T("PNG"), dllInstance);
 
-		bitmapGraphics.DrawImage(res->m_pBitmap, rect, 0.0f, 0.0f, (REAL)res->m_pBitmap->GetWidth(), (REAL)res->m_pBitmap->GetHeight(), UnitPixel);	
+		bitmapGraphics.DrawImage(res->m_pBitmap, rect, 0.0f, 0.0f, (REAL)res->m_pBitmap->GetWidth(), (REAL)res->m_pBitmap->GetHeight(), UnitPixel);
 
 		delete res;
-	} 
+	}
 	else
 	{
 		Bitmap* img = docklet->LoadGDIPlusImage(image);
-		bitmapGraphics.DrawImage(img, rect, 0.0f, 0.0f, (REAL)img->GetWidth(), (REAL)img->GetHeight(), UnitPixel);		
+		bitmapGraphics.DrawImage(img, rect, 0.0f, 0.0f, (REAL)img->GetWidth(), (REAL)img->GetHeight(), UnitPixel);
 
 		delete img;
 	}
-	
+
 	HBITMAP hBitmap;
 	bitmap.GetHBITMAP(*background, &hBitmap);
 
@@ -235,8 +257,8 @@ void showInfo(HWND hDlg, PLUGIN_DATA *data, int selected)
 
 	// Load the background image
 	CGdiPlusBitmapResource* image = new CGdiPlusBitmapResource();
-	image->Load(IDB_BACKGROUND, _T("PNG"), dllInstance);	
-	
+	image->Load(IDB_BACKGROUND, _T("PNG"), dllInstance);
+
 	if (image->m_pBitmap != NULL) {
 		// Get the background color
 		Color* background = new Color();
@@ -269,8 +291,8 @@ void showInfo(HWND hDlg, PLUGIN_DATA *data, int selected)
 
 		// Draw the name, author, version and notes
 		Docklet::DOCKLET_INFO info = Docklet::GetInformationFromDll((char*)data->docklets[selected].path);
-		
-		USES_CONVERSION;		
+
+		USES_CONVERSION;
 
 		wchar_t name[200];
 		wcscpy_s(name, L"");

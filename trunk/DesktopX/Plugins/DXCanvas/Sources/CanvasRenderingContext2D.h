@@ -2,7 +2,7 @@
 //
 // Canvas Plugin for DesktopX
 //
-// Copyright (c) 2008-2009, Three Oaks Crossing
+// Copyright (c) 2008-2010, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -10,12 +10,34 @@
 // * $LastChangedDate$
 // * $LastChangedBy$
 ///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Redistribution and use in source and binary forms, with or without modification, are
+// permitted provided that the following conditions are met:
+//  1. Redistributions of source code must retain the above copyright notice, this list of
+//     conditions and the following disclaimer.
+//  2. Redistributions in binary form must reproduce the above copyright notice, this list
+//     of conditions and the following disclaimer in the documentation and/or other materials
+//     provided with the distribution.
+//  3. The name of the author may not be used to endorse or promote products derived from this
+//     software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+//  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+//  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+//  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+//  GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+//  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+//  OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+//  POSSIBILITY OF SUCH DAMAGE.
+//
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
 
 #include "stdafx.h"
 #include "DXCanvas.h"
-#include "resource.h"  
+#include "resource.h"
 #include <comsvcs.h>
 
 #include <string>
@@ -84,23 +106,23 @@ class ATL_NO_VTABLE CCanvasRenderingContext2D :
 	public ISupportErrorInfo
 {
 public:
-	CCanvasRenderingContext2D() 
+	CCanvasRenderingContext2D()
 		: canvas(NULL),
 #ifdef ENABLE_PANGO
 		  layout(NULL),
 #endif
 		  shadow(NULL)
-	{}	
+	{}
 
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
 
 	HRESULT FinalConstruct()
-	{	
+	{
 		return S_OK;
 	}
 
-	void FinalRelease() 
-	{	
+	void FinalRelease()
+	{
 		SAFE_DELETE(shadow);
 #ifdef ENABLE_PANGO
 		/* free the layout object */
@@ -136,9 +158,9 @@ private:
 	PangoLayout* layout;
 #endif
 	CanvasShadow* shadow;
-	
+
 	CanvasState::State& currentState();
-	
+
 	cairo_pattern_t* createNewPatternFromSurface(cairo_surface_t* surface, int width, int height);
 
 	HRESULT processText(BSTR text, float x, float y, VARIANT maxWidth, TextOperation operation, float* width);
@@ -181,7 +203,7 @@ public:
 	STDMETHOD(put_lineCap)(BSTR cap);
 	STDMETHOD(get_lineCap)(BSTR* cap);
 	STDMETHOD(put_lineJoin)(BSTR join);
-	STDMETHOD(get_lineJoin)(BSTR* join);	
+	STDMETHOD(get_lineJoin)(BSTR* join);
 	STDMETHOD(put_miterLimit)(float limit);
 	STDMETHOD(get_miterLimit)(float* limit);
 
@@ -197,11 +219,11 @@ public:
 
 	// text
 	STDMETHOD(put_font)(BSTR font);
-	STDMETHOD(get_font)(BSTR* font);	 
+	STDMETHOD(get_font)(BSTR* font);
 	STDMETHOD(put_textAlign)(BSTR align);
-	STDMETHOD(get_textAlign)(BSTR* align);	
+	STDMETHOD(get_textAlign)(BSTR* align);
 	STDMETHOD(put_textBaseline)(BSTR baseline);
-	STDMETHOD(get_textBaseline)(BSTR* baseline);	
+	STDMETHOD(get_textBaseline)(BSTR* baseline);
 
 	STDMETHOD(get_canvas)(ICanvas** canvas);
 
@@ -234,25 +256,25 @@ public:
 	STDMETHOD(beginPath)();
 	STDMETHOD(closePath)();
 	STDMETHOD(moveTo)(float x, float y);
-	STDMETHOD(lineTo)(float x, float y);	
+	STDMETHOD(lineTo)(float x, float y);
 	STDMETHOD(quadraticCurveTo)(float cpx, float cpy, float x, float y);
-	STDMETHOD(bezierCurveTo)(float cp1x, float cp1y, float cp2x, float cp2y, float x, float y);	
+	STDMETHOD(bezierCurveTo)(float cp1x, float cp1y, float cp2x, float cp2y, float x, float y);
 	STDMETHOD(arcTo)(float x1, float y1, float x2, float y2, float radius);
 	STDMETHOD(rect)(double x, double y, double width, double height);
-	STDMETHOD(arc)(float x, float y, float radius, float startAngle, float endAngle, VARIANT_BOOL anticlockwise);	
+	STDMETHOD(arc)(float x, float y, float radius, float startAngle, float endAngle, VARIANT_BOOL anticlockwise);
 	STDMETHOD(fill)();
 	STDMETHOD(stroke)();
 	STDMETHOD(clip)();
 	STDMETHOD(isPointInPath)(float x, float y, VARIANT_BOOL* isPresent);
 
 	// text
-	STDMETHOD(fillText)(BSTR text, float x, float y, VARIANT maxWidth);	
-	STDMETHOD(strokeText)(BSTR text, float x, float y, VARIANT maxWidth);	
+	STDMETHOD(fillText)(BSTR text, float x, float y, VARIANT maxWidth);
+	STDMETHOD(strokeText)(BSTR text, float x, float y, VARIANT maxWidth);
 	STDMETHOD(textAlongPath)(BSTR text, BOOL stroke);
 	STDMETHOD(pathText)(BSTR text);
 
 	STDMETHOD(measureText)(BSTR text, ICanvasTextMetrics** metrics);
-	
+
 	// drawing images
 	STDMETHOD(loadImage)(BSTR path, ICanvasImage** image);
 	STDMETHOD(drawImage)(VARIANT input, float dx, float dy, VARIANT dw, VARIANT dh);

@@ -2,7 +2,7 @@
 //
 // DXSystemEx - Extended System Information
 //
-// Copyright (c) 2009, Julien Templier
+// Copyright (c) 2009-2010, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -10,16 +10,16 @@
 // * $LastChangedDate$
 // * $LastChangedBy$
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification, are
 // permitted provided that the following conditions are met:
 //  1. Redistributions of source code must retain the above copyright notice, this list of
-//     conditions and the following disclaimer. 
+//     conditions and the following disclaimer.
 //  2. Redistributions in binary form must reproduce the above copyright notice, this list
 //     of conditions and the following disclaimer in the documentation and/or other materials
-//     provided with the distribution. 
+//     provided with the distribution.
 //  3. The name of the author may not be used to endorse or promote products derived from this
-//     software without specific prior written permission. 
+//     software without specific prior written permission.
 //
 //  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
 //  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -114,7 +114,7 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 
 			return TRUE;
 		}
-		
+
 
 		// Initialize the plugin DLL
 		case SD_INITIALIZE_MODULE:
@@ -127,7 +127,7 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 
 			return TRUE;
 		}
-		
+
 
 		// Create a new instance of the plugin
 		case SD_CREATE_PLUGIN:
@@ -140,7 +140,7 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 			__time64_t nowTime;
 			errno_t err;
 
-			_time64(&nowTime);			    // get current time			
+			_time64(&nowTime);			    // get current time
 			err = _localtime64_s(&now, &nowTime); // convert time to structure
 
 			if (err) // there is no bugs in the program, only features
@@ -156,29 +156,29 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 			if (now.tm_year + 1900 == EXPIRATION_YEAR)
 				if (now.tm_mon == EXPIRATION_MONTH-1)
 					if (now.tm_mday > EXPIRATION_DAY)
-						goto label_expiration;	
+						goto label_expiration;
 #endif
 
 			DWORD *flags = (DWORD *) param1;
-			*flags = SD_FLAG_SUBCLASS | 
+			*flags = SD_FLAG_SUBCLASS |
 					 SD_FLAG_NO_BUILDER_CONFIG|
 					 SD_FLAG_NO_USER_CONFIG;
 
 			CComObject<CSystemEx>* pSystemEx;
-			CComObject<CSystemEx>::CreateInstance(&pSystemEx);	
+			CComObject<CSystemEx>::CreateInstance(&pSystemEx);
 
 			*pluginIndex = (DWORD)pSystemEx;
 
 			SCRIPTABLEPLUGIN sp;
 			strcpy_s(sp.szName, "SystemEx");
-			pSystemEx->QueryInterface(IID_IUnknown, (void**)&sp.pUnk);	        
+			pSystemEx->QueryInterface(IID_IUnknown, (void**)&sp.pUnk);
 			sp.pTI =  ReadSystemExTypeInfo(dllInstance);
 			SDHostMessage(SD_REGISTER_SCRIPTABLE_PLUGIN, objID, (DWORD)&sp);
 
 			return TRUE;
 
 #ifdef DEBUG
-label_expiration:		
+label_expiration:
 			char message[2000];
 			sprintf_s(message, "This beta version of DXSystemEx expired on %d/%d/%d.\n\n Please check http://julien.wincustomize.com or http://www.templier.info for new versions.", EXPIRATION_MONTH, EXPIRATION_DAY, EXPIRATION_YEAR);
 			MessageBox(NULL, (char *)message, "Beta version expiration!", MB_ICONERROR|MB_OK);
@@ -186,14 +186,14 @@ label_expiration:
 			return FALSE;
 #endif
 		}
-		
+
 
 		// Load saved plugin data
 		case SD_LOAD_DATA:
 		{
 			return TRUE;
 		}
-		
+
 
 		// Configure this instance
 		case SD_CONFIGURE:
@@ -206,12 +206,12 @@ label_expiration:
 		case SD_DUPLICATE_PLUGIN:
 		{
 			return TRUE;
-		}		
+		}
 
 		// Start running this instance of the plugin
 		case SD_INITIALIZE_PLUGIN:
 		{
-			CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;	
+			CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;
 			SD_PLUGIN_INIT* pluginInit = (SD_PLUGIN_INIT*)param1;
 
 			if (pSystemEx == NULL)
@@ -231,7 +231,7 @@ label_expiration:
 
 		case SD_WINDOW_MESSAGE:
 		{
-			CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;	
+			CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;
 			if (pSystemEx == NULL)
 				return FALSE;
 
@@ -241,11 +241,11 @@ label_expiration:
 				// Monitor information
 				case WM_DISPLAYCHANGE:
 				{
-					CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;	
+					CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;
 
 					if (pSystemEx == NULL)
 						return FALSE;
-					
+
 					pSystemEx->UpdateMonitorInfo();
 
 					break;
@@ -256,10 +256,10 @@ label_expiration:
 				case WM_MOUSEMOVE:
 				{
 					// FIXME: BROKEN AT THE MOMENT: DISABLE
-			
+
 					//// Check if we are dragging with the middle mouse button
 					//if (!((msg->wParam & MK_MBUTTON) == MK_MBUTTON))
-					//	return FALSE;		
+					//	return FALSE;
 
 					//// Ignore any movement from child objects
 					//if (objID != mouseWheelData.objID)
@@ -286,7 +286,7 @@ label_expiration:
 					//// Save position
 					//mouseWheelData.current = MAKEPOINTS(msg->lParam);
 
-					//mouseWheelData.isMouseDragging = true;	
+					//mouseWheelData.isMouseDragging = true;
 
 					//return TRUE;
 					//
@@ -312,7 +312,7 @@ label_expiration:
 					memset(&se.dp, 0, sizeof(DISPPARAMS));
 					se.dp.cArgs = 3;
 					VARIANT* lpvt = (VARIANT*)malloc(sizeof(VARIANT)*3);
-					VariantInit(&lpvt[0]);	
+					VariantInit(&lpvt[0]);
 					VariantInit(&lpvt[1]);
 					VariantInit(&lpvt[2]);
 					lpvt[0].vt = VT_BOOL;
@@ -329,7 +329,7 @@ label_expiration:
 					free(se.dp.rgvarg);
 
 					// Stop mouse dragging
-					mouseWheelData.Reset();			
+					mouseWheelData.Reset();
 
 					break;
 				}
@@ -339,7 +339,7 @@ label_expiration:
 				{
 					// Start dragging on next MOUSE_MOVE if we do not get a WM_MBUTTONUP
 					mouseWheelData.objID = objID;
-					mouseWheelData.current = MAKEPOINTS(msg->lParam);					
+					mouseWheelData.current = MAKEPOINTS(msg->lParam);
 
 					SD_SCRIPTABLE_EVENT se;
 					se.cbSize = sizeof(SD_SCRIPTABLE_EVENT);
@@ -350,7 +350,7 @@ label_expiration:
 					memset(&se.dp, 0, sizeof(DISPPARAMS));
 					se.dp.cArgs = 2;
 					VARIANT* lpvt = (VARIANT*)malloc(sizeof(VARIANT)*2);
-					VariantInit(&lpvt[0]);	
+					VariantInit(&lpvt[0]);
 					VariantInit(&lpvt[1]);
 					lpvt[0].vt = VT_I4;
 					lpvt[0].lVal = GET_Y_LPARAM(msg->lParam);
@@ -361,7 +361,7 @@ label_expiration:
 
 					SDHostMessage(SD_SCRIPTABLE_PLUGIN_EVENT, objID, (DWORD) &se);
 
-					free(se.dp.rgvarg);	
+					free(se.dp.rgvarg);
 
 					break;
 				}
@@ -384,17 +384,17 @@ label_expiration:
 					}
 
 					// If user specified no wheel scrolling, then don't do wheel scrolling.
-					if (scroll_lines == 0)					
-						return FALSE;		
-					
-					// If user specified scrolling by pages, do so.					
+					if (scroll_lines == 0)
+						return FALSE;
+
+					// If user specified scrolling by pages, do so.
 					if (scroll_lines == WHEEL_PAGESCROLL)
 						scroll_lines = WHEEL_PAGE_LINES;
 
-					// Accumulate wheel motion 
+					// Accumulate wheel motion
 					wheel_delta += wheel_carryover;
 
-					// See how many lines we should scroll. This relies on round-towards-zero.					
+					// See how many lines we should scroll. This relies on round-towards-zero.
 					int delta_lines = wheel_delta * (int)scroll_lines / WHEEL_DELTA;
 
 					// Record the unused portion as the next carryover.
@@ -410,7 +410,7 @@ label_expiration:
 
 					se.dp.cArgs = 1;
 					VARIANT* lpvt = (VARIANT*)malloc(sizeof(VARIANT)*1);
-					VariantInit(&lpvt[0]);							
+					VariantInit(&lpvt[0]);
 					lpvt[0].vt = VT_I4;
 					lpvt[0].lVal = delta_lines;
 
@@ -418,7 +418,7 @@ label_expiration:
 
 					SDHostMessage(SD_SCRIPTABLE_PLUGIN_EVENT, objID, (DWORD) &se);
 
-					free(se.dp.rgvarg);	
+					free(se.dp.rgvarg);
 
 					return TRUE;
 				}
@@ -430,7 +430,7 @@ label_expiration:
 
 					// Call script: Instance_OnNewInstance
 					SD_SCRIPTABLE_EVENT se;
-					memset(&se.dp, 0, sizeof(DISPPARAMS));	
+					memset(&se.dp, 0, sizeof(DISPPARAMS));
 					se.cbSize = sizeof(SD_SCRIPTABLE_EVENT);
 					se.flags=0;
 
@@ -441,13 +441,13 @@ label_expiration:
 
 					// Get command line args
 					USES_CONVERSION;
-					pSystemEx->ExtractCommandLine(A2W(commandLine), &lpvt[0], true); 
+					pSystemEx->ExtractCommandLine(A2W(commandLine), &lpvt[0], true);
 
 					se.dp.rgvarg = lpvt;
 
 					SDHostMessage(SD_SCRIPTABLE_PLUGIN_EVENT, objID, (DWORD) &se);
 
-					free(se.dp.rgvarg);						
+					free(se.dp.rgvarg);
 
 					return TRUE;
 				}
@@ -461,7 +461,7 @@ label_expiration:
 		{
 			return TRUE;
 		}
-		
+
 
 		// Stop running this instance of the plugin
 		case SD_TERMINATE_PLUGIN:
@@ -469,7 +469,7 @@ label_expiration:
 			if (Is_WinVista_or_Later())
 				pVistaVolumeCallback->removeID(objID);
 
-			CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;				
+			CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;
 
 			if (pSystemEx != NULL)
 				pSystemEx->Terminate();
@@ -480,9 +480,9 @@ label_expiration:
 
 		// Destroy this instance of the plugin
 		case SD_DESTROY_PLUGIN:
-		{			
-			CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;				
-			
+		{
+			CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;
+
 			if (pSystemEx != NULL)
 				pSystemEx->Cleanup();
 
@@ -500,7 +500,7 @@ label_expiration:
 
 			return TRUE;
 		}
-			
+
 	}
 
 	return FALSE;
@@ -513,8 +513,8 @@ label_expiration:
 CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
-	OBJECT_ENTRY(CLSID_SystemEx, CSystemEx)		
-	OBJECT_ENTRY(CLSID_MonitorInfo, CMonitorInfo)	
+	OBJECT_ENTRY(CLSID_SystemEx, CSystemEx)
+	OBJECT_ENTRY(CLSID_MonitorInfo, CMonitorInfo)
 END_OBJECT_MAP()
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

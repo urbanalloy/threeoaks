@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // This file is used as a template by SubWCRev
-// 
+//
 // DO NOT MODIFY, IT WILL BE OVERWRITTEN AT BUILD TIME
 // MAKE MODIFICATIONS TO .tpl file
 //
-//	
+//
 // SubWCRev.exe $(ProjectDir) "$(ProjectDir)/Sources/Config.tpl" "$(ProjectDir)/Sources/Config.h"
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -20,7 +20,7 @@
 #define VERSION_BUILD $WCREV$
 
 #ifdef DEBUG
-#define EXPIRATION_YEAR 2009
+#define EXPIRATION_YEAR 2010
 #define EXPIRATION_MONTH 7
 #define EXPIRATION_DAY 1
 #endif

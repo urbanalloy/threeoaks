@@ -2,7 +2,7 @@
 //
 // DXSystemEx - Extended System Information
 //
-// Copyright (c) 2009, Julien Templier
+// Copyright (c) 2009-2010, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -10,16 +10,16 @@
 // * $LastChangedDate$
 // * $LastChangedBy$
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification, are
 // permitted provided that the following conditions are met:
 //  1. Redistributions of source code must retain the above copyright notice, this list of
-//     conditions and the following disclaimer. 
+//     conditions and the following disclaimer.
 //  2. Redistributions in binary form must reproduce the above copyright notice, this list
 //     of conditions and the following disclaimer in the documentation and/or other materials
-//     provided with the distribution. 
+//     provided with the distribution.
 //  3. The name of the author may not be used to endorse or promote products derived from this
-//     software without specific prior written permission. 
+//     software without specific prior written permission.
 //
 //  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
 //  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -74,15 +74,15 @@ public:
 
 		m_executableDirectory = L"";
 		m_executableName = L"";
-		
+
 		m_singleInstance = NULL;
 		m_pFileDownloader = NULL;
 
 		return S_OK;
 	}
 
-	void FinalRelease() 
-	{		
+	void FinalRelease()
+	{
 	}
 
 DECLARE_REGISTRY_RESOURCEID(IDR_SYSTEMEX)
@@ -120,13 +120,13 @@ END_CONNECTION_POINT_MAP()
 
 		// Monitors
 		HANDLE m_hConfigMutex;
-		vector<pair<RECT, bool>> m_monitors;	
+		vector<pair<RECT, bool>> m_monitors;
 
 		// Downloads
-		FileDownloader* m_pFileDownloader;		
-		
+		FileDownloader* m_pFileDownloader;
+
 		void UpdateInstanceInfo();
-		static BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData);	
+		static BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData);
 		static bool hasEnding(wstring const &fullString, wstring const &ending);
 
 		//////////////////////////////////////////////////////////////////////////
@@ -159,12 +159,12 @@ END_CONNECTION_POINT_MAP()
 		void Terminate();
 
 		void UpdateMonitorInfo();
-		HRESULT ExtractCommandLine(LPWSTR commandLine, VARIANT* pArgs, bool extractArgs); 
-		
+		HRESULT ExtractCommandLine(LPWSTR commandLine, VARIANT* pArgs, bool extractArgs);
+
 		//////////////////////////////////////////////////////////////////////////
 		// ISupportErrorInfo
 		//////////////////////////////////////////////////////////////////////////
-		STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);	
+		STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 		//////////////////////////////////////////////////////////////////////////
 		// ISystemEx

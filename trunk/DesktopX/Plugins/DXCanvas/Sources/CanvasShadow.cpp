@@ -2,13 +2,17 @@
 //
 // Canvas Plugin for DesktopX
 //
-// Copyright (c) 2008-2009, Three Oaks Crossing
+// Copyright (c) 2008-2010, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // * $LastChangedRevision$
 // * $LastChangedDate$
 // * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Uses code from Mozilla (see Readme and licence folder)
+//
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -29,7 +33,7 @@ cairo_t* CanvasShadow::getContext(cairo_t* ctx, CanvasState* state, EXTENTS_RECT
 	this->extents = extents;
 	this->state = state;
 
-	// Calculate standard deviation for Gaussian blur	
+	// Calculate standard deviation for Gaussian blur
 	if (state->currentState().shadowBlur < 8)
 		sigma = state->currentState().shadowBlur / 2;
 	else
@@ -64,7 +68,7 @@ cairo_t* CanvasShadow::getContext(cairo_t* ctx, CanvasState* state, EXTENTS_RECT
 		context = NULL;
 		return NULL;
 	}
-	
+
 	// Copy the original context data to our new context
 	copyContext();
 	cairo_set_operator(context, CAIRO_OPERATOR_SOURCE);
@@ -100,7 +104,7 @@ void CanvasShadow::draw()
 
 	// Cleanup the context and surface
 	cairo_destroy(context);
-	cairo_surface_destroy(surface);	
+	cairo_surface_destroy(surface);
 	context = NULL; surface = NULL;
 }
 
@@ -110,7 +114,7 @@ bool CanvasShadow::copyContext()
 {
 	if (context == NULL || originalContext == NULL)
 		return false;
-	
+
 	// Apply the original matrix
 	cairo_matrix_t originalMatrix;
 	cairo_get_matrix(originalContext, &originalMatrix);
@@ -152,8 +156,8 @@ void CanvasShadow::applyBlur()
 
 	unsigned char* buffer = cairo_image_surface_get_data(surface);
 
-	int stride = cairo_image_surface_get_stride(surface);		
-	int rows = cairo_image_surface_get_height(surface);	
+	int stride = cairo_image_surface_get_stride(surface);
+	int rows = cairo_image_surface_get_height(surface);
 
 	// Create temporary buffer
 	unsigned char* tempBuffer = (unsigned char*) calloc((size_t)(stride * rows), sizeof(char));
@@ -181,30 +185,30 @@ void CanvasShadow::blur(unsigned char* input, unsigned char* output, Direction d
 	int boxSize = leftLobe + rightLobe + 1;
 
 	if (direction == HORIZONTAL)
-	{	
+	{
 	    for (int y = 0; y < rows; y++) {
 
 			int sum = 0;
-			
+
 			for (int i = 0; i < boxSize; i++) {
 				int pos = i - leftLobe;
 				pos = max(pos, 0);
 				pos = min(pos, stride - 1);
 				sum += input[stride * y + pos];
 			}
-			
+
 			for (int x = 0; x < stride; x++) {
 	            int tmp = x - leftLobe;
 	            int last = max(tmp, 0);
 	            int next = min(tmp + boxSize, stride - 1);
-	
+
 		        output[stride * y + x] = (unsigned char)(sum/boxSize);
-	
+
 		        sum += input[stride * y + next] -
-		               input[stride * y + last];	       
+		               input[stride * y + last];
 		    }
-		}		
-	} 
+		}
+	}
 	else
 	{
 		for (int x = 0; x < stride; x++) {
@@ -263,7 +267,7 @@ void CanvasShadow::computeLobes(int radius, int lobes[3][2])
 			minor = z;
 			break;
 	}
-	
+
 #ifdef DEBUG
 	// Lobes should sum to the right length
 	_ASSERT_EXPR((major + minor + final == radius), L"Lobes should sum to the right length");

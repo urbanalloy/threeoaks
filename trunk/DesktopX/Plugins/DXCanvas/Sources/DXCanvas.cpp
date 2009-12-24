@@ -2,13 +2,35 @@
 //
 // Canvas Plugin for DesktopX
 //
-// Copyright (c) 2008-2009, Three Oaks Crossing
+// Copyright (c) 2008-2010, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // * $LastChangedRevision$
 // * $LastChangedDate$
 // * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Redistribution and use in source and binary forms, with or without modification, are
+// permitted provided that the following conditions are met:
+//  1. Redistributions of source code must retain the above copyright notice, this list of
+//     conditions and the following disclaimer.
+//  2. Redistributions in binary form must reproduce the above copyright notice, this list
+//     of conditions and the following disclaimer in the documentation and/or other materials
+//     provided with the distribution.
+//  3. The name of the author may not be used to endorse or promote products derived from this
+//     software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+//  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+//  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+//  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+//  GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+//  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+//  OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+//  POSSIBILITY OF SUCH DAMAGE.
+//
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -28,7 +50,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Size of the version text
 #define VERSION_SIZE 30
-#define MAX_NUMBER_SIZE 5 
+#define MAX_NUMBER_SIZE 5
 
 INT_PTR CALLBACK ConfigurePlugin(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -66,27 +88,27 @@ INT_PTR CALLBACK ConfigurePlugin(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lPa
 #endif
 
 			break;
-		}	
+		}
 
 		case WM_COMMAND:
 			switch(LOWORD(wParam))
 			{
 
 				case IDOK:
-				{					
+				{
 					if(!config)
-						break;	
-					
+						break;
+
 					// Input boxes are set to number, so no need to check for conversion (famous last words :P)
 					config->width = GetDlgItemInt(hDlg, IDC_WIDTH, NULL, FALSE);
 					config->height = GetDlgItemInt(hDlg, IDC_HEIGHT, NULL, FALSE);
-					IsDlgButtonChecked(hDlg, IDC_ALPHABLEND) ? config->alphablend = true : config->alphablend = false;					
+					IsDlgButtonChecked(hDlg, IDC_ALPHABLEND) ? config->alphablend = true : config->alphablend = false;
 				}
 
 				case IDCANCEL:
 					EndDialog(hDlg, 0);
 					return TRUE;
-					break;	
+					break;
 
 			}
 			break;
@@ -134,7 +156,7 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 
 			return TRUE;
 		}
-		
+
 
 		// Initialize the plugin DLL
 		case SD_INITIALIZE_MODULE:
@@ -144,7 +166,7 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 
 			return TRUE;
 		}
-		
+
 
 		// Create a new instance of the plugin
 		case SD_CREATE_PLUGIN:
@@ -155,7 +177,7 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 			__time64_t nowTime;
 			errno_t err;
 
-			_time64(&nowTime);			    // get current time			
+			_time64(&nowTime);			    // get current time
 			err = _localtime64_s(&now, &nowTime); // convert time to structure
 
 			if (err) // there is no bugs in the program, only features
@@ -163,7 +185,7 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 
 			if (now.tm_year + 1900 > EXPIRATION_YEAR)
 				goto label_expiration;
-    
+
       if (now.tm_year + 1900 == EXPIRATION_YEAR)
         if (now.tm_mon > EXPIRATION_MONTH-1)
           goto label_expiration;
@@ -171,11 +193,11 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
       if (now.tm_year + 1900 == EXPIRATION_YEAR)
         if (now.tm_mon == EXPIRATION_MONTH-1)
           if (now.tm_mday > EXPIRATION_DAY)
-            goto label_expiration;	
+            goto label_expiration;
 #endif
 
 	        CComObject<CCanvas>* pCanvas;
-	        CComObject<CCanvas>::CreateInstance(&pCanvas);	
+	        CComObject<CCanvas>::CreateInstance(&pCanvas);
 			pCanvas->setObjID(objID);
 
 	        *pluginIndex = (DWORD)pCanvas;
@@ -185,7 +207,7 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 			pCanvas->QueryInterface(IID_IUnknown, (void**)&sp.pUnk);
 			sp.pTI =  ReadCanvasTypeInfo(dllInstance);
 			SDHostMessage(SD_REGISTER_SCRIPTABLE_PLUGIN, objID, (DWORD)&sp);
-    
+
 			DWORD *flags = (DWORD *)param1;
 			*flags = SD_FLAG_DRAW |
 					 SD_FLAG_DRAW_PPALPHA |
@@ -205,54 +227,54 @@ label_expiration:
 			return FALSE;
 #endif
 		}
-		
+
 
 		// Load saved plugin data
 		case SD_LOAD_DATA:
 		{
-			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;	
-		
+			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;
+
 			if (pCanvas == NULL)
 				return FALSE;
-		
+
 			// Get our ini file
 			char objectDirectory[MAX_PATH];
 			char iniFile[MAX_PATH];
 			SDHostMessage(SD_GET_OBJECT_DIRECTORY, (DWORD) objectDirectory, 0);
-			sprintf_s(iniFile, "%s\\DXCanvas-%s.ini", objectDirectory, (char *) param1);			
+			sprintf_s(iniFile, "%s\\DXCanvas-%s.ini", objectDirectory, (char *) param1);
 
 			// Save configuration
 			pCanvas->config->width = GetPrivateProfileInt("Config", "Width", DEFAULT_WIDTH, iniFile);
 			pCanvas->config->height = GetPrivateProfileInt("Config", "Height", DEFAULT_HEIGHT, iniFile);
-			pCanvas->config->alphablend = (GetPrivateProfileInt("Config", "AlphaBlend", 1, iniFile) == 1);			
+			pCanvas->config->alphablend = (GetPrivateProfileInt("Config", "AlphaBlend", 1, iniFile) == 1);
 
 			// Update the plugin flags - by default we use alpha blending, so only set it to false if needed
 			DWORD *plugin_flags = (DWORD*) param2;
-			if (!pCanvas->config->alphablend)		
+			if (!pCanvas->config->alphablend)
 				*plugin_flags &= ~SD_FLAG_DRAW_PPALPHA;
 
 			return TRUE;
 		}
-		
+
 
 		// Configure this instance
 		case SD_CONFIGURE:
 		{
-			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;	
+			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;
 
 			if (pCanvas == NULL)
 				return FALSE;
 
-			// Show the config for the current instance			
+			// Show the config for the current instance
 			DialogBoxParam(dllInstance, MAKEINTRESOURCE(IDD_CONFIG), (HWND)param2, ConfigurePlugin, (LPARAM)pCanvas->config);
 
 			// Update flags
 			DWORD* plugin_flags = (DWORD*) param1;
 
-			// Check that it's not already set, as we may have modified it during LOAD_DATA			
+			// Check that it's not already set, as we may have modified it during LOAD_DATA
 			if ((*plugin_flags & SD_FLAG_DRAW_PPALPHA) == SD_FLAG_DRAW_PPALPHA)
 			{
-				if (!pCanvas->config->alphablend) // remove flag		
+				if (!pCanvas->config->alphablend) // remove flag
 					*plugin_flags &= ~SD_FLAG_DRAW_PPALPHA;
 			} else {
 				if (pCanvas->config->alphablend) // add flag
@@ -261,15 +283,15 @@ label_expiration:
 
 			return TRUE;
 		}
-		
+
 
 		// Duplicate this instance data
 		// Only the size of the object as set in the configuration dialog is duplicated
 		// All data related to the cairo surface is lost
 		case SD_DUPLICATE_PLUGIN:
 		{
-			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;	
-			CComObject<CCanvas>* pOriginalCanvas = (CComObject<CCanvas>*) param2;	
+			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;
+			CComObject<CCanvas>* pOriginalCanvas = (CComObject<CCanvas>*) param2;
 
 			if (pOriginalCanvas == NULL)
 				return FALSE;
@@ -280,14 +302,14 @@ label_expiration:
 			strcpy_s(pCanvas->config->objectDirectory, pOriginalCanvas->config->objectDirectory);
 
 			return TRUE;
-		}		
+		}
 
 
 		// Get the object size of this instance
 		// The plugin has already been configured
 		case SD_GET_OBJECT_SIZE:
 		{
-			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;	
+			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;
 
 			if (pCanvas == NULL)
 				return FALSE;
@@ -297,19 +319,19 @@ label_expiration:
 			sz->cy = pCanvas->config->height;
 
 			return TRUE;
-		}		
+		}
 
 
 		// Start running this instance of the plugin
 		case SD_INITIALIZE_PLUGIN:
 		{
-			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;		
-			
+			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;
+
 			if (pCanvas == NULL)
 				return FALSE;
 
-			char objectDirectory[MAX_PATH];			
-			SDHostMessage(SD_GET_OBJECT_DIRECTORY, (DWORD) objectDirectory, 0);			
+			char objectDirectory[MAX_PATH];
+			SDHostMessage(SD_GET_OBJECT_DIRECTORY, (DWORD) objectDirectory, 0);
 			strcpy_s(pCanvas->config->objectDirectory, objectDirectory);
 
 			// Retrieve object name
@@ -322,18 +344,18 @@ label_expiration:
 
 			return TRUE;
 		}
-		
+
 
 		// Draw the contents of the canvas into the passed bitmap
 		case SD_DRAW:
 		{
 			SD_DRAW_INFO* drawInfo = (SD_DRAW_INFO*) param1;
-			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;	
-						
+			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;
+
 			if (pCanvas == NULL)
 				return FALSE;
-						
-			pCanvas->draw(drawInfo->hdc, drawInfo->hBitmap);		
+
+			pCanvas->draw(drawInfo->hdc, drawInfo->hBitmap);
 		}
 		return TRUE;
 
@@ -342,20 +364,20 @@ label_expiration:
 		case SD_SAVE_DATA:
 		{
 			// We need to come up with an instance ID and register our config file
-			// we don't care whether we are in export mode or not 
-			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;	
-			
+			// we don't care whether we are in export mode or not
+			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;
+
 			if (pCanvas == NULL)
 				return FALSE;
-			
+
 			// Use the object ID pointer as our instance ID
 			char instanceID[20];
 			_ltoa_s((long) objID, instanceID, 10);
 			lstrcpy((char *) param1, instanceID);
 
 			char iniFile[MAX_PATH], name[MAX_PATH];
-			SDHostMessage(SD_GET_OBJECT_DIRECTORY, (DWORD) iniFile, 0);			
-			sprintf_s(name, "DXCanvas-%s.ini", iniFile, instanceID);		
+			SDHostMessage(SD_GET_OBJECT_DIRECTORY, (DWORD) iniFile, 0);
+			sprintf_s(name, "DXCanvas-%s.ini", iniFile, instanceID);
 			sprintf_s(iniFile, "%s\\%s", iniFile, name);
 
 			// Save configuration
@@ -367,12 +389,12 @@ label_expiration:
 
 			return TRUE;
 		}
-		
+
 
 		// Stop running this instance of the plugin
 		case SD_TERMINATE_PLUGIN:
 		{
-			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;	
+			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;
 
 			if (pCanvas == NULL)
 				return FALSE;
@@ -381,21 +403,21 @@ label_expiration:
 
 			return TRUE;
 		}
-		
+
 
 		// Destroy this instance of the plugin
 		case SD_DESTROY_PLUGIN:
 		{
-			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;				
+			CComObject<CCanvas>* pCanvas = (CComObject<CCanvas>*) *pluginIndex;
 
 			if (pCanvas != NULL)
 				pCanvas->killthreadQueueDraw();
-			
-			SAFE_RELEASE(pCanvas);	
-			
+
+			SAFE_RELEASE(pCanvas);
+
 			return TRUE;
-		}		
-		
+		}
+
 
 		// Unload the plugin dll
 		case SD_TERMINATE_MODULE:
@@ -415,14 +437,14 @@ BEGIN_OBJECT_MAP(ObjectMap)
 	OBJECT_ENTRY(CLSID_Canvas, CCanvas)
 	OBJECT_ENTRY(CLSID_CanvasGradient, CCanvasGradient)
 	OBJECT_ENTRY(CLSID_CanvasPattern, CCanvasPattern)
-	OBJECT_ENTRY(CLSID_CanvasRenderingContext2D, CCanvasRenderingContext2D)	
+	OBJECT_ENTRY(CLSID_CanvasRenderingContext2D, CCanvasRenderingContext2D)
 END_OBJECT_MAP()
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DLL
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma warning(push)
-#pragma warning(disable: 4100) 
+#pragma warning(disable: 4100)
 DECLARE_DXPLUGIN_DLLFUNCTIONS(LIBID_DXCanvasLib,
 							  "DXCanvas.dll",
 							  "{9215BB4D-AFC4-4b09-B39E-1967072BDD69}",

@@ -2,7 +2,7 @@
 //
 // DXSystemEx - Extended System Information
 //
-// Copyright (c) 2009, Julien Templier
+// Copyright (c) 2009-2010, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -10,16 +10,16 @@
 // * $LastChangedDate$
 // * $LastChangedBy$
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification, are
 // permitted provided that the following conditions are met:
 //  1. Redistributions of source code must retain the above copyright notice, this list of
-//     conditions and the following disclaimer. 
+//     conditions and the following disclaimer.
 //  2. Redistributions in binary form must reproduce the above copyright notice, this list
 //     of conditions and the following disclaimer in the documentation and/or other materials
-//     provided with the distribution. 
+//     provided with the distribution.
 //  3. The name of the author may not be used to endorse or promote products derived from this
-//     software without specific prior written permission. 
+//     software without specific prior written permission.
 //
 //  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
 //  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -69,10 +69,10 @@ ULONG STDMETHODCALLTYPE CVistaVolumeCallback::AddRef()
 // Decrement ref count
 ULONG STDMETHODCALLTYPE CVistaVolumeCallback::Release()
 {
-	LONG ref = InterlockedDecrement(&m_RefCount);  
-	if (ref == 0) 
-		delete this; 
-	return ref; 
+	LONG ref = InterlockedDecrement(&m_RefCount);
+	if (ref == 0)
+		delete this;
+	return ref;
 }
 
 // Notify objects
@@ -82,9 +82,9 @@ HRESULT STDMETHODCALLTYPE CVistaVolumeCallback::OnNotify(PAUDIO_VOLUME_NOTIFICAT
 	DWORD dwWaitMutex;
 	dwWaitMutex = WaitForSingleObject(hObject, INFINITE);
 
-	switch (dwWaitMutex) 
+	switch (dwWaitMutex)
 	{
-		case WAIT_OBJECT_0: 
+		case WAIT_OBJECT_0:
 		{
 			std::vector <DWORD>::iterator Iter;
 			for (Iter = this->objectsId->begin( ); Iter != this->objectsId->end( ); Iter++) {
@@ -96,8 +96,8 @@ HRESULT STDMETHODCALLTYPE CVistaVolumeCallback::OnNotify(PAUDIO_VOLUME_NOTIFICAT
 
 				se.dp.cArgs = 1;
 				VARIANT* lpvt = (VARIANT*)malloc(sizeof(VARIANT)*1);
-				VariantInit(&lpvt[0]);							
-				
+				VariantInit(&lpvt[0]);
+
 				// Mute event
 				if (pNotify->bMuted == TRUE)
 				{
@@ -109,17 +109,17 @@ HRESULT STDMETHODCALLTYPE CVistaVolumeCallback::OnNotify(PAUDIO_VOLUME_NOTIFICAT
 				{
 					lstrcpy(se.szEventName, "VistaVolume_OnVolumeEvent");
 					lpvt[0].vt = VT_I4;
-					lpvt[0].lVal = (long) ceil(pNotify->fMasterVolume*100);				
+					lpvt[0].lVal = (long) ceil(pNotify->fMasterVolume*100);
 				}
-				
+
 				se.dp.rgvarg = lpvt;
 
 				SDHostMessage(SD_SCRIPTABLE_PLUGIN_EVENT, (DWORD) *Iter, (DWORD) &se);
-				
+
 				free(se.dp.rgvarg);
 			}
 			break;
-		}					
+		}
 
 		default:
 			return S_FALSE;
@@ -135,9 +135,9 @@ void CVistaVolumeCallback::addID(DWORD objID) {
 	DWORD dwWaitMutex;
 	dwWaitMutex = WaitForSingleObject(hObject, INFINITE);
 
-	switch (dwWaitMutex) 
+	switch (dwWaitMutex)
 	{
-		case WAIT_OBJECT_0: 
+		case WAIT_OBJECT_0:
 			{
 				std::vector <DWORD>::iterator Iter;
 				for (Iter = objectsId->begin( ); Iter != objectsId->end( ); Iter++) {
@@ -148,10 +148,10 @@ void CVistaVolumeCallback::addID(DWORD objID) {
 				}
 
 				objectsId->push_back(objID);
-		
+
 				ReleaseMutex(hObject);
 			}
-			break; 
+			break;
 
 		default:
 			break;
@@ -162,9 +162,9 @@ void CVistaVolumeCallback::removeID(DWORD objID) {
 	DWORD dwWaitMutex;
 	dwWaitMutex = WaitForSingleObject(hObject, INFINITE);
 
-	switch (dwWaitMutex) 
+	switch (dwWaitMutex)
 	{
-		case WAIT_OBJECT_0: 
+		case WAIT_OBJECT_0:
 			{
 				std::vector <DWORD>::iterator Iter;
 				for (Iter = objectsId->begin( ); Iter != objectsId->end( ); Iter++) {
@@ -174,10 +174,10 @@ void CVistaVolumeCallback::removeID(DWORD objID) {
 						return;
 					}
 				}
-		
+
 				ReleaseMutex(hObject);
 			}
-			break; 
+			break;
 
 		default:
 			break;

@@ -2,13 +2,35 @@
 //
 // DockletX - Docklet support plugin for DesktopX
 //
-// Copyright (c) 2006-2009, Three Oaks Crossing
+// Copyright (c) 2006-2010, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // * $LastChangedRevision$
 // * $LastChangedDate$
 // * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Redistribution and use in source and binary forms, with or without modification, are
+// permitted provided that the following conditions are met:
+//  1. Redistributions of source code must retain the above copyright notice, this list of
+//     conditions and the following disclaimer.
+//  2. Redistributions in binary form must reproduce the above copyright notice, this list
+//     of conditions and the following disclaimer in the documentation and/or other materials
+//     provided with the distribution.
+//  3. The name of the author may not be used to endorse or promote products derived from this
+//     software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+//  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+//  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+//  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+//  GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+//  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+//  OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+//  POSSIBILITY OF SUCH DAMAGE.
+//
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -29,15 +51,15 @@ HMODULE WINAPI MyGetModuleHandleW(LPCWSTR lpModuleName);
 // Constructor&Destructor
 //////////////////////////////////////////////////////////////////////////
 
-Docklet::Docklet(int objID) : 	
+Docklet::Docklet(int objID) :
 	hLibrary(NULL),
 	objID(objID),
 	hwnd(NULL),
 	pDropTarget(NULL),
 	initialized(FALSE),
 	locked(FALSE),
-	docklet_data(NULL)	
-{	
+	docklet_data(NULL)
+{
 	ClearFunctionPointers();
 
 	images.background = new CGdiPlusBitmapResource();
@@ -69,18 +91,18 @@ void Docklet::ClearFunctionPointers()
 }
 
 Docklet::~Docklet()
-{	 
+{
 }
 
 void Docklet::Start(HWND hwnd)
-{	
+{
 	if (strcmp(config.dockletFile, "") == 0) {
 		ShowDefaultImage();
 		SDHostMessage(SD_SET_TOOLTIP_TEXT, objID, (DWORD)"CTRL+Click to configure docklet");
 		return;
 	}
 
-	hLibrary = LoadPluginInstance((char*)config.dockletFile, 
+	hLibrary = LoadPluginInstance((char*)config.dockletFile,
 		 					      17,
 								  &OnGetInformation,		"OnGetInformation",
 								  &OnGetRequiredVersion,	"OnGetRequiredVersion",
@@ -119,7 +141,7 @@ void Docklet::Start(HWND hwnd)
 	this->pDropTarget = pTarget;
 
 	//////////////////////////////////////////////////////////////////////////
-	// Get plugin information on load	
+	// Get plugin information on load
 	LoadInformation(OnGetInformation, &info);
 
 	// Hook GetModuleHandle(NULL)
@@ -132,7 +154,7 @@ void Docklet::Start(HWND hwnd)
 	if (strcmp(config.iniFile, "") == 0 || OnSave == NULL)
 		docklet_data = OnCreate(hwnd, hLibrary, NULL, NULL);
 	else
-		docklet_data = OnCreate(hwnd, hLibrary, config.iniFile, DOCKLET_CONFIG_SECTION);		
+		docklet_data = OnCreate(hwnd, hLibrary, config.iniFile, DOCKLET_CONFIG_SECTION);
 }
 
 void Docklet::Stop()
@@ -142,7 +164,7 @@ void Docklet::Stop()
 
 	///////////////////////////////////////////
 	// Unregister drag&drop
-	UnregisterDropWindow(hwnd, pDropTarget);	
+	UnregisterDropWindow(hwnd, pDropTarget);
 
 	// Destroy docklet
 	if (docklet_data != NULL) {
@@ -151,7 +173,7 @@ void Docklet::Stop()
 	}
 
 	///////////////////////////////////////////
-	// Free images	
+	// Free images
 	if (images.disposeImage)
 		SAFE_DELETE(images.image);
 
@@ -191,7 +213,7 @@ void Docklet::ComputePaths()
 	// Root
 	Docklet::GetObjectDockFolder(config.rootFolder);
 
-	// Relative	
+	// Relative
 	CPathA fullPath(config.dockletFile);
 	fullPath.RemoveFileSpec();
 	fullPath.AddBackslash();
@@ -206,8 +228,8 @@ void Docklet::ComputePaths()
 void Docklet::GetObjectDockFolder(char* path)
 {
 	strcpy_s(path, MAX_PATH*sizeof(char), "");
-	
-	HKEY key;	
+
+	HKEY key;
 	DWORD size;
 	DWORD type = REG_SZ;
 	char buffer[MAX_PATH];
@@ -222,7 +244,7 @@ void Docklet::GetObjectDockFolder(char* path)
 	size = sizeof(buffer);
 	strcpy_s((char*)&buffer, size, "");
 	if (RegQueryValueExA(key, "Path", NULL, &type, (LPBYTE)&buffer, &size) == ERROR_SUCCESS)
-		strcpy_s((char *)path, size, (const char *)&buffer); 
+		strcpy_s((char *)path, size, (const char *)&buffer);
 
 	RegCloseKey(key);
 }
@@ -243,7 +265,7 @@ BOOL Docklet::GetRect(RECT *rcDocklet)
 		return FALSE;
 
 	SDHostMessage(SD_GET_ABSOLUTE_RECT, objID, (DWORD)rcDocklet);
-	
+
 	return TRUE;
 }
 
@@ -284,7 +306,7 @@ void Docklet::SetImageFile(char *szImage)
 {
 	SetImage(LoadGDIPlusImage(szImage), TRUE);
 
-	// Save image path	
+	// Save image path
 	strcpy_s(images.path, szImage);
 }
 
@@ -416,7 +438,7 @@ Bitmap* Docklet::LoadGDIPlusImage(char *szImage)
 //////////////////////////////////////////////////////////////////////////
 
 void Docklet::LeftButtonClick(POINT ptCursor)
-{	
+{
 	if (OnLeftButtonClick == NULL || locked)
 		return;
 
@@ -449,7 +471,7 @@ void Docklet::LeftButtonHeld(POINT ptCursor)
 }
 
 BOOL Docklet::RightButtonClick(POINT ptCursor)
-{	
+{
 	if (locked)
 		return TRUE;
 
@@ -462,7 +484,7 @@ BOOL Docklet::RightButtonClick(POINT ptCursor)
 }
 
 void Docklet::Configure()
-{	
+{
 	BOOL isHandled = FALSE;
 
 	if (OnConfigure != NULL)
@@ -480,7 +502,7 @@ void Docklet::Save(char* ini, BOOL isForExport)
 		return;
 
 	OnSave(docklet_data, ini, DOCKLET_CONFIG_SECTION, isForExport);
-}	
+}
 
 BOOL Docklet::AcceptDropFiles()
 {
@@ -549,7 +571,7 @@ void Docklet::ShowDefaultImage()
 	SAFE_DELETE(images.image);
 	SAFE_DELETE(images.overlay);
 
-	Redraw();	
+	Redraw();
 }
 
 void Docklet::Redraw()
@@ -562,7 +584,7 @@ void Docklet::Redraw()
 #pragma warning(disable: 4100)
 void Docklet::Draw(HDC hdc, HBITMAP hBitmap)
 {
-	Graphics graphics(hdc);	
+	Graphics graphics(hdc);
 	graphics.SetInterpolationMode(InterpolationModeHighQuality);
 	graphics.SetSmoothingMode(SmoothingModeAntiAlias);
 
@@ -571,19 +593,19 @@ void Docklet::Draw(HDC hdc, HBITMAP hBitmap)
 	RectF rect(0.0f, 0.0f, (REAL)config.size, (REAL)config.size);
 
 	if (images.image == NULL && images.overlay == NULL)
-		DrawBitmap(images.background->m_pBitmap, rect, &graphics);		
+		DrawBitmap(images.background->m_pBitmap, rect, &graphics);
 
 	if (images.image != NULL)
-		DrawBitmap(images.image, rect, &graphics);	
+		DrawBitmap(images.image, rect, &graphics);
 
 	if (images.overlay != NULL)
-		DrawBitmap(images.overlay, rect, &graphics);	
+		DrawBitmap(images.overlay, rect, &graphics);
 }
 #pragma warning(pop)
 
 void Docklet::DrawBitmap(Bitmap* bitmap, RectF rect, Graphics* graphics)
 {
-	graphics->DrawImage(bitmap, rect, 0.0f, 0.0f, (REAL)bitmap->GetWidth(), (REAL)bitmap->GetHeight(), UnitPixel);	
+	graphics->DrawImage(bitmap, rect, 0.0f, 0.0f, (REAL)bitmap->GetWidth(), (REAL)bitmap->GetHeight(), UnitPixel);
 }
 
 //////////////////////////////////////////////////////////////////////////.
@@ -604,12 +626,12 @@ void Docklet::LoadConfig(char* ini)
 void Docklet::SaveConfig(char* ini, BOOL isForExport)
 {
 	WritePrivateProfileStringA("Config", "Docklet", config.dockletFile, ini);
-	WritePrivateProfileInt((LPCTSTR)"Config", (LPCTSTR)"Size", config.size, (LPCTSTR)ini);		
+	WritePrivateProfileInt((LPCTSTR)"Config", (LPCTSTR)"Size", config.size, (LPCTSTR)ini);
 
 	// Save label&image, as docklets might not save it themselves
-	WritePrivateProfileStringA(DOCKLET_CONFIG_SECTION, "Image", images.path, ini);	
-	WritePrivateProfileStringA(DOCKLET_CONFIG_SECTION, "Title", config.label.c_str(), ini);		
-	
+	WritePrivateProfileStringA(DOCKLET_CONFIG_SECTION, "Image", images.path, ini);
+	WritePrivateProfileStringA(DOCKLET_CONFIG_SECTION, "Title", config.label.c_str(), ini);
+
 	// Save docklet configuration
 	Save(ini, isForExport);
 }
@@ -676,7 +698,7 @@ int Docklet::GetSize()
 
 void Docklet::SetDockletFile(char* path)
 {
-	strcpy_s(config.dockletFile, path);		
+	strcpy_s(config.dockletFile, path);
 
 	ComputePaths();
 }
@@ -685,7 +707,7 @@ char* Docklet::GetDockletFile()
 {
 	return (char *)&config.dockletFile;
 }
-	
+
 
 //////////////////////////////////////////////////////////////////////////
 //LoadPluginInstance
@@ -757,7 +779,7 @@ BOOL Docklet::InterceptDllCall(HMODULE hLocalModule,
 	DWORD dwProtect;
 	BOOL bSuccess = FALSE;
 
-	DWORD dwAddressToIntercept; 
+	DWORD dwAddressToIntercept;
 
 	if (pApiToChange)
 		dwAddressToIntercept = (DWORD)pApiToChange;
@@ -776,7 +798,7 @@ BOOL Docklet::InterceptDllCall(HMODULE hLocalModule,
 
 	pImportDesc = MakePtr(PIMAGE_IMPORT_DESCRIPTOR, hLocalModule, pNTHeader->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress);
 
-	if (pImportDesc == (PIMAGE_IMPORT_DESCRIPTOR)pNTHeader) 
+	if (pImportDesc == (PIMAGE_IMPORT_DESCRIPTOR)pNTHeader)
 
 		return FALSE;
 
@@ -789,10 +811,10 @@ BOOL Docklet::InterceptDllCall(HMODULE hLocalModule,
 		while (pThunk->u1.Function)
 		{
 			if ((DWORD)pThunk->u1.Function == dwAddressToIntercept)
-			{	
+			{
 				if (!IsBadWritePtr((PVOID)&pThunk->u1.Function, sizeof(PVOID)))
 				{
-					if (p_pApiOrg) 
+					if (p_pApiOrg)
 						*p_pApiOrg = (PVOID)pThunk->u1.Function;
 
 					pThunk->u1.Function = (DWORD)pApiNew;
@@ -804,7 +826,7 @@ BOOL Docklet::InterceptDllCall(HMODULE hLocalModule,
 					{
 						DWORD dwNewProtect;
 
-						if (p_pApiOrg) 
+						if (p_pApiOrg)
 							*p_pApiOrg = (PVOID)pThunk->u1.Function;
 
 						pThunk->u1.Function = (DWORD)pApiNew;
@@ -814,7 +836,7 @@ BOOL Docklet::InterceptDllCall(HMODULE hLocalModule,
 
 						VirtualProtect((PVOID)&pThunk->u1.Function, sizeof(PVOID), dwNewProtect, &dwProtect);
 					}
-				} 
+				}
 			}
 			pThunk++;
 		}

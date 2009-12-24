@@ -2,7 +2,7 @@
 //
 // DXSystemEx - Extended System Information
 //
-// Copyright (c) 2009, Julien Templier
+// Copyright (c) 2009-2010, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -10,16 +10,16 @@
 // * $LastChangedDate$
 // * $LastChangedBy$
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification, are
 // permitted provided that the following conditions are met:
 //  1. Redistributions of source code must retain the above copyright notice, this list of
-//     conditions and the following disclaimer. 
+//     conditions and the following disclaimer.
 //  2. Redistributions in binary form must reproduce the above copyright notice, this list
 //     of conditions and the following disclaimer in the documentation and/or other materials
-//     provided with the distribution. 
+//     provided with the distribution.
 //  3. The name of the author may not be used to endorse or promote products derived from this
-//     software without specific prior written permission. 
+//     software without specific prior written permission.
 //
 //  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
 //  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -72,7 +72,7 @@ void CSystemEx::Init(DWORD objID, string guiId, HWND hwnd)
 		m_hConfigMutex = CreateMutex(NULL, false, name);
 	}
 
-	pSystemEx = this;	
+	pSystemEx = this;
 	configMutex = m_hConfigMutex;
 
 	UpdateMonitorInfo();
@@ -137,7 +137,7 @@ BOOL CALLBACK CSystemEx::MonitorEnumProc(HMONITOR hMonitor, HDC, LPRECT, LPARAM)
 }
 
 // Extract command line info
-HRESULT CSystemEx::ExtractCommandLine(LPWSTR commandLine, VARIANT* pArgs, bool extractArgs) 
+HRESULT CSystemEx::ExtractCommandLine(LPWSTR commandLine, VARIANT* pArgs, bool extractArgs)
 {
 	USES_CONVERSION;
 	HRESULT hr = S_OK;
@@ -185,14 +185,14 @@ HRESULT CSystemEx::ExtractCommandLine(LPWSTR commandLine, VARIANT* pArgs, bool e
 	SAFEARRAYBOUND aDim[1];
 
 	aDim[0].lLbound = 0;
-	aDim[0].cElements = numArgs - startIndex;	
+	aDim[0].cElements = numArgs - startIndex;
 
 	pSA = SafeArrayCreate(VT_VARIANT, 1, aDim);
 
 	if (pSA != NULL) {
 		variant_t vOut;
 
-		for (long l = aDim[0].lLbound; l < (signed)(aDim[0].cElements + aDim[0].lLbound); l++) {			
+		for (long l = aDim[0].lLbound; l < (signed)(aDim[0].cElements + aDim[0].lLbound); l++) {
 			vOut = args[l + startIndex];
 
 			HRESULT hr = SafeArrayPutElement(pSA, &l, &vOut);
@@ -234,7 +234,7 @@ bool CSystemEx::hasEnding(std::wstring const &fullString, std::wstring const &en
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 STDMETHODIMP CSystemEx::InterfaceSupportsErrorInfo(REFIID riid)
 {
-	static const IID* arr[] = 
+	static const IID* arr[] =
 	{
 		&IID_ISystemEx
 	};
@@ -258,7 +258,7 @@ STDMETHODIMP CSystemEx::DownloadFile(int id, BSTR remoteUrl, BSTR localPath)
 {
 	// Check input
 	if (CComBSTR(remoteUrl) == CComBSTR(""))
-		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid remote url"), "Remote url is empty!", 0, NULL);	
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid remote url"), "Remote url is empty!", 0, NULL);
 
 	if (CComBSTR(localPath) == CComBSTR(""))
 		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid file path"), "File path is empty!", 0, NULL);
@@ -292,26 +292,26 @@ STDMETHODIMP CSystemEx::VerifySignature(BSTR path, BSTR signature, int type, VAR
 {
 	// Check input
 	if (CComBSTR(path) == CComBSTR(""))
-		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid file path"), "File path is empty!", 0, NULL);	
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid file path"), "File path is empty!", 0, NULL);
 
 	if (CComBSTR(signature) == CComBSTR(""))
-		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid signature"), "Signature is empty!", 0, NULL);	
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid signature"), "Signature is empty!", 0, NULL);
 
 	// Only allow SHA1 signature type at this moment
 	if (type != 0)
-		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid signature type"), "Signature type is invalid!", 0, NULL);	
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid signature type"), "Signature type is invalid!", 0, NULL);
 
 	USES_CONVERSION;
-	
+
 	HCRYPTPROV hProv = NULL;
 	HCRYPTHASH hHash = NULL;
-	HANDLE hFile = INVALID_HANDLE_VALUE;  
-	
+	HANDLE hFile = INVALID_HANDLE_VALUE;
+
 	BYTE *pbHash = NULL;
 	string hashValue;
 	const int BUFFER_SIZE = 4096;
 	BYTE pbBuffer[BUFFER_SIZE];
-	
+
 	DWORD dwBytesRead, dwCount;
 	DWORD dwHashLen;
 
@@ -319,19 +319,19 @@ STDMETHODIMP CSystemEx::VerifySignature(BSTR path, BSTR signature, int type, VAR
 	BOOL fFinished = FALSE;
 
 	// Open file to verify
-	hFile = CreateFile(OLE2A(path), 
-		GENERIC_READ, 
-		0, 
-		NULL, 
-		OPEN_EXISTING, 
-		FILE_ATTRIBUTE_NORMAL, 
+	hFile = CreateFile(OLE2A(path),
+		GENERIC_READ,
+		0,
+		NULL,
+		OPEN_EXISTING,
+		FILE_ATTRIBUTE_NORMAL,
 		NULL);
 
 	if (hFile == INVALID_HANDLE_VALUE)
-		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid file path"), "File cannot be opened. Check that the path entered is valid.", 0, NULL);	
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid file path"), "File cannot be opened. Check that the path entered is valid.", 0, NULL);
 
 	// Get CryptoAPI context
-	if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))			
+	if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
 		goto INTERNAL_ERROR;
 
 	// Create hash
@@ -360,7 +360,7 @@ STDMETHODIMP CSystemEx::VerifySignature(BSTR path, BSTR signature, int type, VAR
 
 	// Get the hash value
 	dwCount = sizeof(DWORD);
-	if(!CryptGetHashParam(hHash, HP_HASHSIZE, (BYTE *)&dwHashLen, &dwCount, 0)) 
+	if(!CryptGetHashParam(hHash, HP_HASHSIZE, (BYTE *)&dwHashLen, &dwCount, 0))
 		goto INTERNAL_ERROR;
 
 	if ((pbHash = (unsigned char*)malloc(dwHashLen)) == NULL)
@@ -388,7 +388,7 @@ STDMETHODIMP CSystemEx::VerifySignature(BSTR path, BSTR signature, int type, VAR
 	// Cleanup
 	free(pbHash);
 	CloseHandle(hFile);
-	CryptDestroyHash(hHash);  
+	CryptDestroyHash(hHash);
 	CryptReleaseContext(hProv, 0);
 
 	return S_OK;
@@ -398,13 +398,13 @@ INTERNAL_ERROR:
 	if (hFile != INVALID_HANDLE_VALUE)
 		CloseHandle(hFile);
 	if (hHash)
-		CryptDestroyHash(hHash);  
+		CryptDestroyHash(hHash);
 	if (hProv)
 		CryptReleaseContext(hProv, 0);
 	if (pbHash != NULL)
 		free(pbHash);
 
-	return CCOMError::DispatchError(INTERNAL_ERR, CLSID_SystemEx, _T("Internal error"), "Internal error while checking signature.", 0, NULL);	
+	return CCOMError::DispatchError(INTERNAL_ERR, CLSID_SystemEx, _T("Internal error"), "Internal error while checking signature.", 0, NULL);
 }
 
 /************************************************************************/
@@ -446,7 +446,7 @@ STDMETHODIMP CSystemEx::get_ExecutableFolder(BSTR* directory)
 	ClearBSTR(*directory);
 
 	if (m_executableDirectory.empty())
-		ExtractCommandLine(GetCommandLineW(), NULL, false);	
+		ExtractCommandLine(GetCommandLineW(), NULL, false);
 
 	CComBSTR bstr(m_executableDirectory.c_str());
 	*directory = bstr.Detach();
@@ -459,7 +459,7 @@ STDMETHODIMP CSystemEx::get_ExecutableName(BSTR* name)
 	ClearBSTR(*name);
 
 	if (m_executableName.empty())
-		ExtractCommandLine(GetCommandLineW(), NULL, false);	
+		ExtractCommandLine(GetCommandLineW(), NULL, false);
 
 	CComBSTR bstr(m_executableName.c_str());
 	*name = bstr.Detach();
@@ -489,14 +489,14 @@ STDMETHODIMP CSystemEx::get_Monitors(VARIANT* monitors)
 	SAFEARRAYBOUND aDim[1];
 
 	aDim[0].lLbound = 0;
-	aDim[0].cElements = m_monitors.size();	
+	aDim[0].cElements = m_monitors.size();
 
 	pSA = SafeArrayCreate(VT_VARIANT, 1, aDim);
 
 	if (pSA != NULL) {
 
-		for (long l = aDim[0].lLbound; l < (signed)(aDim[0].cElements + aDim[0].lLbound); l++) {	
-			
+		for (long l = aDim[0].lLbound; l < (signed)(aDim[0].cElements + aDim[0].lLbound); l++) {
+
 			VARIANT vOut;
 			VariantInit(&vOut);
 			vOut.vt = VT_DISPATCH;
@@ -506,9 +506,9 @@ STDMETHODIMP CSystemEx::get_Monitors(VARIANT* monitors)
 			CComObject<CMonitorInfo>::CreateInstance(&pMonitorInfo);
 			pMonitorInfo->Init(m_monitors[l]);
 			pMonitorInfo->QueryInterface(IID_IMonitorInfo, (void**)&vOut.pdispVal);
-			
+
 			HRESULT hr = SafeArrayPutElement(pSA, &l, &vOut);
-			
+
 			if (FAILED(hr)) {
 				VariantClear(&vOut);
 				SafeArrayDestroy(pSA); // does a deep destroy of source VARIANT
@@ -516,7 +516,7 @@ STDMETHODIMP CSystemEx::get_Monitors(VARIANT* monitors)
 				ReleaseMutex(m_hConfigMutex);
 				return hr;
 			}
-			
+
 			VariantClear(&vOut);
 		}
 	}
@@ -532,8 +532,8 @@ STDMETHODIMP CSystemEx::get_Monitors(VARIANT* monitors)
 
 STDMETHODIMP CSystemEx::GetMonitor(int index, IMonitorInfo** info)
 {
-	if (index < 0 || index > (signed)m_monitors.size() - 1)		
-		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Error getting monitor info!"), "Monitor index is invalid.", 0, NULL);	
+	if (index < 0 || index > (signed)m_monitors.size() - 1)
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Error getting monitor info!"), "Monitor index is invalid.", 0, NULL);
 
 	ACQUIRE_MUTEX(m_hConfigMutex)
 
@@ -734,7 +734,7 @@ HRESULT CSystemEx::Vista_get_Mute(VARIANT_BOOL *isMuted)
 
 	(mutingState == TRUE) ? *isMuted = VARIANT_TRUE : *isMuted = VARIANT_FALSE;
 
-Exit:	
+Exit:
 	SAFE_RELEASE(pEnumerator)
 	SAFE_RELEASE(pDevice)
 	SAFE_RELEASE(pClient)
@@ -772,7 +772,7 @@ HRESULT CSystemEx::Vista_get_PeakValue(int *value)
 	int scaledValue = (int) ceil(peak*100);
 	*value = scaledValue;
 
-Exit:	
+Exit:
 	SAFE_RELEASE(pEnumerator)
 	SAFE_RELEASE(pDevice)
 	SAFE_RELEASE(pClient)
@@ -792,7 +792,7 @@ HRESULT CSystemEx::XP_put_Volume(int volume)
 		NO_SOURCE,
 		MIXERCONTROL_CONTROLTYPE_VOLUME);
 
-	if (!mixer.IsOk()) 
+	if (!mixer.IsOk())
 		return S_FALSE;
 
 	// Volume should be between 0 and 0xFFFF
@@ -809,7 +809,7 @@ HRESULT CSystemEx::XP_get_Volume(int *volume)
 		NO_SOURCE,
 		MIXERCONTROL_CONTROLTYPE_VOLUME);
 
-	if (!mixer.IsOk()) 
+	if (!mixer.IsOk())
 		return S_FALSE;
 
 	DWORD* results;
@@ -834,7 +834,7 @@ HRESULT CSystemEx::XP_put_Mute(VARIANT_BOOL isMuted)
 		NO_SOURCE,
 		MIXERCONTROL_CONTROLTYPE_MUTE);
 
-	if (!mixer.IsOk()) 
+	if (!mixer.IsOk())
 		return S_FALSE;
 
 	if (isMuted == VARIANT_TRUE)
@@ -851,7 +851,7 @@ HRESULT CSystemEx::XP_get_Mute(VARIANT_BOOL *isMuted)
 		NO_SOURCE,
 		MIXERCONTROL_CONTROLTYPE_MUTE);
 
-	if (!mixer.IsOk()) 
+	if (!mixer.IsOk())
 		return S_FALSE;
 
 	LONG results;

@@ -2,13 +2,35 @@
 //
 // Canvas Plugin for DesktopX
 //
-// Copyright (c) 2008-2009, Three Oaks Crossing
+// Copyright (c) 2008-2010, Julien Templier
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // * $LastChangedRevision$
 // * $LastChangedDate$
 // * $LastChangedBy$
+///////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Redistribution and use in source and binary forms, with or without modification, are
+// permitted provided that the following conditions are met:
+//  1. Redistributions of source code must retain the above copyright notice, this list of
+//     conditions and the following disclaimer.
+//  2. Redistributions in binary form must reproduce the above copyright notice, this list
+//     of conditions and the following disclaimer in the documentation and/or other materials
+//     provided with the distribution.
+//  3. The name of the author may not be used to endorse or promote products derived from this
+//     software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+//  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+//  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+//  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+//  GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+//  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+//  OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+//  POSSIBILITY OF SUCH DAMAGE.
+//
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
@@ -34,7 +56,7 @@ void CCanvas::initCairo()
 	}
 
 	logFile->Write("Creating new surface (%dx%d)", config->width, config->height);
-	surface = cairo_win32_surface_create_with_dib(CAIRO_FORMAT_ARGB32, config->width, config->height);	
+	surface = cairo_win32_surface_create_with_dib(CAIRO_FORMAT_ARGB32, config->width, config->height);
 	if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS) {
 		logFile->Write("[ERROR] Error creating cairo surface: %d", cairo_status_to_string(cairo_surface_status(surface)));
 		return;
@@ -71,18 +93,18 @@ void CCanvas::initCairo()
 	}
 #endif
 
-    state->clear();		
+    state->clear();
 }
 
 void CCanvas::destroyCairo()
-{	
+{
 	logFile->Write("Destroying surface and context");
 	logFile->Write("----------------------------------------------------");
 	if (context)
 		cairo_destroy(context);
 
 	if (surface)
-		cairo_surface_destroy(surface);	
+		cairo_surface_destroy(surface);
 
 #ifdef USE_DRAWING_MUTEX
 	if (hDrawMutex != NULL) {
@@ -101,7 +123,7 @@ void CCanvas::draw(HDC hdc, HBITMAP hBitmap)
 
 	ACQUIRE_DRAWING_MUTEX(hDrawMutex)
 
-	HDC cairoDC = cairo_win32_surface_get_dc(surface);	
+	HDC cairoDC = cairo_win32_surface_get_dc(surface);
 
 	BitBlt(hdc, 0, 0, config->width, config->height, cairoDC, 0, 0, SRCCOPY);
 
@@ -112,7 +134,7 @@ void CCanvas::draw(HDC hdc, HBITMAP hBitmap)
 void CCanvas::queueDraw()
 {
 	// nothing to draw...
-	if (surface == NULL) 
+	if (surface == NULL)
 		return;
 
 	if (hThread == NULL)
@@ -139,7 +161,7 @@ unsigned CCanvas::threadQueueDraw()
 		ACQUIRE_DRAWING_MUTEX(hDrawMutex)
 		if (!isDrawingSuspended && shouldDraw) {
 			shouldDraw = FALSE;
-			SDHostMessage(SD_REDRAW, objID , NULL);	
+			SDHostMessage(SD_REDRAW, objID , NULL);
 		}
 		RELEASE_DRAWING_MUTEX(hDrawMutex)
 	}
@@ -203,7 +225,7 @@ int CCanvas::getHeight()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 STDMETHODIMP CCanvas::InterfaceSupportsErrorInfo(REFIID riid)
 {
-	static const IID* arr[] = 
+	static const IID* arr[] =
 	{
 		&IID_ICanvas
 	};
@@ -302,7 +324,7 @@ STDMETHODIMP CCanvas::resumeDrawing()
 
 	isDrawingSuspended = FALSE;
 
-	SDHostMessage(SD_REDRAW, objID , NULL);	
+	SDHostMessage(SD_REDRAW, objID , NULL);
 
 	RELEASE_DRAWING_MUTEX(hDrawMutex)
 
@@ -332,7 +354,7 @@ STDMETHODIMP CCanvas::getContext(BSTR type, ICanvasRenderingContext2D **ctx)
 	pContext2d->setCanvas(this);
 
 	pContext2d->QueryInterface(IID_ICanvasRenderingContext2D, (void**)ctx);
-	
+
 	return S_OK;
 }
 
