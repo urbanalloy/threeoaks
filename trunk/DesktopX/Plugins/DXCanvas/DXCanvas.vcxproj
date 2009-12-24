@@ -1,0 +1,266 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BC90005D-AAA2-4961-8BFC-9FCEA128B931}</ProjectGuid>
+    <RootNamespace>DXCanvas</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfAtl>Static</UseOfAtl>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfAtl>Static</UseOfAtl>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.21006.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)Builds\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)Builds\$(Configuration)\Intermediate\</IntDir>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</IgnoreImportLibrary>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)Builds\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)Builds\$(Configuration)\Intermediate\</IntDir>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</IgnoreImportLibrary>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <PreBuildEvent>
+      <Command>SubWCRev.exe $(ProjectDir) "$(ProjectDir)/Sources/Config.tpl" "$(ProjectDir)/Sources/Config.h"</Command>
+    </PreBuildEvent>
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <TypeLibraryName>$(IntDir)DXCanvas.tlb</TypeLibraryName>
+      <HeaderFileName>.\Sources\DXCanvas.h</HeaderFileName>
+      <DllDataFileName>.\Sources\dlldata.c</DllDataFileName>
+      <InterfaceIdentifierFileName>.\Sources\DXCanvas_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>.\Sources\DXCanvas_p.c</ProxyFileName>
+      <ValidateAllParameters>false</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../SDK;./Libs/cairo/src;./Libs/pango;./Libs/glib/gmodule;./Libs/glib/glib;./Libs/glib;./Libs/include/glib;./Libs/include/cairo;./Libs/include/pango;./Libs/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_USRDLL;_MERGE_PROXYSTUB;ENABLE_PANGO;CAIRO_WIN32_STATIC_BUILD;LIBCAIRO_EXPORTS;HAVE_CAIRO_WIN32;PANGO_ENABLE_BACKEND;PANGO_ENABLE_ENGINE;PANGO_MODULE_PREFIX;DEFINE_PACKAGE_PANGO;DXCANVAS;PANGO_WIN32_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <BrowseInformation>
+      </BrowseInformation>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <CallingConvention>StdCall</CallingConvention>
+      <CompileAs>Default</CompileAs>
+      <DisableSpecificWarnings>4748;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <RegisterOutput>false</RegisterOutput>
+      <AdditionalOptions>/LTCG %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>MsImg32.lib;libcairo.lib;pixman.lib;libpng.lib;zlib.lib;gdiplus.lib;pango.lib;pangocairo.lib;pangowin32.lib;gmodule.lib;glib.lib;gobject.lib;libintl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>./Libs/Builds/Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateManifest>false</GenerateManifest>
+      <IgnoreSpecificDefaultLibraries>Libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile>.\Sources\DXCanvas.def</ModuleDefinitionFile>
+      <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SupportUnloadOfDelayLoadedDLL>true</SupportUnloadOfDelayLoadedDLL>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <PreBuildEvent>
+      <Command>SubWCRev.exe $(ProjectDir) "$(ProjectDir)/Sources/Config.tpl" "$(ProjectDir)/Sources/Config.h"</Command>
+    </PreBuildEvent>
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <TypeLibraryName>$(IntDir)DXCanvas.tlb</TypeLibraryName>
+      <HeaderFileName>.\Sources\DXCanvas.h</HeaderFileName>
+      <DllDataFileName>.\Sources\dlldata.c</DllDataFileName>
+      <InterfaceIdentifierFileName>.\Sources\DXCanvas_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>.\Sources\DXCanvas_p.c</ProxyFileName>
+      <ValidateAllParameters>false</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>../SDK;./Libs/cairo/src;./Libs/pango;./Libs/glib/gmodule;./Libs/glib/glib;./Libs/glib;./Libs/include/glib;./Libs/include/cairo;./Libs/include/pango;./Libs/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_USRDLL;_MERGE_PROXYSTUB;ENABLE_PANGO;CAIRO_WIN32_STATIC_BUILD;LIBCAIRO_EXPORTS;HAVE_CAIRO_WIN32;PANGO_ENABLE_BACKEND;PANGO_ENABLE_ENGINE;PANGO_MODULE_PREFIX;DEFINE_PACKAGE_PANGO;DXCANVAS;PANGO_WIN32_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CallingConvention>StdCall</CallingConvention>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <RegisterOutput>false</RegisterOutput>
+      <AdditionalDependencies>MsImg32.lib;libcairo.lib;pixman.lib;libpng.lib;zlib.lib;pango.lib;pangocairo.lib;pangowin32.lib;gmodule.lib;glib.lib;gobject.lib;libintl.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>./Libs/Builds/Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile>.\Sources\DXCanvas.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\SDK\COMError.cpp" />
+    <ClCompile Include="Sources\dlldatax.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Sources\DXCanvas.cpp" />
+    <ClCompile Include="Sources\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Sources\Canvas.cpp" />
+    <ClCompile Include="Sources\CanvasGradient.cpp" />
+    <ClCompile Include="Sources\CanvasImage.cpp" />
+    <ClCompile Include="Sources\CanvasImageData.cpp" />
+    <ClCompile Include="Sources\CanvasPattern.cpp" />
+    <ClCompile Include="Sources\CanvasPixelArray.cpp" />
+    <ClCompile Include="Sources\CanvasRenderingContext2D.cpp" />
+    <ClCompile Include="Sources\CanvasTextMetrics.cpp" />
+    <ClCompile Include="Sources\CanvasPath.cpp" />
+    <ClCompile Include="Sources\CanvasShadow.cpp" />
+    <ClCompile Include="Sources\CanvasState.cpp" />
+    <ClCompile Include="Sources\CSSColorParser.cpp" />
+    <ClCompile Include="Sources\DXCanvas_i.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\SDK\COMError.h" />
+    <ClInclude Include="..\SDK\HelperMacros.h" />
+    <ClInclude Include="..\SDK\LogFile.h" />
+    <ClInclude Include="Sources\dlldatax.h" />
+    <ClInclude Include="Sources\stdafx.h" />
+    <ClInclude Include="Sources\Canvas.h" />
+    <ClInclude Include="Sources\CanvasGradient.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="Sources\CanvasImage.h" />
+    <ClInclude Include="Sources\CanvasImageData.h" />
+    <ClInclude Include="Sources\CanvasPattern.h" />
+    <ClInclude Include="Sources\CanvasPixelArray.h" />
+    <ClInclude Include="Sources\CanvasRenderingContext2D.h" />
+    <ClInclude Include="Sources\CanvasTextMetrics.h" />
+    <ClInclude Include="Sources\CanvasParameter.h" />
+    <ClInclude Include="Sources\CanvasPath.h" />
+    <ClInclude Include="Sources\CanvasShadow.h" />
+    <ClInclude Include="Sources\CanvasState.h" />
+    <ClInclude Include="Sources\CSSColorParser.h" />
+    <ClInclude Include="Sources\resource.h" />
+    <ClInclude Include="Sources\Config.h" />
+    <ClInclude Include="Sources\DXCanvas.h" />
+    <ClInclude Include="..\SDK\SDPlugin.h" />
+    <ClInclude Include="..\SDK\SDScriptedPlugin.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sources\Canvas.rgs" />
+    <None Include="Docs\Config.bmp" />
+    <None Include="Sources\Config.tpl" />
+    <None Include="Sources\DXCanvas.def" />
+    <None Include="Docs\Readme.txt" />
+    <None Include="Docs\Todo.txt" />
+    <None Include="Test\Tests\Bowties.js" />
+    <None Include="Test\Tests\Boxes.vbs" />
+    <None Include="Test\Tests\Curves.vbs" />
+    <None Include="Test\Tests\Gradients.vbs" />
+    <None Include="Test\Tests\Images.js" />
+    <None Include="Test\Tests\Patterns.js" />
+    <None Include="Test\Tests\Reflection.vbs" />
+    <None Include="Test\Tests\Resize.vbs" />
+    <None Include="Test\Tests\Rotate.vbs" />
+    <None Include="Test\Tests\Shadows.js" />
+    <None Include="Test\Tests\Smiley.vbs" />
+    <None Include="Test\Tests\Spheres.vbs" />
+    <None Include="Test\Tests\Text.js" />
+    <None Include="Test\Tests\TextAlignment.js" />
+    <None Include="Test\Tests\TextBaseline.js" />
+    <None Include="Test\Tests\TextPath.js" />
+    <None Include="Test\Tests\TextTwisted.js" />
+    <None Include="Test\Tests\TextWave.js" />
+    <None Include="Test\Tests\Translate.vbs" />
+    <None Include="Test\Charts\Charts.js" />
+    <None Include="Test\Apps\Blobsallad.js" />
+    <None Include="Test\Apps\Calendar.vbs" />
+    <None Include="Test\Apps\Clock.vbs" />
+    <None Include="Test\Apps\Cubes.js" />
+    <None Include="Test\Apps\EdgeDetection.js" />
+    <None Include="Test\Apps\Particles.js" />
+    <None Include="Test\Apps\Polygon.js" />
+    <None Include="Test\Apps\SearchLight.js" />
+    <None Include="Test\Apps\SolarSystem.js" />
+    <None Include="Test\Apps\Stars.vbs" />
+    <None Include="Test\TestSuite\source\gentest.py" />
+    <None Include="Test\TestSuite\include.js" />
+    <None Include="Test\TestSuite\source\templates.yaml" />
+    <None Include="Test\TestSuite\source\tests.yaml" />
+    <None Include="Test\TestSuite\source\tests2d.yaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="Sources\DXCanvas.idl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Sources\DXCanvas.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

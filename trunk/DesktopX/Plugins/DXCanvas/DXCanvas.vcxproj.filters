@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Docs">
+      <UniqueIdentifier>{177fab1d-7d5f-4da6-8b08-eba4dabe0b4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{c8cb647d-b0f7-4357-b45e-e19acef9a766}</UniqueIdentifier>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\COM">
+      <UniqueIdentifier>{0d12ca4c-96a2-4aa6-a3c4-ff5a960776e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{5c397087-cb4e-46cb-8760-ba3c50f97b8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="SDK">
+      <UniqueIdentifier>{f0ae1d88-ad1f-4af2-9da8-bbc6e235949f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\COM">
+      <UniqueIdentifier>{43ab7780-4847-475b-bbd2-32c3e0f7d10d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utils">
+      <UniqueIdentifier>{98916f3a-ef63-4aa5-afa4-07a3de03e28f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{5508440e-f1e0-4978-b9ea-ba94c27b0f8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Apps">
+      <UniqueIdentifier>{36066195-01e9-4923-b5ed-ef9ec96ad05c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Charts">
+      <UniqueIdentifier>{a0d9127c-d189-47f0-8077-f7643c189f63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Tests">
+      <UniqueIdentifier>{658b1301-2457-47aa-8060-d56430ea1007}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\TestSuite">
+      <UniqueIdentifier>{9aeeeb9c-236a-4889-95a1-cb6ebbbe544d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\SDK\COMError.cpp">
+      <Filter>SDK</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Canvas.cpp">
+      <Filter>Source Files\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CanvasGradient.cpp">
+      <Filter>Source Files\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CanvasImage.cpp">
+      <Filter>Source Files\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CanvasImageData.cpp">
+      <Filter>Source Files\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CanvasPath.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CanvasPattern.cpp">
+      <Filter>Source Files\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CanvasPixelArray.cpp">
+      <Filter>Source Files\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CanvasRenderingContext2D.cpp">
+      <Filter>Source Files\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CanvasShadow.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CanvasState.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CanvasTextMetrics.cpp">
+      <Filter>Source Files\COM</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CSSColorParser.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\dlldatax.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\DXCanvas.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\DXCanvas_i.c">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\SDK\COMError.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\HelperMacros.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\LogFile.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\SDPlugin.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDK\SDScriptedPlugin.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Canvas.h">
+      <Filter>Header Files\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CanvasGradient.h">
+      <Filter>Header Files\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CanvasImage.h">
+      <Filter>Header Files\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CanvasImageData.h">
+      <Filter>Header Files\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CanvasParameter.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CanvasPath.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CanvasPattern.h">
+      <Filter>Header Files\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CanvasPixelArray.h">
+      <Filter>Header Files\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CanvasRenderingContext2D.h">
+      <Filter>Header Files\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CanvasShadow.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CanvasState.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CanvasTextMetrics.h">
+      <Filter>Header Files\COM</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Config.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CSSColorParser.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\dlldatax.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\DXCanvas.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Docs\Config.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Docs\Readme.txt">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="Docs\Todo.txt">
+      <Filter>Docs</Filter>
+    </None>
+    <None Include="Sources\Canvas.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Sources\Config.tpl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Sources\DXCanvas.def">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Test\Apps\Blobsallad.js">
+      <Filter>Test\Apps</Filter>
+    </None>
+    <None Include="Test\Apps\Calendar.vbs">
+      <Filter>Test\Apps</Filter>
+    </None>
+    <None Include="Test\Apps\Clock.vbs">
+      <Filter>Test\Apps</Filter>
+    </None>
+    <None Include="Test\Apps\Cubes.js">
+      <Filter>Test\Apps</Filter>
+    </None>
+    <None Include="Test\Apps\EdgeDetection.js">
+      <Filter>Test\Apps</Filter>
+    </None>
+    <None Include="Test\Apps\Particles.js">
+      <Filter>Test\Apps</Filter>
+    </None>
+    <None Include="Test\Apps\Polygon.js">
+      <Filter>Test\Apps</Filter>
+    </None>
+    <None Include="Test\Apps\SearchLight.js">
+      <Filter>Test\Apps</Filter>
+    </None>
+    <None Include="Test\Apps\SolarSystem.js">
+      <Filter>Test\Apps</Filter>
+    </None>
+    <None Include="Test\Apps\Stars.vbs">
+      <Filter>Test\Apps</Filter>
+    </None>
+    <None Include="Test\Charts\Charts.js">
+      <Filter>Test\Charts</Filter>
+    </None>
+    <None Include="Test\TestSuite\include.js">
+      <Filter>Test\TestSuite</Filter>
+    </None>
+    <None Include="Test\TestSuite\source\gentest.py">
+      <Filter>Test\TestSuite</Filter>
+    </None>
+    <None Include="Test\TestSuite\source\templates.yaml">
+      <Filter>Test\TestSuite</Filter>
+    </None>
+    <None Include="Test\TestSuite\source\tests.yaml">
+      <Filter>Test\TestSuite</Filter>
+    </None>
+    <None Include="Test\TestSuite\source\tests2d.yaml">
+      <Filter>Test\TestSuite</Filter>
+    </None>
+    <None Include="Test\Tests\Bowties.js">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\Boxes.vbs">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\Curves.vbs">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\Gradients.vbs">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\Images.js">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\Patterns.js">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\Reflection.vbs">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\Resize.vbs">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\Rotate.vbs">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\Shadows.js">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\Smiley.vbs">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\Spheres.vbs">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\Text.js">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\TextAlignment.js">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\TextBaseline.js">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\TextPath.js">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\TextTwisted.js">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\TextWave.js">
+      <Filter>Test\Tests</Filter>
+    </None>
+    <None Include="Test\Tests\Translate.vbs">
+      <Filter>Test\Tests</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="Sources\DXCanvas.idl">
+      <Filter>Resource Files</Filter>
+    </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Sources\DXCanvas.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
