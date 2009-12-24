@@ -219,10 +219,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\COMError.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\dlldatax.c"
 				>
 			</File>
@@ -240,10 +236,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\COMError.h"
-				>
-			</File>
 			<File
 				RelativePath=".\dlldatax.h"
 				>
@@ -321,6 +313,18 @@
 		<Filter
 			Name="SDK"
 			>
+			<File
+				RelativePath="..\..\SDK\COMError.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\SDK\COMError.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\SDK\HelperMacros.h"
+				>
+			</File>
 			<File
 				RelativePath="..\..\SDK\SDPlugin.h"
 				>
