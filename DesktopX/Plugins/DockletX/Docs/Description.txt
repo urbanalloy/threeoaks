@@ -1,0 +1,5 @@
+DockletX is a DesktopX plugin that allows you to use ObjectDock docklets on your desktop.
+
+To interact with the docklet, use CTRL+Click.
+
+To open the default context menu, use CTRL+SHIFT+Right Click.

@@ -1,0 +1,154 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_DISPLAY             BITMAP                  "Display.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_CONFIG DIALOGEX 0, 0, 276, 172
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Choose the ObjectDock Docklet to load..."
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",ID_OK,168,154,50,14
+    PUSHBUTTON      "Cancel",ID_CANCEL,221,154,50,14
+    LTEXT           "Choose a Docklet in the list and press OK",IDC_TXT_CHOOSE,10,5,132,8
+    LTEXT           "DockletX v00.00 Build 0000",IDC_TXT_VERSION,3,162,138,8,WS_DISABLED
+    GROUPBOX        "",IDC_ICON_BOX,125,14,142,136,BS_BITMAP
+    CONTROL         "",IDC_ICON_PIC,"Static",SS_BITMAP | SS_CENTERIMAGE,132,20,128,128
+    LISTBOX         IDC_DOCKLET_LIST,9,18,110,132,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_DISPLAY DIALOGEX 0, 0, 199, 196
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure Display Properties"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",ID_OK,88,176,50,14
+    PUSHBUTTON      "Cancel",ID_CANCEL,142,176,50,14
+    CONTROL         104,IDC_DISPLAY_PICTURE,"Static",SS_BITMAP | SS_REALSIZEIMAGE,0,0,200,37
+    LTEXT           "Size",IDC_DOCKLET_SIZE_TEXT,13,66,14,8
+    CONTROL         "",IDC_DOCKLET_SIZE,"msctls_trackbar32",TBS_AUTOTICKS | TBS_TOP | TBS_TOOLTIPS | WS_TABSTOP,39,57,152,26
+    GROUPBOX        "Display",IDC_DISPLAY_BOX,4,44,189,121
+    CONTROL         "",IDC_DOCKLET_ICON,"Static",SS_BLACKFRAME,13,86,70,70
+    PUSHBUTTON      "Reset Image",IDC_RESET_IMAGE,95,102,58,14
+    PUSHBUTTON      "Change Image",IDC_CHANGE_IMAGE,95,129,58,14
+    CONTROL         "",IDC_DOCKLET_IMAGE,"Static",SS_BITMAP,17,91,62,62
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "Docklet support plugin for DesktopX"
+            VALUE "CompanyName", "Julien Templier"
+            VALUE "FileDescription", "DockletX"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "DockletX"
+            VALUE "LegalCopyright", "Copyright (C) 2009 Julien Templier"
+            VALUE "OriginalFilename", "DockletX.rc"
+            VALUE "ProductName", "DockletX"
+            VALUE "ProductVersion", "1, 0, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// PNG
+//
+
+IDB_BACKGROUND          PNG                     "ObjectDock.png"
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
