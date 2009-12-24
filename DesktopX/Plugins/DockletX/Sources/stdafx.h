@@ -41,12 +41,8 @@
 
 using namespace ATL;
 
-//////////////////////////////////////////////////////////////////////////
-// Macros
-#define SAFE_DELETE(_p)			{ if(_p) { delete _p;		_p=NULL; } }
-#define SAFE_DELETE_ARRAY(_p)	{ if(_p) { delete [] _p;	_p=NULL; } }
-#define SAFE_RELEASE(_p)		{ if(_p) { _p->Release();	_p=NULL; } }
-
 #include <Gdiplus.h>
 using namespace Gdiplus;
 #pragma comment(lib, "gdiplus.lib")
+
+#include <HelperMacros.h>

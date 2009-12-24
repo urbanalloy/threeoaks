@@ -99,7 +99,8 @@
 			OutputDirectory="$(SolutionDir)/Builds/$(ConfigurationName)"
 			IntermediateDirectory="$(SolutionDir)/Builds/$(ConfigurationName)/Intermediate"
 			ConfigurationType="2"
-			CharacterSet="2"
+			UseOfATL="1"
+			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -275,6 +276,10 @@
 		<Filter
 			Name="SDK"
 			>
+			<File
+				RelativePath="..\SDK\HelperMacros.h"
+				>
+			</File>
 			<File
 				RelativePath="..\SDK\SDPlugin.h"
 				>
