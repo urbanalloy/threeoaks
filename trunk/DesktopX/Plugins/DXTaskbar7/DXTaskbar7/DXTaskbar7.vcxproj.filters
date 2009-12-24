@@ -28,8 +28,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="COMError.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\SDK\COMError.cpp">
+      <Filter>SDK</Filter>
     </ClCompile>
     <ClCompile Include="dlldatax.c">
       <Filter>Source Files</Filter>
@@ -48,14 +48,17 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\SDK\COMError.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SDK\HelperMacros.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\SDK\SDPlugin.h">
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="..\..\SDK\SDScriptedPlugin.h">
       <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="COMError.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Config.h">
       <Filter>Generated Files</Filter>
