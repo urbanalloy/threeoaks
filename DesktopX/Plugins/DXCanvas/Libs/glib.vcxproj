@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{12BCA020-EABF-429E-876A-A476BC9C10C0}</ProjectGuid>
+    <RootNamespace>glib</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.21006.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)Builds\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)Builds\$(Configuration)\Intermediate\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)/include/glib;$(SolutionDir)/glib/build/win32/dirent;$(SolutionDir)/glib/glib;$(SolutionDir)/glib;$(SolutionDir)/libintl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CallingConvention>StdCall</CallingConvention>
+      <DisableSpecificWarnings>4018;4100;4152;4389;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ForcedIncludeFiles>msvc_recommended_pragmas.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;GLIB_COMPILATION;DLL_EXPORT;HAVE_CONFIG_H;G_LOG_DOMAIN="Glib";G_ENABLE_DEBUG;G_DISABLE_DEPRECATED;PCRE_STATIC;LINK_SIZE=2;MAX_NAME_SIZE=32;MAX_NAME_COUNT=10000;NEWLINE=-1;POSIX_MALLOC_THRESHOLD=10;MATCH_LIMIT=10000000;MATCH_LIMIT_RECURSION=10000000;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Lib>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>Libcmtd.lib;libcmt.lib;msvcrt.lib;msvcrtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="glib\glib\garray.c" />
+    <ClCompile Include="glib\glib\gasyncqueue.c" />
+    <ClCompile Include="glib\glib\gatomic.c" />
+    <ClCompile Include="glib\glib\gbacktrace.c" />
+    <ClCompile Include="glib\glib\gbase64.c" />
+    <ClCompile Include="glib\glib\gbookmarkfile.c" />
+    <ClCompile Include="glib\glib\gcache.c" />
+    <ClCompile Include="glib\glib\gchecksum.c" />
+    <ClCompile Include="glib\glib\gcompletion.c" />
+    <ClCompile Include="glib\glib\gconvert.c" />
+    <ClCompile Include="glib\glib\gdataset.c" />
+    <ClCompile Include="glib\glib\gdate.c" />
+    <ClCompile Include="glib\glib\gdir.c" />
+    <ClCompile Include="glib\glib\gerror.c" />
+    <ClCompile Include="glib\glib\gfileutils.c" />
+    <ClCompile Include="glib\glib\ghash.c" />
+    <ClCompile Include="glib\glib\ghook.c" />
+    <ClCompile Include="glib\glib\giochannel.c" />
+    <ClCompile Include="glib\glib\giowin32.c" />
+    <ClCompile Include="glib\glib\gkeyfile.c" />
+    <ClCompile Include="glib\glib\glist.c" />
+    <ClCompile Include="glib\glib\gmain.c" />
+    <ClCompile Include="glib\glib\gmappedfile.c" />
+    <ClCompile Include="glib\glib\gmarkup.c" />
+    <ClCompile Include="glib\glib\gmem.c" />
+    <ClCompile Include="glib\glib\gmessages.c" />
+    <ClCompile Include="glib\glib\gnode.c" />
+    <ClCompile Include="glib\glib\goption.c" />
+    <ClCompile Include="glib\glib\gpattern.c" />
+    <ClCompile Include="glib\glib\gpoll.c" />
+    <ClCompile Include="glib\glib\gprimes.c" />
+    <ClCompile Include="glib\glib\gprintf.c" />
+    <ClCompile Include="glib\glib\gqsort.c" />
+    <ClCompile Include="glib\glib\gqueue.c" />
+    <ClCompile Include="glib\glib\grand.c" />
+    <ClCompile Include="glib\glib\gregex.c" />
+    <ClCompile Include="glib\glib\grel.c" />
+    <ClCompile Include="glib\glib\gscanner.c" />
+    <ClCompile Include="glib\glib\gsequence.c" />
+    <ClCompile Include="glib\glib\gshell.c" />
+    <ClCompile Include="glib\glib\gslice.c" />
+    <ClCompile Include="glib\glib\gslist.c" />
+    <ClCompile Include="glib\glib\gspawn-win32.c" />
+    <ClCompile Include="glib\glib\gstdio.c" />
+    <ClCompile Include="glib\glib\gstrfuncs.c" />
+    <ClCompile Include="glib\glib\gstring.c" />
+    <ClCompile Include="glib\glib\gtestutils.c" />
+    <ClCompile Include="glib\glib\gthread.c" />
+    <ClCompile Include="glib\glib\gthreadpool.c" />
+    <ClCompile Include="glib\glib\gtimer.c" />
+    <ClCompile Include="glib\glib\gtree.c" />
+    <ClCompile Include="glib\glib\gunibreak.c" />
+    <ClCompile Include="glib\glib\gunicollate.c" />
+    <ClCompile Include="glib\glib\gunidecomp.c" />
+    <ClCompile Include="glib\glib\guniprop.c" />
+    <ClCompile Include="glib\glib\gurifuncs.c" />
+    <ClCompile Include="glib\glib\gutf8.c" />
+    <ClCompile Include="glib\glib\gutils.c" />
+    <ClCompile Include="glib\glib\gwin32.c" />
+    <ClCompile Include="glib\glib\gnulib\asnprintf.c" />
+    <ClCompile Include="glib\glib\gnulib\printf-args.c" />
+    <ClCompile Include="glib\glib\gnulib\printf-parse.c" />
+    <ClCompile Include="glib\glib\gnulib\printf.c" />
+    <ClCompile Include="glib\glib\gnulib\vasnprintf.c" />
+    <ClCompile Include="glib\glib\libcharset\localcharset.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_chartables.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_compile.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_config.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_dfa_exec.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_exec.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_fullinfo.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_get.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_globals.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_info.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_maketables.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_newline.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_ord2utf8.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_refcount.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_study.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_tables.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_try_flipped.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_ucp_searchfuncs.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_valid_utf8.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_version.c" />
+    <ClCompile Include="glib\glib\pcre\pcre_xclass.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="glib\glib\gpoll.h" />
+    <ClInclude Include="include\glib\config.h" />
+    <ClInclude Include="include\glib\glibconfig.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="glib\glib\glib.symbols">
+      <FileType>Document</FileType>
+    </CustomBuild>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

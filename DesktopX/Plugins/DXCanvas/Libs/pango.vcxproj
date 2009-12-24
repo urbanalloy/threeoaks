@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{538FB453-51A2-4A26-AA99-FC6832C4321B}</ProjectGuid>
+    <RootNamespace>pango</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.21006.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)Builds\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)Builds\$(Configuration)\Intermediate\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <OmitFramePointers>true</OmitFramePointers>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)/include/glib;$(SolutionDir)/include/pango;$(SolutionDir)/include;$(SolutionDir)/pango;$(SolutionDir)/pango/pango;$(SolutionDir)/glib/glib;$(SolutionDir)/glib/;$(SolutionDir)/cairo/src;$(SolutionDir)/glib/gmodule;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;HAVE_CAIRO_WIN32;PANGO_ENABLE_BACKEND;PANGO_ENABLE_ENGINE;PANGO_MODULE_PREFIX;DEFINE_PACKAGE_PANGO;DXCANVAS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CallingConvention>StdCall</CallingConvention>
+      <DisableSpecificWarnings>4018;4100;4146;4152;4244;4389;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>Libcmtd.lib;libcmt.lib;msvcrt.lib;msvcrtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="pango\pango\break.c" />
+    <ClCompile Include="pango\pango\ellipsize.c" />
+    <ClCompile Include="pango\pango\fonts.c" />
+    <ClCompile Include="pango\pango\glyphstring.c" />
+    <ClCompile Include="pango\pango\module-defs-lang.c" />
+    <ClCompile Include="pango\pango\modules.c" />
+    <ClCompile Include="pango\pango\pango-attributes.c" />
+    <ClCompile Include="pango\pango\pango-bidi-type.c" />
+    <ClCompile Include="pango\pango\pango-color.c" />
+    <ClCompile Include="pango\pango\pango-context.c" />
+    <ClCompile Include="pango\pango\pango-coverage.c" />
+    <ClCompile Include="pango\pango\pango-engine.c" />
+    <ClCompile Include="pango\pango\pango-enum-types.c" />
+    <ClCompile Include="pango\pango\pango-fontmap.c" />
+    <ClCompile Include="pango\pango\pango-fontset.c" />
+    <ClCompile Include="pango\pango\pango-glyph-item.c" />
+    <ClCompile Include="pango\pango\pango-gravity.c" />
+    <ClCompile Include="pango\pango\pango-item.c" />
+    <ClCompile Include="pango\pango\pango-language.c" />
+    <ClCompile Include="pango\pango\pango-layout.c" />
+    <ClCompile Include="pango\pango\pango-markup.c" />
+    <ClCompile Include="pango\pango\pango-matrix.c" />
+    <ClCompile Include="pango\pango\pango-renderer.c" />
+    <ClCompile Include="pango\pango\pango-script.c" />
+    <ClCompile Include="pango\pango\pango-tabs.c" />
+    <ClCompile Include="pango\pango\pango-utils.c" />
+    <ClCompile Include="pango\pango\reorder-items.c" />
+    <ClCompile Include="pango\pango\shape.c" />
+    <ClCompile Include="pango\pango\mini-fribidi\fribidi.c" />
+    <ClCompile Include="pango\pango\mini-fribidi\fribidi_char_type.c" />
+    <ClCompile Include="pango\pango\mini-fribidi\fribidi_types.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pango\pango\modules.h" />
+    <ClInclude Include="pango\pango\pango-break.h" />
+    <ClInclude Include="pango\pango\pango-context.h" />
+    <ClInclude Include="pango\pango\pango-coverage.h" />
+    <ClInclude Include="pango\pango\pango-engine-private.h" />
+    <ClInclude Include="pango\pango\pango-engine.h" />
+    <ClInclude Include="pango\pango\pango-enum-types.h" />
+    <ClInclude Include="pango\pango\pango-font.h" />
+    <ClInclude Include="pango\pango\pango-fontmap.h" />
+    <ClInclude Include="pango\pango\pango-fontset.h" />
+    <ClInclude Include="pango\pango\pango-glyph-item.h" />
+    <ClInclude Include="pango\pango\pango-glyph.h" />
+    <ClInclude Include="pango\pango\pango-gravity.h" />
+    <ClInclude Include="pango\pango\pango-impl-utils.h" />
+    <ClInclude Include="pango\pango\pango-item.h" />
+    <ClInclude Include="pango\pango\pango-language-sample-table.h" />
+    <ClInclude Include="pango\pango\pango-layout-private.h" />
+    <ClInclude Include="pango\pango\pango-layout.h" />
+    <ClInclude Include="pango\pango\pango-modules.h" />
+    <ClInclude Include="pango\pango\pango-renderer.h" />
+    <ClInclude Include="pango\pango\pango-script-lang-table.h" />
+    <ClInclude Include="pango\pango\pango-script.h" />
+    <ClInclude Include="pango\pango\pango-tabs.h" />
+    <ClInclude Include="pango\pango\pango-types.h" />
+    <ClInclude Include="pango\pango\pango-utils.h" />
+    <ClInclude Include="pango\pango\pango.h" />
+    <ClInclude Include="pango\pango\pangofc-font.h" />
+    <ClInclude Include="pango\pango\pangofc-fontmap.h" />
+    <ClInclude Include="pango\pango\mini-fribidi\fribidi.h" />
+    <ClInclude Include="pango\pango\mini-fribidi\fribidi_config.h" />
+    <ClInclude Include="pango\pango\mini-fribidi\fribidi_types.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="glib.vcxproj">
+      <Project>{12bca020-eabf-429e-876a-a476bc9c10c0}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="gmodule.vcxproj">
+      <Project>{4214047c-f5c1-40b3-8369-5dced8c32770}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="libcairo.vcxproj">
+      <Project>{22d144b0-9535-4ca4-938d-64af503c51a5}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
