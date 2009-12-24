@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{11CF6B7B-BF41-474A-A81A-DF1B8D7FA65D}</ProjectGuid>
+    <RootNamespace>pixman</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>NotSet</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.21006.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)Builds\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)Builds\$(Configuration)\Intermediate\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <PreBuildEvent>
+      <Command>D:\Apps\Perl\Perl64\bin\perl $(ProjectDir)\pixman\pixman\make-combine.pl 8 &lt; $(ProjectDir)\pixman\pixman\pixman-combine.c.template &gt; $(ProjectDir)\pixman\pixman\pixman-combine32.c
+D:\Apps\Perl\Perl64\bin\perl $(ProjectDir)\pixman\pixman\make-combine.pl 8 &lt; $(ProjectDir)\pixman\pixman\pixman-combine.h.template &gt; $(ProjectDir)\pixman\pixman\pixman-combine32.h
+D:\Apps\Perl\Perl64\bin\perl $(ProjectDir)\pixman\pixman\make-combine.pl 16 &lt; $(ProjectDir)\pixman\pixman\pixman-combine.c.template &gt; $(ProjectDir)\pixman\pixman\pixman-combine64.c
+D:\Apps\Perl\Perl64\bin\perl $(ProjectDir)\pixman\pixman\make-combine.pl 16 &lt; $(ProjectDir)\pixman\pixman\pixman-combine.h.template &gt; $(ProjectDir)\pixman\pixman\pixman-combine64.h
+</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>.;$(SolutionDir)/pixman/pixman;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PACKAGE;WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;USE_SSE2;USE_MMX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <ProgramDataBaseFileName>$(OutDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CallingConvention>StdCall</CallingConvention>
+      <CompileAs>Default</CompileAs>
+      <DisableSpecificWarnings>4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>Libcmtd.lib;libcmt.lib;msvcrt.lib;msvcrtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="pixman\pixman\pixman-access-accessors.c" />
+    <ClCompile Include="pixman\pixman\pixman-access.c" />
+    <ClCompile Include="pixman\pixman\pixman-bits-image.c" />
+    <ClCompile Include="pixman\pixman\pixman-conical-gradient.c" />
+    <ClCompile Include="pixman\pixman\pixman-cpu.c" />
+    <ClCompile Include="pixman\pixman\pixman-edge-accessors.c" />
+    <ClCompile Include="pixman\pixman\pixman-edge.c" />
+    <ClCompile Include="pixman\pixman\pixman-fast-path.c" />
+    <ClCompile Include="pixman\pixman\pixman-general.c" />
+    <ClCompile Include="pixman\pixman\pixman-gradient-walker.c" />
+    <ClCompile Include="pixman\pixman\pixman-image.c" />
+    <ClCompile Include="pixman\pixman\pixman-implementation.c" />
+    <ClCompile Include="pixman\pixman\pixman-linear-gradient.c" />
+    <ClCompile Include="pixman\pixman\pixman-matrix.c" />
+    <ClCompile Include="pixman\pixman\pixman-mmx.c" />
+    <ClCompile Include="pixman\pixman\pixman-radial-gradient.c" />
+    <ClCompile Include="pixman\pixman\pixman-region16.c" />
+    <ClCompile Include="pixman\pixman\pixman-region32.c" />
+    <ClCompile Include="pixman\pixman\pixman-solid-fill.c" />
+    <ClCompile Include="pixman\pixman\pixman-sse2.c" />
+    <ClCompile Include="pixman\pixman\pixman-timer.c" />
+    <ClCompile Include="pixman\pixman\pixman-trap.c" />
+    <ClCompile Include="pixman\pixman\pixman-utils.c" />
+    <ClCompile Include="pixman\pixman\pixman.c" />
+    <ClCompile Include="pixman\pixman\pixman-combine32.c" />
+    <ClCompile Include="pixman\pixman\pixman-combine64.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pixman\pixman\pixman-private.h" />
+    <ClInclude Include="pixman\pixman\pixman-version.h" />
+    <ClInclude Include="pixman\pixman\pixman.h" />
+    <ClInclude Include="pixman\pixman\pixman-combine32.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,27 +1,35 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libpng", "libpng.vcxproj", "{0008960E-E0DD-41A6-8265-00B31DDB4C21}"
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libpng", "libpng.vcproj", "{0008960E-E0DD-41A6-8265-00B31DDB4C21}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "zlib\win32\zlib.vcxproj", "{2D4F8105-7D21-454C-9932-B47CAB71A5C0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "zlib\win32\zlib.vcproj", "{2D4F8105-7D21-454C-9932-B47CAB71A5C0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pango", "pango.vcxproj", "{538FB453-51A2-4A26-AA99-FC6832C4321B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pango", "pango.vcproj", "{538FB453-51A2-4A26-AA99-FC6832C4321B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{12BCA020-EABF-429E-876A-A476BC9C10C0} = {12BCA020-EABF-429E-876A-A476BC9C10C0}
+		{4214047C-F5C1-40B3-8369-5DCED8C32770} = {4214047C-F5C1-40B3-8369-5DCED8C32770}
+		{22D144B0-9535-4CA4-938D-64AF503C51A5} = {22D144B0-9535-4CA4-938D-64AF503C51A5}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pangocairo", "pangocairo.vcxproj", "{A75AB486-0795-40DA-8B09-70EAF01AF85F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pangocairo", "pangocairo.vcproj", "{A75AB486-0795-40DA-8B09-70EAF01AF85F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pangowin32", "pangowin32.vcxproj", "{DBFDF018-843B-497D-9DCB-16A4658BE62C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pangowin32", "pangowin32.vcproj", "{DBFDF018-843B-497D-9DCB-16A4658BE62C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4214047C-F5C1-40B3-8369-5DCED8C32770} = {4214047C-F5C1-40B3-8369-5DCED8C32770}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gmodule", "gmodule.vcxproj", "{4214047C-F5C1-40B3-8369-5DCED8C32770}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gmodule", "gmodule.vcproj", "{4214047C-F5C1-40B3-8369-5DCED8C32770}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glib", "glib.vcxproj", "{12BCA020-EABF-429E-876A-A476BC9C10C0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glib", "glib.vcproj", "{12BCA020-EABF-429E-876A-A476BC9C10C0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gobject", "gobject.vcxproj", "{F172EFFC-E30F-4593-809E-DB2024B1E753}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gobject", "gobject.vcproj", "{F172EFFC-E30F-4593-809E-DB2024B1E753}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libintl", "libintl\libintl.vcxproj", "{51933D27-35BA-4680-95A8-480D14C8A9BA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libintl", "libintl\libintl.vcproj", "{51933D27-35BA-4680-95A8-480D14C8A9BA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pixman", "pixman.vcxproj", "{11CF6B7B-BF41-474A-A81A-DF1B8D7FA65D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pixman", "pixman.vcproj", "{11CF6B7B-BF41-474A-A81A-DF1B8D7FA65D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libcairo", "libcairo.vcxproj", "{22D144B0-9535-4CA4-938D-64AF503C51A5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libcairo", "libcairo.vcproj", "{22D144B0-9535-4CA4-938D-64AF503C51A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
