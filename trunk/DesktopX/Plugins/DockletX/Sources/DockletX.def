@@ -1,0 +1,25 @@
+LIBRARY DockletX
+
+EXPORTS
+	SDMessage
+	DockletIsVisible
+	DockletGetRect
+	DockletGetLabel
+	DockletSetLabel
+	DockletSetImage
+	DockletSetImageFile
+	DockletSetImageOverlay
+	DockletBrowseForImage
+	DockletLockMouseEffect
+	DockletDoAttentionAnimation
+	DockletGetRootFolder
+	DockletGetRelativeFolder
+	DockletDefaultConfigDialog
+	DockletQueryDockEdge
+	DockletQueryDockAlign
+	DockletSetDockEdge
+	DockletSetDockAlign
+	DockletLoadGDIPlusImage
+	DockletRemoveSelf
+	DockletDoClickAnimation
+	
