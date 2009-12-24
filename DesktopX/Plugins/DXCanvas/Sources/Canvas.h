@@ -52,7 +52,7 @@ using namespace Gdiplus;
 #include <process.h>
 
 #define _DEBUG_LOG
-#include "LogFile.h"
+#include <LogFile.h>
 
 #define DEFAULT_WIDTH 300
 #define DEFAULT_HEIGHT 150
