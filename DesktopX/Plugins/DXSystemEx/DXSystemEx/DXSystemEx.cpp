@@ -256,41 +256,40 @@ label_expiration:
 				case WM_MOUSEMOVE:
 				{
 					// FIXME: BROKEN AT THE MOMENT: DISABLE
-					return FALSE;
+			
+					//// Check if we are dragging with the middle mouse button
+					//if (!((msg->wParam & MK_MBUTTON) == MK_MBUTTON))
+					//	return FALSE;		
 
-					// Check if we are dragging with the middle mouse button
-					if (!((msg->wParam & MK_MBUTTON) == MK_MBUTTON))
-						return FALSE;		
+					//// Ignore any movement from child objects
+					//if (objID != mouseWheelData.objID)
+					//	return FALSE;
 
-					// Ignore any movement from child objects
-					if (objID != mouseWheelData.objID)
-						return FALSE;
+					//// Get delta since last move
+					//int delta_x = GET_X_LPARAM(msg->lParam) - mouseWheelData.current.x;
+					//int delta_y = GET_Y_LPARAM(msg->lParam) - mouseWheelData.current.y;
 
-					// Get delta since last move
-					int delta_x = GET_X_LPARAM(msg->lParam) - mouseWheelData.current.x;
-					int delta_y = GET_Y_LPARAM(msg->lParam) - mouseWheelData.current.y;
+					//if (delta_x == 0 && delta_y == 0)
+					//	return FALSE;
 
-					if (delta_x == 0 && delta_y == 0)
-						return FALSE;
+					//// Get the object position
+					//RECT position;
+					//SDHostMessage(SD_GET_ABSOLUTE_RECT, objID, (DWORD)&position);
 
-					// Get the object position
-					RECT position;
-					SDHostMessage(SD_GET_ABSOLUTE_RECT, objID, (DWORD)&position);
+					//// Move the object
+					//SD_SOP_INFO positionInfo;
+					//positionInfo.x = position.left + delta_x;
+					//positionInfo.y = position.top + delta_y;
+					//positionInfo.flags = SD_SOP_MOVE;
+					//SDHostMessage(SD_SET_OBJECT_POS, objID, (DWORD)&positionInfo);
 
-					// Move the object
-					SD_SOP_INFO positionInfo;
-					positionInfo.x = position.left + delta_x;
-					positionInfo.y = position.top + delta_y;
-					positionInfo.flags = SD_SOP_MOVE;
-					SDHostMessage(SD_SET_OBJECT_POS, objID, (DWORD)&positionInfo);
+					//// Save position
+					//mouseWheelData.current = MAKEPOINTS(msg->lParam);
 
-					// Save position
-					mouseWheelData.current = MAKEPOINTS(msg->lParam);
+					//mouseWheelData.isMouseDragging = true;	
 
-					mouseWheelData.isMouseDragging = true;	
-
-					return TRUE;
-					
+					//return TRUE;
+					//
 					break;
 				}
 
