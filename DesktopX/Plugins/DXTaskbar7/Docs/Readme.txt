@@ -49,6 +49,10 @@ Taskbar_OnCloseTab()
 --------------------
 This function will be called when the user closes a tab in the list.
 
+Taskbar_OnShowTab()
+-------------------
+This function will be called when the user clicks the preview on the tab list. You should then call Object.OnTop if you want your object to get focus.
+
 
 ThumbBar
 ########
@@ -132,6 +136,9 @@ Discontinues a Jump List building session without committing any changes
 *******************************************************************************************************
 ** Changelog
 *******************************************************************************************************
+
+Version 1.0 Build 302
+  * Added Taskbar_OnShowTab() callback to allow objects to get focus when a taskbar preview is clicked
 
 Version 1.0 Build 231:
   * Implemented Tasks
