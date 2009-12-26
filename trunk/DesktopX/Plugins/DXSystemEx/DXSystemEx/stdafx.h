@@ -37,3 +37,4 @@
 using namespace ATL;
 
 #include <HelperMacros.h>
+#include "Config.h"

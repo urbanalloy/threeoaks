@@ -18,13 +18,13 @@ interface IMonitorInfo : IDispatch{
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Properties
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	[propget, id(1), helpstring("")] HRESULT IsPrimary([out, retval] VARIANT_BOOL* isPrimary);
-	[propget, id(2), helpstring("")] HRESULT Left([out, retval] int* left);
-	[propget, id(3), helpstring("")] HRESULT Top([out, retval] int* top);
-	[propget, id(4), helpstring("")] HRESULT Bottom([out, retval] int* bottom);
-	[propget, id(5), helpstring("")] HRESULT Right([out, retval] int* right);
-	[propget, id(6), helpstring("")] HRESULT Width([out, retval] int* width);
-	[propget, id(7), helpstring("")] HRESULT Height([out, retval] int* height);
+	[propget, id(1), helpstring("True if this is the primary monitor, False otherwise")] HRESULT IsPrimary([out, retval] VARIANT_BOOL* isPrimary);
+	[propget, id(2), helpstring("Left coordinate of monitor")] HRESULT Left([out, retval] int* left);
+	[propget, id(3), helpstring("Top coordinate of monitor")] HRESULT Top([out, retval] int* top);
+	[propget, id(4), helpstring("Bottom coordinate of monitor")] HRESULT Bottom([out, retval] int* bottom);
+	[propget, id(5), helpstring("Right coordinate of monitor")] HRESULT Right([out, retval] int* right);
+	[propget, id(6), helpstring("Width of monitor")] HRESULT Width([out, retval] int* width);
+	[propget, id(7), helpstring("Height of monitor")] HRESULT Height([out, retval] int* height);
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Methods

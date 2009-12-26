@@ -40,7 +40,6 @@
 #include <SDScriptedPlugin.h>
 
 #include <time.h>
-#include "Config.h"
 #include "resource.h"
 #include "DXSystemEx.h"
 #include "dlldatax.h"
@@ -48,6 +47,82 @@
 
 #include "Utils/VersionCheck.h"
 #include "Volume/VistaCallBackSetup.h"
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Configuration Dialog
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Size of the version text
+#define VERSION_SIZE 30
+#define MAX_NUMBER_SIZE 5
+
+INT_PTR CALLBACK ConfigurePlugin(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
+{
+	CSystemEx::Config* config = (CSystemEx::Config*) GetProp(hDlg, "config");
+
+	switch(iMsg)
+	{
+		case WM_INITDIALOG:
+		{
+			// Set the version text
+			char version[VERSION_SIZE];
+			sprintf_s(version, VERSION_SIZE*sizeof(char), "v%i.%i Build %i",VERSION_MAJOR, VERSION_MINOR, VERSION_BUILD);
+			SetDlgItemText(hDlg, IDC_BUILD,version);
+
+			// Get Data
+			SetProp(hDlg, "config", (HANDLE) lParam);
+			config = (CSystemEx::Config*) GetProp(hDlg, "config");
+
+			if(!config) {
+				MessageBox(hDlg, "Error initializing Dialog: config not present", "Initialization Error", MB_OK|MB_ICONERROR);
+				EndDialog(hDlg, 0);
+			}
+
+			// Init & fill the controls
+			CheckDlgButton(hDlg, IDC_DRAGANDDROP, config->enableDnD);
+			CheckDlgButton(hDlg, IDC_MONITORS, config->enableMonitors);
+			CheckDlgButton(hDlg, IDC_INSTANCE, config->enableInstance);
+
+#ifdef DEBUG
+			SetDlgItemText(hDlg, IDC_BETA, "BETA - DO NOT REDISTRIBUTE");
+#endif
+
+			break;
+		}
+
+		case WM_COMMAND:
+			switch(LOWORD(wParam))
+			{
+
+				case IDOK:
+				{
+					if(!config)
+						break;
+
+					// Input boxes are set to number, so no need to check for conversion (famous last words :P)					
+					IsDlgButtonChecked(hDlg, IDC_DRAGANDDROP) ? config->enableDnD = true 	  : config->enableDnD = false;
+					IsDlgButtonChecked(hDlg, IDC_MONITORS) 	  ? config->enableMonitors = true : config->enableMonitors = false;
+					IsDlgButtonChecked(hDlg, IDC_INSTANCE)    ? config->enableInstance = true : config->enableInstance = false;
+				}
+
+				case IDCANCEL:
+					EndDialog(hDlg, 0);
+					return TRUE;
+					break;
+
+			}
+			break;
+
+		case WM_DESTROY:
+			RemoveProp(hDlg, "config");
+			break;
+
+		case WM_CLOSE:
+			EndDialog(hDlg, 0);
+			return FALSE;
+	}
+
+	return FALSE;
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DesktopX Plugin
@@ -59,6 +134,7 @@ static HINSTANCE dllInstance = NULL;
 static HANDLE processHandle = NULL;
 
 DECLARE_DXPLUGIN_READTYPEINFO(ReadSystemExTypeInfo, IID_ISystemEx);
+int WritePrivateProfileInt(LPCTSTR lpAppName, LPCTSTR lpKeyName, int iValue, LPCTSTR lpFileName);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Plugin-specific data
@@ -125,6 +201,8 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 			if (Is_WinVista_or_Later())
 				RegisterCallBack();
 
+			OleInitialize(NULL);
+
 			return TRUE;
 		}
 
@@ -160,8 +238,7 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 #endif
 
 			DWORD *flags = (DWORD *) param1;
-			*flags = SD_FLAG_SUBCLASS |
-					 SD_FLAG_NO_BUILDER_CONFIG|
+			*flags = SD_FLAG_SUBCLASS |					 
 					 SD_FLAG_NO_USER_CONFIG;
 
 			CComObject<CSystemEx>* pSystemEx;
@@ -191,6 +268,22 @@ label_expiration:
 		// Load saved plugin data
 		case SD_LOAD_DATA:
 		{
+			CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;
+
+			if (pSystemEx == NULL)
+				return FALSE;
+
+			// Get our ini file
+			char objectDirectory[MAX_PATH];
+			char iniFile[MAX_PATH];
+			SDHostMessage(SD_GET_OBJECT_DIRECTORY, (DWORD) objectDirectory, 0);
+			sprintf_s(iniFile, "%s\\DXCanvas-%s.ini", objectDirectory, (char *) param1);
+
+			// Save configuration
+			pSystemEx->config->enableDnD = (GetPrivateProfileInt("Config", "EnableDnd", 1, iniFile) == 1);
+			pSystemEx->config->enableMonitors = (GetPrivateProfileInt("Config", "EnableMonitors", 1, iniFile) == 1);
+			pSystemEx->config->enableInstance = (GetPrivateProfileInt("Config", "EnableInstance", 1, iniFile) == 1);
+
 			return TRUE;
 		}
 
@@ -198,6 +291,14 @@ label_expiration:
 		// Configure this instance
 		case SD_CONFIGURE:
 		{
+			CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;
+
+			if (pSystemEx == NULL)
+				return FALSE;
+
+			// Show the config for the current instance
+			DialogBoxParam(dllInstance, MAKEINTRESOURCE(IDD_CONFIG), (HWND)param2, ConfigurePlugin, (LPARAM)pSystemEx->config);
+
 			return TRUE;
 		}
 
@@ -205,6 +306,16 @@ label_expiration:
 		// Duplicate this instance data
 		case SD_DUPLICATE_PLUGIN:
 		{
+			CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;
+			CComObject<CSystemEx>* pOriginalSystemEx = (CComObject<CSystemEx>*) param2;
+
+			if (pSystemEx == NULL)
+				return FALSE;
+
+			pSystemEx->config->enableDnD	  = pOriginalSystemEx->config->enableDnD;
+			pSystemEx->config->enableMonitors = pOriginalSystemEx->config->enableMonitors;
+			pSystemEx->config->enableInstance = pOriginalSystemEx->config->enableInstance;
+
 			return TRUE;
 		}
 
@@ -239,17 +350,9 @@ label_expiration:
 			switch(msg->message)
 			{
 				// Monitor information
-				case WM_DISPLAYCHANGE:
-				{
-					CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;
-
-					if (pSystemEx == NULL)
-						return FALSE;
-
-					pSystemEx->UpdateMonitorInfo();
-
+				case WM_DISPLAYCHANGE:				
+					pSystemEx->EnableMonitorInfo(pSystemEx->config->enableMonitors);
 					break;
-				}
 
 				//////////////////////////////////////////////////////////////////////////
 				// Middle button drag
@@ -306,7 +409,7 @@ label_expiration:
 					SD_SCRIPTABLE_EVENT se;
 					se.cbSize = sizeof(SD_SCRIPTABLE_EVENT);
 					se.flags=0;
-					lstrcpy(se.szEventName, "SystemEx_OnMButtonUp");
+					lstrcpy(se.szEventName, PLUGIN_PREFIX "OnMButtonUp");
 
 					// Message parameters
 					memset(&se.dp, 0, sizeof(DISPPARAMS));
@@ -344,7 +447,7 @@ label_expiration:
 					SD_SCRIPTABLE_EVENT se;
 					se.cbSize = sizeof(SD_SCRIPTABLE_EVENT);
 					se.flags=0;
-					lstrcpy(se.szEventName, "SystemEx_OnMButtonDown");
+					lstrcpy(se.szEventName, PLUGIN_PREFIX "OnMButtonDown");
 
 					// Message parameters
 					memset(&se.dp, 0, sizeof(DISPPARAMS));
@@ -403,7 +506,7 @@ label_expiration:
 					// Send the message to the object
 					SD_SCRIPTABLE_EVENT se;
 					se.cbSize = sizeof(SD_SCRIPTABLE_EVENT);
-					lstrcpy(se.szEventName, "SystemEx_OnMouseWheel");
+					lstrcpy(se.szEventName, PLUGIN_PREFIX "OnMouseWheel");
 					se.flags=0;
 
 					memset(&se.dp, 0, sizeof(DISPPARAMS));
@@ -425,6 +528,9 @@ label_expiration:
 
 				case WM_COPYDATA:
 				{
+					if (!pSystemEx->config->enableInstance)
+						return TRUE;
+
 					COPYDATASTRUCT* pCDS = reinterpret_cast<COPYDATASTRUCT*>(msg->lParam);
 					char* commandLine = static_cast<char*>(pCDS->lpData);
 
@@ -434,12 +540,12 @@ label_expiration:
 					se.cbSize = sizeof(SD_SCRIPTABLE_EVENT);
 					se.flags=0;
 
-					lstrcpy(se.szEventName, "SystemEx_OnNewInstance");
+					lstrcpy(se.szEventName, PLUGIN_PREFIX "OnNewInstance");
 
 					se.dp.cArgs = 1;
 					VARIANT* lpvt = (VARIANT*)malloc(sizeof(VARIANT));
 
-					// Get command line args
+					// Get command line arguments
 					USES_CONVERSION;
 					pSystemEx->ExtractCommandLine(A2W(commandLine), &lpvt[0], true);
 
@@ -459,6 +565,30 @@ label_expiration:
 		// Save the plugin data before unload
 		case SD_SAVE_DATA:
 		{
+			// We need to come up with an instance ID and register our config file
+			// we don't care whether we are in export mode or not
+			CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;
+
+			if (pSystemEx == NULL)
+				return FALSE;
+
+			// Use the object ID pointer as our instance ID
+			char instanceID[20];
+			_ltoa_s((long) objID, instanceID, 10);
+			lstrcpy((char *) param1, instanceID);
+
+			char iniFile[MAX_PATH], name[MAX_PATH];
+			SDHostMessage(SD_GET_OBJECT_DIRECTORY, (DWORD) iniFile, 0);
+			sprintf_s(name, "DXSystemEx-%s.ini", iniFile, instanceID);
+			sprintf_s(iniFile, "%s\\%s", iniFile, name);
+
+			// Save configuration
+			WritePrivateProfileInt("Config", "EnableDnd", 	   pSystemEx->config->enableDnD ? 1 : 0, iniFile);
+			WritePrivateProfileInt("Config", "EnableMonitors", pSystemEx->config->enableMonitors ? 1 : 0, iniFile);
+			WritePrivateProfileInt("Config", "EnableInstance", pSystemEx->config->enableInstance ? 1 : 0, iniFile);
+
+			SDHostMessage(SD_REGISTER_FILE, (DWORD) name, 0);
+
 			return TRUE;
 		}
 
@@ -484,7 +614,7 @@ label_expiration:
 			CComObject<CSystemEx>* pSystemEx = (CComObject<CSystemEx>*) *pluginIndex;
 
 			if (pSystemEx != NULL)
-				pSystemEx->Cleanup();
+				pSystemEx->Destroy();
 
 			SAFE_RELEASE(pSystemEx);
 
@@ -497,6 +627,9 @@ label_expiration:
 		{
 			if (Is_WinVista_or_Later())
 				UnregisterCallBack();
+
+			// Shutdown COM
+			OleUninitialize();
 
 			return TRUE;
 		}
@@ -528,3 +661,16 @@ DECLARE_DXPLUGIN_DLLFUNCTIONS(LIBID_DXSystemExLib,
 							  "DXSystemEx.SystemEx",
 							  "1.0",
 							  "DXSystemEx 1.0 Type Library")
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Registry
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+int WritePrivateProfileInt(LPCTSTR lpAppName, LPCTSTR lpKeyName, int iValue, LPCTSTR lpFileName)
+{
+	//////////////////////////////////////////////////////////////////////////
+	///Helper function included to quickly & easily save integers to an Ini
+	char szNumber[100];
+	strcpy_s(szNumber, 100, "");
+	_itoa_s(iValue, szNumber, 100, 10);
+	return WritePrivateProfileString(lpAppName, lpKeyName, szNumber, lpFileName);
+}

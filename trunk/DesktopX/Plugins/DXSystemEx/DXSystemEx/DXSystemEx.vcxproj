@@ -150,6 +150,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dlldatax.c" />
+    <ClCompile Include="DragDrop\CDropTarget.cpp" />
+    <ClCompile Include="DragDrop\DragDropUtils.cpp" />
     <ClCompile Include="DXSystemEx.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="DXSystemEx_i.c" />
@@ -169,6 +171,8 @@
   <ItemGroup>
     <ClInclude Include="..\..\SDK\HelperMacros.h" />
     <ClInclude Include="dlldatax.h" />
+    <ClInclude Include="DragDrop\CDropTarget.h" />
+    <ClInclude Include="DragDrop\DragDropUtils.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Config.h" />
@@ -199,6 +203,7 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Config.h;%(Outputs)</Outputs>
     </CustomBuild>
+    <None Include="..\Docs\Config.bmp" />
     <None Include="DXSystemEx.def" />
     <None Include="DXSystemEx.rgs" />
     <None Include="..\Docs\DXSystemExDefines.vbs" />
