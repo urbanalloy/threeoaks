@@ -130,7 +130,7 @@ void FileDownloader::CompletionCallback(REQUEST_CONTEXT* context, DownloadStatus
 	SD_SCRIPTABLE_EVENT se;
 	se.cbSize = sizeof(SD_SCRIPTABLE_EVENT);
 	se.flags = 0;
-	lstrcpy(se.szEventName, "SystemEx_OnDownloadFinish");
+	lstrcpy(se.szEventName, PLUGIN_PREFIX "OnDownloadFinish");
 
 	// Message parameters
 	memset(&se.dp, 0, sizeof(DISPPARAMS));
@@ -166,7 +166,7 @@ void FileDownloader::ProgressCallback(REQUEST_CONTEXT* context)
 	SD_SCRIPTABLE_EVENT se;
 	se.cbSize = sizeof(SD_SCRIPTABLE_EVENT);
 	se.flags = 0;
-	lstrcpy(se.szEventName, "SystemEx_OnDownloadProgress");
+	lstrcpy(se.szEventName, PLUGIN_PREFIX "OnDownloadProgress");
 
 	// Message parameters
 	memset(&se.dp, 0, sizeof(DISPPARAMS));

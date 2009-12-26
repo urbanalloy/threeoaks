@@ -4,6 +4,9 @@
     <Filter Include="COM/Functions">
       <UniqueIdentifier>{4ab934cc-e6f8-4123-9309-7928722b971f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="COM/Functions\Drag&amp;Drop">
+      <UniqueIdentifier>{7a33795a-3555-4360-b6b1-975d9ebafb1a}</UniqueIdentifier>
+    </Filter>
     <Filter Include="COM/Functions\HTTP">
       <UniqueIdentifier>{d64211e7-4e4a-4999-a846-b8cf5e41e71f}</UniqueIdentifier>
     </Filter>
@@ -51,6 +54,12 @@
     </ClCompile>
     <ClCompile Include="dlldatax.c">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DragDrop\CDropTarget.cpp">
+      <Filter>COM/Functions\Drag&amp;Drop</Filter>
+    </ClCompile>
+    <ClCompile Include="DragDrop\DragDropUtils.cpp">
+      <Filter>COM/Functions\Drag&amp;Drop</Filter>
     </ClCompile>
     <ClCompile Include="DXSystemEx.cpp">
       <Filter>Source Files</Filter>
@@ -114,6 +123,12 @@
     <ClInclude Include="dlldatax.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DragDrop\CDropTarget.h">
+      <Filter>COM/Functions\Drag&amp;Drop</Filter>
+    </ClInclude>
+    <ClInclude Include="DragDrop\DragDropUtils.h">
+      <Filter>COM/Functions\Drag&amp;Drop</Filter>
+    </ClInclude>
     <ClInclude Include="DXSystemEx.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
@@ -161,6 +176,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Docs\Config.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
     <None Include="..\Docs\DXSystemExDefines.vbs">
       <Filter>Docs</Filter>
     </None>

@@ -20,18 +20,33 @@ Full source code is available here: http://code.google.com/p/threeoaks/
 ** Documentation
 *******************************************************************************************************
 
-Mousewheel
-----------
+-----------
+Drag & Drop
+-----------
+Callbacks
+	- SystemEx_OnDropText(text)
+	- SystemEx_OnDropFiles(files)
 
-Callbacks:
-	- SystemEx_OnMouseWheel(rotation)
-	- SystemEx_OnMButtonDown(x, y)
-	- SystemEx_OnMButtonUp(x, y, dragged)
+--------
+Instance
+--------
+Properties & Methods
+	- CommandLine
+	- CommandLineArgs
+	- IsFirstInstance
 
+Callbacks
+	- SystemEx_OnNewInstance(commandLineArgs)
 
+----
+Misc
+----
+Properties & Methods
+	- VerifySignature(path, signature, type)
+
+-------------------
 Monitor information
 -------------------
-
 Properties & Methods
   - Monitors
   - NumberOfMonitors
@@ -44,10 +59,17 @@ Properties & Methods
    - Bottom
    - Right
 
+----------
+Mousewheel
+----------
+Callbacks:
+	- SystemEx_OnMouseWheel(rotation)
+	- SystemEx_OnMButtonDown(x, y)
+	- SystemEx_OnMButtonUp(x, y, dragged)
 
+------
 Volume
 ------
-
 Properties & Methods
 	- Volume
 	- Mute
@@ -57,25 +79,82 @@ Callbacks
 	- SystemEx_OnVolumeEvent(volume)
 	- SystemEx_OnMuteEvent(isMuted)
 
-Instance
-----
-
-Properties & Methods
-	- CommandLine
-	- CommandLineArgs
-	- IsFirstInstance
-
-Callbacks
-	- SystemEx_OnNewInstance(commandLineArgs)
-
-Misc
-----
-
-Properties & Methods
-	- VerifySignature(path, signature, type)
-
 
 *******************************************************************************************************
+** Methods, Properties and callbacks details
+*******************************************************************************************************
+
+SystemEx_OnDropText(text)
+-------------------------
+
+Gets called when the user drops a text selection on the object
+
+SystemEx_OnDropFiles(files)
+---------------------------
+
+Gets called when the user drops one or more files on the object. "files" will be an array of file names
+
+
+Notes: 
+ 1. You don't need to set the layer to Accept Drag&Drop in the layer options.
+ 2. Your object will also be set to accept files. The normal Object_OnDropFiles callback will work as
+usual (although provided by the plugin instead of DesktopX). You can also get an array of file names
+instead of a |-separated list by implementing the SystemEx_OnDropFiles callback.
+
+=======================================================================================================
+
+SystemEx.CommandLine
+--------------------
+
+Get the full command line (including the path to the executable and DesktopX-specific arguments)
+
+SystemEx.CommandLineArgs
+------------------------
+
+Get an array of command line arguments.
+Command line arguments have been cleaned up to remove DesktopX-specific arguments (in the case of single-exe gadgets)
+
+SystemEx.IsFirstInstance
+------------------------
+
+Will be True if this is the first instance to run, False otherwise.
+It is preferable to check for it at startup and close the gadget accordingly,
+as only the first instance will receive a callback message when a new instance is started.
+
+SystemEx_OnNewInstance(commandLineArgs)
+---------------------------------------
+
+Gets called when another instance is started. The command line arguments are passed in an array.
+
+=======================================================================================================
+
+SystemEx.VerifySignature(path, signature, type)
+-----------------------------------------------
+
+Check the signature of the file pointed to by path.
+
+The only type of signature supported at this time is SIGNATURE_SHA1
+
+=======================================================================================================
+
+SystemEx.Monitors
+------------------
+
+Gets an array of MonitorInfo objects
+
+
+SystemEx.GetMonitor(index)
+---------------------------
+
+Returns the MonitorInfo for the given monitor
+
+
+SystemEx.NumberOfMonitors
+--------------------------
+
+Gets the number of active monitors on the machine
+
+=======================================================================================================
 
 SystemEx_OnMouseWheel(rotation)
 ----------------------------
@@ -100,26 +179,7 @@ called. When you release the button, the SystemEx_OnMButtonUp function will be c
 Both functions will have the mouse coordinates relative to your object passed as
 parameters.
 
-*******************************************************************************************************
-
-SystemEx.Monitors
-------------------
-
-Gets an array of MonitorInfo objects
-
-
-SystemEx.GetMonitor(index)
----------------------------
-
-Returns the MonitorInfo for the given monitor
-
-
-SystemEx.NumberOfMonitors
---------------------------
-
-Gets the number of active monitors on the machine
-
-*******************************************************************************************************
+=======================================================================================================
 
 SystemEx_OnVolumeEvent(volume)
 ---------------------------------
@@ -181,51 +241,25 @@ XP Compatibility: might not work with some cards, in which case it will always
 			      It reads from the waveout device, so it won't work when
 			      reading from a CD for example.
 
+=======================================================================================================
 
-*******************************************************************************************************
-
-SystemEx.CommandLine
---------------------
-
-Get the full command line (including the path to the executable and DesktopX-specific arguments)
-
-SystemEx.CommandLineArgs
-------------------------
-
-Get an array of command line arguments.
-Command line arguments have been cleaned up to remove DesktopX-specific arguments (in the case of single-exe gadgets)
-
-SystemEx.IsFirstInstance
-------------------------
-
-Will be True if this is the first instance to run, False otherwise.
-It is preferable to check for it at startup and close the gadget accordingly,
-as only the first instance will receive a callback message when a new instance is started.
-
-SystemEx_OnNewInstance(commandLineArgs)
----------------------------------------
-
-Gets called when another instance is started. The command line arguments are passed in an array.
-
-*******************************************************************************************************
-
-SystemEx.VerifySignature(path, signature, type)
------------------------------------------------
-
-Check the signature of the file pointed to by path.
-
-The only type of signature supported at this time is SIGNATURE_SHA1
 
 *******************************************************************************************************
 ** Changelog
 *******************************************************************************************************
+
+Version 1.0 Build xxx:
+  + Added Zip/Unzip functions
+  + Added HTTP download functions (with progress information)
+  + Added drag&drop handling (merged from DXDragDropExtended)
+  + Added configuration UI to enable/disable some functions when they are not needed
 
 Version 1.0 Build 240:
   + Renamed to DXSystemEx (plugin namespace is now SystemEx)
   + Added SHA1 signature check
   + Added MouseWheel and Middle button click callbacks (merged from DXMouseWheel)
   + Added Master volume control / Mute / Peak (merged from DXVolumeControl)
-  + Added instance information (merged from DxInstance)
+  + Added Instance information (merged from DxInstance)
 
 Version 1.0 Build 204: First released version
 

@@ -42,6 +42,7 @@
 #include "DXSystemEx.h"
 #include "resource.h"
 
+#include "DragDrop/CDropTarget.h"
 #include "Monitor/MonitorInfo.h"
 #include "Volume/IVolumeEventsConnectionPoint.h"
 #include "Instance/CSingleInstance.h"
@@ -75,14 +76,18 @@ public:
 		m_executableDirectory = L"";
 		m_executableName = L"";
 
-		m_singleInstance = NULL;
+		m_pSingleInstance = NULL;
 		m_pFileDownloader = NULL;
+		m_pDropTarget = NULL;
+
+		config = new Config;
 
 		return S_OK;
 	}
 
 	void FinalRelease()
 	{
+		SAFE_DELETE(config);
 	}
 
 DECLARE_REGISTRY_RESOURCEID(IDR_SYSTEMEX)
@@ -114,9 +119,12 @@ END_CONNECTION_POINT_MAP()
 		HWND m_hwnd;
 
 		// Single instance
-		CSingleInstance* m_singleInstance;
+		CSingleInstance* m_pSingleInstance;
 		wstring m_executableDirectory;
 		wstring m_executableName;
+
+		// Drag&Drop
+		CDropTarget* m_pDropTarget;
 
 		// Monitors
 		HANDLE m_hConfigMutex;
@@ -125,7 +133,6 @@ END_CONNECTION_POINT_MAP()
 		// Downloads
 		FileDownloader* m_pFileDownloader;
 
-		void UpdateInstanceInfo();
 		static BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData);
 		static bool hasEnding(wstring const &fullString, wstring const &ending);
 
@@ -153,12 +160,28 @@ END_CONNECTION_POINT_MAP()
 
 	//////////////////////////////////////////////////////////////////////////
 	public:
+		struct Config {
+			bool enableDnD;
+			bool enableMonitors;
+			bool enableInstance;
+
+			Config() {
+				enableDnD = false;
+				enableMonitors = true;
+				enableInstance = false;
+			}
+		};
+
+		Config* config;
 
 		void Init(DWORD objID, string guiID, HWND hwnd);
-		void Cleanup();
+		void Destroy();
 		void Terminate();
 
-		void UpdateMonitorInfo();
+		void EnableInstance(bool enable);
+		void EnableMonitorInfo(bool enable);
+		void EnableDragDrop(bool enable);
+
 		HRESULT ExtractCommandLine(LPWSTR commandLine, VARIANT* pArgs, bool extractArgs);
 
 		//////////////////////////////////////////////////////////////////////////

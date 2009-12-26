@@ -50,6 +50,7 @@
 #include <EndpointVolume.h>
 #include "Volume/MixerAPI.h"
 
+#include "DragDrop/DragDropUtils.h"
 #include "Utils/VersionCheck.h"
 
 // HACK !
@@ -63,7 +64,10 @@ void CSystemEx::Init(DWORD objID, string guiId, HWND hwnd)
 	m_hwnd = hwnd;
 
 	// Init instance information
-	UpdateInstanceInfo();
+	EnableInstance(config->enableInstance);
+
+	// Init Drag&Drop
+	EnableDragDrop(config->enableDnD);
 
 	// Init the config mutex
 	if (m_hConfigMutex == NULL) {
@@ -75,18 +79,22 @@ void CSystemEx::Init(DWORD objID, string guiId, HWND hwnd)
 	pSystemEx = this;
 	configMutex = m_hConfigMutex;
 
-	UpdateMonitorInfo();
+	// Process monitor information
+	EnableMonitorInfo(config->enableMonitors);
 }
 
 void CSystemEx::Terminate()
 {
 	if (m_pFileDownloader)
 		m_pFileDownloader->Cleanup();
+
+	if (config->enableDnD)
+		UnregisterDropWindow(m_pDropTarget);
 }
 
-void CSystemEx::Cleanup()
+void CSystemEx::Destroy()
 {
-	SAFE_DELETE(m_singleInstance);
+	SAFE_DELETE(m_pSingleInstance);
 	SAFE_DELETE(m_pFileDownloader);
 
 	if (m_hConfigMutex != NULL)
@@ -96,24 +104,57 @@ void CSystemEx::Cleanup()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper functions
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void CSystemEx::UpdateInstanceInfo()
+void CSystemEx::EnableDragDrop(bool enable)
 {
-	m_singleInstance = new CSingleInstance(m_guiID);
-	m_singleInstance->ActivateInstance();
+	if (!enable) {
+		UnregisterDropWindow(m_pDropTarget);
+	}
+
+	// Already enabled
+	if (m_pDropTarget)
+		return;
+
+	CComObject<CDropTarget>* pDropTarget;
+	CComObject<CDropTarget>::CreateInstance(&pDropTarget);
+
+	m_pDropTarget = pDropTarget;
+
+	m_pDropTarget->setObjID(m_objID);
+	m_pDropTarget->setHwnd(m_hwnd);
+
+	RegisterDropWindow(m_pDropTarget);
+}
+
+void CSystemEx::EnableInstance(bool enable)
+{
+	if (!enable) {
+		SAFE_DELETE(m_pSingleInstance);
+		return;
+	}
+
+	// Already enabled
+	if (m_pSingleInstance)
+		return;
+
+	m_pSingleInstance = new CSingleInstance(m_guiID);
+	m_pSingleInstance->ActivateInstance();
 
 	// Notify the first instance
-	if (!m_singleInstance->IsFirstInstance())
+	if (!m_pSingleInstance->IsFirstInstance())
 	{
-		m_singleInstance->NotifyFirstInstance(m_hwnd, GetCommandLine());
+		m_pSingleInstance->NotifyFirstInstance(m_hwnd, GetCommandLine());
 		return;
 	}
 
 	// This is the first instance, initialize data
-	m_singleInstance->CreateFirstInstanceData(m_hwnd);
+	m_pSingleInstance->CreateFirstInstanceData(m_hwnd);
 }
 
-void CSystemEx::UpdateMonitorInfo()
+void CSystemEx::EnableMonitorInfo(bool enable)
 {
+	if (!enable)
+		return;
+
 	ACQUIRE_MUTEX(m_hConfigMutex)
 	m_monitors.clear();
 	RELEASE_MUTEX(m_hConfigMutex)
@@ -339,8 +380,7 @@ STDMETHODIMP CSystemEx::VerifySignature(BSTR path, BSTR signature, int type, VAR
 		goto INTERNAL_ERROR;
 
 	// Loop through file and hash file contents
-	do
-	{
+	do {
 		dwBytesRead = 0;
 
 		fResult = ReadFile(hFile, pbBuffer, BUFFER_SIZE, &dwBytesRead, NULL);
@@ -413,7 +453,10 @@ INTERNAL_ERROR:
 
 STDMETHODIMP CSystemEx::get_IsFirstInstance(VARIANT_BOOL* isFirstInstance)
 {
-	if (m_singleInstance->IsFirstInstance())
+	if (!config->enableInstance)
+		return CCOMError::DispatchError(NOT_SUPPORTED_ERR, CLSID_SystemEx, _T("Function disabled!"), "Instance support is disabled. Please enable it in the configuration panel.", 0, NULL);
+
+	if (m_pSingleInstance->IsFirstInstance())
 		*isFirstInstance = VARIANT_TRUE;
 	else
 		*isFirstInstance = VARIANT_FALSE;
@@ -473,6 +516,9 @@ STDMETHODIMP CSystemEx::get_ExecutableName(BSTR* name)
 
 STDMETHODIMP CSystemEx::get_NumberOfMonitors(int* numberOfMonitors)
 {
+	if (!config->enableMonitors)
+		return CCOMError::DispatchError(NOT_SUPPORTED_ERR, CLSID_SystemEx, _T("Function disabled!"), "Monitors support is disabled. Please enable it in the configuration panel.", 0, NULL);
+
 	ACQUIRE_MUTEX(m_hConfigMutex)
 	*numberOfMonitors = m_monitors.size();
 	RELEASE_MUTEX(m_hConfigMutex)
@@ -482,6 +528,9 @@ STDMETHODIMP CSystemEx::get_NumberOfMonitors(int* numberOfMonitors)
 
 STDMETHODIMP CSystemEx::get_Monitors(VARIANT* monitors)
 {
+	if (!config->enableMonitors)
+		return CCOMError::DispatchError(NOT_SUPPORTED_ERR, CLSID_SystemEx, _T("Function disabled!"), "Monitors support is disabled. Please enable it in the configuration panel.", 0, NULL);
+
 	ACQUIRE_MUTEX(m_hConfigMutex)
 
 	// Create SafeArray of MonitorInfos
@@ -523,7 +572,7 @@ STDMETHODIMP CSystemEx::get_Monitors(VARIANT* monitors)
 
 	// return SafeArray as VARIANT
 	V_VT(monitors) = VT_ARRAY | VT_VARIANT;
-	V_ARRAY(monitors)= pSA;
+	V_ARRAY(monitors) = pSA;
 
 	RELEASE_MUTEX(m_hConfigMutex)
 
@@ -532,6 +581,9 @@ STDMETHODIMP CSystemEx::get_Monitors(VARIANT* monitors)
 
 STDMETHODIMP CSystemEx::GetMonitor(int index, IMonitorInfo** info)
 {
+	if (!config->enableMonitors)
+		return CCOMError::DispatchError(NOT_SUPPORTED_ERR, CLSID_SystemEx, _T("Function disabled!"), "Monitors support is disabled. Please enable it in the configuration panel.", 0, NULL);
+
 	if (index < 0 || index > (signed)m_monitors.size() - 1)
 		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Error getting monitor info!"), "Monitor index is invalid.", 0, NULL);
 

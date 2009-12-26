@@ -16,10 +16,8 @@
 // English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
-#ifdef _WIN32
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
-#endif //_WIN32
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -73,7 +71,7 @@ BEGIN
             VALUE "FileDescription", "DesktopX plugin : Extended System Control"
             VALUE "FileVersion", "1.0.0.1"
             VALUE "InternalName", "DXSystemEx.dll"
-            VALUE "LegalCopyright", "(c) 2009 Julien Templier.  All rights reserved."
+            VALUE "LegalCopyright", "(c) 2009-2010 Julien Templier.  All rights reserved."
             VALUE "OriginalFilename", "DXSystemEx.dll"
             VALUE "ProductName", "DXSystemEx"
             VALUE "ProductVersion", "1.0.0.1"
@@ -85,19 +83,65 @@ BEGIN
     END
 END
 
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // REGISTRY
 //
 
-IDR_SYSTEMEX         REGISTRY                "DXSystemEx.rgs"
+IDR_SYSTEMEX            REGISTRY                "DXSystemEx.rgs"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_CONFIG DIALOGEX 0, 0, 200, 163
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_TOOLWINDOW
+CAPTION "Configure DXSystemEx Plugin..."
+FONT 8, "MS Shell Dlg", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,89,144,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,144,144,50,14
+    LTEXT           "Build %s",IDC_BUILD,6,149,70,8,WS_DISABLED
+    CONTROL         202,IDC_PICTURE,"Static",SS_BITMAP,0,0,200,37
+    CONTROL         "Allow drag && drop",IDC_DRAGANDDROP,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,53,185,10
+    LTEXT           "",IDC_BETA,95,41,100,8
+    CONTROL         "Enable single instance",IDC_INSTANCE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,69,185,10
+    CONTROL         "Enable monitor information",IDC_MONITORS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,5,85,185,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_CONFIG, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 158
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_PICTURE             BITMAP                  "..\\Docs\\Config.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // String Table
 //
 
-STRINGTABLE 
+STRINGTABLE
 BEGIN
     IDS_PROJNAME            "DXSystemEx"
 END

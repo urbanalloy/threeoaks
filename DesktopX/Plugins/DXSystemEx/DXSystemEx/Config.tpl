@@ -16,6 +16,8 @@
 #define PLUGIN_PLATFORM		SD_OS_XP
 #define PLUGIN_HOSTS		SD_HOST_DESKTOPX
 
+#define PLUGIN_PREFIX 		"SystemEx_"
+
 #define VERSION_MAJOR 1  
 #define VERSION_MINOR 0
 #define VERSION_BUILD $WCREV$
