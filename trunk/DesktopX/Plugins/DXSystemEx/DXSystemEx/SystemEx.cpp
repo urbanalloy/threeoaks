@@ -600,7 +600,20 @@ STDMETHODIMP CSystemEx::GetMonitor(int index, IMonitorInfo** info)
 }
 
 /************************************************************************/
-/* Volume                                                             */
+/* Zip                                                                  */
+/************************************************************************/
+STDMETHODIMP CSystemEx::GetArchive(IArchive **zip) {
+
+	CComObject<CArchive>* pZipUtility;
+	CComObject<CArchive>::CreateInstance(&pZipUtility);
+
+	pZipUtility->QueryInterface(IID_IArchive, (void**)zip);
+
+	return S_OK;
+}
+
+/************************************************************************/
+/* Volume                                                               */
 /************************************************************************/
 
 // Master volume

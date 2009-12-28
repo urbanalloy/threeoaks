@@ -132,7 +132,7 @@ typedef struct
 //
 // Returns:     HZIP   - non-zero if zip archive opened ok, otherwise 0
 //
-HZIP OpenZip(void *z, unsigned int len, DWORD flags);
+HZIP OpenZip(void *z, unsigned int len, DWORD flags, const char* password = 0);
 // OpenZip - opens a zip file and returns a handle with which you can
 // subsequently examine its contents. You can open a zip file from:
 // from a pipe:             OpenZip(hpipe_read,0, ZIP_HANDLE);
@@ -144,6 +144,7 @@ HZIP OpenZip(void *z, unsigned int len, DWORD flags);
 // although GetZipItem can be called immediately before and after unzipping
 // it. If it's opened i	n any other way, then full random access is possible.
 // Note: pipe input is not yet implemented.
+// Note: zip passwords are ascii, not unicode.
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -280,6 +281,7 @@ unsigned int FormatZipMessage(ZRESULT code, char *buf,unsigned int len);
 #define ZR_MORE       0x00000600     // there's still more data to be unzipped
 #define ZR_CORRUPT    0x00000700     // the zipfile is corrupt or not a zipfile
 #define ZR_READ       0x00000800     // a general error reading the file
+#define ZR_PASSWORD   0x00001000     // we didn't get the right password to unzip the file
 // The following come from mistakes on the part of the caller
 #define ZR_CALLERMASK 0x00FF0000
 #define ZR_ARGS       0x00010000     // general mistake with the arguments
@@ -354,6 +356,7 @@ unsigned int FormatZipMessage(ZRESULT code, char *buf,unsigned int len);
 // }
 // CloseZip(hz);
 //
+//
 
 
 
@@ -364,7 +367,7 @@ unsigned int FormatZipMessage(ZRESULT code, char *buf,unsigned int len);
 // the cpp files for zip and unzip are both present, so we will call
 // one or the other of them based on a dynamic choice. If the header file
 // for only one is present, then we will bind to that particular one.
-HZIP OpenZipU(void *z,unsigned int len,DWORD flags);
+HZIP OpenZipU(void *z,unsigned int len,DWORD flags, const char *password = 0);
 ZRESULT CloseZipU(HZIP hz);
 unsigned int FormatZipMessageU(ZRESULT code, char *buf,unsigned int len);
 bool IsZipHandleU(HZIP hz);

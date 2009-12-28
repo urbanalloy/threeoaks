@@ -43,10 +43,11 @@
 #include "resource.h"
 
 #include "DragDrop/CDropTarget.h"
+#include "HTTP/FileDownloader.h"
+#include "Instance/CSingleInstance.h"
 #include "Monitor/MonitorInfo.h"
 #include "Volume/IVolumeEventsConnectionPoint.h"
-#include "Instance/CSingleInstance.h"
-#include "HTTP/FileDownloader.h"
+#include "Archive/Archive.h"
 
 #include <string>
 #include <vector>
@@ -129,11 +130,15 @@ END_CONNECTION_POINT_MAP()
 		// Monitors
 		HANDLE m_hConfigMutex;
 		vector<pair<RECT, bool>> m_monitors;
+		static BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData);
 
 		// Downloads
 		FileDownloader* m_pFileDownloader;
 
-		static BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData);
+		// Zip
+		CArchive* m_pZipUtility;
+
+		// Misc		
 		static bool hasEnding(wstring const &fullString, wstring const &ending);
 
 		//////////////////////////////////////////////////////////////////////////
@@ -235,6 +240,12 @@ END_CONNECTION_POINT_MAP()
 
 		// Peak level
 		STDMETHOD(get_PeakValue)(int *level);
+
+		/************************************************************************/
+		/* Zip                                                               */
+		/************************************************************************/
+
+		STDMETHOD(GetArchive)(IArchive **zip);
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(SystemEx), CSystemEx)

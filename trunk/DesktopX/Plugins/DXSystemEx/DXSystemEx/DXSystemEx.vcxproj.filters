@@ -4,6 +4,9 @@
     <Filter Include="COM/Functions">
       <UniqueIdentifier>{4ab934cc-e6f8-4123-9309-7928722b971f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="COM/Functions\Archive">
+      <UniqueIdentifier>{657a2379-94a5-43a9-bead-16db1000b343}</UniqueIdentifier>
+    </Filter>
     <Filter Include="COM/Functions\Drag&amp;Drop">
       <UniqueIdentifier>{7a33795a-3555-4360-b6b1-975d9ebafb1a}</UniqueIdentifier>
     </Filter>
@@ -21,9 +24,6 @@
     </Filter>
     <Filter Include="COM/Functions\Volume">
       <UniqueIdentifier>{6685420c-1717-409b-952b-39ef59230bda}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="COM/Functions\Zip">
-      <UniqueIdentifier>{657a2379-94a5-43a9-bead-16db1000b343}</UniqueIdentifier>
     </Filter>
     <Filter Include="Docs">
       <UniqueIdentifier>{17d3c54d-b23a-424d-8916-f4fcf2abdb70}</UniqueIdentifier>
@@ -94,14 +94,14 @@
     <ClCompile Include="Volume\VistaVolumeCallback.cpp">
       <Filter>COM/Functions\Volume</Filter>
     </ClCompile>
-    <ClCompile Include="Zip\XUnzip.cpp">
-      <Filter>COM/Functions\Zip</Filter>
+    <ClCompile Include="Archive\Archive.cpp">
+      <Filter>COM/Functions\Archive</Filter>
     </ClCompile>
-    <ClCompile Include="Zip\XZip.cpp">
-      <Filter>COM/Functions\Zip</Filter>
+    <ClCompile Include="Archive\XUnzip.cpp">
+      <Filter>COM/Functions\Archive</Filter>
     </ClCompile>
-    <ClCompile Include="Zip\ZipUtility.cpp">
-      <Filter>COM/Functions\Zip</Filter>
+    <ClCompile Include="Archive\XZip.cpp">
+      <Filter>COM/Functions\Archive</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -165,14 +165,14 @@
     <ClInclude Include="Volume\VistaVolumeCallback.h">
       <Filter>COM/Functions\Volume</Filter>
     </ClInclude>
-    <ClInclude Include="Zip\XUnzip.h">
-      <Filter>COM/Functions\Zip</Filter>
+    <ClInclude Include="Archive\Archive.h">
+      <Filter>COM/Functions\Archive</Filter>
     </ClInclude>
-    <ClInclude Include="Zip\XZip.h">
-      <Filter>COM/Functions\Zip</Filter>
+    <ClInclude Include="Archive\XUnzip.h">
+      <Filter>COM/Functions\Archive</Filter>
     </ClInclude>
-    <ClInclude Include="Zip\ZipUtility.h">
-      <Filter>COM/Functions\Zip</Filter>
+    <ClInclude Include="Archive\XZip.h">
+      <Filter>COM/Functions\Archive</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

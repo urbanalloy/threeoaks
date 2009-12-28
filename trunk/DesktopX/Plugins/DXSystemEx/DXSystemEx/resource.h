@@ -5,7 +5,7 @@
 #define IDS_PROJNAME                    100
 #define IDR_SYSTEMEX                    101
 #define IDR_MONITORINFO                 102
-#define IDR_ZIPUTILITY                  103
+#define IDR_ARCHIVE                  103
 #define IDD_CONFIG                      201
 #define IDB_PICTURE                     202
 #define IDC_BUILD                       203

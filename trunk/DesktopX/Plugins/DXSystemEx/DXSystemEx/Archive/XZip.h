@@ -120,7 +120,7 @@ typedef DWORD ZRESULT;		// result codes from any of the zip functions. Listed la
 //
 // Returns:     HZIP   - non-zero if zip archive created ok, otherwise 0
 //
-HZIP CreateZip(void *z, unsigned int len, DWORD flags);
+HZIP CreateZip(void *z, unsigned int len, DWORD flags, const char* password = 0);
 // CreateZip - call this to start the creation of a zip file.
 // As the zip is being created, it will be stored somewhere:
 // to a pipe:              CreateZip(hpipe_write, 0,ZIP_HANDLE);
@@ -131,7 +131,10 @@ HZIP CreateZip(void *z, unsigned int len, DWORD flags);
 // The final case stores it in memory backed by the system paging file,
 // where the zip may not exceed len bytes. This is a bit friendlier than
 // allocating memory with new[]: it won't lead to fragmentation, and the
-// memory won't be touched unless needed.
+// memory won't be touched unless needed. That means you can give very
+// large estimates of the maximum-size without too much worry.
+// As for the password, it lets you encrypt every file in the archive.
+// (This api doesn't support per-file encryption.)
 // Note: because pipes don't allow random access, the structure of a zipfile
 // created into a pipe is slightly different from that created into a file
 // or memory. In particular, the compressed-size of the item cannot be
@@ -239,6 +242,9 @@ unsigned int FormatZipMessage(ZRESULT code, char *buf,unsigned int len);
 
 
 
+
+
+
 // e.g.
 //
 // (1) Traditional use, creating a zipfile from existing files
@@ -303,7 +309,7 @@ unsigned int FormatZipMessage(ZRESULT code, char *buf,unsigned int len);
 // the cpp files for zip and unzip are both present, so we will call
 // one or the other of them based on a dynamic choice. If the header file
 // for only one is present, then we will bind to that particular one.
-HZIP CreateZipZ(void *z,unsigned int len,DWORD flags);
+HZIP CreateZipZ(void *z,unsigned int len,DWORD flags, const char* password = 0);
 ZRESULT CloseZipZ(HZIP hz);
 unsigned int FormatZipMessageZ(ZRESULT code, char *buf,unsigned int len);
 bool IsZipHandleZ(HZIP hz);
