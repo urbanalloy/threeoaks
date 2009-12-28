@@ -20,6 +20,24 @@ Full source code is available here: http://code.google.com/p/threeoaks/
 ** Documentation
 *******************************************************************************************************
 
+-------
+Archive (WIP - only handles zip and does not have any progress callbacks)
+-------
+Properties & Methods
+    - InputFolder
+    - Path
+	- FileName
+	- Password 
+    - Count
+	- Files
+	- Create(filePath)
+	- Open(filePath)
+	- AddFile(originalFilename, newFilename)
+	- ExistsFile(filename)
+	- ExtractFile(filename, outputDirectory)
+	- Close()
+	- Extract(filePath, outputDirectory)
+
 -----------
 Drag & Drop
 -----------
@@ -43,6 +61,7 @@ Misc
 ----
 Properties & Methods
 	- VerifySignature(path, signature, type)
+	- GetArchive()
 
 -------------------
 Monitor information
@@ -93,7 +112,6 @@ SystemEx_OnDropFiles(files)
 ---------------------------
 
 Gets called when the user drops one or more files on the object. "files" will be an array of file names
-
 
 Notes: 
  1. You don't need to set the layer to Accept Drag&Drop in the layer options.
@@ -286,3 +304,86 @@ Version 1.0 Build 204: First released version
   OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
   POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************************************
+
+*******************************************************************************************************
+** Aknowledgments
+*******************************************************************************************************
+ Incorporates code from zlib 
+
+ Copyright (C) 1995-1998 Jean-loup Gailly and Mark Adler
+ 
+ This software is provided 'as-is', without any express or implied
+ warranty.  In no event will the authors be held liable for any damages
+ arising from the use of this software.
+
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it
+ freely, subject to the following restrictions:
+
+ 1. The origin of this software must not be misrepresented; you must not
+    claim that you wrote the original software. If you use this software
+    in a product, an acknowledgment in the product documentation would be
+    appreciated but is not required.
+ 2. Altered source versions must be plainly marked as such, and must not be
+    misrepresented as being the original software.
+ 3. This notice may not be removed or altered from any source distribution.
+
+ Jean-loup Gailly        Mark Adler
+ jloup@gzip.org          madler@alumni.caltech.edu
+
+ -------------------------------------------------------------------------------------------------------
+ Incorporates code by the Info-ZIP group, further modified by Hans Dietrich and Lucian Wischik
+
+ This is version 2002-Feb-16 of the Info-ZIP copyright and license. The 
+ definitive version of this document should be available at 
+ ftp:ftp.info-zip.org/pub/infozip/license.html indefinitely.
+ 
+ Copyright (c) 1990-2002 Info-ZIP.  All rights reserved.
+
+ For the purposes of this copyright and license, "Info-ZIP" is defined as
+ the following set of individuals:
+
+   Mark Adler, John Bush, Karl Davis, Harald Denker, Jean-Michel Dubois,
+   Jean-loup Gailly, Hunter Goatley, Ian Gorman, Chris Herborth, Dirk Haase,
+   Greg Hartwig, Robert Heath, Jonathan Hudson, Paul Kienitz, 
+   David Kirschbaum, Johnny Lee, Onno van der Linden, Igor Mandrichenko, 
+   Steve P. Miller, Sergio Monesi, Keith Owens, George Petrov, Greg Roelofs, 
+   Kai Uwe Rommel, Steve Salisbury, Dave Smith, Christian Spieler, 
+   Antoine Verheijen, Paul von Behren, Rich Wales, Mike White
+
+ This software is provided "as is", without warranty of any kind, express
+ or implied.  In no event shall Info-ZIP or its contributors be held liable
+ for any direct, indirect, incidental, special or consequential damages
+ arising out of the use of or inability to use this software.
+
+ Permission is granted to anyone to use this software for any purpose,
+ including commercial applications, and to alter it and redistribute it
+ freely, subject to the following restrictions:
+
+    1. Redistributions of source code must retain the above copyright notice,
+       definition, disclaimer, and this list of conditions.
+
+    2. Redistributions in binary form (compiled executables) must reproduce 
+       the above copyright notice, definition, disclaimer, and this list of 
+       conditions in documentation and/or other materials provided with the 
+       distribution. The sole exception to this condition is redistribution 
+       of a standard UnZipSFX binary as part of a self-extracting archive; 
+       that is permitted without inclusion of this license, as long as the 
+       normal UnZipSFX banner has not been removed from the binary or disabled.
+
+    3. Altered versions--including, but not limited to, ports to new 
+       operating systems, existing ports with new graphical interfaces, and 
+       dynamic, shared, or static library versions--must be plainly marked 
+       as such and must not be misrepresented as being the original source.  
+       Such altered versions also must not be misrepresented as being 
+       Info-ZIP releases--including, but not limited to, labeling of the 
+       altered versions with the names "Info-ZIP" (or any variation thereof, 
+       including, but not limited to, different capitalizations), 
+       "Pocket UnZip", "WiZ" or "MacZip" without the explicit permission of 
+       Info-ZIP.  Such altered versions are further prohibited from 
+       misrepresentative use of the Zip-Bugs or Info-ZIP e-mail addresses or 
+       of the Info-ZIP URL(s).
+
+    4. Info-ZIP retains the right to use the names "Info-ZIP", "Zip", "UnZip",
+       "UnZipSFX", "WiZ", "Pocket UnZip", "Pocket Zip", and "MacZip" for its 
+       own source and binary releases.

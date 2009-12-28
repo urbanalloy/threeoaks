@@ -164,11 +164,14 @@
     <ClCompile Include="Utils\VersionCheck.cpp" />
     <ClCompile Include="Instance\CSingleInstance.cpp" />
     <ClCompile Include="HTTP\FileDownloader.cpp" />
-    <ClCompile Include="Zip\XUnzip.cpp" />
-    <ClCompile Include="Zip\XZip.cpp" />
-    <ClCompile Include="Zip\ZipUtility.cpp" />
+    <ClCompile Include="Archive\XUnzip.cpp" />
+    <ClCompile Include="Archive\XZip.cpp" />
+    <ClCompile Include="Archive\Archive.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Archive\XUnzip.h" />
+    <ClInclude Include="Archive\XZip.h" />
+    <ClInclude Include="Archive\Archive.h" />
     <ClInclude Include="..\..\SDK\HelperMacros.h" />
     <ClInclude Include="dlldatax.h" />
     <ClInclude Include="DragDrop\CDropTarget.h" />
@@ -189,9 +192,6 @@
     <ClInclude Include="Utils\VersionCheck.h" />
     <ClInclude Include="Instance\CSingleInstance.h" />
     <ClInclude Include="HTTP\FileDownloader.h" />
-    <ClInclude Include="Zip\XUnzip.h" />
-    <ClInclude Include="Zip\XZip.h" />
-    <ClInclude Include="Zip\ZipUtility.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="Config.tpl">

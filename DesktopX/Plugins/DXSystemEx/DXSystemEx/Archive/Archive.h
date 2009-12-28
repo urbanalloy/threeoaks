@@ -43,58 +43,73 @@
 #include "DXSystemEx.h"
 #include "resource.h"
 
+#include "Archive/XZip.h"
+#include "Archive/XUnzip.h"
+
 #include <vector>
 using namespace std;
 
 /////////////////////////////////////////////////////////////////////////////
-// CZipUtility
-class ATL_NO_VTABLE CZipUtility :
+// CArchive
+class ATL_NO_VTABLE CArchive :
 	public CComObjectRootEx<CComSingleThreadModel>,
-	public CComCoClass<CZipUtility, &CLSID_ZipUtility>,
-	public IDispatchImpl<IZipUtility, &IID_IZipUtility, &LIBID_DXSystemExLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
+	public CComCoClass<CArchive, &CLSID_Archive>,
+	public IDispatchImpl<IArchive, &IID_IArchive, &LIBID_DXSystemExLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
     public ISupportErrorInfo
 {
 	public:
-	CZipUtility() {}
+	CArchive() {		
+	}
 
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
 
 	HRESULT FinalConstruct()
 	{
+		m_filename = "";
+		m_path = "";
+		m_inputFolder = "";
+		m_password = "";
+		m_hZip = NULL;
+
 		return S_OK;
 	}
 
 	void FinalRelease()
 	{
+		clear();
 	}
 
-DECLARE_REGISTRY_RESOURCEID(IDR_ZIPUTILITY)
+DECLARE_REGISTRY_RESOURCEID(IDR_ARCHIVE)
 
-DECLARE_NOT_AGGREGATABLE(CZipUtility)
+DECLARE_NOT_AGGREGATABLE(CArchive)
 
-BEGIN_COM_MAP(CZipUtility)
-	COM_INTERFACE_ENTRY(IZipUtility)
+BEGIN_COM_MAP(CArchive)
+	COM_INTERFACE_ENTRY(IArchive)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
 private:
-		struct ZipFileInfo
+		struct FileInfo
 		{
-			_bstr_t bstrFileName;
-			_bstr_t bstrNewName;
-			_bstr_t bstrPath;
-			long lCompSize;
+			_bstr_t filename;
+			_bstr_t newFilename;
+			_bstr_t path;
+			long compressedSize;
 		};
 
-		typedef vector<ZipFileInfo> ZipFileInfoVtr;
+		typedef vector<FileInfo> FileInfoList;
 
-		_bstr_t m_bstrFileName;
-		_bstr_t m_bstrOutputPath;
-		_bstr_t m_bstrInputPath;
-		ZipFileInfoVtr m_vtrFiles;
+		_bstr_t m_filename;
+		_bstr_t m_path;
+		_bstr_t m_inputFolder;
+		_bstr_t m_password;
+		FileInfoList m_files;
 
-		_bstr_t CalcFullFileName();
+		HZIP m_hZip;
+
+		void clear();
+		void parseInputFilename(BSTR file);
 
 	public:
 		//////////////////////////////////////////////////////////////////////////
@@ -103,21 +118,28 @@ private:
 		STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 		//////////////////////////////////////////////////////////////////////////
-		// IZipUtility
+		// IArchive
 		//////////////////////////////////////////////////////////////////////////
-		STDMETHOD(ExistsFile)(BSTR strFileName, BOOL* pVal);
-		STDMETHOD(Open)();
-		STDMETHOD(get_FullFileName)(BSTR *pVal);
-		STDMETHOD(Unzip)();
-		STDMETHOD(Zip)();
-		STDMETHOD(get_Count)(long *pVal);
-		STDMETHOD(AddFile)(BSTR strFileName, BSTR strNewName);
-		STDMETHOD(get_FileName)(BSTR *pVal);
-		STDMETHOD(put_FileName)(BSTR newVal);
-		STDMETHOD(get_OutputPath)(BSTR *pVal);
-		STDMETHOD(put_OutputPath)(BSTR newVal);
-		STDMETHOD(get_InputPath)(BSTR *pVal);
-		STDMETHOD(put_InputPath)(BSTR newVal);
+
+		// Properties
+		STDMETHOD(get_InputFolder)(BSTR *inputFolder);
+		STDMETHOD(put_InputFolder)(BSTR inputFolder);
+		STDMETHOD(get_Path)(BSTR *path);
+		STDMETHOD(get_FileName)(BSTR *filename);
+		STDMETHOD(get_Password)(BSTR *password);
+		STDMETHOD(put_Password)(BSTR password);
+		STDMETHOD(get_Count)(long *count);
+		STDMETHOD(get_Files)(VARIANT* files);
+
+		// Methods
+		STDMETHOD(Create)(BSTR filePath, VARIANT_BOOL *status);
+		STDMETHOD(Open)(BSTR filePath, VARIANT_BOOL *status);
+		STDMETHOD(ExistsFile)(BSTR filename, VARIANT_BOOL* status);
+		STDMETHOD(AddFile)(BSTR originalFilename, BSTR newFilename, VARIANT_BOOL* status);	
+		STDMETHOD(ExtractFile)(BSTR filename, BSTR outputPath, VARIANT_BOOL* status);
+		STDMETHOD(Close)();
+				
+		STDMETHOD(Extract)(BSTR filename, BSTR outputDirectory, VARIANT_BOOL *status);
 };
 
-OBJECT_ENTRY_AUTO(__uuidof(ZipUtility), CZipUtility)
+OBJECT_ENTRY_AUTO(__uuidof(Archive), CArchive)

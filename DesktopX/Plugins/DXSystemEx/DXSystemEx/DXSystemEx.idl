@@ -34,35 +34,39 @@ interface IMonitorInfo : IDispatch{
 
 [
 	object,
-	uuid(B9A55D32-CAD4-4a1f-AE82-F592554B40F9),
+	uuid(10B80EC0-FFD2-4c4f-B023-D3E63EE0B542),
 	dual,
-	helpstring("IZipUtility Interface"),
+	helpstring("IArchive Interface"),
 	pointer_default(unique)
 ]
-interface IZipUtility : IDispatch
+interface IArchive : IDispatch
 {
+	// TODO return proper error codes instead of boolean
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Properties
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	[propget, id(1), helpstring("Get the input path")] HRESULT InputPath([out, retval] BSTR *pVal);
-	[propput, id(1), helpstring("Set the input path")] HRESULT InputPath([in] BSTR newVal);
-	[propget, id(2), helpstring("Get the output path")] HRESULT OutputPath([out, retval] BSTR *pVal);
-	[propput, id(2), helpstring("Set the output path")] HRESULT OutputPath([in] BSTR newVal);
-	[propget, id(3), helpstring("Set the filename")] HRESULT FileName([out, retval] BSTR *pVal);
-	[propput, id(3), helpstring("Get the filename")] HRESULT FileName([in] BSTR newVal);
-	[propget, id(4), helpstring("Get the number of files in the zip file")] HRESULT Count([out, retval] long *pVal);
-	[propget, id(5), helpstring("Get the full filename (output path + filename)")] HRESULT FullFileName([out, retval] BSTR *pVal);
-
+	[propget, id(1), helpstring("Get the input folder")] HRESULT InputFolder([out, retval] BSTR *inputFolder);
+	[propput, id(1), helpstring("Set the input folder")] HRESULT InputFolder([in] BSTR inputFolder);
+	[propget, id(2), helpstring("Get the file path")] HRESULT Path([out, retval] BSTR *path);	
+	[propget, id(3), helpstring("Get the filename")] HRESULT FileName([out, retval] BSTR *filename);	
+	[propget, id(4), helpstring("Get the password")] HRESULT Password([out, retval] BSTR *password);
+	[propput, id(4), helpstring("Set the password")] HRESULT Password([in] BSTR password);
+	[propget, id(5), helpstring("Get the number of files in the archive")] HRESULT Count([out, retval] long *count);	
+	[propget, id(6), helpstring("Get the list of files inside the archive")] HRESULT Files([out, retval] VARIANT* files);	
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Methods
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	[id(6), helpstring("Add a new file to the zip file")] HRESULT AddFile(BSTR strFileName, BSTR strNewName);	
-	[helpstring("Zip the contents of InputPath")] HRESULT Zip();
-	[helpstring("Unzip the contents of Filename to OutputPath")] HRESULT Unzip();	
-	[helpstring("Open an existing zip file")] HRESULT Open();
-	[helpstring("Check if a file exists in the zip file")] HRESULT ExistsFile(BSTR strFileName, [out, retval] BOOL* pVal);
+	[id(7), helpstring("Create a new archive")] HRESULT Create([in] BSTR filePath, [out, retval] VARIANT_BOOL* status);
+	[helpstring("Open an existing archive file")] HRESULT Open([in] BSTR filePath, [out, retval] VARIANT_BOOL* status);
+	[helpstring("Add a new file to the archive")] HRESULT AddFile([in] BSTR originalFilename, [in] BSTR newFilename, [out, retval] VARIANT_BOOL* status);	
+	[helpstring("Check if a file exists in the archive")] HRESULT ExistsFile([in]BSTR filename, [out, retval] VARIANT_BOOL* status);
+	[helpstring("Extract a single file from the archive")] HRESULT ExtractFile([in]BSTR filename, [in] BSTR outputDirectory, [out, retval] VARIANT_BOOL* status);
+	[helpstring("Close the currently opened archive file")] HRESULT Close();
+	[helpstring("Extract the contents of filename to outputDirectory")] HRESULT Extract([in] BSTR filePath, [in] BSTR outputDirectory, [out, retval] VARIANT_BOOL* status);
 };
 
 [
@@ -96,7 +100,6 @@ interface ISystemEx : IDispatch{
 	[propget, id(9), helpstring("Get the executable folder")] HRESULT ExecutableFolder([out, retval] BSTR* directory);
 	[propget, id(10), helpstring("Get the executable name")] HRESULT ExecutableName([out, retval] BSTR* name);
 
-
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Methods
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -109,7 +112,10 @@ interface ISystemEx : IDispatch{
 
 	// Download
 	[helpstring("Download a file with progress information")] HRESULT DownloadFile([in] int id, [in] BSTR remoteUrl, [in] BSTR localPath);
-	[helpstring("Stop an existing download")] HRESULT StopDownload([in] int id);
+	[helpstring("Stop an existing download")] HRESULT StopDownload([in] int id);	
+
+	// Archive
+	[helpstring("Get an archive object")] HRESULT GetArchive([out, retval] IArchive** zip);
 };
 
 [
@@ -158,12 +164,12 @@ library DXSystemExLib
 
 	importlib("stdole2.tlb");
 	[
-		uuid(674E4C28-957C-4564-9DAF-4960947129E6),
-		helpstring("ZipUtility Class")
+		uuid(796B8264-38CE-4c63-8657-C1B114CA9DF8),
+		helpstring("Archive Class")
 	]
-	coclass ZipUtility
+	coclass Archive
 	{
-		[default] interface IZipUtility;
+		[default] interface IArchive;
 		interface ISupportErrorInfo;
 	};
 };
