@@ -8,6 +8,23 @@ import "ocidl.idl";
 
 [
 	object,
+	uuid(9A0F925A-9DFF-495e-986A-680A952A6922),
+	dual,
+	nonextensible,
+	helpstring("IArchiveItem Interface"),
+	pointer_default(unique)
+]
+interface IArchiveItem : IDispatch{
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Properties
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	[propget, id(1), helpstring("Name of the item")] HRESULT Name([out, retval] BSTR* name);	
+	[propget, id(2), helpstring("True if the item is a directory, false otherwise")] HRESULT IsDirectory([out, retval] VARIANT_BOOL* isDirectory);
+	[propget, id(3), helpstring("Compressed size")] HRESULT CompressedSize([out, retval] long* compressedSize);
+};
+
+[
+	object,
 	uuid(9D1E1F8B-3D11-466e-956A-CC86AC9658D8),
 	dual,
 	nonextensible,
@@ -25,11 +42,6 @@ interface IMonitorInfo : IDispatch{
 	[propget, id(5), helpstring("Right coordinate of monitor")] HRESULT Right([out, retval] int* right);
 	[propget, id(6), helpstring("Width of monitor")] HRESULT Width([out, retval] int* width);
 	[propget, id(7), helpstring("Height of monitor")] HRESULT Height([out, retval] int* height);
-	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Methods
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 };
 
 [
@@ -54,19 +66,24 @@ interface IArchive : IDispatch
 	[propget, id(4), helpstring("Get the password")] HRESULT Password([out, retval] BSTR *password);
 	[propput, id(4), helpstring("Set the password")] HRESULT Password([in] BSTR password);
 	[propget, id(5), helpstring("Get the number of files in the archive")] HRESULT Count([out, retval] long *count);	
-	[propget, id(6), helpstring("Get the list of files inside the archive")] HRESULT Files([out, retval] VARIANT* files);	
+	[propget, id(6), helpstring("Get the list of items inside the archive")] HRESULT Items([out, retval] VARIANT* items);	
+	[propget, id(7), helpstring("Get the archive compression type")] HRESULT Type([out, retval] int* type);	
+
+	[propget, id(8), helpstring("Get the list of supported extensions")] HRESULT SupportedExtensions([out, retval] VARIANT* exts);
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Methods
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	[id(7), helpstring("Create a new archive")] HRESULT Create([in] BSTR filePath, [out, retval] VARIANT_BOOL* status);
+	[id(9), helpstring("Create a new archive")] HRESULT Create([in] BSTR filePath, [in] int type, [out, retval] VARIANT_BOOL* status);
 	[helpstring("Open an existing archive file")] HRESULT Open([in] BSTR filePath, [out, retval] VARIANT_BOOL* status);
-	[helpstring("Add a new file to the archive")] HRESULT AddFile([in] BSTR originalFilename, [in] BSTR newFilename, [out, retval] VARIANT_BOOL* status);	
+	[helpstring("Add a new file to the archive")] HRESULT AddFile([in] BSTR filename, [out, retval] VARIANT_BOOL* status);	
 	[helpstring("Check if a file exists in the archive")] HRESULT ExistsFile([in]BSTR filename, [out, retval] VARIANT_BOOL* status);
 	[helpstring("Extract a single file from the archive")] HRESULT ExtractFile([in]BSTR filename, [in] BSTR outputDirectory, [out, retval] VARIANT_BOOL* status);
+	[helpstring("Extract the contents of the opened archive to outputDirectory")] HRESULT Extract([in] BSTR outputDirectory, [out, retval] VARIANT_BOOL* status);
 	[helpstring("Close the currently opened archive file")] HRESULT Close();
-	[helpstring("Extract the contents of filename to outputDirectory")] HRESULT Extract([in] BSTR filePath, [in] BSTR outputDirectory, [out, retval] VARIANT_BOOL* status);
+
+	[helpstring("Return true if the archive format is handled, false otherwise")] HRESULT IsArchive([in] BSTR filePath, [out, retval] VARIANT_BOOL* status);
 };
 
 [
@@ -108,6 +125,7 @@ interface ISystemEx : IDispatch{
 	[id(11), helpstring("Get the specific monitor info identified by index")] HRESULT GetMonitor([in] int index, [out, retval] IMonitorInfo** info);
 
 	// Signature
+	[helpstring("Get the file signature")] HRESULT GetSignature([in] BSTR path, [in] int type, [out, retval] BSTR* signature);
 	[helpstring("Verify the file signature")] HRESULT VerifySignature([in] BSTR path, [in] BSTR signature, [in] int type, [out, retval] VARIANT_BOOL* isValid);
 
 	// Download
@@ -159,6 +177,17 @@ library DXSystemExLib
 	coclass MonitorInfo
 	{
 		[default] interface IMonitorInfo;
+		interface ISupportErrorInfo;
+	};
+
+	importlib("stdole2.tlb");
+	[
+		uuid(FA95AF31-18C6-4310-94F2-62282D42A683),
+		helpstring("ArchiveItem Class")
+	]
+	coclass ArchiveItem
+	{
+		[default] interface IArchiveItem;
 		interface ISupportErrorInfo;
 	};
 

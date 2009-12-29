@@ -94,8 +94,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#define _USE_32BIT_TIME_T	//+++1.2
+#include "Config.h"
+#if ENABLE_ZIP_FALLBACK
 
+#define _USE_32BIT_TIME_T	//+++1.2
 
 #define STRICT
 #define WIN32_LEAN_AND_MEAN
@@ -3085,3 +3087,4 @@ BOOL AddFolderContent(HZIP hZip, TCHAR* AbsolutePath, TCHAR* DirToAdd)
 	
 }
 
+#endif

@@ -17,13 +17,15 @@
 #define PLUGIN_HOSTS		SD_HOST_DESKTOPX
 
 #define PLUGIN_PREFIX 		"SystemEx_"
+// Compile zip fallback in case 7z.dll is not included
+#define ENABLE_ZIP_FALLBACK		1
 
-#define VERSION_MAJOR 1  
-#define VERSION_MINOR 0
-#define VERSION_BUILD $WCREV$
+#define VERSION_MAJOR 		1  
+#define VERSION_MINOR 		1
+#define VERSION_BUILD 		$WCREV$
 
 #ifdef DEBUG
-#define EXPIRATION_YEAR 2010
-#define EXPIRATION_MONTH 10
-#define EXPIRATION_DAY 5
+#define EXPIRATION_YEAR 	2010
+#define EXPIRATION_MONTH 	10
+#define EXPIRATION_DAY 		5
 #endif

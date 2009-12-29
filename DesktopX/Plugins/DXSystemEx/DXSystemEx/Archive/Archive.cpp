@@ -37,20 +37,28 @@
 
 #include "Archive/Archive.h"
 
+#include <SDPlugin.h>
 #include <atlpath.h>
+#include <shlobj.h>
 
-void CArchive::clear() {
-	
+extern HINSTANCE g_hInstance;	
+extern BOOL (__stdcall *SDHostMessage)(UINT, DWORD, DWORD);
+
+void CArchive::clear() 
+{
 	m_filename = "";
 	m_path = "";
 	m_password = "";
 	m_files.empty();
+	m_type = kArchiveNone;
 
+#if ENABLE_ZIP_FALLBACK
 	if (!m_hZip)
 		return;
 
 	CloseZip(m_hZip);
 	m_hZip = NULL;
+#endif
 }
 
 void CArchive::parseInputFilename(BSTR file)
@@ -67,6 +75,29 @@ void CArchive::parseInputFilename(BSTR file)
 
 	m_path = LPCTSTR(path);
 	m_filename = LPCTSTR(filename);
+}
+
+void CArchive::load7zip() {
+	char pluginsPath[MAX_PATH], objectPath[MAX_PATH], programFilesPath[MAX_PATH], dll7zip[MAX_PATH];
+
+	GetModuleFileName(g_hInstance, pluginsPath, MAX_PATH);
+	SDHostMessage(SD_GET_OBJECT_DIRECTORY, (DWORD)objectPath, 0);
+	SHGetFolderPath(NULL, CSIDL_PROGRAM_FILES, NULL, SHGFP_TYPE_CURRENT, (char *)&programFilesPath);
+	sprintf_s((char *)&programFilesPath, MAX_PATH, "%s\\7-Zip\\7z.dll", (char *)&programFilesPath);
+
+#define TRYLOAD_7ZLIB(path)  \
+	{ \
+		CPath dllPath(path); \
+		dllPath.RemoveFileSpec(); \
+		sprintf_s((char*)&dll7zip, MAX_PATH, "%s\\7z.dll", (LPCTSTR)dllPath); \
+		m_h7zip = LoadLibrary((char*)&dll7zip); \
+		if (m_h7zip) \
+			return; \
+	}
+
+	TRYLOAD_7ZLIB(objectPath)
+	TRYLOAD_7ZLIB(pluginsPath)
+	TRYLOAD_7ZLIB(programFilesPath)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,20 +164,14 @@ STDMETHODIMP CArchive::put_Password(BSTR password)
 
 STDMETHODIMP CArchive::get_Count(long *count)
 {
-	//if (!m_hZip)
-	//	return CCOMError::DispatchError(SYNTAX_ERR, CLSID_ZipFile, _T("No file opened!"), "You need to create or open a zip file before calling Count", 0, NULL);
-
 	*count = (long)m_files.size();
 
 	return S_OK;
 }
 
-STDMETHODIMP CArchive::get_Files(VARIANT *files)
+STDMETHODIMP CArchive::get_Items(VARIANT *items)
 {
-	//if (!m_hZip)
-	//	return CCOMError::DispatchError(SYNTAX_ERR, CLSID_ZipFile, _T("No file opened!"), "You need to create or open a zip file before calling Files", 0, NULL);
-
-	// Create SafeArray of VARIANT BSTRs
+	// Create SafeArray of VARIANTS
 	SAFEARRAY *pSA;
 	SAFEARRAYBOUND aDim[1];
 
@@ -155,11 +180,74 @@ STDMETHODIMP CArchive::get_Files(VARIANT *files)
 
 	pSA = SafeArrayCreate(VT_VARIANT, 1, aDim);
 
-	if (pSA != NULL) {
+	if (pSA != NULL && m_files.size() > 0) {
+		for (long l = aDim[0].lLbound; l < (signed)(aDim[0].cElements + aDim[0].lLbound); l++) {
+
+			VARIANT vOut;
+			VariantInit(&vOut);
+			vOut.vt = VT_DISPATCH;
+
+			// Init MonitorInfo
+			CComObject<CArchiveItem>* pArchiveItem;
+			CComObject<CArchiveItem>::CreateInstance(&pArchiveItem);
+			pArchiveItem->Init(m_files[l]);
+			pArchiveItem->QueryInterface(IID_IArchiveItem, (void**)&vOut.pdispVal);
+
+			HRESULT hr = SafeArrayPutElement(pSA, &l, &vOut);
+
+			if (FAILED(hr)) {
+				VariantClear(&vOut);
+				SafeArrayDestroy(pSA); // does a deep destroy of source VARIANT
+
+				return hr;
+			}
+
+			VariantClear(&vOut);
+		}
+	}
+
+	// return SafeArray as VARIANT
+	V_VT(items) = VT_ARRAY | VT_VARIANT;
+	V_ARRAY(items)= pSA;
+
+	return S_OK;
+}
+
+STDMETHODIMP CArchive::get_Type(int* type)
+{
+	*type = m_type;
+
+	return S_OK;
+}
+
+STDMETHODIMP CArchive::get_SupportedExtensions(VARIANT* extensions) 
+{	
+	// Compute extensions
+	vector<string> exts;
+
+	if (m_h7zip) {
+
+	} else {
+#if ENABLE_ZIP_FALLBACK	
+		exts.push_back("zip");
+#endif
+	}
+
+	// Create SafeArray of VARIANT BSTRs
+	USES_CONVERSION;
+	SAFEARRAY *pSA;
+	SAFEARRAYBOUND aDim[1];
+
+	aDim[0].lLbound = 0;
+	aDim[0].cElements = exts.size(); // when no file is opened, will return an empty array
+
+	pSA = SafeArrayCreate(VT_VARIANT, 1, aDim);
+
+	if (pSA != NULL && aDim[0].cElements > 0) {
 		variant_t vOut;
 
 		for (long l = aDim[0].lLbound; l < (signed)(aDim[0].cElements + aDim[0].lLbound); l++) {
-			vOut = m_files[l].filename;
+			vOut = (OLECHAR*) T2OLE(exts[l].c_str());
 
 			HRESULT hr = SafeArrayPutElement(pSA, &l, &vOut);
 
@@ -167,12 +255,13 @@ STDMETHODIMP CArchive::get_Files(VARIANT *files)
 				SafeArrayDestroy(pSA); // does a deep destroy
 				return hr;
 			}
-		}
-	}
+		}	
 
+	}
+	
 	// return SafeArray as VARIANT
-	V_VT(files) = VT_ARRAY | VT_VARIANT;
-	V_ARRAY(files)= pSA;
+	V_VT(extensions) = VT_ARRAY | VT_VARIANT;
+	V_ARRAY(extensions)= pSA;
 
 	return S_OK;
 }
@@ -180,39 +269,62 @@ STDMETHODIMP CArchive::get_Files(VARIANT *files)
 //////////////////////////////////////////////////////////////////////////
 // Methods
 //////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CArchive::Create(BSTR filePath, VARIANT_BOOL* status)
+STDMETHODIMP CArchive::Create(BSTR filePath, int type, VARIANT_BOOL* status)
 {
+	USES_CONVERSION;
+
 	// Close previously opened/created file, if any
 	clear();
 
-	USES_CONVERSION;
+	//if (m_h7zip) {
+	// switch type for archive type
+	//	return S_OK;
+	//}
+
+#if ENABLE_ZIP_FALLBACK	
+	if (type != kArchiveZip)
+		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_Archive, _T("Error: Not available"), "The plugin cannot find the 7zip dll and the zip fallback path only supports ZIP archives", 0, NULL);		
+
 	m_hZip = CreateZip(W2A(filePath), 0, ZIP_FILENAME, LPCTSTR(m_password));
 	if (!m_hZip) {
 		*status = VARIANT_FALSE;
 		return S_FALSE;
 	}
 
+	m_type = kArchiveZip;
+
 	// Store filename & path
 	parseInputFilename(filePath);
-
 	*status = VARIANT_TRUE;
+
 	return S_OK;
+#else 
+	return CCOMError::DispatchError(SYNTAX_ERR, CLSID_Archive, _T("Error: Not available"), "The plugin cannot find the 7zip dll and the zip fallback path was not compiled in!", 0, NULL);	
+#endif
 }
 
 STDMETHODIMP CArchive::Open(BSTR filePath, VARIANT_BOOL* status) 
 {
-	ZIPENTRY zipEntry;
-	ZIPENTRY zipItem;
-
+	USES_CONVERSION;
+	
 	// Close previously opened/created file, if any
 	clear();	
 
-	USES_CONVERSION;
+	//if (m_h7zip) {
+	//	return S_OK;
+	//}
+
+#if ENABLE_ZIP_FALLBACK	
+	ZIPENTRY zipEntry;
+	ZIPENTRY zipItem;
+
 	m_hZip = OpenZip(W2A(filePath), 0, ZIP_FILENAME, LPCTSTR(m_password));
 	if (!m_hZip) {
 		*status = VARIANT_FALSE;
 		return S_FALSE;
 	}
+
+	m_type = kArchiveZip;
 
 	// Store filename & path
 	parseInputFilename(filePath);
@@ -220,81 +332,91 @@ STDMETHODIMP CArchive::Open(BSTR filePath, VARIANT_BOOL* status)
 	GetZipItem(m_hZip, -1, &zipEntry);
 	for (int i = 0; i < zipEntry.index; i++)
 	{
-		FileInfo fileInfo;
+		CArchiveItem::ArchiveItem archiveItem;
 
 		GetZipItem(m_hZip, i, &zipItem);
-		fileInfo.filename = zipItem.name;
-		fileInfo.newFilename = zipItem.name;
-		fileInfo.compressedSize = zipItem.comp_size;
-		m_files.push_back(fileInfo);
+		archiveItem.filename = zipItem.name;
+		archiveItem.isDirectory = (bool)(zipItem.attr & FILE_ATTRIBUTE_DIRECTORY);
+		archiveItem.compressedSize = zipItem.comp_size;
+		m_files.push_back(archiveItem);
 	}
-
+	
 	*status = VARIANT_TRUE;
 	return S_OK;
+#else 
+	return CCOMError::DispatchError(SYNTAX_ERR, CLSID_Archive, _T("Error: Not available"), "The plugin cannot find the 7zip dll and the zip fallback path was not compiled in!", 0, NULL);	
+#endif
 }
 
 STDMETHODIMP CArchive::ExistsFile(BSTR filename, VARIANT_BOOL* result)
 {
-	if (!m_hZip)
+	if (!m_hZip && !m_h7zip)
 		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_Archive, _T("No file opened!"), "You need to create or open a zip file before calling ExistsFile", 0, NULL);
 
 	*result = FALSE;
 	_bstr_t itemName = filename;
 
-	for (FileInfoList::iterator iterBegin = m_files.begin(); iterBegin != m_files.end(); ++iterBegin)
-	{
-		FileInfo fileInfo;
-
-		fileInfo = *iterBegin;
-		if (itemName == fileInfo.filename) {
+	for (ArchiveItemList::iterator iterBegin = m_files.begin(); iterBegin != m_files.end(); ++iterBegin)
+		if (itemName == ((CArchiveItem::ArchiveItem)*iterBegin).filename) {
 			*result = TRUE;
 			break;
 		}
-	}
 
 	return S_OK;
 }
 
-STDMETHODIMP CArchive::AddFile(BSTR strFileName, BSTR strNewName, VARIANT_BOOL* status)
+STDMETHODIMP CArchive::AddFile(BSTR fileName, VARIANT_BOOL* status)
 {
-	if (!m_hZip)
+	if (!m_hZip && !m_h7zip)
 		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_Archive, _T("No file opened!"), "You need to create or open a zip file before calling ExistsFile", 0, NULL);
 
-	FileInfo fileInfo;
+	//if (m_h7zip) {
+	//	return S_OK;
+	//}
+
+#if ENABLE_ZIP_FALLBACK
+	CArchiveItem::ArchiveItem archiveItem;
 	*status = VARIANT_FALSE;
 
 	// can add ONLY if the zip file is being created
-	fileInfo.filename = strFileName;
-	fileInfo.newFilename = strNewName;
-	fileInfo.path = m_inputFolder;
-	m_files.push_back(fileInfo);
+	archiveItem.filename = fileName;
+	m_files.push_back(archiveItem);
 
-	_bstr_t fullFilename = m_inputFolder + _bstr_t(_T("\\")) + fileInfo.filename;
-	
-	if (ZipAdd(m_hZip, fileInfo.filename, (char *)fullFilename, 0, ZIP_FILENAME) == ZR_OK)
+	_bstr_t fullFilename = m_inputFolder + _bstr_t(_T("\\")) + archiveItem.filename;
+	if (ZipAdd(m_hZip, archiveItem.filename, (char *)fullFilename, 0, ZIP_FILENAME) == ZR_OK) {
 		*status = VARIANT_TRUE;
+		// TODO update compressed size
+	}
 
 	return S_OK;
+#else 
+	return CCOMError::DispatchError(SYNTAX_ERR, CLSID_Archive, _T("Error: Not available"), "The plugin cannot find the 7zip dll and the zip fallback path was not compiled in!", 0, NULL);	
+#endif
 }
 
 STDMETHODIMP CArchive::ExtractFile(BSTR filename, BSTR outputPath, VARIANT_BOOL* status)
 {
-	if (!m_hZip)
+	if (!m_hZip && !m_h7zip)
 		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_Archive, _T("No file opened!"), "You need to create or open a zip file before calling ExtractFile", 0, NULL);
 
 	*status = VARIANT_FALSE;
 
+	//if (m_h7zip) {
+	//	return S_OK;
+	//}
+
+#if ENABLE_ZIP_FALLBACK
 	_bstr_t itemName = filename;
 
 	// TODO rewrite and remove index
 	int i = 0;
-	for (FileInfoList::iterator iterBegin = m_files.begin(); iterBegin != m_files.end(); ++iterBegin)
+	for (ArchiveItemList::iterator iterBegin = m_files.begin(); iterBegin != m_files.end(); ++iterBegin)
 	{
-		FileInfo fileInfo;
+		CArchiveItem::ArchiveItem archiveItem;
 
-		fileInfo = *iterBegin;
-		if (itemName == fileInfo.filename) {
-			_bstr_t outputFile = outputPath + _bstr_t(_T("\\")) + _bstr_t(fileInfo.filename);
+		archiveItem = *iterBegin;
+		if (itemName == archiveItem.filename) {
+			_bstr_t outputFile = outputPath + _bstr_t(_T("\\")) + _bstr_t(archiveItem.filename);
 			UnzipItem(m_hZip, i, (char *)outputFile, 0, ZIP_FILENAME);
 			break;
 		}
@@ -303,6 +425,44 @@ STDMETHODIMP CArchive::ExtractFile(BSTR filename, BSTR outputPath, VARIANT_BOOL*
 	}
 
 	return S_OK;
+#else 
+	return CCOMError::DispatchError(SYNTAX_ERR, CLSID_Archive, _T("Error: Not available"), "The plugin cannot find the 7zip dll and the zip fallback path was not compiled in!", 0, NULL);	
+#endif
+}
+
+STDMETHODIMP CArchive::Extract(BSTR outputDirectory, VARIANT_BOOL* status)
+{	
+	USES_CONVERSION;
+	_bstr_t outputFile;
+	_bstr_t outputPath = outputDirectory;
+
+	*status = VARIANT_FALSE;
+
+	//if (m_h7zip) {
+	//	return S_OK;
+	//}
+
+#if ENABLE_ZIP_FALLBACK
+	ZIPENTRY zipEntry;
+	ZIPENTRY zipItem;
+
+	GetZipItem(m_hZip, -1, &zipEntry);
+	for (int i = 0; i < zipEntry.index; i++)
+	{
+		CArchiveItem::ArchiveItem archiveItem;
+
+		GetZipItem(m_hZip, i, &zipItem);
+		outputFile = outputPath + _bstr_t(_T("\\")) + _bstr_t(zipItem.name);
+
+		// TODO add error handling
+		UnzipItem(m_hZip, i, (char *)outputFile, 0, ZIP_FILENAME);
+	}
+
+	*status = VARIANT_TRUE;
+	return S_OK;
+#else 
+	return CCOMError::DispatchError(SYNTAX_ERR, CLSID_Archive, _T("Error: Not available"), "The plugin cannot find the 7zip dll and the zip fallback path was not compiled in!", 0, NULL);	
+#endif
 }
 
 STDMETHODIMP CArchive::Close()
@@ -313,36 +473,27 @@ STDMETHODIMP CArchive::Close()
 	return S_OK;
 }
 
-STDMETHODIMP CArchive::Extract(BSTR filename, BSTR outputDirectory, VARIANT_BOOL* status)
+STDMETHODIMP CArchive::IsArchive(BSTR filename, VARIANT_BOOL* status)
 {
-	HZIP hZip;
-	ZIPENTRY zipEntry;
-	ZIPENTRY zipItem;
-	_bstr_t bstrOutputFile;
-	_bstr_t bstrOutputPath = outputDirectory;
+	*status = VARIANT_FALSE;
 
-	m_files.empty();
+	_bstr_t file(filename); 
+	CString s;
+	s.Format(_T("%s"), (LPCTSTR)file);
 
-	USES_CONVERSION;
-	hZip = OpenZip((char *)W2A(filename), 0, ZIP_FILENAME, LPCTSTR(m_password));
-	if (!hZip) {
-		*status = VARIANT_FALSE;
-		return S_FALSE;
-	}
+	CPath path(s);
+	CString ext = path.GetExtension();
 
-	GetZipItem(hZip, -1, &zipEntry);
-	for (int i = 0; i < zipEntry.index; i++)
-	{
-		FileInfo fileInfo;
+	//if (m_h7zip) {
+	//	*status = VARIANT_FALSE;
 
-		GetZipItem(hZip, i, &zipItem);
-		bstrOutputFile = outputDirectory + _bstr_t(_T("\\")) + _bstr_t(zipItem.name);
+	//	return S_OK;
+	//}
 
-		// TODO add error handling
-		UnzipItem(hZip, i, (char *)bstrOutputFile, 0, ZIP_FILENAME);
-	}
-	CloseZip(hZip);
+#if ENABLE_ZIP_FALLBACK
+	if (ext == ".zip")
+		*status = VARIANT_TRUE;
+#endif
 
-	*status = VARIANT_TRUE;
 	return S_OK;
 }

@@ -5,7 +5,9 @@
 #define IDS_PROJNAME                    100
 #define IDR_SYSTEMEX                    101
 #define IDR_MONITORINFO                 102
-#define IDR_ARCHIVE                  103
+#define IDR_ARCHIVE                     103
+#define IDR_FILEINFO                    104
+#define IDR_ARCHIVEITEM                 105
 #define IDD_CONFIG                      201
 #define IDB_PICTURE                     202
 #define IDC_BUILD                       203
@@ -22,7 +24,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        104
+#define _APS_NEXT_RESOURCE_VALUE        106
 #define _APS_NEXT_COMMAND_VALUE         32768
 #define _APS_NEXT_CONTROL_VALUE         208
 #define _APS_NEXT_SYMED_VALUE           104

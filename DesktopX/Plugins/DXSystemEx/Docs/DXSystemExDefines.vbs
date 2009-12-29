@@ -34,26 +34,30 @@
 '///////////////////////////////////////////////////////////////////////////////////////////////
 
 ' Errors
-Const INDEX_SIZE_ERR				    = 1
-Const DOMSTRING_SIZE_ERR			    = 2
-Const HIERARCHY_REQUEST_ERR		        = 3
-Const WRONG_DOCUMENT_ERR			    = 4
-Const INVALID_CHARACTER_ERR		        = 5
-Const NO_DATA_ALLOWED_ERR			    = 6
-Const NO_MODIFICATION_ALLOWED_ERR       = 7
-Const NOT_FOUND_ERR				        = 8
-Const NOT_SUPPORTED_ERR			        = 9
-Const INUSE_ATTRIBUTE_ERR			    = 10
-Const INVALID_STATE_ERR			        = 11
-Const SYNTAX_ERR					    = 12
-Const INVALID_MODIFICATION_ERR          = 13
-Const NAMESPACE_ERR				        = 14
-Const INVALID_ACCESS_ERR			    = 15
-Const VALIDATION_ERR				    = 16
-Const TYPE_MISMATCH_ERR			        = 17
+Const ERR_INDEX_SIZE				    = 1
+Const ERR_DOMSTRING_SIZE			    = 2
+Const ERR_HIERARCHY_REQUEST		        = 3
+Const ERR_WRONG_DOCUMENT			    = 4
+Const ERR_INVALID_CHARACTER		        = 5
+Const ERR_NO_DATA_ALLOWED			    = 6
+Const ERR_NO_MODIFICATION_ALLOWED       = 7
+Const ERR_NOT_FOUND				        = 8
+Const ERR_NOT_SUPPORTED			        = 9
+Const ERR_INUSE_ATTRIBUTE			    = 10
+Const ERR_INVALID_STATE			        = 11
+Const ERR_SYNTAX					    = 12
+Const ERR_INVALID_MODIFICATION          = 13
+Const ERR_NAMESPACE				        = 14
+Const ERR_INVALID_ACCESS			    = 15
+Const ERR_VALIDATION				    = 16
+Const ERR_TYPE_MISMATCH			        = 17
 
 ' Signature
 Const SIGNATURE_SHA1                    = 0
+
+' Archive (1.1 only)
+Const ARCHIVE_ZIP                       = 1
+
 
 ' Download (1.1 only)
 Const DOWNLOAD_OK                       = 0

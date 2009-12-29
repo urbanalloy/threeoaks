@@ -207,6 +207,7 @@ END_CONNECTION_POINT_MAP()
 		/************************************************************************/
 		/* Signature                                                            */
 		/************************************************************************/
+		STDMETHOD(GetSignature)(BSTR path, int type, BSTR* signature);
 		STDMETHOD(VerifySignature)(BSTR path, BSTR signature, int type, VARIANT_BOOL* isValid);
 
 		/************************************************************************/
