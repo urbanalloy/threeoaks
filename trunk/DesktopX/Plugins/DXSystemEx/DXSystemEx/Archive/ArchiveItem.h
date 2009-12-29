@@ -43,123 +43,74 @@
 #include "DXSystemEx.h"
 #include "resource.h"
 
-#include "Archive/ArchiveItem.h"
-
-#if ENABLE_ZIP_FALLBACK
-#include "Archive/XZip.h"
-#include "Archive/XUnzip.h"
-#else
-DECLARE_HANDLE(HZIP);
-#endif
-
-#include <vector>
-using namespace std;
-
 /////////////////////////////////////////////////////////////////////////////
-// CArchive
-class ATL_NO_VTABLE CArchive :
+// CArchiveItem
+class ATL_NO_VTABLE CArchiveItem :
 	public CComObjectRootEx<CComSingleThreadModel>,
-	public CComCoClass<CArchive, &CLSID_Archive>,
-	public IDispatchImpl<IArchive, &IID_IArchive, &LIBID_DXSystemExLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
+	public CComCoClass<CArchiveItem, &CLSID_ArchiveItem>,
+	public IDispatchImpl<IArchiveItem, &IID_IArchiveItem, &LIBID_DXSystemExLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
     public ISupportErrorInfo
 {
-	public:
-	CArchive() {		
-	}
+public:
+	CArchiveItem() {}
 
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
 
 	HRESULT FinalConstruct()
 	{
-		m_filename = "";
-		m_path = "";
-		m_inputFolder = "";
-		m_password = "";
-		m_type = kArchiveNone;
-
-		m_hZip = NULL;
-
-		// 7zip
-		m_h7zip = NULL;
-		//load7zip();
-
 		return S_OK;
 	}
 
 	void FinalRelease()
 	{
-		clear();
-
-		if (m_h7zip)
-			FreeLibrary(m_h7zip);
 	}
 
-DECLARE_REGISTRY_RESOURCEID(IDR_ARCHIVE)
+DECLARE_REGISTRY_RESOURCEID(IDR_ARCHIVEITEM)
 
-DECLARE_NOT_AGGREGATABLE(CArchive)
+DECLARE_NOT_AGGREGATABLE(CArchiveItem)
 
-BEGIN_COM_MAP(CArchive)
-	COM_INTERFACE_ENTRY(IArchive)
+BEGIN_COM_MAP(CArchiveItem)
+	COM_INTERFACE_ENTRY(IArchiveItem)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
+	struct ArchiveItem
+	{
+		_bstr_t filename;
+		bool isDirectory;
+		long compressedSize;
+
+		ArchiveItem& operator=(const ArchiveItem &rhs) {
+			// Check for self-assignment
+		    if (this == &rhs)
+		   		return *this; 
+
+			filename = rhs.filename.copy();
+			isDirectory = rhs.isDirectory;
+			compressedSize = rhs.compressedSize;
+
+			return *this;
+		}
+	}; 
+
 	private:
-		enum ArchiveType {
-			kArchiveNone,
-			kArchiveZip
-		};
-
-		typedef vector<CArchiveItem::ArchiveItem> ArchiveItemList;
-
-		_bstr_t m_filename;
-		_bstr_t m_path;
-		_bstr_t m_inputFolder;
-		_bstr_t m_password;
-		ArchiveItemList m_files;
-
-		ArchiveType m_type;
-
-		HZIP m_hZip;
-		HMODULE m_h7zip;
-
-		void load7zip();
-
-		void clear();
-		void parseInputFilename(BSTR file);
+		ArchiveItem item;
 
 	public:
+		void Init(ArchiveItem file);
+
 		//////////////////////////////////////////////////////////////////////////
 		// ISupportErrorInfo
 		//////////////////////////////////////////////////////////////////////////
 		STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 		//////////////////////////////////////////////////////////////////////////
-		// IArchive
+		// ISystemEx
 		//////////////////////////////////////////////////////////////////////////
-
-		// Properties
-		STDMETHOD(get_InputFolder)(BSTR *inputFolder);
-		STDMETHOD(put_InputFolder)(BSTR inputFolder);
-		STDMETHOD(get_Path)(BSTR *path);
-		STDMETHOD(get_FileName)(BSTR *filename);
-		STDMETHOD(get_Password)(BSTR *password);
-		STDMETHOD(put_Password)(BSTR password);
-		STDMETHOD(get_Count)(long *count);
-		STDMETHOD(get_Items)(VARIANT* items);
-		STDMETHOD(get_Type)(int* type);
-		STDMETHOD(get_SupportedExtensions)(VARIANT* extensions);		
-
-		// Methods
-		STDMETHOD(Create)(BSTR filePath, int type, VARIANT_BOOL *status);
-		STDMETHOD(Open)(BSTR filePath, VARIANT_BOOL *status);
-		STDMETHOD(ExistsFile)(BSTR filename, VARIANT_BOOL* status);
-		STDMETHOD(AddFile)(BSTR filename, VARIANT_BOOL* status);	
-		STDMETHOD(ExtractFile)(BSTR filename, BSTR outputPath, VARIANT_BOOL* status);
-		STDMETHOD(Extract)(BSTR outputDirectory, VARIANT_BOOL *status);
-		STDMETHOD(Close)();
-				
-		STDMETHOD(IsArchive)(BSTR filename, VARIANT_BOOL *status);		
+		STDMETHOD(get_Name)(BSTR* name);
+		STDMETHOD(get_IsDirectory)(VARIANT_BOOL *isDirectory);
+		STDMETHOD(get_CompressedSize)(long* compressedSize);
 };
 
-OBJECT_ENTRY_AUTO(__uuidof(Archive), CArchive)
+OBJECT_ENTRY_AUTO(__uuidof(ArchiveItem), CArchiveItem)

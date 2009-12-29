@@ -94,6 +94,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include "Config.h"
+#if ENABLE_ZIP_FALLBACK
+
 #define STRICT
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -104,7 +107,7 @@
 #include <string.h>
 #include <tchar.h>
 #include "XUnzip.h"
-//
+
 #ifdef UNICODE
 #define _tsprintf swprintf
 #else
@@ -4427,4 +4430,4 @@ bool IsZipHandleU(HZIP hz)
   return (han->flag==1);
 }
 
-
+#endif

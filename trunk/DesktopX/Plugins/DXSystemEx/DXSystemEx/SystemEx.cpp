@@ -328,15 +328,11 @@ STDMETHODIMP CSystemEx::StopDownload(int id)
 /************************************************************************/
 /* Signature                                                            */
 /************************************************************************/
-
-STDMETHODIMP CSystemEx::VerifySignature(BSTR path, BSTR signature, int type, VARIANT_BOOL* isValid)
+STDMETHODIMP CSystemEx::GetSignature(BSTR path, int type, BSTR* signature) 
 {
 	// Check input
 	if (CComBSTR(path) == CComBSTR(""))
 		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid file path"), "File path is empty!", 0, NULL);
-
-	if (CComBSTR(signature) == CComBSTR(""))
-		return CCOMError::DispatchError(SYNTAX_ERR, CLSID_SystemEx, _T("Invalid signature"), "Signature is empty!", 0, NULL);
 
 	// Only allow SHA1 signature type at this moment
 	if (type != 0)
@@ -419,11 +415,7 @@ STDMETHODIMP CSystemEx::VerifySignature(BSTR path, BSTR signature, int type, VAR
 		hashValue += ch;
 	}
 
-	// Check hash against signature
-	if (hashValue.compare(string(OLE2A(signature))) == 0)
-		*isValid = VARIANT_TRUE;
-	else
-		*isValid = VARIANT_FALSE;
+	*signature = SysAllocString((OLECHAR*) T2OLE(hashValue.c_str()));	
 
 	// Cleanup
 	free(pbHash);
@@ -445,6 +437,27 @@ INTERNAL_ERROR:
 		free(pbHash);
 
 	return CCOMError::DispatchError(INTERNAL_ERR, CLSID_SystemEx, _T("Internal error"), "Internal error while checking signature.", 0, NULL);
+}
+
+
+STDMETHODIMP CSystemEx::VerifySignature(BSTR path, BSTR signature, int type, VARIANT_BOOL* isValid)
+{
+	USES_CONVERSION;
+	BSTR sig;
+	HRESULT hr = GetSignature(path, type, &sig);
+
+	if (hr != S_OK)
+		goto cleanup;
+
+	// Check hash against signature
+	if (string(OLE2A(sig)).compare(string(OLE2A(signature))) == 0)
+		*isValid = VARIANT_TRUE;
+	else
+		*isValid = VARIANT_FALSE;
+
+cleanup:
+	SysFreeString(sig);
+	return hr;
 }
 
 /************************************************************************/

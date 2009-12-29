@@ -130,7 +130,7 @@ INT_PTR CALLBACK ConfigurePlugin(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lPa
 
 BOOL (__stdcall *SDHostMessage)(UINT, DWORD, DWORD) = NULL;
 
-static HINSTANCE dllInstance = NULL;
+HINSTANCE g_hInstance = NULL;
 static HANDLE processHandle = NULL;
 
 DECLARE_DXPLUGIN_READTYPEINFO(ReadSystemExTypeInfo, IID_ISystemEx);
@@ -195,7 +195,7 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 		// Initialize the plugin DLL
 		case SD_INITIALIZE_MODULE:
 		{
-			dllInstance = (HINSTANCE) param2;
+			g_hInstance = (HINSTANCE) param2;
 			SDHostMessage = (BOOL (__stdcall *)(UINT, DWORD, DWORD)) param1;
 
 			if (Is_WinVista_or_Later())
@@ -249,7 +249,7 @@ BOOL SDMessage(DWORD objID, DWORD *pluginIndex, UINT messageID, DWORD param1, DW
 			SCRIPTABLEPLUGIN sp;
 			strcpy_s(sp.szName, "SystemEx");
 			pSystemEx->QueryInterface(IID_IUnknown, (void**)&sp.pUnk);
-			sp.pTI =  ReadSystemExTypeInfo(dllInstance);
+			sp.pTI =  ReadSystemExTypeInfo(g_hInstance);
 			SDHostMessage(SD_REGISTER_SCRIPTABLE_PLUGIN, objID, (DWORD)&sp);
 
 			return TRUE;
@@ -277,7 +277,7 @@ label_expiration:
 			char objectDirectory[MAX_PATH];
 			char iniFile[MAX_PATH];
 			SDHostMessage(SD_GET_OBJECT_DIRECTORY, (DWORD) objectDirectory, 0);
-			sprintf_s(iniFile, "%s\\DXCanvas-%s.ini", objectDirectory, (char *) param1);
+			sprintf_s(iniFile, "%s\\DXSystemEx-%s.ini", objectDirectory, (char *) param1);
 
 			// Save configuration
 			pSystemEx->config->enableDnD = (GetPrivateProfileInt("Config", "EnableDnd", 1, iniFile) == 1);
@@ -297,7 +297,7 @@ label_expiration:
 				return FALSE;
 
 			// Show the config for the current instance
-			DialogBoxParam(dllInstance, MAKEINTRESOURCE(IDD_CONFIG), (HWND)param2, ConfigurePlugin, (LPARAM)pSystemEx->config);
+			DialogBoxParam(g_hInstance, MAKEINTRESOURCE(IDD_CONFIG), (HWND)param2, ConfigurePlugin, (LPARAM)pSystemEx->config);
 
 			return TRUE;
 		}
@@ -577,18 +577,17 @@ label_expiration:
 			_ltoa_s((long) objID, instanceID, 10);
 			lstrcpy((char *) param1, instanceID);
 
-			char iniFile[MAX_PATH], name[MAX_PATH];
-			SDHostMessage(SD_GET_OBJECT_DIRECTORY, (DWORD) iniFile, 0);
-			sprintf_s(name, "DXSystemEx-%s.ini", iniFile, instanceID);
-			sprintf_s(iniFile, "%s\\%s", iniFile, name);
+			char path[MAX_PATH], iniFile[MAX_PATH];
+			SDHostMessage(SD_GET_OBJECT_DIRECTORY, (DWORD) path, 0);
+			sprintf_s(iniFile, "%s\\DXSystemEx-%s.ini", path, instanceID);
 
 			// Save configuration
 			WritePrivateProfileInt("Config", "EnableDnd", 	   pSystemEx->config->enableDnD ? 1 : 0, iniFile);
 			WritePrivateProfileInt("Config", "EnableMonitors", pSystemEx->config->enableMonitors ? 1 : 0, iniFile);
 			WritePrivateProfileInt("Config", "EnableInstance", pSystemEx->config->enableInstance ? 1 : 0, iniFile);
 
-			SDHostMessage(SD_REGISTER_FILE, (DWORD) name, 0);
-
+			SDHostMessage(SD_REGISTER_FILE, (DWORD) iniFile, 0);
+			
 			return TRUE;
 		}
 
