@@ -38,16 +38,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(THREEOAKS_LIBS)\7zip\Builds\$(Configuration)\</OutDir>
-    <IntDir>$(THREEOAKS_LIBS)\7zip\Builds\$(Configuration)\Intermediate\</IntDir>
+    <OutDir>$(THREEOAKS_LIBS)\Builds\7zip\$(Configuration)\</OutDir>
+    <IntDir>$(THREEOAKS_LIBS)\Builds\7zip\$(Configuration)\Intermediate\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <TargetName>7zip</TargetName>
     <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(THREEOAKS_LIBS)\7zip\Builds\$(Configuration)\</OutDir>
-    <IntDir>$(THREEOAKS_LIBS)\7zip\Builds\$(Configuration)\Intermediate\</IntDir>
+    <OutDir>$(THREEOAKS_LIBS)\Builds\7zip\$(Configuration)\</OutDir>
+    <IntDir>$(THREEOAKS_LIBS)\Builds\7zip\$(Configuration)\Intermediate\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <TargetName>7zip</TargetName>
