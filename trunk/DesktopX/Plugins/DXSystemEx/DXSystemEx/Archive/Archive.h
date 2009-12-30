@@ -48,6 +48,7 @@
 #if ENABLE_ZIP_FALLBACK
 #include "Archive/XZip.h"
 #include "Archive/XUnzip.h"
+#pragma comment(lib, "zlib.lib")
 #else
 DECLARE_HANDLE(HZIP);
 #endif

@@ -86,7 +86,6 @@
 #ifndef XUNZIP_H
 #define XUNZIP_H
 
-
 #ifndef XZIP_H
 DECLARE_HANDLE(HZIP);	// An HZIP identifies a zip file that has been opened
 #endif
