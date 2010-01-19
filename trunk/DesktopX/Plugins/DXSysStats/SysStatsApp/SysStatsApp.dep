@@ -1,0 +1,319 @@
+# Microsoft Developer Studio Generated Dependency File, included by SysStatsApp.mak
+
+.\AppConfig.rc : \
+	".\Radioactive _ aqua.ico"\
+	
+
+.\CloseMenuAction.cpp : \
+	"..\..\..\microsoft sdk\include\gdiplus.h"\
+	"..\..\..\microsoft sdk\include\gdiplusbase.h"\
+	"..\..\..\microsoft sdk\include\gdiplusbitmap.h"\
+	"..\..\..\microsoft sdk\include\gdiplusbrush.h"\
+	"..\..\..\microsoft sdk\include\gdipluscachedbitmap.h"\
+	"..\..\..\microsoft sdk\include\gdipluscolor.h"\
+	"..\..\..\microsoft sdk\include\gdipluscolormatrix.h"\
+	"..\..\..\microsoft sdk\include\gdiplusenums.h"\
+	"..\..\..\microsoft sdk\include\gdiplusflat.h"\
+	"..\..\..\microsoft sdk\include\gdiplusfont.h"\
+	"..\..\..\microsoft sdk\include\gdiplusfontcollection.h"\
+	"..\..\..\microsoft sdk\include\gdiplusfontfamily.h"\
+	"..\..\..\microsoft sdk\include\gdiplusgpstubs.h"\
+	"..\..\..\microsoft sdk\include\gdiplusgraphics.h"\
+	"..\..\..\microsoft sdk\include\gdiplusheaders.h"\
+	"..\..\..\microsoft sdk\include\gdiplusimageattributes.h"\
+	"..\..\..\microsoft sdk\include\gdiplusimagecodec.h"\
+	"..\..\..\microsoft sdk\include\gdiplusimaging.h"\
+	"..\..\..\microsoft sdk\include\gdiplusinit.h"\
+	"..\..\..\microsoft sdk\include\gdipluslinecaps.h"\
+	"..\..\..\microsoft sdk\include\gdiplusmatrix.h"\
+	"..\..\..\microsoft sdk\include\gdiplusmem.h"\
+	"..\..\..\microsoft sdk\include\gdiplusmetafile.h"\
+	"..\..\..\microsoft sdk\include\gdiplusmetaheader.h"\
+	"..\..\..\microsoft sdk\include\gdipluspath.h"\
+	"..\..\..\microsoft sdk\include\gdipluspen.h"\
+	"..\..\..\microsoft sdk\include\gdipluspixelformats.h"\
+	"..\..\..\microsoft sdk\include\gdiplusregion.h"\
+	"..\..\..\microsoft sdk\include\gdiplusstringformat.h"\
+	"..\..\..\microsoft sdk\include\gdiplustypes.h"\
+	"..\SysStatsCOM\APVDummy.h"\
+	"..\SysStatsCOM\ArrayPtrVariant.cpp"\
+	"..\SysStatsCOM\ArrayPtrVariant.h"\
+	"..\SysStatsCOM\CClientModel.h"\
+	"..\SysStatsCOM\CMeter.h"\
+	"..\SysStatsCOM\CMeterHome.h"\
+	"..\SysStatsCOM\CompositeOverlayDialog.h"\
+	"..\SysStatsCOM\CompositeOverlayImpl.cpp"\
+	"..\SysStatsCOM\CompositeOverlayImpl.h"\
+	"..\SysStatsCOM\COMTimerService.h"\
+	"..\SysStatsCOM\COverlayFactory.h"\
+	"..\SysStatsCOM\COverlayHome.h"\
+	"..\SysStatsCOM\CSubject.h"\
+	"..\SysStatsCOM\MeterImpl.cpp"\
+	"..\SysStatsCOM\MeterImpl.h"\
+	"..\SysStatsCOM\OverlayImpl.cpp"\
+	"..\SysStatsCOM\OverlayImpl.h"\
+	"..\sysstatscom\pluginmanager.h"\
+	"..\SysStatsCOM\StdAfx.h"\
+	"..\SysStatsCOM\SysStatsCOM.h"\
+	"..\SysStatsCOM\SysStatsCOMCP.h"\
+	"..\SysStatsCOM\TimerClientImpl.cpp"\
+	"..\SysStatsCOM\TimerClientImpl.h"\
+	"..\SysStatsCommon\ArrayPtr.cpp"\
+	"..\SysStatsCommon\ArrayPtr.h"\
+	"..\SysStatsCommon\CommonDialog.h"\
+	"..\SysStatsCommon\Dialog.h"\
+	"..\SysStatsCommon\DictionaryPtr.cpp"\
+	"..\SysStatsCommon\DictionaryPtr.h"\
+	"..\SysStatsCommon\SysStatsUtils.h"\
+	".\CloseMenuAction.h"\
+	".\Menu.h"\
+	".\MenuAction.h"\
+	".\ShellIconHelper.cpp"\
+	".\ShellIconHelper.h"\
+	".\SysStatsApp.h"\
+	".\SysStatsClientWindow.h"\
+	".\WindowTimerService.h"\
+	
+
+.\Main.cpp : \
+	"..\..\..\microsoft sdk\include\gdiplus.h"\
+	"..\..\..\microsoft sdk\include\gdiplusbase.h"\
+	"..\..\..\microsoft sdk\include\gdiplusbitmap.h"\
+	"..\..\..\microsoft sdk\include\gdiplusbrush.h"\
+	"..\..\..\microsoft sdk\include\gdipluscachedbitmap.h"\
+	"..\..\..\microsoft sdk\include\gdipluscolor.h"\
+	"..\..\..\microsoft sdk\include\gdipluscolormatrix.h"\
+	"..\..\..\microsoft sdk\include\gdiplusenums.h"\
+	"..\..\..\microsoft sdk\include\gdiplusflat.h"\
+	"..\..\..\microsoft sdk\include\gdiplusfont.h"\
+	"..\..\..\microsoft sdk\include\gdiplusfontcollection.h"\
+	"..\..\..\microsoft sdk\include\gdiplusfontfamily.h"\
+	"..\..\..\microsoft sdk\include\gdiplusgpstubs.h"\
+	"..\..\..\microsoft sdk\include\gdiplusgraphics.h"\
+	"..\..\..\microsoft sdk\include\gdiplusheaders.h"\
+	"..\..\..\microsoft sdk\include\gdiplusimageattributes.h"\
+	"..\..\..\microsoft sdk\include\gdiplusimagecodec.h"\
+	"..\..\..\microsoft sdk\include\gdiplusimaging.h"\
+	"..\..\..\microsoft sdk\include\gdiplusinit.h"\
+	"..\..\..\microsoft sdk\include\gdipluslinecaps.h"\
+	"..\..\..\microsoft sdk\include\gdiplusmatrix.h"\
+	"..\..\..\microsoft sdk\include\gdiplusmem.h"\
+	"..\..\..\microsoft sdk\include\gdiplusmetafile.h"\
+	"..\..\..\microsoft sdk\include\gdiplusmetaheader.h"\
+	"..\..\..\microsoft sdk\include\gdipluspath.h"\
+	"..\..\..\microsoft sdk\include\gdipluspen.h"\
+	"..\..\..\microsoft sdk\include\gdipluspixelformats.h"\
+	"..\..\..\microsoft sdk\include\gdiplusregion.h"\
+	"..\..\..\microsoft sdk\include\gdiplusstringformat.h"\
+	"..\..\..\microsoft sdk\include\gdiplustypes.h"\
+	"..\SysStatsCOM\COMTimerService.h"\
+	"..\SysStatsCOM\Debug\SysStatsCOM.dll"\
+	"..\SysStatsCommon\ArrayPtr.cpp"\
+	"..\SysStatsCommon\ArrayPtr.h"\
+	"..\SysStatsCommon\DictionaryPtr.cpp"\
+	"..\SysStatsCommon\DictionaryPtr.h"\
+	"..\SysStatsCommon\SysStatsUtils.h"\
+	".\Menu.h"\
+	".\MenuAction.h"\
+	".\ShellIconHelper.cpp"\
+	".\ShellIconHelper.h"\
+	".\SysStatsApp.h"\
+	".\SysStatsClientWindow.h"\
+	".\WindowTimerService.h"\
+	
+
+.\Menu.cpp : \
+	".\Menu.h"\
+	".\MenuAction.h"\
+	
+
+.\MenuAction.cpp : \
+	".\MenuAction.h"\
+	
+
+.\SysStatsApp.cpp : \
+	"..\..\..\microsoft sdk\include\basetsd.h"\
+	"..\..\..\microsoft sdk\include\gdiplus.h"\
+	"..\..\..\microsoft sdk\include\gdiplusbase.h"\
+	"..\..\..\microsoft sdk\include\gdiplusbitmap.h"\
+	"..\..\..\microsoft sdk\include\gdiplusbrush.h"\
+	"..\..\..\microsoft sdk\include\gdipluscachedbitmap.h"\
+	"..\..\..\microsoft sdk\include\gdipluscolor.h"\
+	"..\..\..\microsoft sdk\include\gdipluscolormatrix.h"\
+	"..\..\..\microsoft sdk\include\gdiplusenums.h"\
+	"..\..\..\microsoft sdk\include\gdiplusflat.h"\
+	"..\..\..\microsoft sdk\include\gdiplusfont.h"\
+	"..\..\..\microsoft sdk\include\gdiplusfontcollection.h"\
+	"..\..\..\microsoft sdk\include\gdiplusfontfamily.h"\
+	"..\..\..\microsoft sdk\include\gdiplusgpstubs.h"\
+	"..\..\..\microsoft sdk\include\gdiplusgraphics.h"\
+	"..\..\..\microsoft sdk\include\gdiplusheaders.h"\
+	"..\..\..\microsoft sdk\include\gdiplusimageattributes.h"\
+	"..\..\..\microsoft sdk\include\gdiplusimagecodec.h"\
+	"..\..\..\microsoft sdk\include\gdiplusimaging.h"\
+	"..\..\..\microsoft sdk\include\gdiplusinit.h"\
+	"..\..\..\microsoft sdk\include\gdipluslinecaps.h"\
+	"..\..\..\microsoft sdk\include\gdiplusmatrix.h"\
+	"..\..\..\microsoft sdk\include\gdiplusmem.h"\
+	"..\..\..\microsoft sdk\include\gdiplusmetafile.h"\
+	"..\..\..\microsoft sdk\include\gdiplusmetaheader.h"\
+	"..\..\..\microsoft sdk\include\gdipluspath.h"\
+	"..\..\..\microsoft sdk\include\gdipluspen.h"\
+	"..\..\..\microsoft sdk\include\gdipluspixelformats.h"\
+	"..\..\..\microsoft sdk\include\gdiplusregion.h"\
+	"..\..\..\microsoft sdk\include\gdiplusstringformat.h"\
+	"..\..\..\microsoft sdk\include\gdiplustypes.h"\
+	"..\..\..\microsoft sdk\include\guiddef.h"\
+	"..\..\..\microsoft sdk\include\propidl.h"\
+	"..\..\..\microsoft sdk\include\reason.h"\
+	"..\..\..\microsoft sdk\include\shldisp.h"\
+	"..\..\..\microsoft sdk\include\shobjidl.h"\
+	"..\..\..\microsoft sdk\include\shtypes.h"\
+	"..\..\..\microsoft sdk\include\stralign.h"\
+	"..\..\..\microsoft sdk\include\tvout.h"\
+	"..\SysStatsCOM\APVDummy.h"\
+	"..\SysStatsCOM\ArrayPtrVariant.cpp"\
+	"..\SysStatsCOM\ArrayPtrVariant.h"\
+	"..\SysStatsCOM\CClientModel.h"\
+	"..\SysStatsCOM\CMeter.h"\
+	"..\SysStatsCOM\CMeterHome.h"\
+	"..\SysStatsCOM\CompositeOverlayDialog.h"\
+	"..\SysStatsCOM\CompositeOverlayImpl.cpp"\
+	"..\SysStatsCOM\CompositeOverlayImpl.h"\
+	"..\SysStatsCOM\COMTimerService.h"\
+	"..\SysStatsCOM\COverlayFactory.h"\
+	"..\SysStatsCOM\COverlayHome.h"\
+	"..\SysStatsCOM\CSubject.h"\
+	"..\SysStatsCOM\MeterImpl.cpp"\
+	"..\SysStatsCOM\MeterImpl.h"\
+	"..\SysStatsCOM\OverlayImpl.cpp"\
+	"..\SysStatsCOM\OverlayImpl.h"\
+	"..\sysstatscom\pluginmanager.h"\
+	"..\SysStatsCOM\StdAfx.h"\
+	"..\SysStatsCOM\SysStatsCOM.h"\
+	"..\SysStatsCOM\SysStatsCOMCP.h"\
+	"..\SysStatsCOM\TimerClientImpl.cpp"\
+	"..\SysStatsCOM\TimerClientImpl.h"\
+	"..\SysStatsCommon\ArrayPtr.cpp"\
+	"..\SysStatsCommon\ArrayPtr.h"\
+	"..\SysStatsCommon\CommonDialog.h"\
+	"..\SysStatsCommon\Dialog.h"\
+	"..\SysStatsCommon\DictionaryPtr.cpp"\
+	"..\SysStatsCommon\DictionaryPtr.h"\
+	"..\SysStatsCommon\FrameworkExport.h"\
+	"..\SysStatsCommon\SysStatsUtils.h"\
+	".\CloseMenuAction.h"\
+	".\ExitMenuAction.h"\
+	".\Menu.h"\
+	".\MenuAction.h"\
+	".\MenuActionT.h"\
+	".\ShellIconHelper.cpp"\
+	".\ShellIconHelper.h"\
+	".\StdAfx.h"\
+	".\SysStatsApp.h"\
+	".\SysStatsClientWindow.h"\
+	".\WindowTimerService.h"\
+	
+
+.\SysStatsClientWindow.cpp : \
+	"..\..\..\microsoft sdk\include\gdiplus.h"\
+	"..\..\..\microsoft sdk\include\gdiplusbase.h"\
+	"..\..\..\microsoft sdk\include\gdiplusbitmap.h"\
+	"..\..\..\microsoft sdk\include\gdiplusbrush.h"\
+	"..\..\..\microsoft sdk\include\gdipluscachedbitmap.h"\
+	"..\..\..\microsoft sdk\include\gdipluscolor.h"\
+	"..\..\..\microsoft sdk\include\gdipluscolormatrix.h"\
+	"..\..\..\microsoft sdk\include\gdiplusenums.h"\
+	"..\..\..\microsoft sdk\include\gdiplusflat.h"\
+	"..\..\..\microsoft sdk\include\gdiplusfont.h"\
+	"..\..\..\microsoft sdk\include\gdiplusfontcollection.h"\
+	"..\..\..\microsoft sdk\include\gdiplusfontfamily.h"\
+	"..\..\..\microsoft sdk\include\gdiplusgpstubs.h"\
+	"..\..\..\microsoft sdk\include\gdiplusgraphics.h"\
+	"..\..\..\microsoft sdk\include\gdiplusheaders.h"\
+	"..\..\..\microsoft sdk\include\gdiplusimageattributes.h"\
+	"..\..\..\microsoft sdk\include\gdiplusimagecodec.h"\
+	"..\..\..\microsoft sdk\include\gdiplusimaging.h"\
+	"..\..\..\microsoft sdk\include\gdiplusinit.h"\
+	"..\..\..\microsoft sdk\include\gdipluslinecaps.h"\
+	"..\..\..\microsoft sdk\include\gdiplusmatrix.h"\
+	"..\..\..\microsoft sdk\include\gdiplusmem.h"\
+	"..\..\..\microsoft sdk\include\gdiplusmetafile.h"\
+	"..\..\..\microsoft sdk\include\gdiplusmetaheader.h"\
+	"..\..\..\microsoft sdk\include\gdipluspath.h"\
+	"..\..\..\microsoft sdk\include\gdipluspen.h"\
+	"..\..\..\microsoft sdk\include\gdipluspixelformats.h"\
+	"..\..\..\microsoft sdk\include\gdiplusregion.h"\
+	"..\..\..\microsoft sdk\include\gdiplusstringformat.h"\
+	"..\..\..\microsoft sdk\include\gdiplustypes.h"\
+	"..\SysStatsCOM\APVDummy.h"\
+	"..\SysStatsCOM\ArrayPtrVariant.cpp"\
+	"..\SysStatsCOM\ArrayPtrVariant.h"\
+	"..\SysStatsCOM\CClientModel.h"\
+	"..\SysStatsCOM\CMeter.h"\
+	"..\SysStatsCOM\CMeterHome.h"\
+	"..\SysStatsCOM\CompositeOverlayDialog.h"\
+	"..\SysStatsCOM\CompositeOverlayImpl.cpp"\
+	"..\SysStatsCOM\CompositeOverlayImpl.h"\
+	"..\SysStatsCOM\COMTimerService.h"\
+	"..\SysStatsCOM\COverlayFactory.h"\
+	"..\SysStatsCOM\COverlayHome.h"\
+	"..\SysStatsCOM\CSubject.h"\
+	"..\SysStatsCOM\MeterImpl.cpp"\
+	"..\SysStatsCOM\MeterImpl.h"\
+	"..\SysStatsCOM\OverlayImpl.cpp"\
+	"..\SysStatsCOM\OverlayImpl.h"\
+	"..\sysstatscom\pluginmanager.h"\
+	"..\SysStatsCOM\StdAfx.h"\
+	"..\SysStatsCOM\SysStatsCOM.h"\
+	"..\SysStatsCOM\SysStatsCOMCP.h"\
+	"..\SysStatsCOM\TimerClientImpl.cpp"\
+	"..\SysStatsCOM\TimerClientImpl.h"\
+	"..\SysStatsCommon\ArrayPtr.cpp"\
+	"..\SysStatsCommon\ArrayPtr.h"\
+	"..\SysStatsCommon\CommonDialog.h"\
+	"..\SysStatsCommon\Dialog.h"\
+	"..\SysStatsCommon\DictionaryPtr.cpp"\
+	"..\SysStatsCommon\DictionaryPtr.h"\
+	"..\SysStatsCommon\SysStatsUtils.h"\
+	".\CloseMenuAction.h"\
+	".\Menu.h"\
+	".\MenuAction.h"\
+	".\MenuActionT.h"\
+	".\SysStatsClientModelConfigure.h"\
+	".\SysStatsClientWindow.h"\
+	".\WindowDialog.h"\
+	".\WindowTimerService.h"\
+	
+
+.\WindowDialog.cpp : \
+	"..\SysStatsCOM\COMTimerService.h"\
+	"..\SysStatsCOM\CSubject.h"\
+	"..\SysStatsCOM\Debug\SysStatsCOM.dll"\
+	"..\SysStatsCommon\ArrayPtr.cpp"\
+	"..\SysStatsCommon\ArrayPtr.h"\
+	"..\SysStatsCommon\CommonDialog.h"\
+	"..\SysStatsCommon\Dialog.h"\
+	"..\SysStatsCommon\DictionaryPtr.cpp"\
+	"..\SysStatsCommon\DictionaryPtr.h"\
+	"..\SysStatsCommon\SysStatsUtils.h"\
+	".\Menu.h"\
+	".\MenuAction.h"\
+	".\SysStatsClientWindow.h"\
+	".\WindowDialog.h"\
+	".\WindowTimerService.h"\
+	
+
+.\WindowTimerService.cpp : \
+	"..\SysStatsCOM\COMTimerService.h"\
+	"..\SysStatsCOM\Debug\SysStatsCOM.dll"\
+	"..\SysStatsCommon\ArrayPtr.cpp"\
+	"..\SysStatsCommon\ArrayPtr.h"\
+	"..\SysStatsCommon\DictionaryPtr.cpp"\
+	"..\SysStatsCommon\DictionaryPtr.h"\
+	".\WindowTimerService.h"\
+	
+
+.\ShellIconHelper.cpp : \
+	".\ShellIconHelper.h"\
+	

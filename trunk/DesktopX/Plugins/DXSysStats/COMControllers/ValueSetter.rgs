@@ -1,0 +1,27 @@
+HKCR
+{
+	COMControllers.ValueSetter.1 = s 'ValueSetter Class'
+	{
+		CLSID = s '{B67890E4-2822-4CE1-9D7C-5AB2C7CAFF53}'
+	}
+	COMControllers.ValueSetter = s 'ValueSetter Class'
+	{
+		CLSID = s '{B67890E4-2822-4CE1-9D7C-5AB2C7CAFF53}'
+		CurVer = s 'COMControllers.ValueSetter.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {B67890E4-2822-4CE1-9D7C-5AB2C7CAFF53} = s 'ValueSetter Class'
+		{
+			ProgID = s 'COMControllers.ValueSetter.1'
+			VersionIndependentProgID = s 'COMControllers.ValueSetter'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{472EB9D7-052E-4EDD-90A1-5D550F786C85}'
+			'Version' = d 1
+		}
+	}
+}

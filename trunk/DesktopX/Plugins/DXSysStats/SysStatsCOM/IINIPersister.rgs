@@ -1,0 +1,26 @@
+HKCR
+{
+	SysStatsCOM.IINIPersister.1 = s 'IINIPersister Class'
+	{
+		CLSID = s '{F90BC4D8-65E2-4F91-B247-AB278FC41D7C}'
+	}
+	SysStatsCOM.IINIPersister = s 'IINIPersister Class'
+	{
+		CLSID = s '{F90BC4D8-65E2-4F91-B247-AB278FC41D7C}'
+		CurVer = s 'SysStatsCOM.IINIPersister.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {F90BC4D8-65E2-4F91-B247-AB278FC41D7C} = s 'IINIPersister Class'
+		{
+			ProgID = s 'SysStatsCOM.IINIPersister.1'
+			VersionIndependentProgID = s 'SysStatsCOM.IINIPersister'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{E305FE28-9D24-4398-905A-A29F7A7E2E3D}'
+		}
+	}
+}

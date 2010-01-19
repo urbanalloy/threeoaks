@@ -1,0 +1,23 @@
+HKCR
+{
+	SysStatsCOM.ClientModel.1 = s 'ClientModel Class'
+	{
+		CLSID = s '{80F11FDB-394A-4B0A-8D3E-74EA2B73CE6D}'
+	}
+	SysStatsCOM.ClientModel = s 'ClientModel Class'
+	{
+		CLSID = s '{80F11FDB-394A-4B0A-8D3E-74EA2B73CE6D}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {80F11FDB-394A-4B0A-8D3E-74EA2B73CE6D} = s 'ClientModel Class'
+		{
+			ProgID = s 'SysStatsCOM.ClientModel.1'
+			VersionIndependentProgID = s 'SysStatsCOM.ClientModel'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

@@ -1,0 +1,27 @@
+HKCR
+{
+	MailNotifier.MailMeter.1 = s 'MailMeter Class'
+	{
+		CLSID = s '{FF920785-772B-4e33-82A7-0E8C2C4023EE}'
+	}
+	MailNotifier.MailMeter = s 'MailMeter Class'
+	{
+		CLSID = s '{FF920785-772B-4e33-82A7-0E8C2C4023EE}'
+		CurVer = s 'MailNotifier.MailMeter.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {FF920785-772B-4e33-82A7-0E8C2C4023EE} = s 'MailMeter Class'
+		{
+			ProgID = s 'MailNotifier.MailMeter.1'
+			VersionIndependentProgID = s 'MailNotifier.MailMeter'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{CCD85E9E-CCC3-4F04-B332-44EE88F6C368}'
+			'Version' = d 1
+		}
+	}
+}

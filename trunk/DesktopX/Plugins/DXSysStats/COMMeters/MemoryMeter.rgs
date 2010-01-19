@@ -1,0 +1,27 @@
+HKCR
+{
+	COMMeters.MemoryMeter.1 = s 'MemoryMeter Class'
+	{
+		CLSID = s '{D5EE3B1C-81EF-42EB-B591-F2A7A7070744}'
+	}
+	COMMeters.MemoryMeter = s 'MemoryMeter Class'
+	{
+		CLSID = s '{D5EE3B1C-81EF-42EB-B591-F2A7A7070744}'
+		CurVer = s 'COMMeters.MemoryMeter.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {D5EE3B1C-81EF-42EB-B591-F2A7A7070744} = s 'MemoryMeter Class'
+		{
+			ProgID = s 'COMMeters.MemoryMeter.1'
+			VersionIndependentProgID = s 'COMMeters.MemoryMeter'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{34AF6298-1F60-440A-94DE-E586F829DE0C}'
+			'Version' = d 1
+		}
+	}
+}

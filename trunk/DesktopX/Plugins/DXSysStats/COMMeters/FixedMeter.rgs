@@ -1,0 +1,27 @@
+HKCR
+{
+	COMMeters.FixedMeter.1 = s 'FixedMeter Class'
+	{
+		CLSID = s '{41DB3EA5-F4CF-4079-AD31-95C147A35D3E}'
+	}
+	COMMeters.FixedMeter = s 'FixedMeter Class'
+	{
+		CLSID = s '{41DB3EA5-F4CF-4079-AD31-95C147A35D3E}'
+		CurVer = s 'COMMeters.FixedMeter.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {41DB3EA5-F4CF-4079-AD31-95C147A35D3E} = s 'FixedMeter Class'
+		{
+			ProgID = s 'COMMeters.FixedMeter.1'
+			VersionIndependentProgID = s 'COMMeters.FixedMeter'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{34AF6298-1F60-440A-94DE-E586F829DE0C}'
+			'Version' = d 1
+		}
+	}
+}

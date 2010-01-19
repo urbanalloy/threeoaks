@@ -1,0 +1,26 @@
+HKCR
+{
+	SysStatsCOM.Label.1 = s 'Label Class'
+	{
+		CLSID = s '{FAAF4EAB-70E9-48ED-A198-F94A7F31D4CA}'
+	}
+	SysStatsCOM.Label = s 'Label Class'
+	{
+		CLSID = s '{FAAF4EAB-70E9-48ED-A198-F94A7F31D4CA}'
+		CurVer = s 'SysStatsCOM.Label.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {FAAF4EAB-70E9-48ED-A198-F94A7F31D4CA} = s 'Label Class'
+		{
+			ProgID = s 'SysStatsCOM.Label.1'
+			VersionIndependentProgID = s 'SysStatsCOM.Label'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{E305FE28-9D24-4398-905A-A29F7A7E2E3D}'
+		}
+	}
+}

@@ -1,0 +1,27 @@
+HKCR
+{
+	COMMeters.Player.1 = s 'Player Class'
+	{
+		CLSID = s '{DAD8AD97-0ED2-4A61-82A2-66F09D7DA9D3}'
+	}
+	COMMeters.Player = s 'Player Class'
+	{
+		CLSID = s '{DAD8AD97-0ED2-4A61-82A2-66F09D7DA9D3}'
+		CurVer = s 'COMMeters.Player.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {DAD8AD97-0ED2-4A61-82A2-66F09D7DA9D3} = s 'Player Class'
+		{
+			ProgID = s 'COMMeters.Player.1'
+			VersionIndependentProgID = s 'COMMeters.Player'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{34AF6298-1F60-440A-94DE-E586F829DE0C}'
+			'Version' = d 1
+		}
+	}
+}

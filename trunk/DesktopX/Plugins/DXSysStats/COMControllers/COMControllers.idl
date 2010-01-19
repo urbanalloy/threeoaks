@@ -1,0 +1,296 @@
+// COMControllers.idl : IDL source for COMControllers.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (COMControllers.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+import "SysStatsCOM.idl";
+
+	[
+		object,
+		uuid(225E51EC-606D-403A-B84C-A154492A2704),
+		dual,
+		helpstring("IShortcut Interface"),
+		pointer_default(unique)
+	]
+	interface IShortcut : IController
+	{
+		[propget, id(100), helpstring("property Args")] HRESULT Args([out, retval] BSTR *pVal);
+		[propput, id(100), helpstring("property Args")] HRESULT Args([in] BSTR newVal);
+		[propget, id(101), helpstring("property StartIn")] HRESULT StartIn([out, retval] BSTR *pVal);
+		[propput, id(101), helpstring("property StartIn")] HRESULT StartIn([in] BSTR newVal);
+		[propget, id(102), helpstring("property Selector")] HRESULT Selector([out, retval] BSTR *pVal);
+		[propput, id(102), helpstring("property Selector")] HRESULT Selector([in] BSTR newVal);
+		[propget, id(103), helpstring("property Shortcut")] HRESULT Shortcut([out, retval] BSTR *pVal);
+		[propput, id(103), helpstring("property Shortcut")] HRESULT Shortcut([in] BSTR newVal);
+	};
+	[
+		object,
+		uuid(3DD1881B-C4F4-4384-8D35-16669EE70413),
+		dual,
+		helpstring("IScriptController Interface"),
+		pointer_default(unique)
+	]
+	interface IScriptController : IController
+	{
+		// Start numbering at 100
+		[propget, id(100), helpstring("property ScriptType")] HRESULT ScriptType([out, retval] BSTR *pVal);
+		[propput, id(100), helpstring("property ScriptType")] HRESULT ScriptType([in] BSTR newVal);
+		[propget, id(101), helpstring("property FileName")] HRESULT FileName([out, retval] BSTR *pVal);
+		[propput, id(101), helpstring("property FileName")] HRESULT FileName([in] BSTR newVal);
+		[id(102), helpstring("method ShowConsole")] HRESULT ShowConsole([in]VARIANT_BOOL show);
+	};
+[
+	uuid(472EB9D7-052E-4EDD-90A1-5D550F786C85),
+	version(1.0),
+	helpstring("COMControllers 1.0 Type Library")
+]
+library COMCONTROLLERSLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+	import "SensEvts.idl";
+
+	[
+		uuid(0383EF95-0787-4CF6-8858-FCC8640307F3),
+		helpstring("Shortcut Class")
+	]
+	coclass Shortcut
+	{
+		[default] interface IShortcut;
+	};
+	[
+		uuid(FCFD5E26-B980-4982-9CC0-AA98A32A12A1),
+		helpstring("_IScriptControllerEvents Interface")
+	]
+	dispinterface _IScriptControllerEvents
+	{
+		properties:
+		methods:
+		[id(1), helpstring("method HandleMessage")] BOOL HandleMessage(UINT wParam, UINT lParam, short x, short y);
+	};
+
+	[
+		object,
+		uuid(F4C7F72B-8B64-4dcf-87F9-356BD78CC14F),
+		dual,
+		helpstring("IScriptControllerImpl Interface"),
+		pointer_default(unique)
+	]
+	interface IScriptControllerImpl : IController
+	{
+		// Start numbering at 100
+		[propget, id(100), helpstring("property ScriptType")] HRESULT ScriptType([out, retval] BSTR *pVal);
+		[propput, id(100), helpstring("property ScriptType")] HRESULT ScriptType([in] BSTR newVal);
+		[propget, id(101), helpstring("property FileName")] HRESULT FileName([out, retval] BSTR *pVal);
+		[propput, id(101), helpstring("property FileName")] HRESULT FileName([in] BSTR newVal);
+		[id(102), helpstring("method ShowConsole")] HRESULT ShowConsole([in] VARIANT_BOOL show);
+		[id(103), helpstring("method Trace")] HRESULT Trace([in] BSTR msg);
+	};
+	[
+		object,
+		uuid(838B4CE7-F762-4887-B92A-3FEC98DDEB53),
+		dual,
+		helpstring("IValueSetter Interface"),
+		pointer_default(unique)
+	]
+	interface IValueSetter : IController
+	{
+		// Start numbering at 100
+		[propget, id(100), helpstring("property Value")] HRESULT Value([out, retval] BSTR *pVal);
+		[propput, id(100), helpstring("property Value")] HRESULT Value([in] BSTR newVal);
+		[propget, id(101), helpstring("property Selector")] HRESULT Selector([out, retval] BSTR *pVal);
+		[propput, id(101), helpstring("property Selector")] HRESULT Selector([in] BSTR newVal);
+	};
+	[
+		object,
+		uuid(FB9276E6-08E2-4E1C-9E86-D1A62773760A),
+		dual,
+		helpstring("IMessageSender Interface"),
+		pointer_default(unique)
+	]
+	interface IMessageSender : IController
+	{
+		// Start numbering at 50
+		[propget, id(50), helpstring("property SendMessage")] HRESULT SendMessage([out, retval] UINT *pVal);
+		[propput, id(50), helpstring("property SendMessage")] HRESULT SendMessage([in] UINT newVal);
+		[propget, id(51), helpstring("property WParam")] HRESULT WParam([out, retval] UINT *pVal);
+		[propput, id(51), helpstring("property WParam")] HRESULT WParam([in] UINT newVal);
+		[propget, id(52), helpstring("property LParam")] HRESULT LParam([out, retval] UINT *pVal);
+		[propput, id(52), helpstring("property LParam")] HRESULT LParam([in] UINT newVal);
+		[propget, id(53), helpstring("property UseWParam")] HRESULT UseWParam([out, retval] VARIANT_BOOL *pVal);
+		[propput, id(53), helpstring("property UseWParam")] HRESULT UseWParam([in] VARIANT_BOOL newVal);
+		[propget, id(54), helpstring("property UseLParam")] HRESULT UseLParam([out, retval] VARIANT_BOOL *pVal);
+		[propput, id(54), helpstring("property UseLParam")] HRESULT UseLParam([in] VARIANT_BOOL newVal);
+	};
+
+	[
+		object,
+		uuid(6646B4DA-3AB4-4D4B-9E42-91400E41CCBC),
+		dual,
+		helpstring("IMappedController Interface"),
+		pointer_default(unique)
+	]
+	interface IMappedController : IMessageSender
+	{
+		// Start numbering at 100
+	};
+	[
+		object,
+		uuid(43E52EFF-90D3-40E1-B680-64B3B4B2464B),
+		dual,
+		helpstring("ITimerController Interface"),
+		pointer_default(unique)
+	]
+	interface ITimerController : IMessageSender
+	{
+		// Start numbering at 100
+		[id(100), helpstring("method Start")] HRESULT Start();
+		[id(101), helpstring("method Stop")] HRESULT Stop();
+		[propget, id(102), helpstring("property Interval")] HRESULT Interval([out, retval] double *pVal);
+		[propput, id(102), helpstring("property Interval")] HRESULT Interval([in] double newVal);
+	};
+	[
+		object,
+		uuid(C09B1355-AFF9-4D40-8F7A-E8066DBB1DE1),
+		dual,
+		helpstring("IASyncScriptController Interface"),
+		pointer_default(unique)
+	]
+	interface IASyncScriptController : IController
+	{
+		// Start numbering at 100
+		[propget, id(100), helpstring("property ScriptType")] HRESULT ScriptType([out, retval] BSTR *pVal);
+		[propput, id(100), helpstring("property ScriptType")] HRESULT ScriptType([in] BSTR newVal);
+		[propget, id(101), helpstring("property FileName")] HRESULT FileName([out, retval] BSTR *pVal);
+		[propput, id(101), helpstring("property FileName")] HRESULT FileName([in] BSTR newVal);
+		[id(102), helpstring("method ShowConsole")] HRESULT ShowConsole([in]VARIANT_BOOL show);
+	};
+	[
+		object,
+		uuid(09890B7A-609D-455D-BF69-C07BC35184A2),
+		dual,
+		helpstring("IDropTargetController Interface"),
+		pointer_default(unique)
+	]
+	interface IDropTargetController : IMessageSender
+	{
+		// Start numbering at 110
+		[propget, id(110), helpstring("property Effect")] HRESULT Effect([out, retval] DWORD *pVal);
+		[propput, id(110), helpstring("property Effect")] HRESULT Effect([in] DWORD newVal);
+	};
+	[
+		object,
+		uuid(55CAC354-C85E-4596-84F9-B85C3BA494A3),
+		dual,
+		helpstring("ICursor Interface"),
+		pointer_default(unique)
+	]
+	interface ICursorController : IController
+	{
+		// Start numbering at 100
+		[propget, id(100), helpstring("property CursorID")] HRESULT CursorID([out, retval] long *pVal);
+		[propput, id(100), helpstring("property CursorID")] HRESULT CursorID([in] long newVal);
+	};
+	[
+		object,
+		uuid(BDE9A537-5D95-4506-B0A0-B483209360EF),
+		dual,
+		helpstring("ISens Interface"),
+		pointer_default(unique)
+	]
+	interface ISens : IController
+	{
+		// Start numbering at 100
+		[propget, id(100), helpstring("property Away")] HRESULT Away([out, retval] UINT *pVal);
+		[propput, id(100), helpstring("property Away")] HRESULT Away([in] UINT newVal);
+		[propget, id(101), helpstring("property Present")] HRESULT Present([out, retval] UINT *pVal);
+		[propput, id(101), helpstring("property Present")] HRESULT Present([in] UINT newVal);
+	};
+	[
+		uuid(7645864B-55D9-46F6-9A08-54891AD40F2E),
+		helpstring("ScriptController Class")
+	]
+	coclass ScriptController
+	{
+		[default] interface IScriptController;
+	};
+
+	[
+		uuid(816EF305-7DCF-48ad-8F29-DA9D758CA2F8),
+		helpstring("ScriptControllerImpl Class")
+	]
+	coclass ScriptControllerImpl
+	{
+		[default] interface IScriptController;
+		[default, source] dispinterface _IScriptControllerEvents;
+	};
+	[
+		uuid(B67890E4-2822-4CE1-9D7C-5AB2C7CAFF53),
+		helpstring("ValueSetter Class")
+	]
+	coclass ValueSetter
+	{
+		[default] interface IValueSetter;
+	};
+	[
+		uuid(2AAB58D3-9946-448C-920A-730878524DB1),
+		helpstring("MappedController Class")
+	]
+	coclass MappedController
+	{
+		[default] interface IMappedController;
+	};
+	[
+		uuid(C8CF55A3-FAB9-485F-9451-96FD97262B19),
+		helpstring("TimerController Class")
+	]
+	coclass TimerController
+	{
+		[default] interface ITimerController;
+	};
+	[
+		uuid(53FA3963-CFAB-4383-A184-28ACE2BD1336),
+		helpstring("MessageSender Class")
+	]
+	coclass MessageSender
+	{
+		[default] interface IMessageSender;
+	};
+	[
+		uuid(C6BE3F5B-DF49-45BB-9B15-ECAABFA7F205),
+		helpstring("ASyncScriptController Class")
+	]
+	coclass ASyncScriptController
+	{
+		[default] interface IASyncScriptController;
+	};
+	[
+		uuid(7B1699F8-F150-4C61-A3BB-2579BAEA42F9),
+		helpstring("DropTargetController Class")
+	]
+	coclass DropTargetController
+	{
+		[default] interface IDropTargetController;
+	};
+	[
+		uuid(6399257E-1915-43DA-A35B-C3DBF3F748AB),
+		helpstring("CursorController Class")
+	]
+	coclass CursorController
+	{
+		[default] interface ICursorController;
+	};
+	[
+		uuid(150D663F-665D-4096-B0E3-D96DEBDB8F01),
+		helpstring("Sens Class")
+	]
+	coclass SysStatsSens
+	{
+		[default] interface ISens;
+		interface ISensLogon;
+		interface ISensLogon2;
+	};
+};

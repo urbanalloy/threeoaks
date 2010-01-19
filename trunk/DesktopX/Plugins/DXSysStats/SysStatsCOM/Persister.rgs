@@ -1,0 +1,26 @@
+HKCR
+{
+	SysStatsCOM.Persister.1 = s 'Persister Class'
+	{
+		CLSID = s '{DC508C3A-D1BE-4EBC-83F7-0D6E5C5C6B01}'
+	}
+	SysStatsCOM.Persister = s 'Persister Class'
+	{
+		CLSID = s '{DC508C3A-D1BE-4EBC-83F7-0D6E5C5C6B01}'
+		CurVer = s 'SysStatsCOM.Persister.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {DC508C3A-D1BE-4EBC-83F7-0D6E5C5C6B01} = s 'Persister Class'
+		{
+			ProgID = s 'SysStatsCOM.Persister.1'
+			VersionIndependentProgID = s 'SysStatsCOM.Persister'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{E305FE28-9D24-4398-905A-A29F7A7E2E3D}'
+		}
+	}
+}

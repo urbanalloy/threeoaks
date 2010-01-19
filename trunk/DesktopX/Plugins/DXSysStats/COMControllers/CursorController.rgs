@@ -1,0 +1,28 @@
+HKCR
+{
+	COMControllers.CursorController.1 = s 'CursorController Class'
+	{
+		CLSID = s '{6399257E-1915-43DA-A35B-C3DBF3F748AB}'
+	}
+	COMControllers.CursorController = s 'CursorController Class'
+	{
+		CLSID = s '{6399257E-1915-43DA-A35B-C3DBF3F748AB}'
+		CurVer = s 'COMControllers.CursorController.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {6399257E-1915-43DA-A35B-C3DBF3F748AB} = s 'CursorController Class'
+		{
+			ProgID = s 'COMControllers.CursorController.1'
+			VersionIndependentProgID = s 'COMControllers.CursorController'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{472EB9D7-052E-4EDD-90A1-5D550F786C85}'
+			'Version' = d 1
+			'DisplayName' = s 'Cursor Controller'
+		}
+	}
+}

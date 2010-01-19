@@ -1,0 +1,27 @@
+HKCR
+{
+	COMControllers.ASyncScriptController.1 = s 'ASyncScriptController Class'
+	{
+		CLSID = s '{C6BE3F5B-DF49-45BB-9B15-ECAABFA7F205}'
+	}
+	COMControllers.ASyncScriptController = s 'ASyncScriptController Class'
+	{
+		CLSID = s '{C6BE3F5B-DF49-45BB-9B15-ECAABFA7F205}'
+		CurVer = s 'COMControllers.ASyncScriptController.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {C6BE3F5B-DF49-45BB-9B15-ECAABFA7F205} = s 'ASyncScriptController Class'
+		{
+			ProgID = s 'COMControllers.ASyncScriptController.1'
+			VersionIndependentProgID = s 'COMControllers.ASyncScriptController'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{472EB9D7-052E-4EDD-90A1-5D550F786C85}'
+			'Version' = d 1
+		}
+	}
+}

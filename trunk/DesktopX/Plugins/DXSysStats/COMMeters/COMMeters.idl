@@ -1,0 +1,413 @@
+// COMMeters.idl : IDL source for COMMeters.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (COMMeters.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+import "ActivScp.idl";
+import "SysStatsCOM.idl";
+
+	[
+		object,
+		uuid(355B5166-409D-445E-91CC-CBE7406F1761),
+		dual,
+		helpstring("IPDHMeter Interface"),
+		pointer_default(unique)
+	]
+	interface IPDHMeter : IMeter
+	{
+		[propget, id(100), helpstring("property Scale")] HRESULT Scale([out, retval] double *pVal);
+		[propput, id(100), helpstring("property Scale")] HRESULT Scale([in] double newVal);
+		[propget, id(101), helpstring("property Counters")] HRESULT Counters([out, retval] SAFEARRAY(BSTR) *pVal);
+		[propput, id(101), helpstring("property Counters")] HRESULT Counters([in] SAFEARRAY(BSTR) newVal);
+	};
+	[
+		object,
+		uuid(CE6EC970-4527-4874-9833-7EF78F4E1A0A),
+		dual,
+		helpstring("IScriptMeter Interface"),
+		pointer_default(unique)
+	]
+	interface IScriptMeter : IMeter
+	{
+		[propget, id(100), helpstring("property ScriptType")] HRESULT ScriptType([out, retval] BSTR *pVal);
+		[propput, id(100), helpstring("property ScriptType")] HRESULT ScriptType([in] BSTR newVal);
+		[propget, id(101), helpstring("property FileName")] HRESULT FileName([out, retval] BSTR *pVal);
+		[propput, id(101), helpstring("property FileName")] HRESULT FileName([in] BSTR newVal);
+		[propput, id(102), helpstring("property Value")] HRESULT Value([in] BSTR newVal);
+		[id(103), helpstring("method ShowConsole")] HRESULT ShowConsole([in] VARIANT_BOOL show);
+	};
+
+[
+	uuid(34AF6298-1F60-440A-94DE-E586F829DE0C),
+	version(1.0),
+	helpstring("COMMeters 1.0 Type Library")
+]
+library COMMETERSLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(74FF2D32-41AC-46CF-A00C-69F6A03A1608),
+		helpstring("PDHMeter")
+	]
+	coclass PDHMeter
+	{
+		[default] interface IPDHMeter;
+	};
+	[
+		uuid(9D4BC4D5-54B5-4B5F-84A8-14071C8F18C1),
+		helpstring("_IScriptMeterEvents Interface")
+	]
+	dispinterface _IScriptMeterEvents
+	{
+		properties:
+		methods:
+		[id(1), helpstring("method Update")] BOOL Update();
+		[id(2), helpstring("method GetValue")] VARIANT GetValue([in]BSTR selector);
+		[id(3), helpstring("method PutValue")] void PutValue([in]BSTR);
+	};
+	[
+		object,
+		uuid(F72D67B0-84C6-41D2-938D-23A84B2ADDDD),
+		dual,
+		helpstring("IMemoryMeter Interface"),
+		pointer_default(unique)
+	]
+	interface IMemoryMeter : IMeter
+	{
+		[propget, id(101), helpstring("property Scale")] HRESULT Scale([out, retval] double *pVal);
+		[propput, id(101), helpstring("property Scale")] HRESULT Scale([in] double newVal);
+		[propget, id(102), helpstring("A number specifying one of %remaining, %used, remaining, used, total")] HRESULT Selector([out, retval] long *pVal);
+		[propput, id(102), helpstring("A number specifying one of %remaining, %used, remaining, used, total")] HRESULT Selector([in] long newVal);
+	};
+	[
+		object,
+		uuid(CFB43609-C77F-4BCC-A9C4-7069CA7646B4),
+		dual,
+		helpstring("IDiskMeter Interface"),
+		pointer_default(unique)
+	]
+	interface IDiskMeter : IMeter
+	{
+		[propget, id(101), helpstring("property Scale")] HRESULT Scale([out, retval] double *pVal);
+		[propput, id(101), helpstring("property Scale")] HRESULT Scale([in] double newVal);
+		[propget, id(102), helpstring("property Selector")] HRESULT Selector([out, retval] long *pVal);
+		[propput, id(102), helpstring("property Selector")] HRESULT Selector([in] long newVal);
+		[propget, id(103), helpstring("property Path")] HRESULT Path([out, retval] BSTR *pVal);
+		[propput, id(103), helpstring("property Path")] HRESULT Path([in] BSTR newVal);
+	};
+	[
+		object,
+		uuid(C35D1ADA-8117-4625-9BA4-6390A4894D44),
+		dual,
+		helpstring("ITimeMeter Interface"),
+		pointer_default(unique)
+	]
+	interface ITimeMeter : IMeter
+	{
+		[propget, id(100), helpstring("property TimeZone")] HRESULT TimeZone([out, retval] BSTR *pVal);
+		[propput, id(100), helpstring("property TimeZone")] HRESULT TimeZone([in] BSTR newVal);
+		[propget, id(101), helpstring("property ForceDST")] HRESULT ForceDST([out, retval] short *pVal);
+		[propput, id(101), helpstring("property ForceDST")] HRESULT ForceDST([in] short newVal);
+		[propget, id(102), helpstring("property TZDescription")] HRESULT TZDescription([out, retval] BSTR *pVal);
+		[propput, id(102), helpstring("property TZDescription")] HRESULT TZDescription([in] BSTR newVal);
+	};
+	[
+		object,
+		uuid(66A4E5CD-6894-4677-9499-EB0A27727ED4),
+		dual,
+		helpstring("IMBMMeter Interface"),
+		pointer_default(unique)
+	]
+	interface IMBMMeter : IMeter
+	{
+		[propget, id(101), helpstring("property Index")] HRESULT Index([out, retval] long *pVal);
+		[propput, id(101), helpstring("property Index")] HRESULT Index([in] long newVal);
+		[propget, id(102), helpstring("property Reading")] HRESULT Reading([out, retval] long *pVal);
+		[propput, id(102), helpstring("property Reading")] HRESULT Reading([in] long newVal);
+		[propget, id(103), helpstring("property Scale")] HRESULT Scale([out, retval] double *pVal);
+		[propput, id(103), helpstring("property Scale")] HRESULT Scale([in] double newVal);
+	};
+	[
+		object,
+		uuid(5E41A0A8-F4CF-4923-B1CB-A173AB639A53),
+		dual,
+		helpstring("IXMLMeter Interface"),
+		pointer_default(unique)
+	]
+	interface IXMLMeter : IMeter
+	{
+		[propget, id(101), helpstring("property URL")] HRESULT URL([out, retval] BSTR *pVal);
+		[propput, id(101), helpstring("property URL")] HRESULT URL([in] BSTR newVal);
+		[propget, id(102), helpstring("property Username")] HRESULT Username([out, retval] BSTR *pVal);
+		[propput, id(102), helpstring("property Username")] HRESULT Username([in] BSTR newVal);
+		[propget, id(103), helpstring("property Password")] HRESULT Password([out, retval] BSTR *pVal);
+		[propput, id(103), helpstring("property Password")] HRESULT Password([in] BSTR newVal);
+		[propget, id(104), helpstring("property ProxyURL")] HRESULT ProxyURL([out, retval] BSTR *pVal);
+		[propput, id(104), helpstring("property ProxyURL")] HRESULT ProxyURL([in] BSTR newVal);
+		[propget, id(105), helpstring("property ProxyUsername")] HRESULT ProxyUsername([out, retval] BSTR *pVal);
+		[propput, id(105), helpstring("property ProxyUsername")] HRESULT ProxyUsername([in] BSTR newVal);
+		[propget, id(106), helpstring("property ProxyPassword")] HRESULT ProxyPassword([out, retval] BSTR *pVal);
+		[propput, id(106), helpstring("property ProxyPassword")] HRESULT ProxyPassword([in] BSTR newVal);
+		[propget, id(107), helpstring("property UseXPath")] HRESULT UseXPath([out, retval] VARIANT_BOOL *pVal);
+		[propput, id(107), helpstring("property UseXPath")] HRESULT UseXPath([in] VARIANT_BOOL newVal);
+		[propget, id(108), helpstring("property Namespaces")] HRESULT Namespaces([out, retval] SAFEARRAY(BSTR) *pVal);
+		[propput, id(108), helpstring("property Namespaces")] HRESULT Namespaces([in] SAFEARRAY(BSTR) newVal);
+		[propput, id(109), helpstring("property Value")] HRESULT Value([in] BSTR newVal);
+		[id(110), helpstring("method GetNodeList")] HRESULT GetNodeList([in] BSTR xpath, [out, retval] IDispatch* *pNodeList);
+		[propget, id(111), helpstring("property LoadFailed")] HRESULT LoadFailed([out, retval] VARIANT_BOOL *pVal);
+		[propput, id(111), helpstring("property LoadFailed")] HRESULT LoadFailed([in] VARIANT_BOOL newVal);
+	};
+	[
+		object,
+		uuid(BD8C36FF-C252-42E0-9DC2-D0D8AAF8F7A0),
+		dual,
+		helpstring("IFixedMeter Interface"),
+		pointer_default(unique)
+	]
+	interface IFixedMeter : IMeter
+	{
+		[propget, id(101), helpstring("property Value")] HRESULT Value([out, retval] BSTR *pVal);
+		[propput, id(101), helpstring("property Value")] HRESULT Value([in] BSTR newVal);
+	};
+	[
+		object,
+		uuid(AC232A4E-CD54-4925-867A-F49AC9A10694),
+		dual,
+		helpstring("IScriptMeterImpl Interface"),
+		pointer_default(unique)
+	]
+	interface IScriptMeterImpl : IMeter
+	{
+		// Life works better if the script type comes before the script itself :)
+		[propget, id(100), helpstring("property ScriptType")] HRESULT ScriptType([out, retval] BSTR *pVal);
+		[propput, id(100), helpstring("property ScriptType")] HRESULT ScriptType([in] BSTR newVal);
+		[propget, id(101), helpstring("property FileName")] HRESULT FileName([out, retval] BSTR *pVal);
+		[propput, id(101), helpstring("property FileName")] HRESULT FileName([in] BSTR newVal);
+		[propput, id(102), helpstring("property Value")] HRESULT Value([in] BSTR newVal);
+		[id(103), helpstring("method ShowConsole")] HRESULT ShowConsole([in] VARIANT_BOOL show);
+		[id(104), helpstring("method Trace")] HRESULT Trace([in] BSTR msg);
+	};
+	[
+		object,
+		uuid(B8E4B4E3-ACB2-4748-9D5B-19C816EAB228),
+		dual,
+		helpstring("IASyncScriptMeter Interface"),
+		pointer_default(unique)
+	]
+	interface IASyncScriptMeter : IMeter
+	{
+		// Start numbering at 100
+		[propget, id(100), helpstring("property ScriptType")] HRESULT ScriptType([out, retval] BSTR *pVal);
+		[propput, id(100), helpstring("property ScriptType")] HRESULT ScriptType([in] BSTR newVal);
+		[propget, id(101), helpstring("property FileName")] HRESULT FileName([out, retval] BSTR *pVal);
+		[propput, id(101), helpstring("property FileName")] HRESULT FileName([in] BSTR newVal);
+		[propput, id(102), helpstring("property Value")] HRESULT Value([in] BSTR newVal);
+		[id(103), helpstring("method ShowConsole")] HRESULT ShowConsole([in] VARIANT_BOOL show);
+	};
+
+	[
+		object,
+		uuid(C47612B3-008B-4DFF-A2F5-D73ED1CC3227),
+		dual,
+		helpstring("IAnimation Interface"),
+		pointer_default(unique)
+	]
+	interface IAnimation : IMeter
+	{
+		// Start numbering at 100
+		[propget, id(100), helpstring("No. of frames")] HRESULT FrameCount([out, retval] long *pVal);
+		[propput, id(100), helpstring("No. of frames")] HRESULT FrameCount([in] long newVal);
+		[propget, id(101), helpstring("No. of frames per second")] HRESULT FrameRate([out, retval] double *pVal);
+		[propput, id(101), helpstring("No. of frames per second")] HRESULT FrameRate([in] double newVal);
+		[propget, id(102), restricted, helpstring("One of: 0=stopped, 1=playing, 2=paused")] HRESULT PlayState([out, retval] short *pVal);
+		[propput, id(102), restricted, helpstring("One of: 0=stopped, 1=playing, 2=paused")] HRESULT PlayState([in] short newVal);
+		[propget, id(103), restricted, helpstring("Bitmask - one of: 1=start, 2=end, 3=both, 0=neither")] HRESULT Position([out, retval] short *pVal);
+		[propput, id(103), restricted, helpstring("Bitmask - one of: 1=start, 2=end, 3=both, 0=neither")] HRESULT Position([in] short newVal);
+		[propget, id(104), helpstring("0=stop at end, 1=play in loop")] HRESULT Loop([out, retval] short *pVal);
+		[propput, id(104), helpstring("0=stop at end, 1=play in loop")] HRESULT Loop([in] short newVal);
+		[propget, id(105), helpstring("0=Restart at beginning, 1=play forwards and backwards")] HRESULT AutoReverse([out, retval] short *pVal);
+		[propput, id(105), helpstring("0=Restart at beginning, 1=play forwards and backwards")] HRESULT AutoReverse([in] short newVal);
+		[propget, id(106), helpstring("Just play next frame")] HRESULT SingleStep([out, retval] short *pVal);
+		[propput, id(106), helpstring("Just play next frame")] HRESULT SingleStep([in] short newVal);
+		[id(107), helpstring("method PutValue")] HRESULT PutValue([in] BSTR selector, [in] BSTR  value);
+		[id(108), helpstring("This should be called by an overlay when it wants the meter to step to the next frame")] HRESULT Step([in] long delta);
+		[propget, id(109), helpstring("set to true if animation automatically starts playing on load")] HRESULT AutoStart([out, retval] short *pVal);
+		[propput, id(109), helpstring("set to true if animation automatically starts playing on load")] HRESULT AutoStart([in] short newVal);
+		[propget, id(110), helpstring("Windows message to post on state transition")] HRESULT StateMsg([out, retval] UINT *pVal);
+		[propput, id(110), helpstring("Windows message to post on state transition")] HRESULT StateMsg([in] UINT newVal);
+		[propget, id(111), helpstring("Value of LPARAM for state transition message")] HRESULT StateLParam([out, retval] UINT *pVal);
+		[propput, id(111), helpstring("Value of LPARAM for state transition message")] HRESULT StateLParam([in] UINT newVal);
+	};
+		
+	[
+		object,
+		uuid(26E3076C-9E84-47AB-9507-0E8B8A95039A),
+		dual,
+		helpstring("IMailMeter Interface"),
+		pointer_default(unique)
+	]
+	interface IMailMeter : IMeter
+	{
+		// Start numbering at 100
+		[propget, id(100), helpstring("property Username")] HRESULT Username([out, retval] BSTR *pVal);
+		[propput, id(100), helpstring("property Username")] HRESULT Username([in] BSTR newVal);
+		[propget, id(101), helpstring("property Password")] HRESULT Password([out, retval] BSTR *pVal);
+		[propput, id(101), helpstring("property Password")] HRESULT Password([in] BSTR newVal);
+		[propget, id(102), helpstring("property ValidDays")] HRESULT ValidDays([out, retval] long *pVal);
+		[propput, id(102), helpstring("property ValidDays")] HRESULT ValidDays([in] long newVal);
+	};
+	[
+		object,
+		uuid(D748EC01-9299-44D2-9BE8-EDA351687E46),
+		dual,
+		helpstring("ISpeedFanMeter Interface"),
+		pointer_default(unique)
+	]
+	interface ISpeedFanMeter : IMeter
+	{
+		// Start numbering at 100
+		[propget, id(101), helpstring("property Index")] HRESULT Index([out, retval] long *pVal);
+		[propput, id(101), helpstring("property Index")] HRESULT Index([in] long newVal);
+		[propget, id(102), helpstring("property Reading")] HRESULT Reading([out, retval] long *pVal);
+		[propput, id(102), helpstring("property Reading")] HRESULT Reading([in] long newVal);
+		[propget, id(103), helpstring("property Scale")] HRESULT Scale([out, retval] double *pVal);
+		[propput, id(103), helpstring("property Scale")] HRESULT Scale([in] double newVal);
+		[id(104), helpstring("method GetCount")] HRESULT GetCount([in] long reading, [out, retval] long *pVal);
+	};
+	[
+		object,
+		uuid(EA7158E3-43F7-4BC4-91B8-AB15AE5C0DCA),
+		dual,
+		helpstring("IPlayer Interface"),
+		pointer_default(unique)
+	]
+	interface IPlayer : IMeter
+	{
+		// Start numbering at 100
+		[propget, id(100), helpstring("property Path")] HRESULT Path([out, retval] BSTR *pVal);
+		[propput, id(100), helpstring("property Path")] HRESULT Path([in] BSTR newVal);
+		[propget, id(101), helpstring("property Loop")] HRESULT Loop([out, retval] short *pVal);
+		[propput, id(101), helpstring("property Loop")] HRESULT Loop([in] short newVal);
+		[id(102), helpstring("method Start")] HRESULT Start();
+		[id(103), helpstring("method Pause")] HRESULT Pause();
+		[id(104), helpstring("method Stop")] HRESULT Stop();
+		[id(105), helpstring("method PutValue")] HRESULT PutValue([in] BSTR selector, [in] BSTR value);
+		[propget, id(106), helpstring("property AutoStart")] HRESULT AutoStart([out, retval] short *pVal);
+		[propput, id(106), helpstring("property AutoStart")] HRESULT AutoStart([in] short newVal);
+		[propget, id(107), helpstring("property Volume")] HRESULT Volume([out, retval] long *pVal);
+		[propput, id(107), helpstring("property Volume")] HRESULT Volume([in] long newVal);
+		[id(108), helpstring("method Resume")] HRESULT Resume();
+	};
+
+	[
+		uuid(76F682AF-0A04-4BB7-A36E-43FBC263661B),
+		version(1.1),
+		helpstring("ScriptMeter")
+	]
+	coclass ScriptMeter
+	{
+		[default] interface IScriptMeter;
+	};
+	[
+		uuid(D5EE3B1C-81EF-42EB-B591-F2A7A7070744),
+		helpstring("MemoryMeter Class")
+	]
+	coclass MemoryMeter
+	{
+		[default] interface IMemoryMeter;
+	};
+	[
+		uuid(9545FC8F-F513-4DBB-A17F-CB74FC044CE2),
+		helpstring("DiskMeter Class")
+	]
+	coclass DiskMeter
+	{
+		[default] interface IDiskMeter;
+	};
+	[
+		uuid(1617561A-B175-4213-A587-47B63D691A35),
+		helpstring("TimeMeter Class")
+	]
+	coclass TimeMeter
+	{
+		[default] interface ITimeMeter;
+	};
+	[
+		uuid(EFDEFD39-FE42-4D53-9546-E78F9F9D3841),
+		helpstring("MBMMeter Class")
+	]
+	coclass MBMMeter
+	{
+		[default] interface IMBMMeter;
+	};
+	[
+		uuid(E8F29CAB-1951-46A9-A645-23EFDD2AA164),
+		helpstring("XMLMeter Class")
+	]
+	coclass XMLMeter
+	{
+		[default] interface IXMLMeter;
+	};
+	[
+		uuid(41DB3EA5-F4CF-4079-AD31-95C147A35D3E),
+		helpstring("FixedMeter Class")
+	]
+	coclass FixedMeter
+	{
+		[default] interface IFixedMeter;
+	};
+	[
+		uuid(4FD5141E-515A-447F-89A3-6C2D073B4BF8),
+		helpstring("ScriptMeterImpl Class")
+	]
+	coclass ScriptMeterImpl
+	{
+		[default] interface IScriptMeterImpl;
+		[default, source] dispinterface _IScriptMeterEvents;
+	};
+	[
+		uuid(CD915828-F075-48EA-9D00-0F9D35FB03B4),
+		helpstring("ASyncScriptMeter Class")
+	]
+	coclass ASyncScriptMeter
+	{
+		[default] interface IASyncScriptMeter;
+	};
+	[
+		uuid(B664708A-6774-4EB0-A904-E951FFD72264),
+		helpstring("Animation Class")
+	]
+	coclass Animation
+	{
+		[default] interface IAnimation;
+	};
+	[
+		uuid(FF920785-772B-4e33-82A7-0E8C2C4023EE),
+		helpstring("MailMeter Class")
+	]
+	coclass MailMeter
+	{
+		[default] interface IMailMeter;
+	};
+	[
+		uuid(4ABD797A-4A8D-4483-A380-416432A90BFE),
+		helpstring("SpeedFanMeter Class")
+	]
+	coclass SpeedFanMeter
+	{
+		[default] interface ISpeedFanMeter;
+	};
+	[
+		uuid(DAD8AD97-0ED2-4A61-82A2-66F09D7DA9D3),
+		helpstring("Player Class")
+	]
+	coclass Player
+	{
+		[default] interface IPlayer;
+	};
+};

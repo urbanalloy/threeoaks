@@ -1,0 +1,38 @@
+// SysStatsODCOM.idl : IDL source for SysStatsODCOM.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (SysStatsODCOM.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	[
+		object,
+		uuid(6EEBF304-6795-4421-A83F-D23553450896),
+		dual,
+		helpstring("IDummy Interface"),
+		pointer_default(unique)
+	]
+	interface IDummy : IDispatch
+	{
+	};
+
+[
+	uuid(915F2659-F686-4523-99F8-65B1098140AF),
+	version(1.0),
+	helpstring("SysStatsODCOM 1.0 Type Library")
+]
+library SYSSTATSODCOMLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(7DAC67C1-FC56-4F1E-BE75-3C3D7C5E12FB),
+		helpstring("Dummy Class")
+	]
+	coclass Dummy
+	{
+		[default] interface IDummy;
+	};
+};

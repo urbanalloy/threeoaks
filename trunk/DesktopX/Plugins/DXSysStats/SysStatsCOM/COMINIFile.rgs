@@ -1,0 +1,26 @@
+HKCR
+{
+	SysStatsCOM.COMINIFile.1 = s 'COMINIFile Class'
+	{
+		CLSID = s '{5D394DCC-5729-4525-9819-D7ACE0207DF5}'
+	}
+	SysStatsCOM.COMINIFile = s 'COMINIFile Class'
+	{
+		CLSID = s '{5D394DCC-5729-4525-9819-D7ACE0207DF5}'
+		CurVer = s 'SysStatsCOM.COMINIFile.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {5D394DCC-5729-4525-9819-D7ACE0207DF5} = s 'COMINIFile Class'
+		{
+			ProgID = s 'SysStatsCOM.COMINIFile.1'
+			VersionIndependentProgID = s 'SysStatsCOM.COMINIFile'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{E305FE28-9D24-4398-905A-A29F7A7E2E3D}'
+		}
+	}
+}

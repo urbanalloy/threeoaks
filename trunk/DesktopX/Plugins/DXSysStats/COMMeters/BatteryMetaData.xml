@@ -1,0 +1,221 @@
+<?xml version="1.0"?>
+<metadata>
+	<valueset id="controller">
+		<item id="controller:playstate">
+			<value type="BSTR">playstate</value>
+			<label>Animation State</label>
+			<help>Sets the playing state of the animation</help>
+		</item>
+		<item id="controller:position">
+			<value type="BSTR">position</value>
+			<label>Position</label>
+			<help>Set the position to start or end</help>
+		</item>
+		<item id="controller:framerate">
+			<value type="BSTR">framerate</value>
+			<label>Frame Rate</label>
+			<help>Set the framerate in frames/sec</help>
+		</item>
+		<item id="controller:framecount">
+			<value type="BSTR">framecount</value>
+			<label>Number of Frames</label>
+			<help>Set the total number of frames in the animation</help>
+		</item>
+		<item id="controller:framedelta">
+			<value type="BSTR">framedelta</value>
+			<label>Frame Increment</label>
+			<help>Set the number of frames to advance per step. Can be negative.</help>
+		</item>
+		<item id="controller:loop">
+			<value type="BSTR">loop</value>
+			<label>Loop Animation</label>
+			<help>If false the animation plays once then enters 'pause' mode, otherwise it loops.</help>
+		</item>
+		<item id="controller:autoreverse">
+			<value type="BSTR">autoreverse</value>
+			<label>AutoReverse at End</label>
+			<help>If true the animation will play forwards then backwards.</help>
+		</item>
+		<item id="controller:singlestep">
+			<value type="BSTR">singlestep</value>
+			<label>Single Step Mode</label>
+			<help>If true, animation will only play one step at a time. It hs to be forced to play each frame.</help>
+		</item>
+		<item id="controller:autostart">
+			<value type="BSTR">autostart</value>
+			<label>Start Animation on Load</label>
+			<help>If true, animation will play when the config is loaded.</help>
+		</item>
+		<item id="controller:step">
+			<value type="BSTR">step</value>
+			<label>Step by Number of Frames</label>
+			<help>Step by a defined number of frames. Can be negative.</help>
+		</item>
+	</valueset>
+	
+	<valueset id="value:playstate" idref="controller:playstate">
+		<item>
+			<value type="long">0</value>
+			<label>Stopped</label>
+			<help>Stops the animation. Sets the frame position back to the start</help>
+		</item>
+		<item>
+			<value type="long">1</value>
+			<label>Playing</label>
+			<help>Starts the animation from the current position</help>
+		</item>
+		<item>
+			<value type="long">2</value>
+			<label>Paused</label>
+			<help>Pauses the animation at the current position</help>
+		</item>
+	</valueset>
+	
+	<valueset id="value:position" idref="controller:position">
+		<item>
+			<value type="long">0</value>
+			<label>Neither</label>
+			<help>Not at the start nor at the end. Animation has to have &gt;2 frames</help>
+		</item>
+		<item>
+			<value type="long">1</value>
+			<label>Start</label>
+			<help>Set animation to first frame</help>
+		</item>
+		<item>
+			<value type="long">2</value>
+			<label>End</label>
+			<help>Set animation to last frame</help>
+		</item>
+		<item>
+			<value type="long">3</value>
+			<label>Both</label>
+			<help>Only makes sense for animations with 1 frame</help>
+		</item>
+	</valueset>
+
+	<valueset id="value:loop" idref="controller:loop">
+		<item>
+			<value type="long">0</value>
+			<label>Don't Loop</label>
+			<help>Do not loop</help>
+		</item>
+		<item>
+			<value type="long">1</value>
+			<label>Loop</label>
+			<help>Loop</help>
+		</item>
+	</valueset>
+
+	<valueset id="value:singlestep" idref="controller:singlestep">
+		<item>
+			<value type="long">0</value>
+			<label>False</label>
+			<help>Do not single-step animation</help>
+		</item>
+		<item>
+			<value type="long">1</value>
+			<label>True</label>
+			<help>Play one frame of animation then enter pause mode.</help>
+		</item>
+	</valueset>
+
+	<valueset id="value:autoreverse" idref="controller:autoreverse">
+		<item>
+			<value type="long">0</value>
+			<label>False</label>
+			<help>when animation reaches end, reset to begining</help>
+		</item>
+		<item>
+			<value type="long">1</value>
+			<label>True</label>
+			<help>When animation reaches end, play in reverse direction</help>
+		</item>
+	</valueset>
+
+	<valueset id="value:autostart" idref="controller:autostart">
+		<item>
+			<value type="long">0</value>
+			<label>False</label>
+			<help>Do not start animation on load of config</help>
+		</item>
+		<item>
+			<value type="long">1</value>
+			<label>True</label>
+			<help>Start animation when config is loaded</help>
+		</item>
+	</valueset>
+
+	<method name="PutValue">
+		<arg name="selector" pos="0">
+			<valuesetref idref="controller"/>
+		</arg>
+		<arg name="value" pos="1">
+			<valuesetref idref="value:playstate"/>
+			<valuesetref idref="value:position"/>
+			<valuesetref idref="value:loop"/>
+			<valuesetref idref="value:autostart"/>
+			<valuesetref idref="value:autoreverse"/>
+			<valuesetref idref="value:singlestep"/>
+		</arg>
+	</method>
+
+	<valueset id="selector">
+		<item id="selector:playstate">
+			<value type="BSTR">playstate</value>
+			<label>Animation State</label>
+			<help>Sets the playing state of the animation</help>
+		</item>
+		<item id="selector:position">
+			<value type="BSTR">position</value>
+			<label>Position</label>
+			<help>Set the position to start or end</help>
+		</item>
+		<item id="selector:framerate">
+			<value type="BSTR">framerate</value>
+			<label>Frame Rate</label>
+			<help>Set the framerate in frames/sec</help>
+		</item>
+		<item id="selector:framecount">
+			<value type="BSTR">framecount</value>
+			<label>Number of Frames</label>
+			<help>Set the total number of frames in the animation</help>
+		</item>
+		<item id="selector:framedelta">
+			<value type="BSTR">framedelta</value>
+			<label>Frame Increment</label>
+			<help>Set the number of frames to advance per step. Can be negative.</help>
+		</item>
+		<item id="selector:loop">
+			<value type="BSTR">loop</value>
+			<label>Loop Animation</label>
+			<help>If false the animation plays once then enters 'pause' mode, otherwise it loops.</help>
+		</item>
+		<item id="selector:autoreverse">
+			<value type="BSTR">autoreverse</value>
+			<label>AutoReverse at End</label>
+			<help>If true the animation will play forwards then backwards.</help>
+		</item>
+		<item id="selector:singlestep">
+			<value type="BSTR">singlestep</value>
+			<label>Single Step Mode</label>
+			<help>If true, animation will only play one step at a time. It hs to be forced to play each frame.</help>
+		</item>
+		<item id="selector:autostart">
+			<value type="BSTR">autostart</value>
+			<label>Start Animation on Load</label>
+			<help>If true, animation will play when the config is loaded.</help>
+		</item>
+		<item id="selector:currentframe">
+			<value type="BSTR">currentframe</value>
+			<label>Get Current Frame</label>
+			<help>Get the current frame</help>
+		</item>
+	</valueset>
+	
+	<method name="GetValue">
+		<arg name="selector" pos="0">
+			<valuesetref idref="selector"/>
+		</arg>
+	</method>
+</metadata>

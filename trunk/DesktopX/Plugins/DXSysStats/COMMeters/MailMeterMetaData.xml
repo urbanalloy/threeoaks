@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<metadata>
+	<valueset id="selector">
+		<item id="selector:mailcount">
+			<value type="BSTR">0</value>
+			<label>Unread Mail Count</label>
+			<help>Gets the count of unread mails</help>
+		</item>
+		<item id="selector:hasmail">
+			<value type="BSTR">1</value>
+			<label>Has Unread Mail</label>
+			<help>0 = no unread mail, 1 = unread mail</help>
+		</item>
+	</valueset>
+	
+	<method name="GetValue">
+		<arg name="selector" pos="0">
+			<valuesetref idref="selector"/>
+		</arg>
+	</method>
+</metadata>

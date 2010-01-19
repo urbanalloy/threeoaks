@@ -1,0 +1,27 @@
+HKCR
+{
+	COMOverlays.GaugeOverlay.1 = s 'GaugeOverlay Class'
+	{
+		CLSID = s '{1DD090DC-9B81-4E41-9026-4E06B83F0B76}'
+	}
+	COMOverlays.GaugeOverlay = s 'GaugeOverlay Class'
+	{
+		CLSID = s '{1DD090DC-9B81-4E41-9026-4E06B83F0B76}'
+		CurVer = s 'COMOverlays.GaugeOverlay.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {1DD090DC-9B81-4E41-9026-4E06B83F0B76} = s 'GaugeOverlay Class'
+		{
+			ProgID = s 'COMOverlays.GaugeOverlay.1'
+			VersionIndependentProgID = s 'COMOverlays.GaugeOverlay'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{F5955ACD-6EFB-4329-9A02-F0D0D30D491E}'
+			'Version' = d 1
+		}
+	}
+}

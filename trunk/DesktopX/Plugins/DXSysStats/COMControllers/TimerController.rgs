@@ -1,0 +1,27 @@
+HKCR
+{
+	COMControllers.TimerController.1 = s 'TimerController Class'
+	{
+		CLSID = s '{C8CF55A3-FAB9-485F-9451-96FD97262B19}'
+	}
+	COMControllers.TimerController = s 'TimerController Class'
+	{
+		CLSID = s '{C8CF55A3-FAB9-485F-9451-96FD97262B19}'
+		CurVer = s 'COMControllers.TimerController.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {C8CF55A3-FAB9-485F-9451-96FD97262B19} = s 'TimerController Class'
+		{
+			ProgID = s 'COMControllers.TimerController.1'
+			VersionIndependentProgID = s 'COMControllers.TimerController'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{472EB9D7-052E-4EDD-90A1-5D550F786C85}'
+			'Version' = d 1
+		}
+	}
+}

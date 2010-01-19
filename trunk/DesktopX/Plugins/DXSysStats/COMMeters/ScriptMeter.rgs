@@ -1,0 +1,27 @@
+HKCR
+{
+	COMMeters.ScriptMeter.1 = s 'ScriptMeter Class'
+	{
+		CLSID = s '{76F682AF-0A04-4BB7-A36E-43FBC263661B}'
+	}
+	COMMeters.ScriptMeter = s 'ScriptMeter Class'
+	{
+		CLSID = s '{76F682AF-0A04-4BB7-A36E-43FBC263661B}'
+		CurVer = s 'COMMeters.ScriptMeter.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {76F682AF-0A04-4BB7-A36E-43FBC263661B} = s 'ScriptMeter Class'
+		{
+			ProgID = s 'COMMeters.ScriptMeter.1'
+			VersionIndependentProgID = s 'COMMeters.ScriptMeter'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{34AF6298-1F60-440A-94DE-E586F829DE0C}'
+			'Version' = d 1
+		}
+	}
+}

@@ -1,0 +1,26 @@
+HKCR
+{
+	SysStatsCOM.MetaData.1 = s 'MetaData Class'
+	{
+		CLSID = s '{C3CEBFCB-A60E-42C3-8D02-F046A8C571B7}'
+	}
+	SysStatsCOM.MetaData = s 'MetaData Class'
+	{
+		CLSID = s '{C3CEBFCB-A60E-42C3-8D02-F046A8C571B7}'
+		CurVer = s 'SysStatsCOM.MetaData.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {C3CEBFCB-A60E-42C3-8D02-F046A8C571B7} = s 'MetaData Class'
+		{
+			ProgID = s 'SysStatsCOM.MetaData.1'
+			VersionIndependentProgID = s 'SysStatsCOM.MetaData'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{E305FE28-9D24-4398-905A-A29F7A7E2E3D}'
+		}
+	}
+}

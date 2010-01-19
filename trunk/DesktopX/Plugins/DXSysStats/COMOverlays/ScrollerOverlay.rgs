@@ -1,0 +1,27 @@
+HKCR
+{
+	COMOverlays.ScrollerOverlay.1 = s 'ScrollerOverlay Class'
+	{
+		CLSID = s '{2694FF6A-9FB6-4BEE-9C65-AB0D72C78E3D}'
+	}
+	COMOverlays.ScrollerOverlay = s 'ScrollerOverlay Class'
+	{
+		CLSID = s '{2694FF6A-9FB6-4BEE-9C65-AB0D72C78E3D}'
+		CurVer = s 'COMOverlays.ScrollerOverlay.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {2694FF6A-9FB6-4BEE-9C65-AB0D72C78E3D} = s 'ScrollerOverlay Class'
+		{
+			ProgID = s 'COMOverlays.ScrollerOverlay.1'
+			VersionIndependentProgID = s 'COMOverlays.ScrollerOverlay'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{F5955ACD-6EFB-4329-9A02-F0D0D30D491E}'
+			'Version' = d 1
+		}
+	}
+}

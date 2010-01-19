@@ -1,0 +1,27 @@
+HKCR
+{
+	COMMeters.PDHMeter.1 = s 'PDHMeter Class'
+	{
+		CLSID = s '{74FF2D32-41AC-46CF-A00C-69F6A03A1608}'
+	}
+	COMMeters.PDHMeter = s 'PDHMeter Class'
+	{
+		CLSID = s '{74FF2D32-41AC-46CF-A00C-69F6A03A1608}'
+		CurVer = s 'COMMeters.PDHMeter.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {74FF2D32-41AC-46CF-A00C-69F6A03A1608} = s 'PDHMeter Class'
+		{
+			ProgID = s 'COMMeters.PDHMeter.1'
+			VersionIndependentProgID = s 'COMMeters.PDHMeter'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{34AF6298-1F60-440A-94DE-E586F829DE0C}'
+			'Version' = d 1
+		}
+	}
+}

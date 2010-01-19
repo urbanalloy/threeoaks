@@ -1,0 +1,27 @@
+HKCR
+{
+	COMMeters.XMLMeter.1 = s 'XMLMeter Class'
+	{
+		CLSID = s '{E8F29CAB-1951-46A9-A645-23EFDD2AA164}'
+	}
+	COMMeters.XMLMeter = s 'XMLMeter Class'
+	{
+		CLSID = s '{E8F29CAB-1951-46A9-A645-23EFDD2AA164}'
+		CurVer = s 'COMMeters.XMLMeter.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {E8F29CAB-1951-46A9-A645-23EFDD2AA164} = s 'XMLMeter Class'
+		{
+			ProgID = s 'COMMeters.XMLMeter.1'
+			VersionIndependentProgID = s 'COMMeters.XMLMeter'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{34AF6298-1F60-440A-94DE-E586F829DE0C}'
+			'Version' = d 2
+		}
+	}
+}

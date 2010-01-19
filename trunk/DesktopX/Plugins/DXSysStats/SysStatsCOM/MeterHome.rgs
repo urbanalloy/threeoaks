@@ -1,0 +1,23 @@
+HKCR
+{
+	SysStatsCOM.MeterHome.1 = s 'MeterHome Class'
+	{
+		CLSID = s '{886694E3-1B09-474C-BC9C-F43A103EF409}'
+	}
+	SysStatsCOM.MeterHome = s 'MeterHome Class'
+	{
+		CLSID = s '{886694E3-1B09-474C-BC9C-F43A103EF409}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {886694E3-1B09-474C-BC9C-F43A103EF409} = s 'MeterHome Class'
+		{
+			ProgID = s 'SysStatsCOM.MeterHome.1'
+			VersionIndependentProgID = s 'SysStatsCOM.MeterHome'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

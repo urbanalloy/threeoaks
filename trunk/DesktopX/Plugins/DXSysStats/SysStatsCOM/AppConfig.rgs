@@ -1,0 +1,26 @@
+HKCR
+{
+	SysStatsCOM.AppConfig.1 = s 'AppConfig Class'
+	{
+		CLSID = s '{C4E1FFE8-3FE7-4849-997A-65589DFB107B}'
+	}
+	SysStatsCOM.AppConfig = s 'AppConfig Class'
+	{
+		CLSID = s '{C4E1FFE8-3FE7-4849-997A-65589DFB107B}'
+		CurVer = s 'SysStatsCOM.AppConfig.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {C4E1FFE8-3FE7-4849-997A-65589DFB107B} = s 'AppConfig Class'
+		{
+			ProgID = s 'SysStatsCOM.AppConfig.1'
+			VersionIndependentProgID = s 'SysStatsCOM.AppConfig'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{E305FE28-9D24-4398-905A-A29F7A7E2E3D}'
+		}
+	}
+}

@@ -1,0 +1,27 @@
+HKCR
+{
+	COMControllers.Shortcut.1 = s 'Shortcut Class'
+	{
+		CLSID = s '{0383EF95-0787-4CF6-8858-FCC8640307F3}'
+	}
+	COMControllers.Shortcut = s 'Shortcut Class'
+	{
+		CLSID = s '{0383EF95-0787-4CF6-8858-FCC8640307F3}'
+		CurVer = s 'COMControllers.Shortcut.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {0383EF95-0787-4CF6-8858-FCC8640307F3} = s 'Shortcut Class'
+		{
+			ProgID = s 'COMControllers.Shortcut.1'
+			VersionIndependentProgID = s 'COMControllers.Shortcut'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{472EB9D7-052E-4EDD-90A1-5D550F786C85}'
+			'Version' = d 1
+		}
+	}
+}

@@ -1,0 +1,26 @@
+HKCR
+{
+	SysStatsCOM.TimerService.1 = s 'TimerService Class'
+	{
+		CLSID = s '{C54AFE74-604E-4E58-9BCC-17573FD1FF2C}'
+	}
+	SysStatsCOM.TimerService = s 'TimerService Class'
+	{
+		CLSID = s '{C54AFE74-604E-4E58-9BCC-17573FD1FF2C}'
+		CurVer = s 'SysStatsCOM.TimerService.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {C54AFE74-604E-4E58-9BCC-17573FD1FF2C} = s 'TimerService Class'
+		{
+			ProgID = s 'SysStatsCOM.TimerService.1'
+			VersionIndependentProgID = s 'SysStatsCOM.TimerService'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{E305FE28-9D24-4398-905A-A29F7A7E2E3D}'
+		}
+	}
+}

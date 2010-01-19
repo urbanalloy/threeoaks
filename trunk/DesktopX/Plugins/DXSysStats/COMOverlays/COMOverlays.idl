@@ -1,0 +1,274 @@
+// COMOverlays.idl : IDL source for COMOverlays.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (COMOverlays.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+import "SysStatsCOM.idl";
+
+	[
+		object,
+		uuid(BC982283-B40A-4748-B29C-0FD5ECEF643A),
+		dual,
+		helpstring("ITextOverlay Interface"),
+		pointer_default(unique)
+	]
+	interface ITextOverlay : ISimpleOverlay2
+	{
+		[propget, id(101), helpstring("property FontName")] HRESULT FontName([out, retval] BSTR *pVal);
+		[propput, id(101), helpstring("property FontName")] HRESULT FontName([in] BSTR newVal);
+		[propget, id(102), helpstring("property FontStyle")] HRESULT FontStyle([out, retval] int *pVal);
+		[propput, id(102), helpstring("property FontStyle")] HRESULT FontStyle([in] int newVal);
+		[propget, id(103), helpstring("property FontSize")] HRESULT FontSize([out, retval] float *pVal);
+		[propput, id(103), helpstring("property FontSize")] HRESULT FontSize([in] float newVal);
+		[propget, id(104), helpstring("property FontColor")] HRESULT FontColor([out, retval] long *pVal);
+		[propput, id(104), helpstring("property FontColor")] HRESULT FontColor([in] long newVal);
+		[propget, id(105), helpstring("property Alpha")] HRESULT Alpha([out, retval] BYTE *pVal);
+		[propput, id(105), helpstring("property Alpha")] HRESULT Alpha([in] BYTE newVal);
+		[propget, id(108), helpstring("property Radius")] HRESULT Radius([out, retval] int *pVal);
+		[propput, id(108), helpstring("property Radius")] HRESULT Radius([in] int newVal);
+		[propget, id(109), helpstring("property Format")] HRESULT Format([out, retval] BSTR *pVal);
+		[propput, id(109), helpstring("property Format")] HRESULT Format([in] BSTR newVal);
+		[propget, id(110), helpstring("property Width")] HRESULT Width([out, retval] long *pVal);
+		[propput, id(110), helpstring("property Width")] HRESULT Width([in] long newVal);
+		[propget, id(111), helpstring("property Height")] HRESULT Height([out, retval] long *pVal);
+		[propput, id(111), helpstring("property Height")] HRESULT Height([in] long newVal);
+		[propget, id(112), helpstring("Use the alternate rendering mechanism")] HRESULT AlternateRender([out, retval] short *pVal);
+		[propput, id(112), helpstring("Use the alternate rendering mechanism")] HRESULT AlternateRender([in] short newVal);
+		[propget, id(113), helpstring("property Wrap")] HRESULT Wrap([out, retval] short *pVal);
+		[propput, id(113), helpstring("property Wrap")] HRESULT Wrap([in] short newVal);
+		[propget, id(114), helpstring("property Vertical")] HRESULT Vertical([out, retval] short *pVal);
+		[propput, id(114), helpstring("property Vertical")] HRESULT Vertical([in] short newVal);
+		[propget, id(115), helpstring("property TextRenderingHint")] HRESULT TextRenderingHint([out, retval] short *pVal);
+		[propput, id(115), helpstring("property TextRenderingHint")] HRESULT TextRenderingHint([in] short newVal);
+		[propget, id(116), helpstring("property TextContrast")] HRESULT TextContrast([out, retval] UINT *pVal);
+		[propput, id(116), helpstring("property TextContrast")] HRESULT TextContrast([in] UINT newVal);
+		[propget, id(117), helpstring("property BlurColor")] HRESULT BlurColor([out, retval] long *pVal);
+		[propput, id(117), helpstring("property BlurColor")] HRESULT BlurColor([in] long newVal);
+	};
+	[
+		object,
+		uuid(E5A9262E-0A30-43C0-8B2D-1B70420F1590),
+		dual,
+		helpstring("IImageOverlay Interface"),
+		pointer_default(unique)
+	]
+	interface IImageOverlay : ISimpleOverlay2
+	{
+		[propget, id(101), helpstring("property Alpha")] HRESULT Alpha([out, retval] BYTE *pVal);
+		[propput, id(101), helpstring("property Alpha")] HRESULT Alpha([in] BYTE newVal);
+		[propget, id(102), helpstring("property Path")] HRESULT Path([out, retval] BSTR *pVal);
+		[propput, id(102), helpstring("property Path")] HRESULT Path([in] BSTR newVal);
+		[propget, id(103), helpstring("property ImageHeight")] HRESULT ImageHeight([out, retval] long *pVal);
+		[propget, id(104), helpstring("property ImageWidth")] HRESULT ImageWidth([out, retval] long *pVal);
+		[id(105), helpstring("method GetPixelValue")] HRESULT GetPixelValue([in] long X, [in] long Y, [out, retval] DWORD *retVal);
+		[id(106), helpstring("Destroy the image")] HRESULT Dispose();
+		[propget, id(107), restricted, helpstring("property AnimationMeter")] HRESULT AnimationMeter([out, retval] IMeter* *pVal);
+		[propput, id(107), restricted, helpstring("property AnimationMeter")] HRESULT AnimationMeter([in] IMeter* newVal);
+		[propget, id(108), helpstring("property AnimationMeterIndex")] HRESULT AnimationMeterIndex([out, retval] long *pVal);
+		[propput, id(108), helpstring("property AnimationMeterIndex")] HRESULT AnimationMeterIndex([in] long newVal);
+		[propget, id(109), helpstring("property HueShift")] HRESULT HueShift([out, retval] long *pVal);
+		[propput, id(109), helpstring("property HueShift")] HRESULT HueShift([in] long newVal);
+		[propget, id(110), helpstring("property Saturation")] HRESULT Saturation([out, retval] double *pVal);
+		[propput, id(110), helpstring("property Saturation")] HRESULT Saturation([in] double newVal);
+		[propget, id(111), helpstring("property KeepImageOpen")] HRESULT KeepImageOpen([out, retval] VARIANT_BOOL *pVal);
+		[propput, id(111), helpstring("property KeepImageOpen")] HRESULT KeepImageOpen([in] VARIANT_BOOL newVal);
+		[propget, id(112), helpstring("property LimitWidth")] HRESULT LimitWidth([out, retval] long *pVal);
+		[propput, id(112), helpstring("property LimitWidth")] HRESULT LimitWidth([in] long newVal);
+		[propget, id(113), helpstring("property LimitHeight")] HRESULT LimitHeight([out, retval] long *pVal);
+		[propput, id(113), helpstring("property LimitHeight")] HRESULT LimitHeight([in] long newVal);
+		[propget, id(114), helpstring("property Alignment")] HRESULT Alignment([out, retval] short *pVal);
+		[propput, id(114), helpstring("property Alignment")] HRESULT Alignment([in] short newVal);
+	};
+	[
+		object,
+		uuid(0BB34678-E7B9-4AC1-BF92-3A3B7B6BFC83),
+		dual,
+		helpstring("IMeterOverlay Interface"),
+		pointer_default(unique)
+	]
+	interface IMeterOverlay : ISimpleOverlay2
+	{
+		[propget, id(101), helpstring("property Min")] HRESULT Min([out, retval] long *pVal);
+		[propput, id(101), helpstring("property Min")] HRESULT Min([in] long newVal);
+		[propget, id(102), helpstring("property Max")] HRESULT Max([out, retval] long *pVal);
+		[propput, id(102), helpstring("property Max")] HRESULT Max([in] long newVal);
+		[propget, id(103), helpstring("property Length")] HRESULT Length([out, retval] long *pVal);
+		[propput, id(103), helpstring("property Length")] HRESULT Length([in] long newVal);
+		[propget, id(104), helpstring("property Thickness")] HRESULT Thickness([out, retval] long *pVal);
+		[propput, id(104), helpstring("property Thickness")] HRESULT Thickness([in] long newVal);
+		[propget, id(105), helpstring("property Color")] HRESULT Color([out, retval] long *pVal);
+		[propput, id(105), helpstring("property Color")] HRESULT Color([in] long newVal);
+		[propget, id(106), helpstring("property Alpha")] HRESULT Alpha([out, retval] BYTE *pVal);
+		[propput, id(106), helpstring("property Alpha")] HRESULT Alpha([in] BYTE newVal);
+	};
+	[
+		object,
+		uuid(BA13C7E6-502E-40D8-A2BE-DF090BE4671E),
+		dual,
+		helpstring("IGaugeOverlay Interface"),
+		pointer_default(unique)
+	]
+	interface IGaugeOverlay : IMeterOverlay
+	{
+		[propget, id(70), helpstring("property Span")] HRESULT Span([out, retval] long *pVal);
+		[propput, id(70), helpstring("property Span")] HRESULT Span([in] long newVal);
+	};
+	[
+		object,
+		uuid(CB11DE48-B0C6-4F8C-B855-CC51392583BD),
+		dual,
+		helpstring("IMappedOverlay Interface"),
+		pointer_default(unique)
+	]
+	interface IMappedOverlay : ISimpleOverlay2
+	{
+		// Start numbering at 100
+		[propget, id(100), helpstring("property Min")] HRESULT Min([out, retval] long *pVal);
+		[propput, id(100), helpstring("property Min")] HRESULT Min([in] long newVal);
+		[propget, id(101), helpstring("property Max")] HRESULT Max([out, retval] long *pVal);
+		[propput, id(101), helpstring("property Max")] HRESULT Max([in] long newVal);
+		[propget, id(102), helpstring("property ImagePath")] HRESULT ImagePath([out, retval] BSTR *pVal);
+		[propput, id(102), helpstring("property ImagePath")] HRESULT ImagePath([in] BSTR newVal);
+		[propget, id(103), helpstring("property MapPath")] HRESULT MapPath([out, retval] BSTR *pVal);
+		[propput, id(103), helpstring("property MapPath")] HRESULT MapPath([in] BSTR newVal);
+		[propget, id(104), helpstring("property Alpha")] HRESULT Alpha([out, retval] BYTE *pVal);
+		[propput, id(104), helpstring("property Alpha")] HRESULT Alpha([in] BYTE newVal);
+		[propget, id(105), helpstring("property ImageHeight")] HRESULT ImageHeight([out, retval] long *pVal);
+		[propget, id(106), helpstring("property ImageWidth")] HRESULT ImageWidth([out, retval] long *pVal);
+		[id(107), helpstring("method GetPixelValue")] HRESULT GetPixelValue([in] long X, [in] long Y, [out, retval] DWORD *retVal);
+		[id(108), helpstring("method Dispose")] HRESULT Dispose();
+		[propget, id(109), helpstring("property HueShift")] HRESULT HueShift([out, retval] long *pVal);
+		[propput, id(109), helpstring("property HueShift")] HRESULT HueShift([in] long newVal);
+		[propget, id(110), helpstring("property saturation")] HRESULT Saturation([out, retval] double *pVal);
+		[propput, id(110), helpstring("property saturation")] HRESULT Saturation([in] double newVal);
+		[propget, id(111), helpstring("property LimitWidth")] HRESULT LimitWidth([out, retval] long *pVal);
+		[propput, id(111), helpstring("property LimitWidth")] HRESULT LimitWidth([in] long newVal);
+		[propget, id(112), helpstring("property LimitHeight")] HRESULT LimitHeight([out, retval] long *pVal);
+		[propput, id(112), helpstring("property LimitHeight")] HRESULT LimitHeight([in] long newVal);
+		[propget, id(113), helpstring("property Alignment")] HRESULT Alignment([out, retval] short *pVal);
+		[propput, id(113), helpstring("property Alignment")] HRESULT Alignment([in] short newVal);
+	};
+	[
+		object,
+		uuid(AC6FAA9E-3A51-4C7C-ACE2-B8968D8DCA23),
+		dual,
+		helpstring("IAnimatorOverlay Interface"),
+		pointer_default(unique)
+	]
+	interface IAnimatorOverlay : ICompositeOverlay
+	{
+		// Start numbering at 100
+		[propget, id(100), helpstring("property Alpha")] HRESULT Alpha([out, retval] BYTE *pVal);
+		[propput, id(100), helpstring("property Alpha")] HRESULT Alpha([in] BYTE newVal);
+		[propget, id(101), helpstring("property AlphaEnd")] HRESULT AlphaEnd([out, retval] BYTE *pVal);
+		[propput, id(101), helpstring("property AlphaEnd")] HRESULT AlphaEnd([in] BYTE newVal);
+		[propget, id(103), helpstring("property XEnd")] HRESULT XEnd([out, retval] long *pVal);
+		[propput, id(103), helpstring("property XEnd")] HRESULT XEnd([in] long newVal);
+		[propget, id(104), helpstring("property YEnd")] HRESULT YEnd([out, retval] long *pVal);
+		[propput, id(104), helpstring("property YEnd")] HRESULT YEnd([in] long newVal);
+		[propget, id(105), helpstring("property CenterXEnd")] HRESULT CenterXEnd([out, retval] long *pVal);
+		[propput, id(105), helpstring("property CenterXEnd")] HRESULT CenterXEnd([in] long newVal);
+		[propget, id(106), helpstring("property CenterYEnd")] HRESULT CenterYEnd([out, retval] long *pVal);
+		[propput, id(106), helpstring("property CenterYEnd")] HRESULT CenterYEnd([in] long newVal);
+		[propget, id(107), helpstring("property RotationEnd")] HRESULT RotationEnd([out, retval] long *pVal);
+		[propput, id(107), helpstring("property RotationEnd")] HRESULT RotationEnd([in] long newVal);
+		[propget, id(108), helpstring("property HScaleEnd")] HRESULT HScaleEnd([out, retval] double *pVal);
+		[propput, id(108), helpstring("property HScaleEnd")] HRESULT HScaleEnd([in] double newVal);
+		[propget, id(109), helpstring("property VScaleEnd")] HRESULT VScaleEnd([out, retval] double *pVal);
+		[propput, id(109), helpstring("property VScaleEnd")] HRESULT VScaleEnd([in] double newVal);
+	};
+	[
+		object,
+		uuid(A5EE4BF0-455B-4BA8-95F0-5288C75EEB86),
+		dual,
+		helpstring("IScrollerOverlay Interface"),
+		pointer_default(unique)
+	]
+	interface IScrollerOverlay : ICompositeOverlay
+	{
+		// Start numbering at 100
+		[propget, id(101), helpstring("property Alpha")] HRESULT Alpha([out, retval] BYTE *pVal);
+		[propput, id(101), helpstring("property Alpha")] HRESULT Alpha([in] BYTE newVal);
+		[propget, id(102), helpstring("X scroll increment")] HRESULT dx([out, retval] long *pVal);
+		[propput, id(102), helpstring("X scroll increment")] HRESULT dx([in] long newVal);
+		[propget, id(103), helpstring("Y scroll increment")] HRESULT dy([out, retval] long *pVal);
+		[propput, id(103), helpstring("Y scroll increment")] HRESULT dy([in] long newVal);
+		[propget, id(104), helpstring("index of the animation meter that controls the smooth scroll")] HRESULT SmoothScrollMeterIndex([out, retval] long *pVal);
+		[propput, id(104), helpstring("index of the animation meter that controls the smooth scroll")] HRESULT SmoothScrollMeterIndex([in] long newVal);
+		[propget, id(105), restricted, helpstring("Meter that controls the smooth scroll")] HRESULT SmoothScrollMeter([out, retval] IMeter* *pVal);
+		[propput, id(105), restricted, helpstring("Meter that controls the smooth scroll")] HRESULT SmoothScrollMeter([in] IMeter* newVal);
+		[propget, id(106), helpstring("property DuplicateLastFrame")] HRESULT DuplicateLastFrame([out, retval] VARIANT_BOOL *pVal);
+		[propput, id(106), helpstring("property DuplicateLastFrame")] HRESULT DuplicateLastFrame([in] VARIANT_BOOL newVal);
+	};
+
+[
+	uuid(F5955ACD-6EFB-4329-9A02-F0D0D30D491E),
+	version(1.0),
+	helpstring("COMOverlays 1.0 Type Library")
+]
+library COMOVERLAYSLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+	importlib("SysStatsCOM.tlb");
+
+	[
+		uuid(103EC361-44AC-4074-9E85-1F5EF0920EF3),
+		helpstring("TextOverlay")
+	]
+	coclass TextOverlay
+	{
+		[default] interface ITextOverlay;
+	};
+	[
+		uuid(BD09D3A7-6C8D-4E2F-B8D2-2C55F7499B6E),
+		helpstring("ImageOverlay Class")
+	]
+	coclass ImageOverlay
+	{
+		[default] interface IImageOverlay;
+	};
+	[
+		uuid(E5591401-11EE-4612-9574-668D1BF243A5),
+		helpstring("MeterOverlay Class")
+	]
+	coclass MeterOverlay
+	{
+		[default] interface IMeterOverlay;
+	};
+	[
+		uuid(1DD090DC-9B81-4E41-9026-4E06B83F0B76),
+		helpstring("GaugeOverlay Class")
+	]
+	coclass GaugeOverlay
+	{
+		[default] interface IGaugeOverlay;
+	};
+	[
+		uuid(5DD9525F-4CBC-4FAC-8AB9-387EEC405DD6),
+		helpstring("MappedOverlay Class")
+	]
+	coclass MappedOverlay
+	{
+		[default] interface IMappedOverlay;
+	};
+	[
+		uuid(ABB75841-5490-43FC-B338-9B6093C15CE5),
+		helpstring("AnimatorOverlay Class")
+	]
+	coclass AnimatorOverlay
+	{
+		[default] interface IAnimatorOverlay;
+	};
+	[
+		uuid(2694FF6A-9FB6-4BEE-9C65-AB0D72C78E3D),
+		helpstring("ScrollerOverlay Class")
+	]
+	coclass ScrollerOverlay
+	{
+		[default] interface IScrollerOverlay;
+	};
+};

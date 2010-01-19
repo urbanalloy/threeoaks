@@ -1,0 +1,49 @@
+HKCR
+{
+	SysStatsCOM.Meter.1 = s 'Meter Class'
+	{
+		CLSID = s '{56A98B52-F249-47D9-9DE1-FD389AD17B32}'
+	}
+	SysStatsCOM.Meter = s 'Meter Class'
+	{
+		CLSID = s '{56A98B52-F249-47D9-9DE1-FD389AD17B32}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {56A98B52-F249-47D9-9DE1-FD389AD17B32} = s 'Meter Class'
+		{
+			ProgID = s 'SysStatsCOM.Meter.1'
+			VersionIndependentProgID = s 'SysStatsCOM.Meter'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}
+HKCR
+{
+	SysStatsCOM.Meter.1 = s 'Meter Class'
+	{
+		CLSID = s '{62E1717B-7F7A-4F50-8BC6-8C966730FE91}'
+	}
+	SysStatsCOM.Meter = s 'Meter Class'
+	{
+		CLSID = s '{62E1717B-7F7A-4F50-8BC6-8C966730FE91}'
+		CurVer = s 'SysStatsCOM.Meter.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {62E1717B-7F7A-4F50-8BC6-8C966730FE91} = s 'Meter Class'
+		{
+			ProgID = s 'SysStatsCOM.Meter.1'
+			VersionIndependentProgID = s 'SysStatsCOM.Meter'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{E305FE28-9D24-4398-905A-A29F7A7E2E3D}'
+		}
+	}
+}

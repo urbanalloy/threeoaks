@@ -1,0 +1,30 @@
+; SysStatsODCOM.def : Declares the module parameters.
+
+LIBRARY      "SysStatsODCOM.DLL"
+
+EXPORTS
+	DllCanUnloadNow     @1 PRIVATE
+	DllGetClassObject   @2 PRIVATE
+	DllRegisterServer   @3 PRIVATE
+	DllUnregisterServer	@4 PRIVATE
+
+	OnGetInformation=?getInformation@SysDocklet@@SGXPAD0PAH0@Z
+	OnCreate=?create@SysDocklet@@SGPAVDocklet@@PAUHWND__@@PAUHINSTANCE__@@PAD2@Z
+
+	OnProcessMessage=?processMessage@Docklet@@QAGXPAUHWND__@@IIJ@Z
+	OnLeftButtonClick=?leftButtonClick@Docklet@@QAGHPAUtagPOINT@@PAUtagSIZE@@@Z
+	OnLeftButtonHeld=?leftButtonHeld@Docklet@@QAGHPAUtagPOINT@@PAUtagSIZE@@@Z
+	OnRightButtonClick=?rightButtonClick@Docklet@@QAGHPAUtagPOINT@@PAUtagSIZE@@@Z
+	OnDoubleClick=?doubleClick@Docklet@@QAGHPAUtagPOINT@@PAUtagSIZE@@@Z
+	OnSave=?save@Docklet@@QAGXPAD0H@Z
+	OnDestroy=?destroy@Docklet@@QAGXPAUHWND__@@@Z
+	OnConfigure=?configure@Docklet@@QAGXXZ
+	OnExportFiles=?exportFiles@Docklet@@QAGHPADH@Z
+	OnCreateSkinEnumeratorW=?createSkinEnumerator@SysDocklet@@SGPAVCSkinEnumerator@@PAUHINSTANCE__@@PBG@Z
+	OnDestroySkinEnumeratorW=?destroySkinEnumerator@SysDocklet@@SGXPAVCSkinEnumerator@@@Z
+	OnGetSkinW=?getSkin@SysDocklet@@SGHPAVCSkinEnumerator@@PAUSkinInfo@@@Z
+	OnCreateFromSkinW=?createFromSkin@SysDocklet@@SGPAVDocklet@@PAUHWND__@@PAUHINSTANCE__@@PAVCSkinEnumerator@@PBUSkinInfo@@@Z
+	OnProcessMessageEx=?processMessageEx@Docklet@@QAGJPAUHWND__@@IIJPAH@Z
+	OnGetModel=?getModel@Docklet@@QAGHPAPAUIDispatch@@@Z
+	OnVisibilityNotify=?visibilityNotify@Docklet@@QAGHHK@Z
+	OnSetSkinW=?setSkin@SysDocklet@@UAEHPAVCSkinEnumerator@@PBUSkinInfo@@@Z

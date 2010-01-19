@@ -1,0 +1,462 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "1 TYPELIB ""COMMeters.tlb""\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,1,11
+ PRODUCTVERSION 2,5,0,11
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "A part of SysStats: http://systats.jools.net/\0"
+            VALUE "CompanyName", "Paul Andrews\0"
+            VALUE "FileDescription", "SysStats Meters Plugin\0"
+            VALUE "FileVersion", "1, 0, 1, 11\0"
+            VALUE "InternalName", "COMMeters\0"
+            VALUE "LegalCopyright", "Copyright 2004-2006\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OLESelfRegister", "\0"
+            VALUE "OriginalFilename", "COMMeters.DLL\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "SysStats\0"
+            VALUE "ProductVersion", "2, 5, 0, 11\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// REGISTRY
+//
+
+IDR_PDHMETER            REGISTRY DISCARDABLE    "PDHMeter.rgs"
+IDR_SCRIPTMETER         REGISTRY DISCARDABLE    "ScriptMeter.rgs"
+IDR_MEMORYMETER         REGISTRY DISCARDABLE    "MemoryMeter.rgs"
+IDR_DISKMETER           REGISTRY DISCARDABLE    "DiskMeter.rgs"
+IDR_TIMEMETER           REGISTRY DISCARDABLE    "TimeMeter.rgs"
+IDR_MBMMETER            REGISTRY DISCARDABLE    "MBMMeter.rgs"
+IDR_XMLMETER            REGISTRY DISCARDABLE    "XMLMeter.rgs"
+IDR_FIXEDMETER          REGISTRY DISCARDABLE    "FixedMeter.rgs"
+IDR_SCRIPTMETERIMPL     REGISTRY DISCARDABLE    "ScriptMeterImpl.rgs"
+IDR_ASYNCSCRIPTMETER    REGISTRY DISCARDABLE    "ASyncScriptMeter.rgs"
+IDR_ANIMATION           REGISTRY DISCARDABLE    "Animation.rgs"
+IDR_MAILMETER           REGISTRY DISCARDABLE    "MailMeter.rgs"
+IDR_SPEEDFANMETER       REGISTRY DISCARDABLE    "SpeedFanMeter.rgs"
+IDR_PLAYER              REGISTRY DISCARDABLE    "Player.rgs"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_METER_PDH DIALOG DISCARDABLE  0, 0, 142, 94
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure PDH Meter..."
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,70,70,60,14
+    LTEXT           "Scale",IDC_STATIC,5,31,19,8
+    PUSHBUTTON      "Configure...",IDC_METER_CONFIGURE,35,5,60,15
+    COMBOBOX        IDC_COMBO_SCALE,35,30,95,90,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+END
+
+IDD_METER_SCRIPT DIALOG DISCARDABLE  0, 0, 277, 95
+STYLE DS_MODALFRAME | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Script Details"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "File Name",IDC_STATIC,7,7,43,10
+    LTEXT           "Type",IDC_STATIC,7,25,43,10
+    EDITTEXT        IDC_SCRIPT_NAME,59,7,148,12,ES_AUTOHSCROLL
+    COMBOBOX        IDC_COMBO_SCRIPT_TYPE,59,24,149,99,CBS_DROPDOWN | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "Browse...",IDC_BUTTON_SCRIPT_NAME,220,5,50,14
+    DEFPUSHBUTTON   "OK",IDOK,160,70,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL2,220,70,50,14
+    DEFPUSHBUTTON   "Console...",IDC_CONSOLE,97,70,50,14
+END
+
+IDD_METER_MEMORY DIALOG DISCARDABLE  0, 0, 186, 86
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure Memory Meter..."
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_COMBO_SCALE,35,15,95,90,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_COMBO_SELECTOR,35,35,95,60,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,120,65,60,14
+    LTEXT           "Scale",IDC_STATIC,5,16,19,8
+    LTEXT           "Metric",IDC_STATIC,5,36,20,8
+END
+
+IDD_METER_DISK DIALOG DISCARDABLE  0, 0, 312, 84
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure Disk Meter..."
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,250,65,50,14
+    LTEXT           "Scale",IDC_STATIC,5,26,19,8
+    COMBOBOX        IDC_COMBO_SELECTOR,45,45,95,60,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Metric",IDC_STATIC,5,47,20,8
+    EDITTEXT        IDC_DIRECTORY,45,5,195,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse...",IDC_BROWSE_DIR,251,4,50,15
+    LTEXT           "Directory",IDC_DIRECTORY_LABEL,5,7,35,15
+    COMBOBOX        IDC_COMBO_SCALE,45,25,95,85,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+END
+
+IDD_METER_MBM DIALOG DISCARDABLE  0, 0, 197, 145
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure MBM Meter..."
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_COMBO_TYPE,60,10,120,80,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO_INSTANCE,60,35,120,80,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO_READING,60,60,120,80,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,120,119,60,14
+    LTEXT           "Sensor Type",IDC_STATIC,10,12,41,8
+    LTEXT           "Sensor Name",IDC_STATIC,10,36,44,8
+    LTEXT           "Reading",IDC_STATIC,10,62,28,8
+    LTEXT           "Scale",IDC_STATIC,10,88,19,8
+    COMBOBOX        IDC_COMBO_SCALE,60,86,120,89,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+END
+
+IDD_METER_XML DIALOG DISCARDABLE  0, 0, 307, 248
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Enter Data..."
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,185,227,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,245,227,50,14
+    EDITTEXT        IDC_METER_NAME,53,5,247,12,ES_AUTOHSCROLL
+    LTEXT           "URL",IDC_STATIC,7,6,16,8
+    EDITTEXT        IDC_METER_USERNAME,52,102,240,12,ES_AUTOHSCROLL | 
+                    WS_DISABLED
+    EDITTEXT        IDC_METER_PASSWORD,52,122,240,12,ES_AUTOHSCROLL | 
+                    WS_DISABLED
+    EDITTEXT        IDC_METER_PROXY,62,157,230,12,ES_AUTOHSCROLL | 
+                    WS_DISABLED
+    EDITTEXT        IDC_METER_PROXY_USERNAME,62,176,230,12,ES_AUTOHSCROLL | 
+                    WS_DISABLED
+    EDITTEXT        IDC_METER_PROXY_PASSWORD,62,197,230,12,ES_AUTOHSCROLL | 
+                    WS_DISABLED
+    GROUPBOX        "Proxy Information",IDC_STATIC,7,147,295,70
+    LTEXT           "Username",IDC_STATIC,7,103,33,8
+    LTEXT           "Password",IDC_STATIC,7,123,32,8
+    LTEXT           "Host",IDC_STATIC,14,160,16,8
+    LTEXT           "Username",IDC_STATIC,14,179,33,8
+    LTEXT           "Password",IDC_STATIC,14,199,32,8
+    CONTROL         "Use XPath",IDC_CHECK_XPATH,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,7,25,53,10
+    EDITTEXT        IDC_EDIT_NAMESPACES,53,43,240,49,ES_MULTILINE | 
+                    ES_AUTOVSCROLL | WS_DISABLED | WS_VSCROLL
+    LTEXT           "Namespace definitions one per line",IDC_STATIC,7,44,43,
+                    45
+END
+
+IDD_METER_FIXED DIALOG DISCARDABLE  0, 0, 267, 46
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Enter Value..."
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,145,25,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,205,25,50,14
+    EDITTEXT        IDC_VALUE,5,5,250,12,ES_AUTOHSCROLL
+END
+
+IDD_ANIMATION DIALOG DISCARDABLE  0, 0, 200, 202
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure Animation"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_FRAMERATE,81,20,30,12,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_FRAMERATE_SPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS | UDS_NOTHOUSANDS,101,20,11,15
+    EDITTEXT        IDC_FRAMECOUNT,81,42,30,12,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_FRAMECOUNT_SPIN,"msctls_updown32",
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS | UDS_NOTHOUSANDS,101,42,11,15
+    CONTROL         "Loop",IDC_LOOP,"Button",BS_AUTOCHECKBOX | BS_LEFTTEXT | 
+                    WS_TABSTOP,19,74,70,10
+    CONTROL         "Single-step",IDC_SINGLESTEP,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,112,74,70,10
+    CONTROL         "Auto-reverse",IDC_AUTOREVERSE,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,19,90,70,10
+    CONTROL         "Auto-start",IDC_AUTOSTART,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,112,91,70,10
+    COMBOBOX        IDC_COMBO_MESSAGE,81,124,80,97,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+    EDITTEXT        IDC_STATELPARAM,81,146,40,14,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,143,181,50,14
+    LTEXT           "Framerate",IDC_STATIC,19,21,46,10
+    LTEXT           "Framecount",IDC_STATIC,19,43,46,10
+    LTEXT           "Post Message on State Transition",IDC_STATIC,18,122,58,
+                    19
+    LTEXT           "State Transition LPARAM",IDC_STATIC,18,145,58,19
+END
+
+IDD_MAILMETER DIALOG DISCARDABLE  0, 0, 186, 123
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure Mail Meter"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PROFILENAME,70,5,100,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_PASSWORD,70,35,100,14,ES_PASSWORD | ES_AUTOHSCROLL
+    EDITTEXT        IDC_DAYS,70,65,40,14,ES_AUTOHSCROLL | ES_NUMBER
+    DEFPUSHBUTTON   "OK",1,55,100,50,14
+    PUSHBUTTON      "Cancel",IDCCANCEL,120,100,50,14
+    LTEXT           "Profile name",IDC_STATIC,10,10,40,8
+    LTEXT           "Password",IDC_STATIC,10,38,32,8
+    LTEXT           "Valid Days",IDC_STATIC,10,67,34,8
+END
+
+IDD_METER_TIME DIALOG DISCARDABLE  0, 0, 236, 90
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure Time Meter"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,179,69,50,14
+    COMBOBOX        IDC_COMBO_TZ,67,14,162,154,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Time zone",IDC_STATIC,17,17,34,8
+    EDITTEXT        IDC_EDIT_TZDESC,68,41,161,13,ES_AUTOHSCROLL
+    LTEXT           "Time zone description",IDC_STATIC,18,39,47,18
+END
+
+IDD_SPEEDFANMETER DIALOG DISCARDABLE  0, 0, 186, 116
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure SpeedFan Meter..."
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",1,129,89,50,14
+    COMBOBOX        IDC_COMBO_READING,59,9,120,80,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO_INDEX,59,34,120,80,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Reading",IDC_STATIC,9,10,28,8
+    LTEXT           "Index",IDC_STATIC,9,36,18,8
+    LTEXT           "Scale",IDC_STATIC,9,62,19,8
+    COMBOBOX        IDC_COMBO_SCALE,59,60,120,89,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+END
+
+IDD_PLAYER DIALOG DISCARDABLE  0, 0, 276, 95
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure Player"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",1,222,74,50,14
+    LTEXT           "Path",IDC_STATIC,13,8,37,10
+    EDITTEXT        IDC_PLAYER_PATH,59,7,148,12,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "Browse...",IDC_BUTTON_PLAYER_PATH,220,5,50,14
+    CONTROL         "Loop",IDC_PLAYER_LOOP,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,12,53,54,10
+    CONTROL         "Auto-start",IDC_PLAYER_AUTOSTART,"Button",
+                    BS_AUTOCHECKBOX | BS_LEFTTEXT | WS_TABSTOP,101,53,55,10
+    LTEXT           "Volume",IDC_STATIC,13,30,25,10
+    CONTROL         "Slider1",IDC_SLIDER_VOLUME,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,53,27,158,14
+    LTEXT           "0",IDC_STATIC_VOLUME,221,31,23,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_METER_PDH, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 135
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 87
+    END
+
+    IDD_METER_SCRIPT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 270
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 88
+    END
+
+    IDD_METER_MEMORY, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 79
+    END
+
+    IDD_METER_DISK, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 305
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 77
+    END
+
+    IDD_METER_MBM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 190
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 138
+    END
+
+    IDD_METER_XML, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 300
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 241
+    END
+
+    IDD_METER_FIXED, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 260
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 39
+    END
+
+    IDD_ANIMATION, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 193
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 195
+    END
+
+    IDD_METER_TIME, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 229
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 83
+    END
+
+    IDD_PLAYER, DIALOG
+    BEGIN
+        RIGHTMARGIN, 272
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// XML
+//
+
+IDR_XML_ANIMATION       XML     DISCARDABLE     "AnimationMetaData.xml"
+IDR_XML_MAILMETER       XML     DISCARDABLE     "MailMeterMetaData.xml"
+IDR_XML_PLAYER          XML     DISCARDABLE     "PlayerMetaData.xml"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_PROJNAME            "COMMeters"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+1 TYPELIB "COMMeters.tlb"
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
