@@ -1,0 +1,27 @@
+HKCR
+{
+	COMMeters.SpeedFanMeter.1 = s 'SpeedFanMeter Class'
+	{
+		CLSID = s '{4ABD797A-4A8D-4483-A380-416432A90BFE}'
+	}
+	COMMeters.SpeedFanMeter = s 'SpeedFanMeter Class'
+	{
+		CLSID = s '{4ABD797A-4A8D-4483-A380-416432A90BFE}'
+		CurVer = s 'COMMeters.SpeedFanMeter.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {4ABD797A-4A8D-4483-A380-416432A90BFE} = s 'SpeedFanMeter Class'
+		{
+			ProgID = s 'COMMeters.SpeedFanMeter.1'
+			VersionIndependentProgID = s 'COMMeters.SpeedFanMeter'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{34AF6298-1F60-440A-94DE-E586F829DE0C}'
+			'Version' = d 1
+		}
+	}
+}

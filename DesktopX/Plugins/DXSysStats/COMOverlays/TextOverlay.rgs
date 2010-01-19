@@ -1,0 +1,27 @@
+HKCR
+{
+	COMOverlays.TextOverlay.1 = s 'TextOverlay Class'
+	{
+		CLSID = s '{103EC361-44AC-4074-9E85-1F5EF0920EF3}'
+	}
+	COMOverlays.TextOverlay = s 'TextOverlay Class'
+	{
+		CLSID = s '{103EC361-44AC-4074-9E85-1F5EF0920EF3}'
+		CurVer = s 'COMOverlays.TextOverlay.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {103EC361-44AC-4074-9E85-1F5EF0920EF3} = s 'TextOverlay Class'
+		{
+			ProgID = s 'COMOverlays.TextOverlay.1'
+			VersionIndependentProgID = s 'COMOverlays.TextOverlay'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{1B8F46A9-E244-4382-A102-AEAFA7B11918}'
+			'Version' = d 1
+		}
+	}
+}

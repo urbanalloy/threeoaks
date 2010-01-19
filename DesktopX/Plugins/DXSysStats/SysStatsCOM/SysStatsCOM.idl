@@ -1,0 +1,614 @@
+// SysStatsCOM.idl : IDL source for SysStatsCOM.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (SysStatsCOM.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+import "objidl.idl";
+#include "olectl.h"
+
+interface IClientModel;
+interface IControllerHome;
+interface IController;
+interface ILabel;
+
+	[
+		object,
+		uuid(770F1704-AD45-44D6-8705-8AB5C76657FF),
+		dual,
+		helpstring("IAppConfig Interface"),
+		pointer_default(unique)
+	]
+	interface IAppConfig : IDispatch
+	{
+		[id(1), helpstring("method NormalizePath")] HRESULT NormalizePath([in] BSTR path, [out, retval] BSTR *pRet);
+		[propget, id(2), helpstring("property RootPath")] HRESULT RootPath([out, retval] BSTR *pVal);
+		[propget, id(3), helpstring("property CWD")] HRESULT CWD([out, retval] BSTR *pVal);
+		[propput, id(3), helpstring("property CWD")] HRESULT CWD([in] BSTR newVal);
+		[id(4), helpstring("method CanonicalPath")] HRESULT CanonicalPath([in] BSTR path, [out, retval] BSTR *pRet);
+		[propget, id(5), helpstring("property ApplicationKey")] HRESULT ApplicationKey([out, retval] BSTR *pVal);
+		[propput, id(5), helpstring("property ApplicationKey")] HRESULT ApplicationKey([in] BSTR newVal);
+		[propget, id(6), helpstring("property InstallDir")] HRESULT InstallDir([out, retval] BSTR *pVal);
+		[propput, id(6), helpstring("property InstallDir")] HRESULT InstallDir([in] BSTR newVal);
+		[propget, id(7), helpstring("property AltRoot")] HRESULT AltRoot([out, retval] BSTR *pVal);
+		[propput, id(7), helpstring("property AltRoot")] HRESULT AltRoot([in] BSTR newVal);
+		[id(8), helpstring("method AltCanonicalPath")] HRESULT AltCanonicalPath(/*[in]*/ BSTR path, /*[out, retval]*/ BSTR *pRet);
+	};
+	[
+		object,
+		uuid(16C3FABB-B74D-4266-845E-F033AA242399),
+		dual,
+		helpstring("ITimerClient Interface"),
+		pointer_default(unique)
+	]
+	interface ITimerClient : IDispatch
+	{
+		[propget, id(1), helpstring("property TimerInterval")] HRESULT TimerInterval([out, retval] double *pVal);
+		[propput, id(1), helpstring("property TimerInterval")] HRESULT TimerInterval([in] double val);
+		[id(2), helpstring("method TimerFired: Called by COMTimerService when the timer goes off")] HRESULT TimerFired();
+	};
+
+	[
+		object,
+		uuid(DCFD2453-32E3-40C1-88E3-D4711A00431D),
+		dual,
+		helpstring("ICOMTimerService Interface"),
+		pointer_default(unique)
+	]
+	interface ICOMTimerService : IDispatch
+	{
+		[id(1), helpstring("method ClearAllTimers")] HRESULT ClearAllTimers();
+		[id(2), helpstring("method RemoveTimerClient")] HRESULT RemoveTimerClient(ITimerClient*);
+		[id(3), helpstring("method SetTimerClient")] HRESULT SetTimerClient(ITimerClient*);
+		[id(4), helpstring("method UpdateTimerClients")] HRESULT UpdateTimerClients();
+	};
+
+	[
+		object,
+		uuid(FC6232A5-B0A3-44EC-9A4C-7C7DA8A1C042),
+		dual,
+		helpstring("IObserver Interface"),
+		pointer_default(unique)
+	]
+	interface IObserver : IDispatch
+	{
+		[id(1), helpstring("method HandleEvent")] HRESULT HandleEvent();
+	};
+
+	[
+		object,
+		uuid(512D8451-5D26-49B7-A3C4-4FC99D34BB18),
+		dual,
+		helpstring("IMeter Interface"),
+		pointer_default(unique)
+	]
+	interface IMeter : ITimerClient
+	{
+		[id(3), helpstring("method Update: Called by the system when the meter should update its value.")] HRESULT Update([out, retval] long *dirty);
+		[propget, id(4), helpstring("property Name")] HRESULT Name([out, retval] BSTR *pVal);
+		[propput, id(4), helpstring("property Name")] HRESULT Name([in] BSTR newVal);
+		[id(5), helpstring("method configure")] HRESULT Configure([in] IObserver *observer, [in] long hWnd);
+		[propget, id(6), helpstring("property Type")] HRESULT Type([out, retval] BSTR *pVal);
+		[id(9), helpstring("method GetAsLong")] HRESULT GetAsLong([in] BSTR selector, [out,retval] long *pRet);
+		[id(10), helpstring("method GetAsDouble")] HRESULT GetAsDouble([in] BSTR selector, [out, retval] double *pRet);
+		[id(11), helpstring("method GetAsString")] HRESULT GetAsString([in] BSTR format, [in] BSTR selector, [out, retval] BSTR *pRet);
+		// 'restricted' is used here to stop the persistence framework trying to persist it.
+		[propget, id(12), restricted, helpstring("property Model")] HRESULT Model([out, retval] IClientModel* *pVal);
+		[propput, id(12), restricted, helpstring("property Model")] HRESULT Model([in] IClientModel* newVal);
+		[id(DISPID_VALUE), helpstring("method GetValue")] HRESULT GetValue([out, retval] VARIANT *retVal);
+	};
+	[
+		object,
+		uuid(80A62C2C-4101-4DBF-86D0-B3F63A7E4308),
+		dual,
+		helpstring("IMeter Interface"),
+		pointer_default(unique)
+	]
+	interface IMeterHome : IDispatch
+	{
+		[id(DISPID_VALUE), helpstring("method Item")] HRESULT Item(VARIANT index, [out, retval] IMeter **pRet);
+		[id(1), helpstring("method Count")] HRESULT Count([out, retval] short *pVal);
+		[id(2), helpstring("method Add")] HRESULT Add([in] IMeter *pMeter);
+		[id(3), helpstring("method Remove")] HRESULT Remove([in] VARIANT index);
+		[id(4), helpstring("method GetIndex")] HRESULT GetIndex([in] IMeter *meter, [out, retval] short *retVal);
+//		[id(5), helpstring("method Load")] HRESULT Load([in] BSTR ini, [in] BSTR iniGroup, [in] BSTR prefix);
+//		[id(6), helpstring("method Save")] HRESULT Save([in] BSTR ini, [in] BSTR iniGroup, [in] VARIANT_BOOL full, [in] BSTR prefix);
+		// 'restricted' is used here to stop the persistence framework trying to persist it.
+		[propget, id(7), restricted, helpstring("property COMTimerService")] HRESULT TimerService([out, retval] ICOMTimerService* *pVal);
+		[propput, id(7), restricted, helpstring("property COMTimerService")] HRESULT TimerService([in] ICOMTimerService* newVal);
+		[id(8), helpstring("method Update")] HRESULT Update([out, retval] long *dirty);
+		// 'restricted' is used here to stop the persistence framework trying to persist it.
+		[propget, id(9), restricted, helpstring("property Model")] HRESULT Model([out, retval] IClientModel **pVal);
+		[propput, id(9), restricted, helpstring("property Model")] HRESULT Model([in] IClientModel *newVal);
+		[propget, id(10), helpstring("property Meters")] HRESULT Meters([out, retval] SAFEARRAY(IDispatch*) *pVal);
+		[propput, id(10), helpstring("property Meters")] HRESULT Meters([in] SAFEARRAY(IDispatch*) newVal);
+	};
+	
+	[
+		object,
+		uuid(E811118F-9BB8-4974-8FD3-A4887454FB3D),
+		dual,
+		helpstring("IOverlay Interface"),
+		pointer_default(unique)
+	]
+	interface IOverlay : IDispatch
+	{
+		[propget, id(1), helpstring("Should return a stringified version of the CLSID")] HRESULT Type([out, retval] BSTR *pVal) const;
+		[propget, id(2), helpstring("A name for the overlay. Used for display purposes only.")] HRESULT Name([out, retval] BSTR *pVal);
+		[propput, id(2), helpstring("A name for the overlay. Used for display purposes only.")] HRESULT Name([in] BSTR newVal);
+		[id(3), helpstring("Return a copy of this overlay.")] HRESULT clone([out, retval] IOverlay **pRet);
+		[id(4), helpstring("Called when the user wants to configure the overlay")] HRESULT Configure([in] IObserver *observer, [in] IMeterHome *meters, [in] long hDlg);
+		[id(5), helpstring("The overlay should render itself into the passed device context")] HRESULT Render([in] long hdc);
+		// 'restricted' is used here to stop the persistence framework trying to persist it.
+		[propget, id(6), restricted, helpstring("A reference to the meter whose value is being displayed. NULL means no meter.")] HRESULT meter([out, retval] IMeter* *pVal);
+		[propput, id(6), restricted, helpstring("A reference to the meter whose value is being displayed. NULL means no meter.")] HRESULT meter([in] IMeter* newVal);
+		// 'restricted' is used here to stop the persistence framework trying to persist it.
+		[propget, id(7), restricted, helpstring("A reference to the containing IClientModel")] HRESULT Model([out, retval] IClientModel* *pVal);
+		[propput, id(7), restricted, helpstring("A reference to the containing IClientModel")] HRESULT Model([in] IClientModel* newVal);
+		[propget, id(8), helpstring("The index of the meter whose value is being displayed. -1 means no meter.")] HRESULT MeterIndex([out, retval] long *pVal);
+		[propput, id(8), helpstring("The index of the meter whose value is being displayed. -1 means no meter.")] HRESULT MeterIndex([in] long newVal);
+		[propget, id(9), helpstring("The combination mode to use when compositing the complete image (future expansion - set to zero)")] HRESULT Mode([out, retval] long *pVal);
+		[propput, id(9), helpstring("The combination mode to use when compositing the complete image (future expansion - set to zero)")] HRESULT Mode([in] long newVal);
+		[propget, id(10), helpstring("property Visible")] HRESULT Visible([out, retval] VARIANT_BOOL *pVal);
+		[propput, id(10), helpstring("property Visible")] HRESULT Visible([in] VARIANT_BOOL newVal);
+	};
+	
+	[
+		object,
+		uuid(E1F6EA1E-B7D2-486d-BD7D-D07BD54E78F7),
+		dual,
+		helpstring("ISimpleOverlay Interface"),
+		pointer_default(unique)
+	]
+	interface ISimpleOverlay : IOverlay
+	{
+		[propget, id(20), helpstring("X coordinate")] HRESULT X([out, retval] long *pVal);
+		[propput, id(20), helpstring("X coordinate")] HRESULT X([in] long newVal);
+		[propget, id(21), helpstring("Y coordinate")] HRESULT Y([out, retval] long *pVal);
+		[propput, id(21), helpstring("Y coordinate")] HRESULT Y([in] long newVal);
+		[propget, id(22), helpstring("Rotation in degrees")] HRESULT Rotation([out, retval] long *pVal);
+		[propput, id(22), helpstring("Rotation in degrees")] HRESULT Rotation([in] long newVal);
+		[propget, id(23), helpstring("A value used by some meters to select from a range of values the meter holds.")] HRESULT selector([out, retval] BSTR *pVal);
+		[propput, id(23), helpstring("A value used by some meters to select from a range of values the meter holds.")] HRESULT selector([in] BSTR newVal);
+		[propget, id(24), helpstring("Horizontal alignment of object relative to X coordinate (center, left, right)")] HRESULT HAlign([out, retval] LONG *pVal);
+		[propput, id(24), helpstring("Horizontal alignment of object relative to X coordinate (center, left, right)")] HRESULT HAlign([in] LONG newVal);
+		[propget, id(25), helpstring("Vertical alignment of object relative to Y coordinate (middle, top, bottom)")] HRESULT VAlign([out, retval] LONG *pVal);
+		[propput, id(25), helpstring("Vertical alignment of object relative to Y coordinate (middle, top, bottom)")] HRESULT VAlign([in] LONG newVal);
+		[propget, id(26), helpstring("X coordinate to rotate around in image coordinates")] HRESULT CenterX([out, retval] LONG *pVal);
+		[propput, id(26), helpstring("X coordinate to rotate around in image coordinates")] HRESULT CenterX([in] LONG newVal);
+		[propget, id(27), helpstring("Y coordinate to rotate around in image coordinates")] HRESULT CenterY([out, retval] LONG *pVal);
+		[propput, id(27), helpstring("Y coordinate to rotate around in image coordinates")] HRESULT CenterY([in] LONG newVal);
+		[propget, id(28), helpstring("Amount to stretch image horizontally")] HRESULT HScale([out, retval] double *pVal);
+		[propput, id(28), helpstring("Amount to stretch image horizontally")] HRESULT HScale([in] double newVal);
+		[propget, id(29), helpstring("Amount to stretch image vertically")] HRESULT VScale([out, retval] double *pVal);
+		[propput, id(29), helpstring("Amount to stretch image vertically")] HRESULT VScale([in] double newVal);
+	};
+	
+	[
+		object,
+		uuid(FC073C26-5CB1-4E25-A6A4-29E0A5AEA72B),
+		dual,
+		helpstring("ISimpleOverlay2 Interface"),
+		pointer_default(unique)
+	]
+	interface ISimpleOverlay2 : ISimpleOverlay
+	{
+		[id(50), helpstring("method HitTest")] HRESULT HitTest([in] short X, [in] short Y, [out, retval] VARIANT_BOOL *retVal);
+		[propget, id(51), restricted, helpstring("property Parent")] HRESULT Parent([out, retval] ISimpleOverlay2* *pVal);
+		[propput, id(51), restricted, helpstring("property Parent")] HRESULT Parent([in] ISimpleOverlay2* newVal);
+		[id(52), helpstring("method CumulativeTransform")] HRESULT CumulativeTransform([out, retval] float *elements);
+		[propget, id(53), helpstring("property EffectOverlayIndex")] HRESULT EffectOverlayPath([out, retval] SAFEARRAY(VARIANT) *pVal);
+		[propput, id(53), helpstring("property EffectOverlayIndex")] HRESULT EffectOverlayPath([in] SAFEARRAY(VARIANT) newVal);
+		[propget, id(54), helpstring("property EffectOverlay"), restricted] HRESULT EffectOverlay([out, retval] IOverlay* *pVal);
+		[propput, id(54), helpstring("property EffectOverlay"), restricted] HRESULT EffectOverlay([in] IOverlay* newVal);
+		[propget, id(55), helpstring("The actual effect that the effect overlay has")] HRESULT EffectOverlayEffect([out, retval] long *pVal);
+		[propput, id(55), helpstring("The actual effect that the effect overlay has")] HRESULT EffectOverlayEffect([in] long newVal);
+	};
+
+	[
+		object,
+		uuid(D5D00F7E-6DFC-4A62-A21E-F6FC0D51D8CC),
+		dual,
+		helpstring("ICompositeOverlay Interface"),
+		pointer_default(unique)
+	]
+	interface ICompositeOverlay : ISimpleOverlay2
+	{
+		[id(DISPID_VALUE), helpstring("method Item")] HRESULT Item(VARIANT Index, [out, retval] IOverlay **pRet);
+		[id(30), helpstring("method Count")] HRESULT Count([out, retval] short *pVal);
+		[id(31), helpstring("method Remove")] HRESULT Remove([in] VARIANT index);
+		[id(32), helpstring("method Add")] HRESULT Add([in] IOverlay *overlay);
+		[id(33), helpstring("method GetIndex")] HRESULT GetIndex([in] IOverlay *overlay, [out, retval] short *index);
+		[id(34), helpstring("method AddAt")] HRESULT AddAt([in] IOverlay *overlay, [in] VARIANT index);
+		[id(35), helpstring("method Swap")] HRESULT Swap([in] VARIANT i1, [in] VARIANT i2);
+		[propget, id(36), helpstring("property Overlays")] HRESULT Overlays([out, retval] SAFEARRAY(IDispatch*) *pVal);
+		[propput, id(36), helpstring("property Overlays")] HRESULT Overlays([in] SAFEARRAY(IDispatch*) newVal);
+	};
+
+	[
+		object,
+		uuid(968132DB-668E-45F5-9DD6-5C342158A00B),
+		dual,
+		helpstring("IOverlayHome Interface"),
+		pointer_default(unique)
+	]
+	interface IOverlayHome : ICompositeOverlay
+	{
+		[id(100), helpstring("Find an overlay")] HRESULT Find([in] SAFEARRAY(VARIANT) path, [out, retval] IOverlay **pRet);
+		[id(101), helpstring("Get the path to the given IOverlay")] HRESULT GetPath([in] IOverlay *pOverlay, [out, retval] SAFEARRAY(VARIANT) *pRet);
+	};
+	
+	[
+		object,
+		uuid(876CC5FE-B4F4-43FA-8D58-E10A901AADA8),
+		dual,
+		helpstring("IClientModel Interface"),
+		pointer_default(unique)
+	]
+	interface IClientModel : IDispatch
+	{
+		[propget, id(1), helpstring("property Meters")] HRESULT Meters([out, retval] IMeterHome **pRet);
+		[propget, id(2), helpstring("property Overlays")] HRESULT Overlays([out, retval] IOverlayHome **pRet);
+		[propget, id(3), helpstring("property ConfigFile")] HRESULT ConfigFile([out, retval] BSTR *pVal);
+		[propput, id(3), helpstring("property ConfigFile")] HRESULT ConfigFile([in] BSTR newVal);
+		[id(5), helpstring("method UpdateMeters")] HRESULT UpdateMeters();
+		[id(6), helpstring("method UpdateOverlays")] HRESULT UpdateOverlays([in] long hDC);
+		[id(7), helpstring("method Load")] HRESULT Load();
+		[id(8), helpstring("method Save")] HRESULT Save([in] short interactive);
+		[id(9), helpstring("method SaveAs")] HRESULT SaveAs();
+		[id(10), helpstring("method Configure")] HRESULT Configure(IObserver *observer, long hWnd);
+		[propget, id(11), helpstring("property Dirty")] HRESULT dirty([out, retval] long *pVal);
+		[propput, id(11), helpstring("property Dirty")] HRESULT dirty([in] long newVal);
+		[propget, id(12), helpstring("property AppConfig")] HRESULT AppConfig([out, retval] IAppConfig* *pVal);
+		[propput, id(12), helpstring("property AppConfig")] HRESULT AppConfig([in] IAppConfig* newVal);
+		[propget, id(13), helpstring("property Controllers")] HRESULT Controllers([out, retval] IControllerHome* *pVal);
+		[id(14), helpstring("method HandleMessage")] HRESULT HandleMessage([in] short messageID, [in] UINT wParam, [in] UINT lParam, [in] short x, [in] short y, [out, retval] VARIANT_BOOL *handled);
+		[propget, id(15), helpstring("property Label")] HRESULT Label([out, retval] ILabel* *pVal);
+		[propget, helpstring("property TimerService")] HRESULT TimerService([out, retval] ICOMTimerService **pVal);
+		[propput, helpstring("property TimerService")] HRESULT TimerService([in] ICOMTimerService *newVal);
+		[propget, id(16), helpstring("property X")] HRESULT X([out, retval] long *pVal);
+		[propput, id(16), helpstring("property X")] HRESULT X([in] long newVal);
+		[propget, id(17), helpstring("property Y")] HRESULT Y([out, retval] long *pVal);
+		[propput, id(17), helpstring("property Y")] HRESULT Y([in] long newVal);
+		[propget, id(18), helpstring("property Width")] HRESULT Width([out, retval] long *pVal);
+		[propput, id(18), helpstring("property Width")] HRESULT Width([in] long newVal);
+		[propget, id(19), helpstring("property Height")] HRESULT Height([out, retval] long *pVal);
+		[propput, id(19), helpstring("property Height")] HRESULT Height([in] long newVal);
+		[id(20), helpstring("method PostMessage")] HRESULT PostMessage([in] short messageID, [in] UINT wParam, [in] UINT lParam);
+		[propget, id(21), restricted, helpstring("property HWND")] HRESULT hWnd([out, retval] long *pHWND);
+		[propput, id(21), restricted, helpstring("property HWND")] HRESULT hWnd([in] long newVal);
+		[id(22), helpstring("method SetWindowSubclass")] HRESULT SetWindowSubclass([in] IController *pSubclass);
+		[id(23), helpstring("method RemoveWindowSubclass")] HRESULT RemoveWindowSubclass([in] IController *pSubclass);
+		[id(24), restricted, helpstring("method HandleSubclassMessage")] HRESULT HandleSubclassMessage([in] UINT msg, [in] UINT wparam, [in] UINT lparam);
+		[propget, id(25), helpstring("property Name")] HRESULT Name([out, retval] BSTR *pVal);
+		[propput, id(25), helpstring("property Name")] HRESULT Name([in] BSTR newVal);
+		[propget, id(26), helpstring("property Description")] HRESULT Description([out, retval] BSTR *pVal);
+		[propput, id(26), helpstring("property Description")] HRESULT Description([in] BSTR newVal);
+		[propget, id(27), helpstring("property Version")] HRESULT Version([out, retval] BSTR *pVal);
+		[propput, id(27), helpstring("property Version")] HRESULT Version([in] BSTR newVal);
+		[propget, id(28), helpstring("property Author")] HRESULT Author([out, retval] BSTR *pVal);
+		[propput, id(28), helpstring("property Author")] HRESULT Author([in] BSTR newVal);
+		[propget, id(29), helpstring("property FitToWindow")] HRESULT FitToWindow([out, retval] short *pVal);
+		[propput, id(29), helpstring("property FitToWindow")] HRESULT FitToWindow([in] short newVal);
+		[id(30), helpstring("method SetActive")] HRESULT SetActive([in] short active);
+	};
+	[
+		object,
+		uuid(E42BF1C9-DD59-42C3-AE23-D5B788D43A49),
+		dual,
+		helpstring("IPersister Interface"),
+		pointer_default(unique)
+	]
+	interface IPersister : IDispatch
+	{
+		[id(1), helpstring("method Save")] HRESULT Save([in]IDispatch*);
+		[id(2), helpstring("method Load")] HRESULT Load([in]IDispatch*);
+	};
+	[
+		object,
+		uuid(9A34B652-564B-4001-98D0-DCB9970E7232),
+		dual,
+		helpstring("ICOMINIFile Interface"),
+		pointer_default(unique)
+	]
+	interface ICOMINIFile : IDispatch
+	{
+		[id(1), helpstring("method PutInt")] HRESULT PutInt([in] BSTR sectionName, [in] BSTR key, [in] int value);
+		[id(2), helpstring("method PutString")] HRESULT PutString([in] BSTR sectionName, [in] BSTR key, [in] BSTR value);
+		[id(3), helpstring("method PutDouble")] HRESULT PutDouble([in] BSTR sectionName, [in] BSTR key, [in] double value);
+		[id(4), helpstring("method GetInt")] HRESULT GetInt([in] BSTR sectionName, [in] BSTR key, [in] int defValue, [out,retval] int *pVal);
+		[id(5), helpstring("method GetString")] HRESULT GetString([in] BSTR sectionName, [in] BSTR key, [in] BSTR defValue, [out,retval] BSTR *pVal);
+		[id(6), helpstring("method GetDouble")] HRESULT GetDouble([in] BSTR sectionName, [in] BSTR key, [in] double defValue, [out,retval] double *pVal);
+		[id(7), helpstring("method Save")] HRESULT Save([in] BSTR filename);
+		[id(8), helpstring("method Read")] HRESULT Read([in] BSTR filename);
+		[id(9), helpstring("method GetLong")] HRESULT GetLong([in] BSTR sectionName, [in] BSTR key, [in] long defValue, [out,retval] long *pVal);
+		[id(10), helpstring("method PutLong")] HRESULT PutLong([in] BSTR sectionName, [in] BSTR key, [in] long value);
+	};
+	[
+		object,
+		uuid(14CEFEC3-273D-4244-8B63-1FC0FFE8E6BF),
+		dual,
+		helpstring("IIINIPersister Interface"),
+		pointer_default(unique)
+	]
+	interface IIINIPersister : IPersister
+	{
+		[id(20), helpstring("method Configure")] HRESULT Configure([in] ICOMINIFile *configFile, [in] BSTR iniGroup, [in] VARIANT_BOOL full, [in] BSTR prefix, [in] IClientModel *model, [in] VARIANT_BOOL oldFormat);
+	};
+	[
+		object,
+		uuid(327953BB-ACB5-4EE7-A004-A7E7411D6639),
+		dual,
+		helpstring("IController Interface"),
+		pointer_default(unique)
+	]
+	interface IController : IDispatch
+	{
+		[propget, id(1), helpstring("property Name")] HRESULT Name([out, retval] BSTR *pVal);
+		[propput, id(1), helpstring("property Name")] HRESULT Name([in] BSTR newVal);
+		[id(2), helpstring("method Configure")] HRESULT Configure([in] IObserver *observer, [in] IMeterHome *meters, [in] long hWnd);
+		[propget, id(3), helpstring("property Type")] HRESULT Type([out, retval] BSTR *pVal);
+		// 'restricted' is used here to stop the persistence framework trying to persist it.
+		[propget, id(4), restricted, helpstring("property Model")] HRESULT Model([out, retval] IClientModel* *pVal);
+		[propput, id(4), restricted, helpstring("property Model")] HRESULT Model([in] IClientModel* newVal);
+		[id(5), helpstring("method HandleMessage")] HRESULT HandleMessage([in] UINT wParam, [in] UINT lParam, [in] short x, [in] short y, [out, retval] VARIANT_BOOL *retVal);
+		// 'restricted' is used here to stop the persistence framework trying to persist it.
+		[propget, id(6), restricted, helpstring("property meter")] HRESULT meter([out, retval] IMeter* *pVal);
+		[propput, id(6), restricted, helpstring("property meter")] HRESULT meter([in] IMeter* newVal);
+		[propget, id(8), helpstring("property MeterIndex")] HRESULT MeterIndex([out, retval] long *pVal);
+		[propput, id(8), helpstring("property MeterIndex")] HRESULT MeterIndex([in] long newVal);
+		[propget, id(9), helpstring("property MessageType")] HRESULT MessageType([out, retval] short *pVal);
+		[propput, id(9), helpstring("property MessageType")] HRESULT MessageType([in] short newVal);
+		[propget, id(10), helpstring("property OverlayPath")] HRESULT OverlayPath([out, retval] SAFEARRAY(VARIANT) *pVal);
+		[propput, id(10), helpstring("property OverlayPath")] HRESULT OverlayPath([in] SAFEARRAY(VARIANT) newVal);
+		[propget, id(11), restricted, helpstring("A reference to the overlay to be used for the hittest. NULL means no associated overlay")] HRESULT Overlay([out, retval] IOverlay* *pVal);
+		[propput, id(11), restricted, helpstring("A reference to the overlay to be used for the hittest. NULL means no associated overlay")] HRESULT Overlay([in] IOverlay* pVal);
+		[propget, id(12), helpstring("A set of modifier keys that should be pressed")] HRESULT Key([out, retval] UINT *pVal);
+		[propput, id(12), helpstring("A set of modifier keys that should be pressed")] HRESULT Key([in] UINT newVal);
+		[propget, id(13), helpstring("property PassThrough")] HRESULT PassThrough([out, retval] VARIANT_BOOL *pVal);
+		[propput, id(13), helpstring("property PassThrough")] HRESULT PassThrough([in] VARIANT_BOOL newVal);
+		[id(14), restricted, helpstring("method HandleSubclassMessage")] HRESULT HandleSubclassMessage([in] UINT msg, [in] UINT wparam, [in] UINT lparam, [out, retval] VARIANT_BOOL *bHandled);
+	};
+	[
+		object,
+		uuid(1A2A2338-3E87-4CDF-9D37-A7134C6326D9),
+		dual,
+		helpstring("IControllerHome Interface"),
+		pointer_default(unique)
+	]
+	interface IControllerHome : IDispatch
+	{
+		[id(DISPID_VALUE), helpstring("method Item")] HRESULT Item(VARIANT index, [out, retval] IController **pRet);
+		[id(1), helpstring("method Count")] HRESULT Count([out, retval] short *pVal);
+		[id(2), helpstring("method Add")] HRESULT Add([in] IController *pController);
+		[id(3), helpstring("method Remove")] HRESULT Remove([in] VARIANT index);
+		[id(4), helpstring("method GetIndex")] HRESULT GetIndex([in] IController *meter, [out, retval] short *retVal);
+		[id(8), helpstring("method HandleMessage")] HRESULT HandleMessage([in] short messageID, [in] UINT wParam, [in] UINT lParam, [in] short x, [in] short y, [out, retval] VARIANT_BOOL *handled);
+		// 'restricted' is used here to stop the persistence framework trying to persist it.
+		[propget, id(9), restricted, helpstring("property Model")] HRESULT Model([out, retval] IClientModel **pVal);
+		[propput, id(9), restricted, helpstring("property Model")] HRESULT Model([in] IClientModel *newVal);
+		[propget, id(10), helpstring("property Controllers")] HRESULT Controllers([out, retval] SAFEARRAY(IDispatch*) *pVal);
+		[propput, id(10), helpstring("property Controllers")] HRESULT Controllers([in] SAFEARRAY(IDispatch*) newVal);
+		[id(11), helpstring("method Swap")] HRESULT Swap([in] VARIANT one, [in] VARIANT two);
+	};
+	[
+		object,
+		uuid(47C51569-B6A8-4600-BB47-77485B5DE31D),
+		dual,
+		helpstring("ILabel Interface"),
+		pointer_default(unique)
+	]
+	interface ILabel : IDispatch
+	{
+		// 'restricted' is used here to stop the persistence framework trying to persist it.
+		[propget, id(1), restricted, helpstring("property meter")] HRESULT meter([out, retval] IMeter* *pVal);
+		[propput, id(1), restricted, helpstring("property meter")] HRESULT meter([in] IMeter* newVal);
+		[propget, id(2), helpstring("property MeterIndex")] HRESULT MeterIndex([out, retval] long *pVal);
+		[propput, id(2), helpstring("property MeterIndex")] HRESULT MeterIndex([in] long newVal);
+		// 'restricted' is used here to stop the persistence framework trying to persist it.
+		[propget, id(3), restricted, helpstring("property Model")] HRESULT Model([out, retval] IClientModel* *pVal);
+		[propput, id(3), restricted, helpstring("property Model")] HRESULT Model([in] IClientModel* newVal);
+		[propget, id(5), helpstring("property Format")] HRESULT Format([out, retval] BSTR *pVal);
+		[propput, id(5), helpstring("property Format")] HRESULT Format([in] BSTR newVal);
+		[propget, id(6), helpstring("property selector")] HRESULT selector([out, retval] BSTR *pVal);
+		[propput, id(6), helpstring("property selector")] HRESULT selector([in] BSTR newVal);
+		[id(7), helpstring("method GetLabel")] HRESULT GetLabel([out, retval] BSTR *retVal);
+	};
+	[
+		object,
+		uuid(11F15D8A-9DCB-46F6-AA3A-7EDF90580837),
+		dual,
+		helpstring("IWeakReference Interface"),
+		pointer_default(unique)
+	]
+	interface IWeakReference : IDispatch
+	{
+		[id(1), helpstring("Called by the target to clear the reference")] HRESULT ClearReference();
+		[id(2), helpstring("method DeReference")] HRESULT DeReference([out, retval] IUnknown **pVal);
+		[id(3), helpstring("Called by the target to set the reference")] HRESULT SetReference([in] IUnknown *pVal);
+		[id(4), helpstring("Called to create a weak reference to a target")] HRESULT AssignReference([in] IUnknown *pVal);
+	};
+	[
+		object,
+		uuid(98CEEF5A-92C2-41F4-82A6-89979378E2F3),
+		dual,
+		helpstring("IWeakTarget Interface"),
+		pointer_default(unique)
+	]
+	interface IWeakTarget : IDispatch
+	{
+		[id(1), helpstring("method Attach")] HRESULT Attach([in]IWeakReference *pVal);
+		[id(2), helpstring("method Detach")] HRESULT Detach([in] IWeakReference *pVal);
+	};
+	[
+		object,
+		uuid(7A4A6437-0960-465A-9224-811A775954F5),
+		dual,
+		helpstring("IScriptConnectionObject Interface"),
+		pointer_default(unique)
+	]
+	interface IScriptConnectionObject : IDispatch
+	{
+		[id(1), helpstring("method Connect")] HRESULT Connect([in] IDispatch*, [in] BSTR);
+		[id(2), helpstring("method Disconnect")] HRESULT Disconnect();
+		[propget, id(3), helpstring("property Script")] HRESULT Script([out, retval] IDispatch* *pVal);
+		[propput, id(3), helpstring("property Script")] HRESULT Script([in] IDispatch* newVal);
+		[id(4), helpstring("method IsConnectionFor")] HRESULT IsConnectionFor([in] IDispatch* pObj, [out] VARIANT_BOOL *pRet);
+	};
+	[
+		object,
+		uuid(73B51676-63C4-4FB9-9081-00B7C6765C8E),
+		dual,
+		helpstring("IScriptUtils Interface"),
+		pointer_default(unique)
+	]
+	interface IScriptUtils : IDispatch
+	{
+		[id(1), helpstring("method ConnectObject")] HRESULT ConnectObject([in] IDispatch*, [in] BSTR);
+		[propget, id(2), restricted, helpstring("property Script")] HRESULT Script([out, retval] IDispatch* *pVal);
+		[propput, id(2), restricted, helpstring("property Script")] HRESULT Script([in] IDispatch* newVal);
+		[id(3), helpstring("method Disconnect")] HRESULT Disconnect([in] IDispatch *pdispObj);
+		[id(4), restricted, helpstring("method DisconnectAll")] HRESULT DisconnectAll();
+		[id(5), helpstring("method Echo")] HRESULT Echo([in] BSTR s);
+		[propget, id(6), restricted, helpstring("property ScriptHost")] HRESULT ScriptHost([out, retval] IDispatch* *pVal);
+		[propput, id(6), restricted, helpstring("property ScriptHost")] HRESULT ScriptHost([in] IDispatch* newVal);
+	};
+	[
+		object,
+		uuid(300C4F57-DCAF-46ED-827B-5F8781829DC2),
+		dual,
+		helpstring("IMetaData Interface"),
+		pointer_default(unique)
+	]
+	interface IMetaData : IDispatch
+	{
+		[id(1), helpstring("method GetMetaData")] HRESULT GetMetaData([out, retval] BSTR *retVal);
+		[id(2), helpstring("method PutResourceName")] HRESULT PutResourceInfo([in] long hModule, [in] BSTR name);
+	};
+[
+	uuid(E305FE28-9D24-4398-905A-A29F7A7E2E3D),
+	version(1.0),
+	helpstring("SysStatsCOM 1.0 Type Library")
+]
+library SYSSTATSCOMLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+	
+	[
+		uuid(80F11FDB-394A-4B0A-8D3E-74EA2B73CE6D),
+		helpstring("ClientModel Class"),
+	]
+	coclass ClientModel
+	{
+		[default] interface IClientModel;
+	};
+	
+	[
+		uuid(886694E3-1B09-474C-BC9C-F43A103EF409),
+		helpstring("MeterHome Class"),
+	]
+	coclass MeterHome
+	{
+		[default] interface IMeterHome;
+	};
+	
+	[
+		uuid(A56ABED7-C2E5-45B8-8E88-4FC2D49F2191),
+		helpstring("OverlayHome Class"),
+	]
+	coclass OverlayHome
+	{
+		[default] interface IOverlayHome;
+	};
+	[
+		uuid(D97B4012-E22A-49E3-9805-BCB00CAB4F62),
+		helpstring("CompositeOverlay")
+	]
+	coclass CompositeOverlay
+	{
+		[default] interface ICompositeOverlay;
+	};
+	[
+		uuid(C4E1FFE8-3FE7-4849-997A-65589DFB107B),
+		helpstring("AppConfig Class")
+	]
+	coclass AppConfig
+	{
+		[default] interface IAppConfig;
+	};
+	[
+		uuid(F90BC4D8-65E2-4F91-B247-AB278FC41D7C),
+		helpstring("IINIPersister Class")
+	]
+	coclass IINIPersister
+	{
+		[default] interface IIINIPersister;
+	};
+	[
+		uuid(4F4C404D-3DDB-47E3-A0E6-95215311CA2F),
+		helpstring("ControllerHome Class")
+	]
+	coclass ControllerHome
+	{
+		[default] interface IControllerHome;
+	};
+	[
+		uuid(FAAF4EAB-70E9-48ED-A198-F94A7F31D4CA),
+		helpstring("Label Class")
+	]
+	coclass Label
+	{
+		[default] interface ILabel;
+	};
+	[
+		uuid(A97A4942-70E7-4979-96EB-77D812191B88),
+		helpstring("WeakReference Class")
+	]
+	coclass WeakReference
+	{
+		[default] interface IWeakReference;
+	};
+	[
+		uuid(513D8DDC-C6B5-40A1-91DD-8A5D70F70EAE),
+		helpstring("WeakTarget Class")
+	]
+	coclass WeakTarget
+	{
+		[default] interface IWeakTarget;
+	};
+	[
+		uuid(2266C09C-BB05-4245-98F7-73091E7DF6CB),
+		helpstring("ScriptConnectionObject Class")
+	]
+	coclass ScriptConnectionObject
+	{
+		[default] interface IScriptConnectionObject;
+	};
+	[
+		uuid(34353AF4-EF86-4B62-8A12-31487FF5FD7D),
+		helpstring("ScriptUtils Class")
+	]
+	coclass ScriptUtils
+	{
+		[default] interface IScriptUtils;
+	};
+	[
+		uuid(C3CEBFCB-A60E-42C3-8D02-F046A8C571B7),
+		helpstring("MetaData Class")
+	]
+	coclass MetaData
+	{
+		[default] interface IMetaData;
+	};
+	[
+		uuid(5D394DCC-5729-4525-9819-D7ACE0207DF5),
+		helpstring("COMINIFile Class")
+	]
+	coclass COMINIFile
+	{
+		[default] interface ICOMINIFile;
+	};
+};

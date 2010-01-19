@@ -1,0 +1,26 @@
+HKCR
+{
+	SysStatsCOM.ScriptUtils.1 = s 'ScriptUtils Class'
+	{
+		CLSID = s '{34353AF4-EF86-4B62-8A12-31487FF5FD7D}'
+	}
+	SysStatsCOM.ScriptUtils = s 'ScriptUtils Class'
+	{
+		CLSID = s '{34353AF4-EF86-4B62-8A12-31487FF5FD7D}'
+		CurVer = s 'SysStatsCOM.ScriptUtils.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {34353AF4-EF86-4B62-8A12-31487FF5FD7D} = s 'ScriptUtils Class'
+		{
+			ProgID = s 'SysStatsCOM.ScriptUtils.1'
+			VersionIndependentProgID = s 'SysStatsCOM.ScriptUtils'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{E305FE28-9D24-4398-905A-A29F7A7E2E3D}'
+		}
+	}
+}

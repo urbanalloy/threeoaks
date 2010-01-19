@@ -1,0 +1,27 @@
+HKCR
+{
+	COMControllers.MappedController.1 = s 'MappedController Class'
+	{
+		CLSID = s '{2AAB58D3-9946-448C-920A-730878524DB1}'
+	}
+	COMControllers.MappedController = s 'MappedController Class'
+	{
+		CLSID = s '{2AAB58D3-9946-448C-920A-730878524DB1}'
+		CurVer = s 'COMControllers.MappedController.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {2AAB58D3-9946-448C-920A-730878524DB1} = s 'MappedController Class'
+		{
+			ProgID = s 'COMControllers.MappedController.1'
+			VersionIndependentProgID = s 'COMControllers.MappedController'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{472EB9D7-052E-4EDD-90A1-5D550F786C85}'
+			'Version' = d 1
+		}
+	}
+}

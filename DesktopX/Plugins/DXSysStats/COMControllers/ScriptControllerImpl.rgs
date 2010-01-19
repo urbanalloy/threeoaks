@@ -1,0 +1,26 @@
+HKCR
+{
+	COMControllers.ScriptControllerImpl.1 = s 'ScriptControllerImpl Class'
+	{
+		CLSID = s '{816EF305-7DCF-48ad-8F29-DA9D758CA2F8}'
+	}
+	COMControllers.ScriptControllerImpl = s 'ScriptControllerImpl Class'
+	{
+		CLSID = s '{816EF305-7DCF-48ad-8F29-DA9D758CA2F8}'
+		CurVer = s 'COMControllers.ScriptControllerImpl.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {816EF305-7DCF-48ad-8F29-DA9D758CA2F8} = s 'ScriptControllerImpl Class'
+		{
+			ProgID = s 'COMControllers.ScriptControllerImpl.1'
+			VersionIndependentProgID = s 'COMControllers.ScriptControllerImpl'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{472EB9D7-052E-4EDD-90A1-5D550F786C85}'
+		}
+	}
+}

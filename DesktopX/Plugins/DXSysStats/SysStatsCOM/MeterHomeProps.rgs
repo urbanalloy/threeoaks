@@ -1,0 +1,23 @@
+HKCR
+{
+	SysStatsCOM.MeterHomeProps.1 = s 'MeterHomeProps Class'
+	{
+		CLSID = s '{AAD8B225-602E-4C3C-910C-F5142C6C8BDB}'
+	}
+	SysStatsCOM.MeterHomeProps = s 'MeterHomeProps Class'
+	{
+		CLSID = s '{AAD8B225-602E-4C3C-910C-F5142C6C8BDB}'
+		CurVer = s 'SysStatsCOM.MeterHomeProps.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {AAD8B225-602E-4C3C-910C-F5142C6C8BDB} = s 'MeterHomeProps Class'
+		{
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+		}
+	}
+}

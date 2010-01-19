@@ -1,0 +1,27 @@
+HKCR
+{
+	COMOverlays.ImageOverlay.1 = s 'ImageOverlay Class'
+	{
+		CLSID = s '{BD09D3A7-6C8D-4E2F-B8D2-2C55F7499B6E}'
+	}
+	COMOverlays.ImageOverlay = s 'ImageOverlay Class'
+	{
+		CLSID = s '{BD09D3A7-6C8D-4E2F-B8D2-2C55F7499B6E}'
+		CurVer = s 'COMOverlays.ImageOverlay.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {BD09D3A7-6C8D-4E2F-B8D2-2C55F7499B6E} = s 'ImageOverlay Class'
+		{
+			ProgID = s 'COMOverlays.ImageOverlay.1'
+			VersionIndependentProgID = s 'COMOverlays.ImageOverlay'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{F5955ACD-6EFB-4329-9A02-F0D0D30D491E}'
+			'Version' = d 2
+		}
+	}
+}

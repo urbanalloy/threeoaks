@@ -1,0 +1,27 @@
+HKCR
+{
+	COMOverlays.AnimatorOverlay.1 = s 'AnimatorOverlay Class'
+	{
+		CLSID = s '{ABB75841-5490-43FC-B338-9B6093C15CE5}'
+	}
+	COMOverlays.AnimatorOverlay = s 'AnimatorOverlay Class'
+	{
+		CLSID = s '{ABB75841-5490-43FC-B338-9B6093C15CE5}'
+		CurVer = s 'COMOverlays.AnimatorOverlay.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {ABB75841-5490-43FC-B338-9B6093C15CE5} = s 'AnimatorOverlay Class'
+		{
+			ProgID = s 'COMOverlays.AnimatorOverlay.1'
+			VersionIndependentProgID = s 'COMOverlays.AnimatorOverlay'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{F5955ACD-6EFB-4329-9A02-F0D0D30D491E}'
+			'Version' = d 1
+		}
+	}
+}

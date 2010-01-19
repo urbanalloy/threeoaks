@@ -1,0 +1,20 @@
+// SysStatsApp.idl : IDL source for SysStatsApp.exe
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (SysStatsApp.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	uuid(543044BA-B5A4-42c0-B115-4851C628E5B2),
+	version(1.0),
+	helpstring("SysStatsApp 1.0 Type Library")
+]
+library SysStatsAppLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+};

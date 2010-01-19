@@ -1,0 +1,435 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "1 TYPELIB ""SysStatsCOM.tlb""\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,1,11
+ PRODUCTVERSION 2,5,0,11
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "A part of SysStats: http://systats.jools.net/\0"
+            VALUE "CompanyName", "Paul Andrews\0"
+            VALUE "FileDescription", "SysStats Common Components\0"
+            VALUE "FileVersion", "1, 0, 1, 11\0"
+            VALUE "InternalName", "SysStatsCOM\0"
+            VALUE "LegalCopyright", "Copyright 2004-2006\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OLESelfRegister", "\0"
+            VALUE "OriginalFilename", "SysStatsCOM.DLL\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "SysStats\0"
+            VALUE "ProductVersion", "2, 5, 0, 11\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// REGISTRY
+//
+
+IDR_ClientModel         REGISTRY DISCARDABLE    "ClientModel.rgs"
+IDR_MeterHome           REGISTRY DISCARDABLE    "MeterHome.rgs"
+IDR_Meter               REGISTRY DISCARDABLE    "Meter.rgs"
+IDR_Overlay             REGISTRY DISCARDABLE    "Overlay.rgs"
+IDR_OverlayHome         REGISTRY DISCARDABLE    "OverlayHome.rgs"
+IDR_TIMERCLIENT         REGISTRY DISCARDABLE    "TimerClient.rgs"
+IDR_COMPOSITEOVERLAY    REGISTRY DISCARDABLE    "CompositeOverlay.rgs"
+IDR_TIMERSERVICE        REGISTRY DISCARDABLE    "TimerService.rgs"
+IDR_APPCONFIG           REGISTRY DISCARDABLE    "AppConfig.rgs"
+IDR_PERSISTER           REGISTRY DISCARDABLE    "Persister.rgs"
+IDR_IINIPERSISTER       REGISTRY DISCARDABLE    "IINIPersister.rgs"
+IDR_CONTROLLER          REGISTRY DISCARDABLE    "Controller.rgs"
+IDR_CONTROLLERHOME      REGISTRY DISCARDABLE    "ControllerHome.rgs"
+IDR_LABEL               REGISTRY DISCARDABLE    "Label.rgs"
+IDR_METERHOMEPROPS      REGISTRY DISCARDABLE    "MeterHomeProps.rgs"
+IDR_WEAKREFERENCE       REGISTRY DISCARDABLE    "WeakReference.rgs"
+IDR_WEAKTARGET          REGISTRY DISCARDABLE    "WeakTarget.rgs"
+IDR_SCRIPTCONNECTIONOBJECT REGISTRY DISCARDABLE    "ScriptConnectionObject.rgs"
+IDR_SCRIPTUTILS         REGISTRY DISCARDABLE    "ScriptUtils.rgs"
+IDR_METADATA            REGISTRY DISCARDABLE    "MetaData.rgs"
+IDR_COMINIFILE          REGISTRY DISCARDABLE    "COMINIFile.rgs"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_METER_RENAME DIALOG DISCARDABLE  0, 0, 267, 46
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Enter Value..."
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,145,25,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,205,25,50,14
+    EDITTEXT        IDC_VALUE,5,5,250,12,ES_AUTOHSCROLL
+END
+
+IDD_METERHOMEPROPS DIALOG DISCARDABLE  0, 0, 225, 161
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    LISTBOX         IDC_METER_LIST,135,15,79,133,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Delete",IDC_METER_DELETE,40,55,60,15,WS_DISABLED
+    COMBOBOX        IDC_METER_TYPE,15,15,110,150,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Add->",IDC_METER_ADD,40,35,60,15
+    PUSHBUTTON      "Rename...",IDC_METER_RENAME,40,95,60,15,WS_DISABLED
+    PUSHBUTTON      "Configure...",IDC_METER_CONFIGURE,40,75,60,15,
+                    WS_DISABLED
+    EDITTEXT        IDC_METER_INTERVAL,45,135,55,12,ES_AUTOHSCROLL
+    LTEXT           "Update interval (sec)",IDC_STATIC,40,120,66,8
+END
+
+IDD_OVERLAYHOMEPROPS DIALOG DISCARDABLE  0, 0, 258, 262
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_OVERLAY_TYPE,10,15,110,135,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Configure...",IDC_OVERLAY_CONFIGURE,35,75,65,15,
+                    WS_DISABLED
+    PUSHBUTTON      "Move Up",IDC_OVERLAY_MOVEUP,35,145,65,15,WS_DISABLED
+    PUSHBUTTON      "Move Down",IDC_OVERLAY_MOVEDOWN,35,165,65,15,
+                    WS_DISABLED
+    PUSHBUTTON      "Add->",IDC_OVERLAY_ADD,35,35,65,15
+    PUSHBUTTON      "Delete",IDC_OVERLAY_DELETE,35,55,65,15,WS_DISABLED
+    CONTROL         "Tree1",IDC_OVERLAY_LIST,"SysTreeView32",TVS_HASBUTTONS | 
+                    TVS_HASLINES | TVS_LINESATROOT | TVS_SHOWSELALWAYS | 
+                    TVS_FULLROWSELECT | WS_BORDER | WS_TABSTOP,130,15,121,
+                    205
+    PUSHBUTTON      "Rename...",IDC_OVERLAY_RENAME,35,95,65,15,WS_DISABLED
+    PUSHBUTTON      "Duplicate",IDC_OVERLAY_DUPLICATE,35,115,65,15,
+                    WS_DISABLED
+    CONTROL         "Visible",IDC_CHECK_VISIBLE,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFT | WS_DISABLED | WS_TABSTOP,47,196,36,10
+    LTEXT           "Effect",IDC_STATIC,7,245,64,10
+    COMBOBOX        IDC_COMBO_MODE,75,242,113,75,CBS_DROPDOWNLIST | 
+                    WS_DISABLED | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO_OVERLAY,75,226,160,90,CBS_DROPDOWNLIST | 
+                    CBS_OWNERDRAWVARIABLE | CBS_HASSTRINGS | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Root Effect Overlay",IDC_STATIC,7,227,64,10
+END
+
+IDD_CONTROLLERHOMEPROPS DIALOG DISCARDABLE  0, 0, 226, 231
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_CONTROLLER_TYPE,10,10,110,150,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LISTBOX         IDC_CONTROLLER_LIST,130,10,83,138,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Add->",IDC_CONTROLLER_ADD,35,30,65,15
+    PUSHBUTTON      "Delete",IDC_CONTROLLER_DELETE,35,50,65,15,WS_DISABLED
+    PUSHBUTTON      "Configure...",IDC_CONTROLLER_CONFIGURE,35,70,65,15,
+                    WS_DISABLED
+    PUSHBUTTON      "Rename...",IDC_CONTROLLER_RENAME,35,90,66,15,
+                    WS_DISABLED
+    PUSHBUTTON      "Move Up",IDC_CONTROLLER_MOVEUP,35,113,65,15,WS_DISABLED
+    PUSHBUTTON      "Move Down",IDC_CONTROLLER_MOVEDOWN,35,133,65,15,
+                    WS_DISABLED
+    COMBOBOX        IDC_COMBO_MESSAGE,7,169,108,90,CBS_DROPDOWN | 
+                    WS_DISABLED | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO_OVERLAY,7,207,108,90,CBS_DROPDOWNLIST | 
+                    CBS_OWNERDRAWVARIABLE | CBS_HASSTRINGS | WS_DISABLED | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Trigger",IDC_STATIC,7,157,23,8
+    LTEXT           "Overlay",IDC_STATIC,7,195,25,8
+    COMBOBOX        IDC_COMBO_KEY,132,169,80,90,CBS_DROPDOWN | WS_DISABLED | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Key",IDC_STATIC_KEY,134,158,55,8
+    CONTROL         "Pass Through",IDC_CHECK_PASSTHROUGH,"Button",
+                    BS_AUTOCHECKBOX | BS_LEFT | WS_DISABLED | WS_TABSTOP,132,
+                    209,60,10
+    EDITTEXT        IDC_EDIT_KEY,133,169,68,13,ES_AUTOHSCROLL | NOT 
+                    WS_VISIBLE
+    COMBOBOX        IDC_COMBO_COMMAND,132,169,80,90,CBS_DROPDOWN | 
+                    WS_DISABLED | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_CONFIGURE DIALOG DISCARDABLE  0, 0, 278, 313
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure SysStats"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,221,292,50,14
+    CONTROL         "Tab1",IDC_TAB,"SysTabControl32",0x0,7,7,264,276
+    PUSHBUTTON      "Help",IDC_BUTTON_HELP,159,292,50,14
+END
+
+IDD_SCRIPT_CONSOLE DIALOG DISCARDABLE  0, 0, 218, 194
+STYLE DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Script Console"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "Close",IDOK,161,173,50,14
+    EDITTEXT        IDC_CONSOLE_TEXT,7,7,204,157,ES_MULTILINE | 
+                    ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_READONLY | 
+                    ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL
+END
+
+IDD_COMPOSITEOVERLAY DIALOG DISCARDABLE  0, 0, 257, 206
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure Composite Overlay"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_XPOS,88,20,30,12,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_XSPIN,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | 
+                    UDS_HORZ | UDS_NOTHOUSANDS,108,20,11,15
+    EDITTEXT        IDC_YPOS,151,19,30,12,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_YSPIN,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | 
+                    UDS_NOTHOUSANDS,165,19,11,15
+    EDITTEXT        IDC_ROT,88,45,30,12,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_ROTSPIN,"msctls_updown32",UDS_WRAP | 
+                    UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | 
+                    UDS_ARROWKEYS | UDS_NOTHOUSANDS,108,45,11,15
+    EDITTEXT        IDC_CXPOS,150,45,30,12,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_CXSPIN,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | 
+                    UDS_HORZ | UDS_NOTHOUSANDS,170,45,11,15
+    EDITTEXT        IDC_CYPOS,200,45,30,12,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_CYSPIN,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | 
+                    UDS_NOTHOUSANDS,220,45,11,15
+    EDITTEXT        IDC_XSCALE,88,70,30,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_YSCALE,150,70,30,12,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,200,185,50,14
+    LTEXT           "X",IDC_STATIC,75,23,10,10
+    LTEXT           "Y",IDC_STATIC,140,22,10,10
+    LTEXT           "Rotation",IDC_STATIC,20,46,30,10
+    LTEXT           "X",IDC_STATIC,140,48,10,10
+    LTEXT           "Y",IDC_STATIC,190,48,10,10
+    LTEXT           "Draw at:",IDC_STATIC,20,23,28,8
+    LTEXT           "Angle",IDC_STATIC,65,46,19,8
+    LTEXT           "Scale",IDC_STATIC,20,71,30,10
+    LTEXT           "X",IDC_STATIC,75,72,8,8
+    LTEXT           "Y",IDC_STATIC,140,72,8,8
+    GROUPBOX        "Position",IDC_STATIC,7,7,243,87
+    GROUPBOX        "Appearance",IDC_STATIC,7,105,243,70
+    LTEXT           "Effect",IDC_STATIC,15,151,64,10
+    COMBOBOX        IDC_COMBO_MODE,83,148,113,75,CBS_DROPDOWNLIST | 
+                    WS_DISABLED | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO_OVERLAY,83,124,167,90,CBS_DROPDOWNLIST | 
+                    CBS_OWNERDRAWVARIABLE | CBS_HASSTRINGS | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Effect Overlay",IDC_STATIC,15,126,64,10
+END
+
+IDD_MODEL DIALOG DISCARDABLE  0, 0, 210, 237
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_MODELNAME,70,30,125,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MODELDESC,69,54,126,63,ES_MULTILINE | WS_VSCROLL
+    EDITTEXT        IDC_MODELVERSION,69,130,55,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_MODELAUTHOR,69,153,126,12,ES_AUTOHSCROLL
+    LTEXT           "Name",IDC_STATIC,14,33,20,8
+    LTEXT           "Description",IDC_STATIC,14,53,36,8
+    LTEXT           "Version",IDC_STATIC,14,131,24,8
+    LTEXT           "Author",IDC_STATIC,14,154,22,8
+    EDITTEXT        IDC_XSCALE,81,184,30,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_YSCALE,143,184,30,12,ES_AUTOHSCROLL
+    LTEXT           "Scale",IDC_STATIC,13,185,30,10
+    LTEXT           "X",IDC_STATIC,68,186,8,8
+    LTEXT           "Y",IDC_STATIC,133,186,8,8
+    CTEXT           "Support SysStats",IDC_LINK,56,7,90,17,SS_NOTIFY | 
+                    SS_CENTERIMAGE
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_METER_RENAME, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 260
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 39
+    END
+
+    IDD_METERHOMEPROPS, DIALOG
+    BEGIN
+        RIGHTMARGIN, 216
+    END
+
+    IDD_OVERLAYHOMEPROPS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 251
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 255
+    END
+
+    IDD_CONTROLLERHOMEPROPS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 219
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 224
+    END
+
+    IDD_CONFIGURE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 271
+        VERTGUIDE, 230
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 306
+        HORZGUIDE, 240
+    END
+
+    IDD_SCRIPT_CONSOLE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 211
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 187
+    END
+
+    IDD_COMPOSITEOVERLAY, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 250
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 199
+    END
+
+    IDD_MODEL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 203
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 230
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// 24
+//
+
+IDR_MANIFEST            24      MOVEABLE PURE   "SysStatsCOM.manifest"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_PROJNAME            "SysStatsCOM"
+    IDS_CLIENTMODEL_DESC    "ClientModel Class"
+    IDS_METERHOME_DESC      "MeterHome Class"
+    IDS_METER_DESC          "Meter Class"
+    IDS_OVERLAY_DESC        "Overlay Class"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_OVERLAYHOME_DESC    "OverlayHome Class"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_TITLEMeterHomeProps "Meters"
+    IDS_DOCSTRINGMeterHomeProps "Configure meters..."
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+1 TYPELIB "SysStatsCOM.tlb"
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

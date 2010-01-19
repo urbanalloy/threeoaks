@@ -1,0 +1,26 @@
+HKCR
+{
+	SysStatsCOM.ScriptConnectionObject.1 = s 'ScriptConnectionObject Class'
+	{
+		CLSID = s '{2266C09C-BB05-4245-98F7-73091E7DF6CB}'
+	}
+	SysStatsCOM.ScriptConnectionObject = s 'ScriptConnectionObject Class'
+	{
+		CLSID = s '{2266C09C-BB05-4245-98F7-73091E7DF6CB}'
+		CurVer = s 'SysStatsCOM.ScriptConnectionObject.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {2266C09C-BB05-4245-98F7-73091E7DF6CB} = s 'ScriptConnectionObject Class'
+		{
+			ProgID = s 'SysStatsCOM.ScriptConnectionObject.1'
+			VersionIndependentProgID = s 'SysStatsCOM.ScriptConnectionObject'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{E305FE28-9D24-4398-905A-A29F7A7E2E3D}'
+		}
+	}
+}

@@ -1,0 +1,26 @@
+HKCR
+{
+	SysStatsODCOM.Dummy.1 = s 'Dummy Class'
+	{
+		CLSID = s '{7DAC67C1-FC56-4F1E-BE75-3C3D7C5E12FB}'
+	}
+	SysStatsODCOM.Dummy = s 'Dummy Class'
+	{
+		CLSID = s '{7DAC67C1-FC56-4F1E-BE75-3C3D7C5E12FB}'
+		CurVer = s 'SysStatsODCOM.Dummy.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {7DAC67C1-FC56-4F1E-BE75-3C3D7C5E12FB} = s 'Dummy Class'
+		{
+			ProgID = s 'SysStatsODCOM.Dummy.1'
+			VersionIndependentProgID = s 'SysStatsODCOM.Dummy'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{915F2659-F686-4523-99F8-65B1098140AF}'
+		}
+	}
+}

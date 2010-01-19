@@ -1,0 +1,27 @@
+HKCR
+{
+	COMMeters.ASyncScriptMeter.1 = s 'ASyncScriptMeter Class'
+	{
+		CLSID = s '{CD915828-F075-48EA-9D00-0F9D35FB03B4}'
+	}
+	COMMeters.ASyncScriptMeter = s 'ASyncScriptMeter Class'
+	{
+		CLSID = s '{CD915828-F075-48EA-9D00-0F9D35FB03B4}'
+		CurVer = s 'COMMeters.ASyncScriptMeter.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {CD915828-F075-48EA-9D00-0F9D35FB03B4} = s 'ASyncScriptMeter Class'
+		{
+			ProgID = s 'COMMeters.ASyncScriptMeter.1'
+			VersionIndependentProgID = s 'COMMeters.ASyncScriptMeter'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{34AF6298-1F60-440A-94DE-E586F829DE0C}'
+			'Version' = d 1
+		}
+	}
+}

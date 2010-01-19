@@ -1,0 +1,27 @@
+HKCR
+{
+	SysStatsCOM.Animation.1 = s 'Animation Class'
+	{
+		CLSID = s '{B664708A-6774-4EB0-A904-E951FFD72264}'
+	}
+	SysStatsCOM.Animation = s 'Animation Class'
+	{
+		CLSID = s '{B664708A-6774-4EB0-A904-E951FFD72264}'
+		CurVer = s 'SysStatsCOM.Animation.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {B664708A-6774-4EB0-A904-E951FFD72264} = s 'Animation Class'
+		{
+			ProgID = s 'SysStatsCOM.Animation.1'
+			VersionIndependentProgID = s 'SysStatsCOM.Animation'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{E305FE28-9D24-4398-905A-A29F7A7E2E3D}'
+			'Version' = d 1
+		}
+	}
+}

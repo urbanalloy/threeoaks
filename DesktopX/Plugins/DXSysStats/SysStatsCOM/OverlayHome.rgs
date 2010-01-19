@@ -1,0 +1,23 @@
+HKCR
+{
+	SysStatsCOM.OverlayHome.1 = s 'OverlayHome Class'
+	{
+		CLSID = s '{A56ABED7-C2E5-45B8-8E88-4FC2D49F2191}'
+	}
+	SysStatsCOM.OverlayHome = s 'OverlayHome Class'
+	{
+		CLSID = s '{A56ABED7-C2E5-45B8-8E88-4FC2D49F2191}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {A56ABED7-C2E5-45B8-8E88-4FC2D49F2191} = s 'OverlayHome Class'
+		{
+			ProgID = s 'SysStatsCOM.OverlayHome.1'
+			VersionIndependentProgID = s 'SysStatsCOM.OverlayHome'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

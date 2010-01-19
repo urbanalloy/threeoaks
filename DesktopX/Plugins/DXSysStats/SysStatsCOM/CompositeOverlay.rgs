@@ -1,0 +1,27 @@
+HKCR
+{
+	SysStatsCOM.CompositeOverlay.1 = s 'CompositeOverlay Class'
+	{
+		CLSID = s '{D97B4012-E22A-49E3-9805-BCB00CAB4F62}'
+	}
+	SysStatsCOM.CompositeOverlay = s 'CompositeOverlay Class'
+	{
+		CLSID = s '{D97B4012-E22A-49E3-9805-BCB00CAB4F62}'
+		CurVer = s 'SysStatsCOM.CompositeOverlay.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {D97B4012-E22A-49E3-9805-BCB00CAB4F62} = s 'CompositeOverlay Class'
+		{
+			ProgID = s 'SysStatsCOM.CompositeOverlay.1'
+			VersionIndependentProgID = s 'SysStatsCOM.CompositeOverlay'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{E305FE28-9D24-4398-905A-A29F7A7E2E3D}'
+			'Version' = d 1
+		}
+	}
+}

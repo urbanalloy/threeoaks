@@ -1,0 +1,27 @@
+HKCR
+{
+	COMMeters.TimeMeter.1 = s 'TimeMeter Class'
+	{
+		CLSID = s '{1617561A-B175-4213-A587-47B63D691A35}'
+	}
+	COMMeters.TimeMeter = s 'TimeMeter Class'
+	{
+		CLSID = s '{1617561A-B175-4213-A587-47B63D691A35}'
+		CurVer = s 'COMMeters.TimeMeter.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {1617561A-B175-4213-A587-47B63D691A35} = s 'TimeMeter Class'
+		{
+			ProgID = s 'COMMeters.TimeMeter.1'
+			VersionIndependentProgID = s 'COMMeters.TimeMeter'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{34AF6298-1F60-440A-94DE-E586F829DE0C}'
+			'Version' = d 1
+		}
+	}
+}

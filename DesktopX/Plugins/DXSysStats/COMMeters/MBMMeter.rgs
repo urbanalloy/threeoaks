@@ -1,0 +1,27 @@
+HKCR
+{
+	COMMeters.MBMMeter.1 = s 'MBMMeter Class'
+	{
+		CLSID = s '{EFDEFD39-FE42-4D53-9546-E78F9F9D3841}'
+	}
+	COMMeters.MBMMeter = s 'MBMMeter Class'
+	{
+		CLSID = s '{EFDEFD39-FE42-4D53-9546-E78F9F9D3841}'
+		CurVer = s 'COMMeters.MBMMeter.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {EFDEFD39-FE42-4D53-9546-E78F9F9D3841} = s 'MBMMeter Class'
+		{
+			ProgID = s 'COMMeters.MBMMeter.1'
+			VersionIndependentProgID = s 'COMMeters.MBMMeter'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{34AF6298-1F60-440A-94DE-E586F829DE0C}'
+			'Version' = d 1
+		}
+	}
+}

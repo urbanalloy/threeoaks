@@ -1,0 +1,23 @@
+HKCR
+{
+	SysStatsCOM.Overlay.1 = s 'Overlay Class'
+	{
+		CLSID = s '{4AC09AC2-1CBD-4A84-A990-F077EEDB28C8}'
+	}
+	SysStatsCOM.Overlay = s 'Overlay Class'
+	{
+		CLSID = s '{4AC09AC2-1CBD-4A84-A990-F077EEDB28C8}'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {4AC09AC2-1CBD-4A84-A990-F077EEDB28C8} = s 'Overlay Class'
+		{
+			ProgID = s 'SysStatsCOM.Overlay.1'
+			VersionIndependentProgID = s 'SysStatsCOM.Overlay'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'both'
+			}
+		}
+	}
+}

@@ -1,0 +1,365 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "1 TYPELIB ""COMControllers.tlb""\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,1,11
+ PRODUCTVERSION 2,5,0,11
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "A part of SysStats: http://systats.jools.net/\0"
+            VALUE "CompanyName", "Paul Andrews\0"
+            VALUE "FileDescription", "COMControllers Module\0"
+            VALUE "FileVersion", "1, 0, 1, 11\0"
+            VALUE "InternalName", "COMControllers\0"
+            VALUE "LegalCopyright", "Copyright 2004-2006\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OLESelfRegister", "\0"
+            VALUE "OriginalFilename", "COMControllers.DLL\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "SysStats\0"
+            VALUE "ProductVersion", "2, 5, 0, 11\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// REGISTRY
+//
+
+IDR_SHORTCUT            REGISTRY DISCARDABLE    "Shortcut.rgs"
+IDR_SCRIPTCONTROLLER    REGISTRY DISCARDABLE    "ScriptController.rgs"
+IDR_SCRIPTCONTROLLERIMPL REGISTRY DISCARDABLE    "ScriptControllerImpl.rgs"
+IDR_VALUESETTER         REGISTRY DISCARDABLE    "ValueSetter.rgs"
+IDR_MAPPEDCONTROLLER    REGISTRY DISCARDABLE    "MappedController.rgs"
+IDR_TIMERCONTROLLER     REGISTRY DISCARDABLE    "TimerController.rgs"
+IDR_MESSAGESENDER       REGISTRY DISCARDABLE    "MessageSender.rgs"
+IDR_ASYNCSCRIPTCONTROLLER REGISTRY DISCARDABLE    "ASyncScriptController.rgs"
+IDR_DROPTARGETCONTROLLER REGISTRY DISCARDABLE    "DropTargetController.rgs"
+IDR_CURSORCONTROLLER    REGISTRY DISCARDABLE    "CursorController.rgs"
+IDR_SENS                REGISTRY DISCARDABLE    "Sens.rgs"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_SHORTCUT DIALOG DISCARDABLE  0, 0, 347, 140
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure Shortcut"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "Browse...",IDC_BROWSE,285,7,50,15
+    EDITTEXT        IDC_COMMANDLINE,80,80,195,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_DIRECTORY,80,101,195,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse...",IDC_BROWSE_DIR,286,100,50,15
+    LTEXT           "Application",IDC_APP_LABEL,9,11,60,15
+    LTEXT           "Arguments",IDC_COMMANDLINE_LABEL,10,82,60,15
+    LTEXT           "Startup Directory",IDC_DIRECTORY_LABEL,10,103,60,15
+    DEFPUSHBUTTON   "OK",IDOK,286,122,50,14
+    COMBOBOX        IDC_COMBO_APP,80,8,195,180,CBS_DROPDOWN | 
+                    CBS_AUTOHSCROLL | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO_METER,80,28,125,75,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Meter",IDC_STATIC,10,28,50,10
+    EDITTEXT        IDC_SELECTOR,80,48,125,12,ES_AUTOHSCROLL
+    LTEXT           "Selector",IDC_STATIC,10,48,30,10
+END
+
+IDD_SCRIPTCONTROLLER DIALOG DISCARDABLE  0, 0, 277, 95
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Script Details"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "File Name",IDC_STATIC,7,7,43,10
+    LTEXT           "Type",IDC_STATIC,7,25,43,10
+    EDITTEXT        IDC_SCRIPT_NAME,59,7,148,12,ES_AUTOHSCROLL
+    COMBOBOX        IDC_COMBO_SCRIPT_TYPE,59,24,149,99,CBS_DROPDOWN | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "Browse...",IDC_BUTTON_SCRIPT_NAME,220,5,50,14
+    DEFPUSHBUTTON   "OK",IDOK,160,70,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL2,220,70,50,14
+    DEFPUSHBUTTON   "Console...",IDC_CONSOLE,97,70,50,14
+END
+
+IDD_VALUESETTER DIALOG DISCARDABLE  0, 0, 271, 102
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Enter Value"
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_COMBO_METER,61,12,115,75,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "OK",1,215,78,50,14
+    LTEXT           "Value",IDC_STATIC,7,55,37,10
+    LTEXT           "Meter",IDC_STATIC,7,14,25,10
+    LTEXT           "Selector",IDC_STATIC,7,35,42,10
+    COMBOBOX        IDC_COMBO_SELECTOR,61,32,204,110,CBS_DROPDOWN | 
+                    CBS_AUTOHSCROLL | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO_VALUE,61,53,204,101,CBS_DROPDOWN | 
+                    CBS_AUTOHSCROLL | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_MAPPEDCONTROLLER DIALOG DISCARDABLE  0, 0, 186, 95
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure Mapped Controller"
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_COMBO_MESSAGE,49,8,80,97,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+    EDITTEXT        IDC_EDIT_WPARAM,49,28,42,12,ES_AUTOHSCROLL | ES_NUMBER
+    DEFPUSHBUTTON   "OK",1,129,74,50,14
+    LTEXT           "Message",IDC_STATIC,9,11,30,8
+    LTEXT           "WPARAM",IDC_STATIC,9,30,34,8
+    LTEXT           "LPARAM will contain the mapped value (0 thru 255)",
+                    IDC_STATIC,9,49,164,8
+END
+
+IDD_TIMERCONTROLLER DIALOG DISCARDABLE  0, 0, 186, 151
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure Timer"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_EDIT_INTERVAL,50,103,42,12,ES_AUTOHSCROLL | 
+                    ES_NUMBER
+    DEFPUSHBUTTON   "OK",1,129,127,50,14
+    LTEXT           "Interval",IDC_STATIC,10,105,24,8
+    COMBOBOX        IDC_COMBO_MESSAGE,52,17,80,97,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+    CONTROL         "WPARAM",IDC_CHECK_WPARAM,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,12,43,49,10
+    EDITTEXT        IDC_EDIT_WPARAM,78,41,42,12,ES_AUTOHSCROLL | ES_NUMBER | 
+                    WS_DISABLED
+    CONTROL         "LPARAM",IDC_CHECK_LPARAM,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,16,67,45,10
+    EDITTEXT        IDC_EDIT_LPARAM,79,66,42,12,ES_AUTOHSCROLL | ES_NUMBER | 
+                    WS_DISABLED
+    COMBOBOX        IDC_COMBO_LPARAM,79,66,80,97,CBS_DROPDOWN | WS_DISABLED | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Message",IDC_STATIC,12,20,30,8
+    GROUPBOX        "Message to Post",IDC_STATIC,5,6,172,86
+END
+
+IDD_MESSAGESENDER DIALOG DISCARDABLE  0, 0, 186, 106
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure Message Sender"
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_COMBO_MESSAGE,49,8,80,97,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+    CONTROL         "WPARAM",IDC_CHECK_WPARAM,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,9,34,49,10
+    EDITTEXT        IDC_EDIT_WPARAM,75,32,42,12,ES_AUTOHSCROLL | ES_NUMBER | 
+                    WS_DISABLED
+    CONTROL         "LPARAM",IDC_CHECK_LPARAM,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,13,58,45,10
+    EDITTEXT        IDC_EDIT_LPARAM,76,57,42,12,ES_AUTOHSCROLL | ES_NUMBER | 
+                    WS_DISABLED
+    COMBOBOX        IDC_COMBO_LPARAM,76,57,80,97,CBS_DROPDOWN | WS_DISABLED | 
+                    WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "OK",1,130,81,50,14
+    LTEXT           "Message",IDC_STATIC,9,11,30,8
+END
+
+IDD_DROPTARGETCONTROLLER DIALOG DISCARDABLE  0, 0, 186, 219
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Set Meter"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",1,129,198,50,14
+    COMBOBOX        IDC_COMBO_METER,62,177,115,75,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "XML Meter to hold list",IDC_STATIC,9,175,41,17
+    COMBOBOX        IDC_COMBO_MESSAGE,52,17,80,97,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+    CONTROL         "WPARAM",IDC_CHECK_WPARAM,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,12,43,49,10
+    EDITTEXT        IDC_EDIT_WPARAM,78,41,42,12,ES_AUTOHSCROLL | ES_NUMBER | 
+                    WS_DISABLED
+    LTEXT           "Message",IDC_STATIC,12,20,30,8
+    GROUPBOX        "Message to Post on Drop",IDC_STATIC,5,6,172,86
+    CONTROL         "Copy",IDC_CHECK_COPY,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,12,114,61,10
+    CONTROL         "Move",IDC_CHECK_MOVE,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,12,129,61,10
+    CONTROL         "Link",IDC_CHECK_LINK,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,12,144,61,10
+    GROUPBOX        "Supported Effects",IDC_STATIC,5,99,172,63
+    LTEXT           "LPARAM will be the effect",IDC_STATIC,13,67,89,8
+END
+
+IDD_CURSOR DIALOG DISCARDABLE  0, 0, 186, 95
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Set Cursor"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",1,129,74,50,14
+    COMBOBOX        IDC_COMBO_CURSOR,51,23,127,82,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Cursor",IDC_STATIC,14,25,21,8
+END
+
+IDD_SENS DIALOG DISCARDABLE  0, 0, 179, 94
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configure Presence"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",1,116,74,50,14
+    COMBOBOX        IDC_COMBO_AWAY_MESSAGE,86,8,80,97,CBS_DROPDOWN | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Away Message",IDC_STATIC,9,11,49,8
+    COMBOBOX        IDC_COMBO_PRESENT_MESSAGE,86,38,80,97,CBS_DROPDOWN | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Present Message",IDC_STATIC,9,41,56,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_SHORTCUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 340
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 133
+    END
+
+    IDD_SCRIPTCONTROLLER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 270
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 88
+    END
+
+    IDD_VALUESETTER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 265
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 92
+    END
+
+    IDD_MESSAGESENDER, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 95
+    END
+
+    IDD_DROPTARGETCONTROLLER, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 173
+    END
+
+    IDD_CURSOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 5
+        RIGHTMARGIN, 179
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 88
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_PROJNAME            "COMControllers"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+1 TYPELIB "COMControllers.tlb"
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

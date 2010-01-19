@@ -1,0 +1,27 @@
+HKCR
+{
+	COMControllers.DropTargetController.1 = s 'DropTargetController Class'
+	{
+		CLSID = s '{7B1699F8-F150-4C61-A3BB-2579BAEA42F9}'
+	}
+	COMControllers.DropTargetController = s 'DropTargetController Class'
+	{
+		CLSID = s '{7B1699F8-F150-4C61-A3BB-2579BAEA42F9}'
+		CurVer = s 'COMControllers.DropTargetController.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {7B1699F8-F150-4C61-A3BB-2579BAEA42F9} = s 'DropTargetController Class'
+		{
+			ProgID = s 'COMControllers.DropTargetController.1'
+			VersionIndependentProgID = s 'COMControllers.DropTargetController'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{472EB9D7-052E-4EDD-90A1-5D550F786C85}'
+			'Version' = d 1
+		}
+	}
+}

@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<metadata>
+	<valueset id="controller">
+		<item id="controller:control">
+			<value type="BSTR">control</value>
+			<label>Simplified Control</label>
+			<help>Call a simplified control method</help>
+		</item>
+		<item id="controller:command">
+			<value type="BSTR">cmd</value>
+			<label>MCI Command</label>
+			<help>Send an MCI command</help>
+		</item>
+		<item id="controller:config">
+			<value type="BSTR">configure</value>
+			<label>Configure Dialog</label>
+			<help>Open the player configuration dialog</help>
+		</item>
+		<item id="controller:path">
+			<value type="BSTR">path</value>
+			<label>File/Device Path</label>
+			<help>Set the path of the file/device to play</help>
+		</item>
+	</valueset>
+	
+	<valueset id="value:control" idref="controller:control">
+		<item>
+			<value type="BSTR">play</value>
+			<label>Play</label>
+			<help>Open the path and start playing from the beginning</help>
+		</item>
+		<item>
+			<value type="BSTR">stop</value>
+			<label>Stop</label>
+			<help>Stop playing and close the path</help>
+		</item>
+		<item>
+			<value type="BSTR">pause</value>
+			<label>Pause</label>
+			<help>Pause playback</help>
+		</item>
+		<item>
+			<value type="BSTR">resume</value>
+			<label>Resume</label>
+			<help>Resume playback</help>
+		</item>
+	</valueset>
+
+	<method name="PutValue">
+		<arg name="selector" pos="0">
+			<valuesetref idref="controller"/>
+		</arg>
+		<arg name="value" pos="1">
+			<valuesetref idref="value:control"/>
+		</arg>
+	</method>
+</metadata>

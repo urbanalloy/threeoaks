@@ -1,0 +1,26 @@
+HKCR
+{
+	SysStatsCOM.WeakTarget.1 = s 'WeakTarget Class'
+	{
+		CLSID = s '{513D8DDC-C6B5-40A1-91DD-8A5D70F70EAE}'
+	}
+	SysStatsCOM.WeakTarget = s 'WeakTarget Class'
+	{
+		CLSID = s '{513D8DDC-C6B5-40A1-91DD-8A5D70F70EAE}'
+		CurVer = s 'SysStatsCOM.WeakTarget.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {513D8DDC-C6B5-40A1-91DD-8A5D70F70EAE} = s 'WeakTarget Class'
+		{
+			ProgID = s 'SysStatsCOM.WeakTarget.1'
+			VersionIndependentProgID = s 'SysStatsCOM.WeakTarget'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{E305FE28-9D24-4398-905A-A29F7A7E2E3D}'
+		}
+	}
+}
