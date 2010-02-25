@@ -166,8 +166,7 @@
 		//#endif
 	}
 	
-	function getQueryString(query)
-	{
+	function getQueryString(query) {
 		return "";
 	}
 	
@@ -203,8 +202,7 @@
 	}
 	
 	// Abort current request
-	function Abort()
-	{
+	function Abort() {
 		m_request.abort();
 	}
 	

@@ -807,38 +807,31 @@
 	var E_PARSEERROR	 = -4;
 	var E_WARNING		 = -100;
 	
-	function get_E_OK()
-	{
+	function get_E_OK() {
 		return E_OK;
 	}
 	
-	function get_E_ERROR()
-	{
+	function get_E_ERROR() {
 		return E_ERROR;
 	}
 	
-	function get_E_NOTAVAILABLE()
-	{
+	function get_E_NOTAVAILABLE() {
 		return E_NOTAVAILABLE;
 	}
 	
-	function get_E_NOTIMPLEMENTED()
-	{
+	function get_E_NOTIMPLEMENTED() {
 		return E_NOTIMPLEMENTED;
 	}
 	
-	function get_E_INVALIDLICENSE()
-	{
+	function get_E_INVALIDLICENSE() {
 		return E_INVALIDLICENSE;
 	}
 	
-	function get_E_PARSEERROR()
-	{
+	function get_E_PARSEERROR() {
 		return E_PARSEERROR;
 	}
 	
-	function get_E_WARNING()
-	{
+	function get_E_WARNING() {
 		return E_WARNING;
 	}	
 	
@@ -848,13 +841,11 @@
 	var DAYPART_DAY = 1;
 	var DAYPART_NIGHT = 2;
 	
-	function get_DAYPART_DAY()
-	{
+	function get_DAYPART_DAY() {
 		return DAYPART_DAY;
 	}
 	
-	function get_DAYPART_NIGHT()
-	{
+	function get_DAYPART_NIGHT() {
 		return DAYPART_NIGHT;
 	}
 	
@@ -1439,8 +1430,7 @@
 	/*********************************
 	 * Functions
 	 *********************************/
-	function ToString()
-	{
+	function ToString() {
 		var text = "";
 		
 		if (m_location != null)
@@ -1528,8 +1518,7 @@
 		return text;
 	}
 	
-	function append(title, value)
-	{
+	function append(title, value) {
 		if (value == null || value == "")
 			return "";
 			
@@ -1587,8 +1576,7 @@
 	var m_effective = null;
 	var m_expiration = null;
 	
-	function ToString()
-	{
+	function ToString() {
 		var text = "";
 		
 		text += append("Status", m_status);
@@ -1613,8 +1601,7 @@
 		return text;
 	}
 	
-	function append(title, value)
-	{
+	function append(title, value) {
 		if (value == null || value == "")
 			return "";
 			
@@ -1674,9 +1661,9 @@
 	var m_urlCamera = null;
 	
 	var m_lastUpdateTime = null;
-	
-	function ToString()
-	{		var txt = "";
+
+	function ToString() {
+        var txt = "";
 		
 		txt += append("Handle", 		m_handle);
 		txt += append("ID",	 			m_ID);
@@ -1698,8 +1685,7 @@
 		return txt;
 	}
 	
-	function append(title, value)
-	{
+	function append(title, value) {
 		if (value == null || value == "")
 			return "";
 			
@@ -1782,8 +1768,7 @@
 	var m_lastUpdateTime = null;
 
 	// Trim values used in query
-	function TrimValues()
-	{
+	function TrimValues() {
 		// Helper
 		var m_helper = createComponent("WeatherHelper");
 		
@@ -1803,8 +1788,7 @@
 		m_customQueryString = m_helper.Trim(m_customQueryString);				
 	}
 	
-	function ToString()
-	{
+	function ToString() {
 		var text = "";
 		
 		text += append("ID", m_ID)
@@ -1845,8 +1829,7 @@
 		return text;
 	}
 	
-	function append(title, value)
-	{
+	function append(title, value) {
 		if (value == null || value == "")
 			return "";
 			
@@ -1897,8 +1880,7 @@
 	var m_credit = null;
 	var m_logo = null;	
 	
-	function ToString()
-	{
+	function ToString() {
 		var text = "";
 		
 		if (m_current != "" && m_current != null)
@@ -2092,8 +2074,7 @@
 	//
 	/////////////////////////////////////////////////////////////////////////////////////////////	
 	
-	function CheckCache(cache, id, rate, isSublevel)
-	{
+	function CheckCache(cache, id, rate, isSublevel) {
 		// check if item exists in the cache
 		if (!cache.Exists(id))
 			return false;
@@ -2154,8 +2135,7 @@
 	}
 	
 	// Try to get a node value and return "" if the node doesn't exists
-	function GetNodeValue(entry, nodeName)
-	{
+	function GetNodeValue(entry, nodeName) {
 		 var node = entry.selectNodes(nodeName);
 		 
 		 if (node.length == 0)
@@ -2170,63 +2150,51 @@
 	//
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	
-	function CtoF(temperature)
-	{
+	function CtoF(temperature) {
 		return ((9/5) * temperature + 32).toFixed(1);
 	}
 	
-	function FtoC(temperature)
-	{
+	function FtoC(temperature) {
 		return ((5/9) * (temperature - 32)).toFixed(1);
 	}
 	
-	function MtoFT(length)
-	{
+	function MtoFT(length) {
 		return (length * 3.280839895013123).toFixed(0);
 	}
 	
-	function FTtoM(length)
-	{
+	function FTtoM(length) {
 		return (length * 0.3048).toFixed(0);
 	}
 	
-	function KMtoMI(distance)
-	{
+	function KMtoMI(distance) {
 		return (distance * 0.621371192237334).toFixed(1);
 	}
 	
-	function MItoKM(distance)
-	{
+	function MItoKM(distance) {
 		return (distance * 1.609344).toFixed(1);
 	}
 	
-	function MBtoIN(pressure)
-	{
+	function MBtoIN(pressure) {
 		return (pressure * 0.0295300).toFixed(2);
 	}
 	
-	function INtoMB(pressure)
-	{
+	function INtoMB(pressure) {
 		return (pressure * 33.8639).toFixed(2);
 	}
 	
-	function MMtoIN(length)
-	{
+	function MMtoIN(length) {
 		return (length * 0.0393700787401575).toFixed(2);
 	}
 	
-	function INtoMM(length)
-	{
+	function INtoMM(length) {
 		return (length * 25.4).toFixed(2);
 	}
 	
-	function KMHtoMPH(speed)
-	{
+	function KMHtoMPH(speed) {
 		return (speed * 0.621371192237334).toFixed(1);
 	}
 	
-	function MPHtoKMH(speed)
-	{
+	function MPHtoKMH(speed) {
 		return (speed * 1.609344).toFixed(1);
 	}	
 	
@@ -2255,8 +2223,7 @@
 		return s.replace(/(\s|\n)+/g,'');
 	}
 	
-	function IsNullOrEmpty(str)
-	{
+	function IsNullOrEmpty(str) {
 		if (str == null)
 			return true;
 			
