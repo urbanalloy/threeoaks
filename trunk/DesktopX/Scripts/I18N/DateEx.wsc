@@ -90,31 +90,26 @@
 	//**Start Encode**
 	
 	// Return a new Date object
-	function GetDate()
-	{
+	function GetDate() {
 		return GetDateI18N("en-US");
 	}
 	
 	// Return a new Date object using the specified locale
-	function GetDateI18N(locale)
-	{
+	function GetDateI18N(locale) {
 		return GetDateFromLocale(locale, "");		
 	}
 	
 	// Return a Date from an epoch
-	function FromEpoch(epoch)
-	{
+	function FromEpoch(epoch) {
 		return GetDateFromLocale("en-US", epoch * 1000);
 	}
 	
 	// Return a Date from an epoch
-	function FromRFC822(rfc822)
-	{		
+	function FromRFC822(rfc822) {		
 		return GetDate().parseExact(rfc822, "ddd, dd MMMM yyyy HH:mm:ss T");
 	}
 	
-	function FromDate(date, locale) 
-	{
+	function FromDate(date, locale) {
 		if (date == null)
 			return GetDateFromLocale(locale);
 			
