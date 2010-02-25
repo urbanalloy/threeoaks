@@ -253,8 +253,7 @@
 	}
 	
 	// Get a query string for the weather info (airport code / id only)
-	function getWeatherQueryString(locationQuery)
-	{		
+	function getWeatherQueryString(locationQuery) {		
 		// Check that location query is not null
 		if (m_helper.IsNullOrEmpty(locationQuery))
 			return "";
@@ -273,8 +272,7 @@
 	///////////////////////////////	
 	
 	// Remove unit at the end of the string
-	function removeUnit(str, end)
-	{
+	function removeUnit(str, end) {
 		var cleaned = m_helper.Trim(str);
 		
 		var index = cleaned.search(end)
@@ -285,8 +283,7 @@
 	}
 	
 	// Parse elevation string, remove unit at the end / convert to metric system if needed
-	function parseElevation(elevation)
-	{
+	function parseElevation(elevation) {
 		var parsed = removeUnit(elevation, "ft");
 		
 		if (!m_useMetricSystem)
@@ -296,8 +293,7 @@
 	}
 	
 	// Parse speed string, remove unit at the end / convert to metric system if needed
-	function parseSpeed(speed)
-	{
+	function parseSpeed(speed) {
 		var parsed = removeUnit(speed, "mph");
 		
 		if (!m_useMetricSystem)
@@ -307,8 +303,7 @@
 	}
 	
 	// Parse speed heat/windchill
-	function parseHeat(heat)
-	{
+	function parseHeat(heat) {
 		var trimmed = m_helper.Trim(heat);
 		
 		if (heat == "NA")
@@ -320,8 +315,7 @@
 	
 	///////////////////////////////////////////////////////
 	// Parse alert category
-	function parseCategory(category)
-	{
+	function parseCategory(category) {
 		switch (m_helper.Trim(category))
 		{
 			case "":
@@ -345,8 +339,7 @@
 	
 	///////////////////////////////////////////////////////
 	// Parse alert category
-	function parseCategory(category)
-	{
+	function parseCategory(category) {
 		switch (m_helper.Trim(category))
 		{
 			case "":
@@ -361,8 +354,7 @@
 	
 	///////////////////////////////////////////////////////
 	// Parse alert severity
-	function parseSeverity(severity)
-	{
+	function parseSeverity(severity) {
 		switch (m_helper.Trim(severity))
 		{
 			case "":
@@ -377,8 +369,7 @@
 	
 	///////////////////////////////////////////////////////
 	// Parse weather code and return a code number
-	function parseCode(code, dayPart)
-	{
+	function parseCode(code, dayPart) {
 		switch (m_helper.Trim(code))
 		{
 			case "":
@@ -483,8 +474,7 @@
 	}
 	
 	// Abort current request
-	function Abort()
-	{
+	function Abort() {
 		m_request.abort();
 	}
 	

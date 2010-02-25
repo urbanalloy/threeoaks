@@ -194,8 +194,7 @@
 	///////////////////////////////
 	// Query
 	///////////////////////////////
-	function getLocationQueryString(query)
-	{
+	function getLocationQueryString(query) {
 		// Check that location query is not null
 		if (m_helper.IsNullOrEmpty(query))
 			return "";
@@ -218,8 +217,7 @@
 		return "";
 	}
 	
-	function getQueryString(queryLocation, isForecast)
-	{
+	function getQueryString(queryLocation, isForecast) {
 		// Check that location query is not null
 		if (m_helper.IsNullOrEmpty(queryLocation))
 			return "";
@@ -247,8 +245,7 @@
 		return query;
 	}
 	
-	function checkFeedError()
-	{
+	function checkFeedError() {
 		// Check if this is an error message
 		var error = m_request.selectNodes("error");
 		if (error.length == 0)			
@@ -274,8 +271,7 @@
 		return true;		
 	}
 	
-	function parseLinks()
-	{
+	function parseLinks() {
 		// Get the promo links node
 		var promo = m_request.selectNodes("weather/lnks");
 		if (promo.length == 0)
@@ -308,8 +304,7 @@
 		return links;		
 	}
 	
-	function parseCode(code)
-	{
+	function parseCode(code) {
 		// Add 0 at the beginning of the code
 		if (code * 1 < 10)
 			return "0" + code * 1;
@@ -317,22 +312,19 @@
 		return code;
 	}
 	
-	function parseCodeMoon(code)
-	{
+	function parseCodeMoon(code) {
 		// TODO parse moon code
 		return code;
 	}
 	
-	function parseGust(gust)
-	{
+	function parseGust(gust) {
 		if (gust == "N/A")
 			return null;
 			
 		return gust;
 	}
 	
-	function parseSharedData()
-	{
+	function parseSharedData() {
 		var weather = getComponent("WeatherInfo");
 		
 		// Save update time
@@ -366,8 +358,7 @@
 		return weather;
 	}
 	
-	function cleanupDate(date)
-	{
+	function cleanupDate(date) {
 		var index = date.search("Local Time");
 		if (index != -1)
 			return date = date.substr(0, index - 1); 
@@ -375,8 +366,7 @@
 		return date;
 	}
 	
-	function parseFullDate(date)
-	{
+	function parseFullDate(date) {
 		// Remove end of date string if present
 		var cleaned = cleanupDate(date);
 			
@@ -414,8 +404,7 @@
 	}
 	
 	// Abort current request
-	function Abort()
-	{
+	function Abort() {
 		m_request.abort();
 	}
 	
