@@ -4,11 +4,12 @@
 <comment>
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Dates Script Component for DesktopX
+// Date Script Component for DesktopX
 //
 // Copyright (c) 2006-2007, Coolite Inc. (http://www.coolite.com/). All rights reserved.
 //
-// Converted to component by Julien Templier (2009)
+// Copyright (c) 2009-2010, Julien Templier. All rights reserved.
+// Conversion to component and helper methods
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // * $LastChangedRevision$
