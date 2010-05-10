@@ -21,22 +21,46 @@ Full source code is available here: http://code.google.com/p/threeoaks/
 *******************************************************************************************************
 
 -------
-Archive (WIP - only handles zip and does not have any progress callbacks)
+Archive
 -------
+(WIP - only handles zip and does not have any progress callbacks)
+
 Properties & Methods
-    - InputFolder
-    - Path
-	- FileName
-	- Password 
-    - Count
-	- Files
-	- Create(filePath)
-	- Open(filePath)
-	- AddFile(originalFilename, newFilename)
-	- ExistsFile(filename)
-	- ExtractFile(filename, outputDirectory)
-	- Close()
-	- Extract(filePath, outputDirectory)
+	- GetArchive()
+
+	Archive Object
+      - InputFolder
+      - Path
+	  - FileName
+	  - Password 
+      - Count
+	  - Items
+	  - Type
+	  - SupportedExtensions
+	  - Create(filePath, type)
+	  - Open(filePath)
+	  - AddFile(filename)
+	  - ExistsFile(filename)
+	  - ExtractFile(filename, outputDirectory)
+	  - Extract(outputDirectory)
+	  - Close()
+	  - IsArchive(filePath)
+	
+	ArchiveItem object
+	  - Name
+	  - IsDirectory
+	  - CompressedSize 
+
+--------
+Download
+--------
+Properties & Methods
+	- StartDownload(id, remoteUrl, localPath)
+	- StopDownload(id)
+
+Callbacks
+	- SystemEx_OnDownloadFinish(id, status, localPath)
+	- SystemEx_OnDownloadProgress(id, completedSize, totalSize)
 
 -----------
 Drag & Drop
@@ -52,16 +76,11 @@ Properties & Methods
 	- CommandLine
 	- CommandLineArgs
 	- IsFirstInstance
+	- ExecutableFolder
+	- ExecutableName
 
 Callbacks
 	- SystemEx_OnNewInstance(commandLineArgs)
-
-----
-Misc
-----
-Properties & Methods
-	- VerifySignature(path, signature, type)
-	- GetArchive()
 
 -------------------
 Monitor information
@@ -86,6 +105,13 @@ Callbacks:
 	- SystemEx_OnMButtonDown(x, y)
 	- SystemEx_OnMButtonUp(x, y, dragged)
 
+---------
+Signature
+---------
+Properties & Methods
+	- VerifySignature(path, signature, type)
+	- GetSignature(path, type)
+
 ------
 Volume
 ------
@@ -103,10 +129,103 @@ Callbacks
 ** Methods, Properties and callbacks details
 *******************************************************************************************************
 
+=======================================================================================================
+== Archive
+=======================================================================================================
+
+Note: The only supported archive type is ARCHIVE_ZIP
+
+SystemEx.GetArchive
+-------------------
+
+Get an archive object that can be used to manipulate archive files
+
+
+Archive.Create(filePath, type)
+------------------------------
+
+Create a new archive
+
+
+Archive.Open(filePath)
+----------------------
+
+Open an existing archive file
+
+
+Archive.AddFile(filename)
+-------------------------
+
+Add a new file to the archive
+
+
+Archive.ExistsFile(filename)
+----------------------------
+
+Check if a file exists in the archive
+
+
+Archive.ExtractFile(filename, outputDirectory)
+----------------------------------------------
+
+Extract a single file from the archive
+
+
+Archive.Extract(outputDirectory)
+--------------------------------
+
+Extract the contents of the opened archive to outputDirectory
+
+
+Archive.Close()
+---------------
+
+Close the currently opened archive file
+
+
+Archive.IsArchive(filePath)
+---------------------------
+
+Return true if the archive format is handled, false otherwise
+
+
+=======================================================================================================
+== Download
+=======================================================================================================
+
+SystemEx.StartDownload(id, remoteUrl, localPath)
+-----------------------------------------------
+
+Download a file to a local path, identified by id
+
+SystemEx.StopDownload(id)
+-------------------------
+
+Stop a specific download
+
+
+SystemEx_OnDownloadFinish(id, status, localPath)
+------------------------------------------------
+
+Received when a download has ended. See the list of status codes for more information
+
+
+SystemEx_OnDownloadProgress(id, completedSize, totalSize)
+---------------------------------------------------------
+
+Received on download progress
+
+
+
+=======================================================================================================
+== Drag & Drop
+=======================================================================================================
+
 SystemEx_OnDropText(text)
 -------------------------
 
 Gets called when the user drops a text selection on the object
+
 
 SystemEx_OnDropFiles(files)
 ---------------------------
@@ -119,12 +238,17 @@ Notes:
 usual (although provided by the plugin instead of DesktopX). You can also get an array of file names
 instead of a |-separated list by implementing the SystemEx_OnDropFiles callback.
 
+
+
+=======================================================================================================
+== Instance
 =======================================================================================================
 
 SystemEx.CommandLine
 --------------------
 
 Get the full command line (including the path to the executable and DesktopX-specific arguments)
+
 
 SystemEx.CommandLineArgs
 ------------------------
@@ -139,20 +263,16 @@ Will be True if this is the first instance to run, False otherwise.
 It is preferable to check for it at startup and close the gadget accordingly,
 as only the first instance will receive a callback message when a new instance is started.
 
+
 SystemEx_OnNewInstance(commandLineArgs)
 ---------------------------------------
 
 Gets called when another instance is started. The command line arguments are passed in an array.
 
+
+
 =======================================================================================================
-
-SystemEx.VerifySignature(path, signature, type)
------------------------------------------------
-
-Check the signature of the file pointed to by path.
-
-The only type of signature supported at this time is SIGNATURE_SHA1
-
+== Monitor Information
 =======================================================================================================
 
 SystemEx.Monitors
@@ -172,6 +292,10 @@ SystemEx.NumberOfMonitors
 
 Gets the number of active monitors on the machine
 
+
+
+=======================================================================================================
+== Mousewheel
 =======================================================================================================
 
 SystemEx_OnMouseWheel(rotation)
@@ -188,6 +312,7 @@ Default value for page scrolling: 10
 A positive value indicates that the wheel was rotated forward, away from the user;
 a negative value indicates that the wheel was rotated backward, toward the user.
 
+
 SystemEx_OnMButtonDown(x, y) & SystemEx_OnMButtonUp(x, y, dragged)
 ---------------------------------------------------
 
@@ -197,10 +322,33 @@ called. When you release the button, the SystemEx_OnMButtonUp function will be c
 Both functions will have the mouse coordinates relative to your object passed as
 parameters.
 
+
+=======================================================================================================
+== Signature
+=======================================================================================================
+
+Note: The only type of signature supported at this time is SIGNATURE_SHA1
+
+
+SystemEx.VerifySignature(path, signature, type)
+-----------------------------------------------
+
+Check the signature of the file pointed to by path.
+
+
+SystemEx.GetSignature(path, type)
+---------------------------------
+
+Get the signature of the file pointed to by path.
+
+
+
+=======================================================================================================
+== Volume
 =======================================================================================================
 
 SystemEx_OnVolumeEvent(volume)
----------------------------------
+------------------------------
 
 When the user change the master volume through the volume mixer or another application
 your object callback is called. The volume parameter will contain the current master
@@ -210,7 +358,7 @@ XP Compatibility: never called.
 
 
 SystemEx_OnMuteEvent(isMuted)
----------------------------------
+-----------------------------
 
 If the volume is muted, your object callback is called.
 isMuted will be True if the volume has been muted, false otherwise.
@@ -219,7 +367,7 @@ XP Compatibility: never called.
 
 
 SystemEx.Volume
-------------------
+---------------
 
 Sets or gets the master volume.
 
@@ -231,7 +379,7 @@ Usage:
 
 
 SystemEx.Mute
-----------------
+-------------
 
 Mute or Unmute the audio stream
 
@@ -244,7 +392,7 @@ If Mute is True the audio stream is muted, otherwise it is not muted.
 
 
 SystemEx.PeakValue
----------------------
+------------------
 
 This is a read-only property. It allows you to get the peak level value for the
 currently playing sample.
@@ -258,9 +406,6 @@ XP Compatibility: might not work with some cards, in which case it will always
 			      returns 100.
 			      It reads from the waveout device, so it won't work when
 			      reading from a CD for example.
-
-=======================================================================================================
-
 
 *******************************************************************************************************
 ** Changelog

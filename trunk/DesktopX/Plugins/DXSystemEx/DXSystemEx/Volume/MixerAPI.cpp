@@ -176,8 +176,10 @@ DWORD MixerAPI::GetControlValue(DWORD **dwResults)
 	mxcd.paDetails = mxcd_u;
 
 	mmr = mixerGetControlDetails((HMIXEROBJ)m_HMixer, &mxcd, 0L);
-	if (MMSYSERR_NOERROR != mmr) 
+	if (MMSYSERR_NOERROR != mmr)  {
+		delete [] mxcd_u;
 		return 0;
+	}
 
 	m_bSuccess = TRUE;
 
@@ -266,8 +268,8 @@ BOOL MixerAPI::SetControlValue(DWORD *dwData, DWORD dwDataLen)
 	mxcd.paDetails = mxcd_u;
 
 	mmr = mixerGetControlDetails((HMIXEROBJ)m_HMixer, &mxcd, 0L);
-	if (MMSYSERR_NOERROR != mmr) 
-		return m_bSuccess;
+	if (MMSYSERR_NOERROR != mmr)
+		goto cleanup;
 
 	for( DWORD i=0; i<dwDataLen; i++ )
 	{
@@ -280,6 +282,7 @@ BOOL MixerAPI::SetControlValue(DWORD *dwData, DWORD dwDataLen)
 
 	m_bSuccess = TRUE;
 
+cleanup:
 	/* cleanup */
 	delete [] mxcd_u;
 

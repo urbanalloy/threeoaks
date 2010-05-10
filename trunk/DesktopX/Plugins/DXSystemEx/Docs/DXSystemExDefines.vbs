@@ -33,7 +33,9 @@
 '//
 '///////////////////////////////////////////////////////////////////////////////////////////////
 
-' Errors
+'=============================================
+'= Errors
+'=============================================
 Const ERR_INDEX_SIZE				    = 1
 Const ERR_DOMSTRING_SIZE			    = 2
 Const ERR_HIERARCHY_REQUEST		        = 3
@@ -52,19 +54,38 @@ Const ERR_INVALID_ACCESS			    = 15
 Const ERR_VALIDATION				    = 16
 Const ERR_TYPE_MISMATCH			        = 17
 
-' Signature
+'=============================================
+'= Signature
+'=============================================
 Const SIGNATURE_SHA1                    = 0
 
-' Archive (1.1 only)
+'=============================================
+'= Archive (1.1 only)
+'=============================================
 Const ARCHIVE_ZIP                       = 1
 
-
-' Download (1.1 only)
+'=============================================
+'= Download (1.1 only)
+'=============================================
 Const DOWNLOAD_OK                       = 0
-Const DOWNLOAD_NOT_CONNECTED            = 1
-Const DOWNLOAD_INTERNAL_ERROR           = 2
-Const DOWNLOAD_HTTP_ERROR               = 3
-Const DOWNLOAD_FILE_NOT_WRITABLE        = 4
-Const DOWNLOAD_FOLDER_NOT_WRITABLE      = 5
-Const DOWNLOAD_FOLDER_NOT_EXISTS        = 6
-
+Const DOWNLOAD_CANCELLED				= 1
+'			Connection / Request
+Const DOWNLOAD_INVALIDURL				= 2		
+Const DOWNLOAD_CANNOTCONNECT			= 3
+Const DOWNLOAD_CONNECTIONERROR			= 4
+Const DOWNLOAD_NAMENOTRESOLVED			= 5
+Const DOWNLOAD_SECUREFAILURE			= 6
+Const DOWNLOAD_TIMEOUT					= 7
+Const DOWNLOAD_HTTPERROR				= 8
+Const DOWNLOAD_READERROR				= 9
+'			Download Folder
+Const DOWNLOAD_INVALIDPAT				= 50
+Const DOWNLOAD_FOLDERDONOTEXISTS		= 51
+Const DOWNLOAD_FOLDERNOTWRITABLE		= 52
+Const DOWNLOAD_FILENOTWRITABLE			= 53
+'			Internal Errors
+Const DOWNLOAD_INTERNALERROR			= 100
+Const DOWNLOAD_CONNECTIONOPENFAILED		= 101
+Const DOWNLOAD_REQUESTOPENFAILED		= 102
+Const DOWNLOAD_REQUESTSENDFAILED		= 103
+Const DOWNLOAD_QUERYHEADERSFAILED		= 104

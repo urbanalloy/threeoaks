@@ -47,7 +47,8 @@ class ATL_NO_VTABLE CDropTarget :
 public:
 	CDropTarget() : m_hWnd(NULL),
 					m_objID(0),
-					m_fAllowDrop(FALSE)
+					m_fAllowDrop(false),
+					m_pDataObject(NULL)
 	{}
 
 	DECLARE_PROTECT_FINAL_CONSTRUCT()

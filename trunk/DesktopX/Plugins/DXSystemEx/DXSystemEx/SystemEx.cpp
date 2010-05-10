@@ -280,7 +280,7 @@ STDMETHODIMP CSystemEx::InterfaceSupportsErrorInfo(REFIID riid)
 		&IID_ISystemEx
 	};
 
-	for (int i=0; i < sizeof(arr) / sizeof(arr[0]); i++)
+	for (unsigned int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++)
 	{
 		if (InlineIsEqualGUID(*arr[i],riid))
 			return S_OK;
@@ -295,7 +295,7 @@ STDMETHODIMP CSystemEx::InterfaceSupportsErrorInfo(REFIID riid)
 /************************************************************************/
 /* HTTP Download                                                        */
 /************************************************************************/
-STDMETHODIMP CSystemEx::DownloadFile(int id, BSTR remoteUrl, BSTR localPath)
+STDMETHODIMP CSystemEx::StartDownload(int id, BSTR remoteUrl, BSTR localPath)
 {
 	// Check input
 	if (CComBSTR(remoteUrl) == CComBSTR(""))

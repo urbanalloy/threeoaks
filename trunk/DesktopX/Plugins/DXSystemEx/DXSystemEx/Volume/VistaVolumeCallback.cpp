@@ -35,7 +35,6 @@
 
 #include "stdafx.h"
 #include "VistaVolumeCallback.h"
-#include <math.h>
 #include <SDPlugin.h>
 
 extern BOOL (__stdcall *SDHostMessage)(UINT, DWORD, DWORD);

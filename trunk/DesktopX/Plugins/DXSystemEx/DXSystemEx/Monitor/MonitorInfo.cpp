@@ -36,7 +36,7 @@
 #include "stdafx.h"
 #include "MonitorInfo.h"
 
-void CMonitorInfo::Init(pair<RECT, bool> info)
+void CMonitorInfo::Init(const pair<RECT, bool> &info)
 {
 	m_rect.top = info.first.top;
 	m_rect.left = info.first.left;
@@ -56,7 +56,7 @@ STDMETHODIMP CMonitorInfo::InterfaceSupportsErrorInfo(REFIID riid)
 		&IID_IMonitorInfo
 	};
 
-	for (int i=0; i < sizeof(arr) / sizeof(arr[0]); i++)
+	for (unsigned int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++)
 	{
 		if (InlineIsEqualGUID(*arr[i],riid))
 			return S_OK;
@@ -78,30 +78,30 @@ STDMETHODIMP CMonitorInfo::get_IsPrimary(VARIANT_BOOL* isPrimary)
 	return S_OK;
 }
 
-STDMETHODIMP CMonitorInfo::get_Left(int* left)
+STDMETHODIMP CMonitorInfo::get_Left(int* monitorLeft)
 {
-	*left = m_rect.left;
+	*monitorLeft = m_rect.left;
 
 	return S_OK;
 }
 
-STDMETHODIMP CMonitorInfo::get_Top(int* top)
+STDMETHODIMP CMonitorInfo::get_Top(int* monitorTop)
 {
-	*top = m_rect.top;
+	*monitorTop = m_rect.top;
 
 	return S_OK;
 }
 
-STDMETHODIMP CMonitorInfo::get_Bottom(int* bottom)
+STDMETHODIMP CMonitorInfo::get_Bottom(int* monitorBottom)
 {
-	*bottom = m_rect.bottom;
+	*monitorBottom = m_rect.bottom;
 
 	return S_OK;
 }
 
-STDMETHODIMP CMonitorInfo::get_Right(int* right)
+STDMETHODIMP CMonitorInfo::get_Right(int* monitorRight)
 {
-	*right = m_rect.right;
+	*monitorRight = m_rect.right;
 
 	return S_OK;
 }

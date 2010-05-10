@@ -40,7 +40,6 @@
 
 #include "COMError.h"
 #include "DXSystemEx.h"
-#include "resource.h"
 
 #include "DragDrop/CDropTarget.h"
 #include "HTTP/FileDownloader.h"
@@ -201,7 +200,7 @@ END_CONNECTION_POINT_MAP()
 		/************************************************************************/
 		/* Download                                                             */
 		/************************************************************************/
-		STDMETHOD(DownloadFile)(int id, BSTR remoteUrl, BSTR localPath);
+		STDMETHOD(StartDownload)(int id, BSTR remoteUrl, BSTR localPath);
 		STDMETHOD(StopDownload)(int id);
 
 		/************************************************************************/
