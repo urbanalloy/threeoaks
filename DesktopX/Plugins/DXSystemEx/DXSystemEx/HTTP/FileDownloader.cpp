@@ -76,10 +76,9 @@ FileDownloader::FileDownloader(DWORD objID) : m_objID(objID),
 FileDownloader::~FileDownloader(void)
 {
 	// Check if any connection is still open
-	if (!m_requests.empty())
-	{
+	if (!m_requests.empty()) {
 		// Wait until all connections have been closed
-		//WaitForSingleObject(m_hShutdownEvent, /*60000*/INFINITE);
+		WaitForSingleObject(m_hShutdownEvent, /*60000*/INFINITE);
 	}
 
 	if (m_hShutdownEvent) {
@@ -201,8 +200,7 @@ void FileDownloader::CloseConnection(REQUEST_CONTEXT* context)
 	if (context == NULL)
 		return;
 
-	if (context->hRequest) {
-		//WinHttpSetStatusCallback(context->hRequest, NULL, NULL, NULL);
+	if (context->hRequest) {		
 		context->hRequest = NULL;
 		WinHttpCloseHandle(context->hRequest);
 	}
@@ -216,6 +214,9 @@ void FileDownloader::CloseConnection(REQUEST_CONTEXT* context)
 		delete [] context->buffer;
 		context->buffer = NULL;
 	}
+
+	// Remove context from connections
+	m_requests.erase(context->id);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -336,6 +337,13 @@ void CALLBACK DownloadStatusCallback(HINTERNET,
 									 DWORD dwStatusInformationLength)
 {
 	FileDownloader::REQUEST_CONTEXT* context = (FileDownloader::REQUEST_CONTEXT*)dwContext;
+
+	// Cleanup on closing
+	if (pFileDownloader->m_fClosing) {
+		WinHttpSetStatusCallback(context->hRequest, NULL, NULL, NULL);
+		SetEvent(pFileDownloader->m_hShutdownEvent);
+		return;
+	}
 
 	switch(dwInternetStatus)
 	{

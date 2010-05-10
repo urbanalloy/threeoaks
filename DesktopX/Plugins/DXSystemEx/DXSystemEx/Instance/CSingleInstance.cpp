@@ -37,6 +37,7 @@ CSingleInstance::CSingleInstance(const string& name)
 	m_isFirstInstance = false;
 
 	m_hInstanceDataMutex = CreateMutex(NULL, false, "CSingleInstanceDataMutex");
+	m_mutexWait = NULL;
 	m_hExecuteLock = NULL;
 }
 
@@ -259,7 +260,7 @@ char* CSingleInstance::CreateUniqueName(const char* pszGUID, char* pszBuffer, in
 	if(nMode & SI_DESKTOP_UNIQUE) {		
 		_tcscat_s(pszBuffer, MAX_PATH, _T("-"));
 		HDESK hDesk		= GetThreadDesktop(GetCurrentThreadId());
-		ULONG cchDesk	= MAX_PATH - _tcslen(pszBuffer) - 1;
+		ULONG cchDesk	= MAX_PATH - (_tcslen(pszBuffer) + 1);
 
 		if(!GetUserObjectInformation(hDesk, UOI_NAME, pszBuffer + _tcslen(pszBuffer), cchDesk, &cchDesk))
 			// Call will fail on Win9x

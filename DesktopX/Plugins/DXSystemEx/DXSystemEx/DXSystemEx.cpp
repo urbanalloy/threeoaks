@@ -40,7 +40,6 @@
 #include <SDScriptedPlugin.h>
 
 #include <time.h>
-#include "resource.h"
 #include "DXSystemEx.h"
 #include "dlldatax.h"
 #include "SystemEx.h"
@@ -75,6 +74,7 @@ INT_PTR CALLBACK ConfigurePlugin(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lPa
 			if(!config) {
 				MessageBox(hDlg, "Error initializing Dialog: config not present", "Initialization Error", MB_OK|MB_ICONERROR);
 				EndDialog(hDlg, 0);
+				break;
 			}
 
 			// Init & fill the controls

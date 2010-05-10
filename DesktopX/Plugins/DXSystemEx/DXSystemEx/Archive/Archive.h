@@ -41,7 +41,6 @@
 
 #include "COMError.h"
 #include "DXSystemEx.h"
-#include "resource.h"
 
 #include "Archive/ArchiveItem.h"
 

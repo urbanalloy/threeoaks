@@ -39,7 +39,7 @@
 
 #define DXSYSTEMEX_USER_AGENT L"DXSystemEx Downloader/1.0"
 
-void static CALLBACK DownloadStatusCallback(HINTERNET hInternet, DWORD_PTR dwContext, DWORD dwInternetStatus, LPVOID lpvStatusInformation, DWORD dwStatusInformationLength);
+static void CALLBACK DownloadStatusCallback(HINTERNET hInternet, DWORD_PTR dwContext, DWORD dwInternetStatus, LPVOID lpvStatusInformation, DWORD dwStatusInformationLength);
 
 #include <string>
 #include <map>
@@ -109,9 +109,6 @@ private:
 	// Session handle
 	HINTERNET m_hSession;
 
-	// Cleanup event
-	HANDLE m_hShutdownEvent;
-
 	// DesktopX objectID
 	DWORD m_objID;
 
@@ -132,6 +129,9 @@ public:
 	// Used by callback
 	CRITICAL_SECTION m_criticalSection;
 	BOOL m_fClosing;
+	// Cleanup event
+	HANDLE m_hShutdownEvent;
+
 	void OnHandleClosing(REQUEST_CONTEXT* context);
 	void CloseConnection(REQUEST_CONTEXT* context);
 	DownloadStatus SaveFile(REQUEST_CONTEXT* context);

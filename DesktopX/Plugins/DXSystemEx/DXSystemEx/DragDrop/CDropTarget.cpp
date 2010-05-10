@@ -85,10 +85,10 @@ DWORD CDropTarget::DropEffect(DWORD /*grfKeyState*/, POINTL /*pt*/, DWORD dwAllo
 
 	// 3. no key-modifiers were specified (or drop effect not allowed), so
 	//    base the effect on those allowed by the DropSource
-	if(dwEffect == 0) {
+	//if (!dwEffect == 0) {
 		if(dwAllowed & DROPEFFECT_COPY) dwEffect = DROPEFFECT_COPY;
 		if(dwAllowed & DROPEFFECT_MOVE) dwEffect = DROPEFFECT_COPY;
-	}
+	//}
 
 	return dwEffect;
 }

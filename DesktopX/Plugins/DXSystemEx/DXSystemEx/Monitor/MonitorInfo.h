@@ -40,7 +40,6 @@
 
 #include "COMError.h"
 #include "DXSystemEx.h"
-#include "resource.h"
 
 #include <string>
 #include <vector>
@@ -55,7 +54,9 @@ class ATL_NO_VTABLE CMonitorInfo :
     public ISupportErrorInfo
 {
 public:
-	CMonitorInfo() {}
+	CMonitorInfo() : m_primary(false) {
+		(void) SetRectEmpty(&m_rect);
+	}
 
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -83,7 +84,7 @@ END_COM_MAP()
 		bool m_primary;
 
 	public:
-		void Init(pair<RECT, bool> info);
+		void Init(const pair<RECT, bool> &info);
 
 		//////////////////////////////////////////////////////////////////////////
 		// ISupportErrorInfo

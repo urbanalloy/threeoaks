@@ -23,7 +23,7 @@
 //
 // Modified by:  Julien Templier
 //
-// Version 1.0   - Merged changes from original zip./unzip files
+// Version 1.0   - Merged changes from original zip/unzip files
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
