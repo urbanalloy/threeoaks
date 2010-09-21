@@ -375,10 +375,9 @@ label_expiration:
 			_ltoa_s((long) objID, instanceID, 10);
 			lstrcpy((char *) param1, instanceID);
 
-			char iniFile[MAX_PATH], name[MAX_PATH];
-			SDHostMessage(SD_GET_OBJECT_DIRECTORY, (DWORD) iniFile, 0);
-			sprintf_s(name, "DXCanvas-%s.ini", iniFile, instanceID);
-			sprintf_s(iniFile, "%s\\%s", iniFile, name);
+			char path[MAX_PATH], name[MAX_PATH];
+			SDHostMessage(SD_GET_OBJECT_DIRECTORY, (DWORD) path, 0);
+			sprintf_s(name, "%s\\DXCanvas-%s.ini", path, instanceID);
 
 			// Save configuration
 			WritePrivateProfileInt("Config", "Width", pCanvas->config->width, iniFile);
