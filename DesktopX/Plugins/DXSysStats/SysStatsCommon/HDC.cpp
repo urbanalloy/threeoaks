@@ -127,10 +127,10 @@ void CHDC::MaskIn(HDC maskHDC)
 						// We actually want to modify the destination alpha.
 						// We apply the same scaling to all parts of the pixel
 						// (i.e. ARGB)
-						*pDest = *pDest * newAlpha / 256;
-						*(pDest-1) = *(pDest-1) * newAlpha / 256;
-						*(pDest-2) = *(pDest-2) * newAlpha / 256;
-						*(pDest-3) = *(pDest-3) * newAlpha / 256;
+						*pDest = (unsigned char)(*pDest * newAlpha / 256);
+						*(pDest-1) = (unsigned char)(*(pDest-1) * newAlpha / 256);
+						*(pDest-2) = (unsigned char)(*(pDest-2) * newAlpha / 256);
+						*(pDest-3) = (unsigned char)(*(pDest-3) * newAlpha / 256);
 					}
 				}
 				else
@@ -199,10 +199,10 @@ void CHDC::MaskOut(HDC maskHDC)
 						// We actually want to modify the destination alpha.
 						// We apply the same scaling to all parts of the pixel
 						// (i.e. ARGB)
-						*pDest = *pDest * newAlpha / 256;
-						*(pDest-1) = *(pDest-1) * newAlpha / 256;
-						*(pDest-2) = *(pDest-2) * newAlpha / 256;
-						*(pDest-3) = *(pDest-3) * newAlpha / 256;
+						*pDest = (unsigned char)(*pDest * newAlpha / 256);
+						*(pDest-1) = (unsigned char)(*(pDest-1) * newAlpha / 256);
+						*(pDest-2) = (unsigned char)(*(pDest-2) * newAlpha / 256);
+						*(pDest-3) = (unsigned char)(*(pDest-3) * newAlpha / 256);
 					}
 				}
 				else

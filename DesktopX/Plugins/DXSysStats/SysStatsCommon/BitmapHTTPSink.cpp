@@ -70,7 +70,7 @@ void BitmapHTTPSink::ReadResponse()
 	if (SUCCEEDED(hr))
 	{    // Print response to file temp1.gif.
 		IStream*    pStream = NULL; 
-		HANDLE      hf = INVALID_HANDLE_VALUE; 
+		/*HANDLE      hf = INVALID_HANDLE_VALUE; */
 		// Check that an IStream was received.
 		if (VT_UNKNOWN == V_VT(&varResponse) || 
 			VT_STREAM == V_VT(&varResponse)) 

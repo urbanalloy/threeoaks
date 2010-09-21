@@ -1,13 +1,14 @@
 //Header file for ObjectDock DockletSDK
 #pragma once
 
-#include <GdiplusH.h>
+#include <Gdiplus.h>
+using namespace Gdiplus;
+#pragma comment(lib, "gdiplus.lib")
 
 BOOL DockletIsVisible(HWND hwndDocklet);
 BOOL DockletGetRect(HWND hwndDocklet, RECT *rcDocklet);
 int DockletGetLabel(HWND hwndDocklet, char *szLabel);
 void DockletSetLabel(HWND hwndDocklet, char *szLabel);
-
 
 Bitmap *DockletLoadGDIPlusImage(char *szImage);
 void DockletSetImage(HWND hwndDocklet, Image *lpImageNew, BOOL bAutomaticallyDeleteImage = TRUE);
@@ -18,6 +19,7 @@ BOOL DockletBrowseForImage(HWND hwndParent, char *szImage, char *szAlternateRela
 
 void DockletLockMouseEffect(HWND hwndDocklet, BOOL bLock);
 void DockletDoAttentionAnimation(HWND hwndDocklet);
+void DockletDoClickAnimation(HWND hwndDocklet);
 
 int WritePrivateProfileInt(LPCTSTR lpAppName, LPCTSTR lpKeyName, int iValue, LPCTSTR lpFileName);
 
@@ -25,6 +27,7 @@ void DockletGetRootFolder(HWND hwndDocklet, char *szFolder);
 void DockletGetRelativeFolder(HWND hwndDocklet, char *szFolder);
 
 void DockletDefaultConfigDialog(HWND hwndDocklet);
+BOOL DockletRemoveSelf(HWND hwndDocklet, WPARAM wParam);
 
 int DockletQueryDockEdge(HWND hwndDocklet);
 int DockletQueryDockAlign(HWND hwndDocklet);

@@ -25,7 +25,7 @@
 #include "Hook.h"
 
 #pragma data_seg(".SYSCMD")
-UINT monitorOff = -1;	// Unknown
+UINT monitorOff = (UINT)-1;	// Unknown
 UINT UWM_SYSCOMMAND = 0;
 UINT numHooked = 0;
 HHOOK hook = NULL;
@@ -123,7 +123,7 @@ __declspec(dllexport) void clearSysCommandHook()
 	if (WaitForSingleObject(hMutex, INFINITE) == WAIT_OBJECT_0)
 	{
 		if (--numHooked == 0) {
-			BOOL unhooked = UnhookWindowsHookEx(hook);
+			/*BOOL unhooked = */UnhookWindowsHookEx(hook);
 			DWORD res;
 			::SendMessageTimeout(HWND_BROADCAST, WM_NULL, 0, 0, SMTO_NORMAL, 1000, &res);
 		}

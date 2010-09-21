@@ -329,7 +329,7 @@ STDMETHODIMP CompositeOverlayImpl<B>::Item(VARIANT index, IOverlay **pRet)
 	else
 		return ArrayPtrVariant<IOverlay, SimpleOverlayImpl2<B> >::Item(index, pRet);
 
-	return E_INVALIDARG;
+	/*return E_INVALIDARG;*/
 }
 
 template <class B>

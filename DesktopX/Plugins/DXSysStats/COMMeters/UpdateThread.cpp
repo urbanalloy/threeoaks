@@ -98,7 +98,7 @@ AtlTrace("ut::ut1\n");
 	LPOLESTR lpolestr;
 	StringFromCLSID(__uuidof(pXMLDoc), &lpolestr);
 	AtlTrace(L"%s\n", lpolestr);
-	HRESULT hr = CoMarshalInterThreadInterfaceInStream(__uuidof(pXMLDoc), pXMLDoc, &docStream);
+	/*HRESULT hr = */CoMarshalInterThreadInterfaceInStream(__uuidof(pXMLDoc), pXMLDoc, &docStream);
 	DWORD threadID;
 	hUpdateThread = CreateThread(NULL, 0, _updateThread, (VOID *) this, 0, &threadID);
 	::CoTaskMemFree(lpolestr);
@@ -250,7 +250,7 @@ STDMETHODIMP UpdateThread::get_UseXPath(VARIANT_BOOL *pVal)
 
 STDMETHODIMP UpdateThread::put_UseXPath(VARIANT_BOOL newVal)
 {
-	useXPath = newVal;
+	useXPath = (newVal == VARIANT_TRUE) ? true : false;
 
 	return S_OK;
 }
@@ -320,7 +320,7 @@ STDMETHODIMP UpdateThread::GetNodeList(BSTR xpath, IDispatch **pNodeList)
 	if (pNodeList == NULL)
 		return E_POINTER;
 
-	IXMLDOMNodeListPtr pNL = pXMLDoc->selectNodes(xpath);
+	MSXML2::IXMLDOMNodeListPtr pNL = pXMLDoc->selectNodes(xpath);
 	AtlTrace("%d\n", pNL->length);
 	*pNodeList = (::MSXML2::IXMLDOMNodeList*)pNL;
 	(*pNodeList)->AddRef();
@@ -355,7 +355,7 @@ STDMETHODIMP UpdateThread::GetAsString(BSTR format, BSTR selector, BSTR *pRet)
 		{
 			if (useXPath)
 			{
-				IXMLDOMDocumentPtr xslt;
+				MSXML2::IXMLDOMDocumentPtr xslt;
 				xslt.CreateInstance("Msxml2.DOMDocument", NULL, CLSCTX_INPROC_SERVER);
 				try
 				{
@@ -410,7 +410,7 @@ STDMETHODIMP UpdateThread::GetAsString(BSTR format, BSTR selector, BSTR *pRet)
 				try
 				{
 					AtlTrace("Using XSL Pattern\n");
-					IXMLDOMNodePtr node = pXMLDoc->selectSingleNode(selector_t);
+					MSXML2::IXMLDOMNodePtr node = pXMLDoc->selectSingleNode(selector_t);
 					if (node != NULL)
 					{
 
@@ -441,9 +441,9 @@ STDMETHODIMP UpdateThread::GetAsString(BSTR format, BSTR selector, BSTR *pRet)
 	return S_OK;
 }
 
-void UpdateThread::ReportError(IXMLDOMDocumentPtr pDoc)
+void UpdateThread::ReportError(MSXML2::IXMLDOMDocumentPtr pDoc)
 {
-	IXMLDOMParseErrorPtr parseError = pDoc->GetparseError();
+	MSXML2::IXMLDOMParseErrorPtr parseError = pDoc->GetparseError();
 	BSTR bstrReason = parseError->Getreason();
 	long ulCode = parseError->GeterrorCode();
 	long ulLine = parseError->Getline();
@@ -609,7 +609,7 @@ void UpdateThread::getData()
 		AtlTrace("*** MSXML4 failed, trying standard %s\n", (char*)URL);
 
 		try {
-			IXMLDOMDocumentPtr pRequest;
+			MSXML2::IXMLDOMDocumentPtr pRequest;
 			pRequest.CreateInstance("Msxml2.DOMDocument", NULL, CLSCTX_INPROC_SERVER);
 			pRequest->async = false;
 			pRequest->load(URL);

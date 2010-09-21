@@ -2,7 +2,8 @@
 
 #include <windows.h>
 #include <commdlg.h>
-#include <GdiplusH.h>
+#include <Gdiplus.h>
+using namespace Gdiplus;
 
 template <class I> class ArrayPtr;
 class Meter;

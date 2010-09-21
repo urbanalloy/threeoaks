@@ -174,7 +174,6 @@ LRESULT CMeterDialog::setInterval(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
 
 	if (mList != CB_ERR)
 	{
-		BOOL iRet = FALSE;
 		double interval = 1.0;
 		char val[64];
 		GetDlgItemText(wID, val, sizeof(val));

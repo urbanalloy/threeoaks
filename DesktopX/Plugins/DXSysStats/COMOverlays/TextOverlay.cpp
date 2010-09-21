@@ -38,7 +38,7 @@ STDMETHODIMP CTextOverlay::InterfaceSupportsErrorInfo(REFIID riid)
 	};
 	for (int i=0; i < sizeof(arr) / sizeof(arr[0]); i++)
 	{
-		if (::ATL::InlineIsEqualGUID(*arr[i],riid))
+		if (InlineIsEqualGUID(*arr[i],riid))
 			return S_OK;
 	}
 	return S_FALSE;
@@ -309,7 +309,7 @@ STDMETHODIMP CTextOverlay::Render(LONG hdc)
 		get_Alpha(&alpha);
 		for (int i=radius; i>0; i--)
 		{
-			Color _blurColor(alpha/radius, (BYTE)(blurColor >> Color::BlueShift), (BYTE)(blurColor >> Color::GreenShift), (BYTE)(blurColor >> Color::RedShift));
+			Color _blurColor((BYTE)(alpha/radius), (BYTE)(blurColor >> Color::BlueShift), (BYTE)(blurColor >> Color::GreenShift), (BYTE)(blurColor >> Color::RedShift));
 			if (blurColor == -1)
 			{
 				_blurColor = Color(alpha/radius, color.GetRed(), color.GetGreen(), color.GetBlue());

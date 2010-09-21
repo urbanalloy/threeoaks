@@ -3,7 +3,8 @@
 #include "MeterImpl.cpp"
 #pragma comment(lib, "SysStatsCommon.lib")
 #pragma comment(lib, "SysStatsCOM.lib")
-#include <GdiplusH.h>
+#include <Gdiplus.h>
+using namespace Gdiplus;
 #include "SysStatsUtils.h"
 #include "COMOverlays.h"
 #include "CompositeOverlayImpl.cpp"

@@ -74,7 +74,7 @@ public:
 	void getData();
 
 protected:
-	void ReportError(IXMLDOMDocumentPtr pDoc);
+	void ReportError(MSXML2::IXMLDOMDocumentPtr pDoc);
 
 private:
 	bool finished;
@@ -93,7 +93,7 @@ private:
 	HANDLE hXMLMutex;
 	HANDLE hUpdateEvent;
 	HANDLE hUpdateThread;
-	IXMLDOMDocumentPtr pXMLDoc;
+	MSXML2::IXMLDOMDocumentPtr pXMLDoc;
 	MSXML2::IXMLDOMDocument *pThreadDoc;
 	IStream	*docStream;
 

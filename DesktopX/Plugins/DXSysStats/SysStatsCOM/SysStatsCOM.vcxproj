@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName />
+    <SccLocalPath />
+    <Keyword>AtlProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfAtl>Static</UseOfAtl>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfAtl>Static</UseOfAtl>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)Builds\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Builds\$(Configuration)\Intermediate\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)Builds\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Builds\$(Configuration)\Intermediate\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level4</WarningLevel>
+      <AdditionalIncludeDirectories>..\SysStatsCommon;..\..\..\..\Libs\wtl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;_USRDLL;_WIN32_WINNT=0x500;WINVER=0x500;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>
+      </PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(OutDir)</ProgramDataBaseFileName>
+      <DisableSpecificWarnings>4100;4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Midl>
+      <TypeLibraryName>.\Release\SysStatsCOM.tlb</TypeLibraryName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(IntDir)\SysStatsCOM.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <LinkDLL>true</LinkDLL>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)\SysStatsCOM.dll</OutputFile>
+      <ImportLibrary>$(OutDir)\SysStatsCOM.lib</ImportLibrary>
+      <AdditionalDependencies>SysStatsCommon.lib;gdiplus.lib;odbc32.lib;odbccp32.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>.\SysStatsCOM.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
+    </Link>
+    <CustomBuildStep>
+      <Command>echo "Disabled Registration"
+echo regsvr32 /s /c "$(TargetPath)"
+echo regsvr32 exec. time &gt; "$(OutDir)\regsvr32.trg" </Command>
+      <Message>Performing registration</Message>
+      <Outputs>$(OutDir)\regsvr32.trg;%(Outputs)</Outputs>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level4</WarningLevel>
+      <MinimalRebuild>true</MinimalRebuild>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\SysStatsCommon;..\..\..\..\Libs\wtl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;_USRDLL;_WIN32_WINNT=0x0500;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BrowseInformation>true</BrowseInformation>
+      <PrecompiledHeaderOutputFile>
+      </PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(OutDir)</ProgramDataBaseFileName>
+      <DisableSpecificWarnings>4100;4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Midl>
+      <TypeLibraryName>.\Debug\SysStatsCOM.tlb</TypeLibraryName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(IntDir)\SysStatsCOM.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <LinkDLL>true</LinkDLL>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)/SysStatsCOM.dll</OutputFile>
+      <ImportLibrary>$(OutDir)\SysStatsCOM.lib</ImportLibrary>
+      <AdditionalDependencies>SysStatsCommon.lib;gdiplus.lib;odbc32.lib;odbccp32.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>.\SysStatsCOM.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
+    </Link>
+    <CustomBuildStep>
+      <Command>echo "Disabled registration"
+echo regsvr32 /s /c "$(TargetPath)"
+echo regsvr32 exec. time &gt; "$(OutDir)\regsvr32.trg" </Command>
+      <Message>Performing registration</Message>
+      <Outputs>$(OutDir)\regsvr32.trg;%(Outputs)</Outputs>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AppConfig.cpp" />
+    <ClCompile Include="CClientModel.cpp" />
+    <ClCompile Include="CCompositeOverlay.cpp" />
+    <ClCompile Include="CControllerFactory.cpp" />
+    <ClCompile Include="CMeterDialog.cpp" />
+    <ClCompile Include="CMeterFactory.cpp" />
+    <ClCompile Include="CMeterHome.cpp" />
+    <ClCompile Include="COMINIFile.cpp" />
+    <ClCompile Include="CompositeOverlayDialog.cpp" />
+    <ClCompile Include="ConfigureDialog.cpp" />
+    <ClCompile Include="ControllerHome.cpp" />
+    <ClCompile Include="ControllerPanel.cpp" />
+    <ClCompile Include="COverlayFactory.cpp" />
+    <ClCompile Include="COverlayHome.cpp" />
+    <ClCompile Include="COverlayPanel.cpp" />
+    <ClCompile Include="CRenameDialog.cpp" />
+    <ClCompile Include="CSubject.cpp" />
+    <ClCompile Include="dlldatax.c" />
+    <ClCompile Include="IINIPersister.cpp" />
+    <ClCompile Include="IniFile.cpp" />
+    <ClCompile Include="IniSection.cpp" />
+    <ClCompile Include="IScriptConsole.cpp" />
+    <ClCompile Include="Label.cpp" />
+    <ClCompile Include="MetaData.cpp" />
+    <ClCompile Include="ModelPanel.cpp" />
+    <ClCompile Include="PluginManager.cpp" />
+    <ClCompile Include="QueueTimerService.cpp" />
+    <ClCompile Include="ScriptConnectionObject.cpp" />
+    <ClCompile Include="ScriptConsole.cpp" />
+    <ClCompile Include="ScriptUtils.cpp" />
+    <ClCompile Include="StdAfx.cpp" />
+    <ClCompile Include="SysStatsCOM.cpp" />
+    <ClCompile Include="WeakReference.cpp" />
+    <ClCompile Include="WeakTarget.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="SysStatsCOM.def" />
+    <CustomBuild Include="Animation.rgs" />
+    <CustomBuild Include="AppConfig.rgs" />
+    <CustomBuild Include="ClientModel.rgs" />
+    <CustomBuild Include="COMINIFile.rgs" />
+    <CustomBuild Include="CompositeOverlay.rgs" />
+    <CustomBuild Include="Controller.rgs" />
+    <CustomBuild Include="ControllerHome.rgs" />
+    <CustomBuild Include="IINIPersister.rgs" />
+    <CustomBuild Include="Label.rgs" />
+    <CustomBuild Include="lientModel.rgs" />
+    <CustomBuild Include="MetaData.rgs" />
+    <CustomBuild Include="Meter.rgs" />
+    <CustomBuild Include="meter1.bin">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="MeterEvents.rgs" />
+    <CustomBuild Include="MeterHome.rgs" />
+    <CustomBuild Include="MeterHomeProps.rgs" />
+    <CustomBuild Include="Obserrver.rgs" />
+    <CustomBuild Include="Overlay.rgs" />
+    <CustomBuild Include="OverlayHome.rgs" />
+    <CustomBuild Include="Persister.rgs" />
+    <CustomBuild Include="ScriptConnectionObject.rgs" />
+    <CustomBuild Include="ScriptUtils.rgs" />
+    <CustomBuild Include="SimpleOverlay2.rgs" />
+    <CustomBuild Include="Tester.rgs" />
+    <CustomBuild Include="TimerClient.rgs" />
+    <CustomBuild Include="TimerService.rgs" />
+    <CustomBuild Include="TreeViewCombo.rgs" />
+    <CustomBuild Include="WeakReference.rgs" />
+    <CustomBuild Include="WeakTarget.rgs" />
+    <CustomBuild Include="Whatever.rgs" />
+    <CustomBuild Include="SysStatsCOM.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="SysStatsCOM.idl">
+      <TypeLibraryName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\SysStatsCOM.tlb</TypeLibraryName>
+      <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">SysStatsCOM.h</HeaderFileName>
+      <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">SysStatsCOM_i.c</InterfaceIdentifierFileName>
+      <TargetEnvironment Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Win32</TargetEnvironment>
+      <TypeLibraryName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\SysStatsCOM.tlb</TypeLibraryName>
+      <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">SysStatsCOM.h</HeaderFileName>
+      <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">SysStatsCOM_i.c</InterfaceIdentifierFileName>
+      <TargetEnvironment Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Win32</TargetEnvironment>
+    </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SysStatsCOM.rc">
+      <Culture Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">0x0409</Culture>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OUTDIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">0x0409</Culture>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OUTDIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AppConfig.h" />
+    <ClInclude Include="CategoryFactoryT.h" />
+    <ClInclude Include="CClientModel.h" />
+    <ClInclude Include="CCompositeOverlay.h" />
+    <ClInclude Include="CControllerFactory.h" />
+    <ClInclude Include="CMeterDialog.h" />
+    <ClInclude Include="CMeterFactory.h" />
+    <ClInclude Include="CMeterHome.h" />
+    <ClInclude Include="COMINIFile.h" />
+    <ClInclude Include="CompositeOverlayDialog.h" />
+    <ClInclude Include="CompositeOverlayImpl.h" />
+    <ClInclude Include="ConfigureDialog.h" />
+    <ClInclude Include="ControllerHome.h" />
+    <ClInclude Include="ControllerImpl.h" />
+    <ClInclude Include="ControllerPanel.h" />
+    <ClInclude Include="COverlayFactory.h" />
+    <ClInclude Include="COverlayHome.h" />
+    <ClInclude Include="COverlayPanel.h" />
+    <ClInclude Include="CRenameDialog.h" />
+    <ClInclude Include="CSubject.h" />
+    <ClInclude Include="dlldatax.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="help_funcs.h" />
+    <ClInclude Include="IINIPersister.h" />
+    <ClInclude Include="IniFile.h" />
+    <ClInclude Include="IniSection.h" />
+    <ClInclude Include="IScriptConsole.h" />
+    <ClInclude Include="Label.h" />
+    <ClInclude Include="MetaData.h" />
+    <ClInclude Include="MeterImpl.h" />
+    <ClInclude Include="ModelPanel.h" />
+    <ClInclude Include="OverlayImpl.h" />
+    <ClInclude Include="PluginManager.h" />
+    <ClInclude Include="QueueTimerService.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="ScriptConnectionObject.h" />
+    <ClInclude Include="ScriptConsole.h" />
+    <ClInclude Include="ScriptUtils.h" />
+    <ClInclude Include="SimpleOverlayImpl.h" />
+    <ClInclude Include="SimpleOverlayImpl2.h" />
+    <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="TimerClientImpl.h" />
+    <ClInclude Include="WeakReference.h" />
+    <ClInclude Include="WeakTarget.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

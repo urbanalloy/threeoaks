@@ -1,17 +1,17 @@
 /*
  * SysStats Widget Framework
  * Copyright (C) 2002-2006 Paul Andrews
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -23,7 +23,8 @@
 #define __TEXTOVERLAY_H_
 
 #include <commdlg.h>
-#include <GdiplusH.h>
+#include <Gdiplus.h>
+using namespace Gdiplus;
 
 #include "COMOverlays.h"       // main symbols
 #include "resource.h"       // main symbols
@@ -32,7 +33,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // CTextOverlay
-class ATL_NO_VTABLE CTextOverlay : 
+class ATL_NO_VTABLE CTextOverlay :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CTextOverlay, &CLSID_TextOverlay>,
 	public ISupportErrorInfo,

@@ -110,7 +110,7 @@ STDMETHODIMP ArrayPtrVariant<I, B>::GetIndex(I* item, short *pRet)
 	{
 		if (coll[i] == item)
 		{
-			*pRet = i;
+			*pRet = (short)i;
 			return S_OK;
 		}
 	}
@@ -178,7 +178,7 @@ STDMETHODIMP ArrayPtrVariant<I, B>::Swap(VARIANT v1, VARIANT v2)
 template <class I, class B>
 STDMETHODIMP ArrayPtrVariant<I, B>::Count(short *pRet)
 {
-	*pRet = _count;
+	*pRet = (short)_count;
 
 	return S_OK;
 }

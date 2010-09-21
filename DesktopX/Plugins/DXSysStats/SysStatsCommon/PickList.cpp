@@ -244,7 +244,7 @@ LRESULT PickList<C>::select(C curVal)
 {
 	C data;
 	bool set = false;
-	short message = 0;
+	/*short message = 0;*/
 
 	for (LRESULT i = SendDlgItemMessage(hDlg,wId,CB_GETCOUNT,0,0); i > 0 && !set; i--)
 	{
@@ -321,7 +321,7 @@ LRESULT PickList<C>::getItemID(C *out, C def)
 template <class C>
 LRESULT PickList<C>::selectValue(C curVal)
 {
-	LRESULT i = ::SendDlgItemMessage(hDlg, wId,  CB_FINDSTRINGEXACT, -1, (LPARAM)((char*)curVal));
+	LRESULT i = ::SendDlgItemMessage(hDlg, wId,  CB_FINDSTRINGEXACT, (WPARAM)-1, (LPARAM)((char*)curVal));
 	if (i != CB_ERR)
 	{
 		SendDlgItemMessage(hDlg,wId,CB_SETCURSEL,i,0);

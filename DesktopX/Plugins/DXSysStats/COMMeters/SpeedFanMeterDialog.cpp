@@ -101,11 +101,11 @@ LRESULT SpeedFanMeterDialog::resetIndexList()
 			::ltoa(i, buf, 10);
 			indexNames[i] = ::strdup(buf);
 		}
-		indexNames[i] = NULL;
+		indexNames[count] = NULL;
 
 		SendDlgItemMessage(IDC_COMBO_INDEX,CB_RESETCONTENT,0,0);
 		indexList.init(m_hWnd, IDC_COMBO_INDEX, indexNames, indexData, curIndex);
-		for (i=0; indexNames[i]; i++)
+		for (int i=0; indexNames[i]; i++)
 		{
 			free((void*)(indexNames[i]));
 		}

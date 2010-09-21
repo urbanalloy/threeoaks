@@ -303,7 +303,7 @@ HRESULT SysStatsUtils::VariantToInteger(VARIANT *v, long *pRet)
 	case VT_INT : *pRet = V_INT(v); return S_OK;
 	case VT_UINT: *pRet = V_UINT(v); return S_OK;
 	case VT_VARIANT : return VariantToInteger(v->pvarVal, pRet);
-		return S_OK;
+		/*return S_OK;*/
 	}
 
 	return E_INVALIDARG;
@@ -375,16 +375,16 @@ HRESULT SysStatsUtils::StringToVariant(char *in, VARTYPE vt, VARIANT *pRet)
 
 	switch (vt)
 	{
-	case VT_BOOL: pRet->boolVal = l; return S_OK;
-	case VT_I1  : pRet->cVal = l; return S_OK;
-	case VT_I2  : pRet->iVal = l; return S_OK;
+	case VT_BOOL: pRet->boolVal = (VARIANT_BOOL)l; return S_OK;
+	case VT_I1  : pRet->cVal = (CHAR)l; return S_OK;
+	case VT_I2  : pRet->iVal = (SHORT)l; return S_OK;
 	case VT_I4  : pRet->lVal = l; return S_OK;
 	case VT_INT : pRet->intVal = l; return S_OK;
-	case VT_UI1 : pRet->bVal = l; return S_OK;
-	case VT_UI2 : pRet->uiVal = l; return S_OK;
+	case VT_UI1 : pRet->bVal = (BYTE)l; return S_OK;
+	case VT_UI2 : pRet->uiVal = (USHORT)l; return S_OK;
 	case VT_UI4 : pRet->ulVal = l; return S_OK;
 	case VT_UINT: pRet->uintVal = l; return S_OK;
-	case VT_R4  : pRet->fltVal = d; return S_OK;
+	case VT_R4  : pRet->fltVal = (FLOAT)d; return S_OK;
 	case VT_R8  : pRet->dblVal = d; return S_OK;
 	case VT_BSTR: pRet->bstrVal = _com_util::ConvertStringToBSTR(in); return S_OK;
 	case VT_VARIANT :
@@ -429,7 +429,7 @@ HRESULT SysStatsUtils::FreeVariant(const VARIANT &var)
 		return S_OK;;
 	}
 
-	return E_INVALIDARG;
+	/*return E_INVALIDARG;*/
 }
 
 void SysStatsUtils::CLSIDToName(const CLSID& clsid, LPCTSTR szFriendlyName, int iLength)

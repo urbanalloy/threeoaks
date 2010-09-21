@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <windows.h>
-#include <GdiplusH.h>
+#include <Gdiplus.h>
+using namespace Gdiplus;
 
 #include "Docklet.h"
 #include "Meter.h"
@@ -153,7 +154,7 @@ void CompositeOverlay::render(Graphics *graphics)
 
 	GraphicsState gState = graphics->Save();
     graphics->MultiplyTransform(&matrix);
-   
+
 	for (i=count()-1; i>=0; i--)
 	{
 		(*this)[i]->render(graphics);
