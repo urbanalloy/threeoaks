@@ -120,7 +120,7 @@ LRESULT MBMDialog::resetInstanceList()
 
 		SendDlgItemMessage(IDC_COMBO_INSTANCE,CB_RESETCONTENT,0,0);
 		nameList.init(m_hWnd, IDC_COMBO_INSTANCE, sensorNames, sensorData, curIndex);
-		for (i=0; sensorNames[i]; i++)
+		for (int i=0; sensorNames[i]; i++)
 		{
 			free((void*)(sensorNames[i]));
 		}

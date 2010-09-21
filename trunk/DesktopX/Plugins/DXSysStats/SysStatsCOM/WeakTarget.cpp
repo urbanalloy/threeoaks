@@ -33,7 +33,7 @@ STDMETHODIMP CWeakTarget::InterfaceSupportsErrorInfo(REFIID riid)
 	};
 	for (int i=0; i < sizeof(arr) / sizeof(arr[0]); i++)
 	{
-		if (::ATL::InlineIsEqualGUID(*arr[i],riid))
+		if (InlineIsEqualGUID(*arr[i],riid))
 			return S_OK;
 	}
 	return S_FALSE;
@@ -52,7 +52,7 @@ CWeakTarget::~CWeakTarget()
 void CWeakTarget::FinalRelease()
 {
 	// Used to be in FinalRelease - but that never gets called!
-	short count = referers.count();
+	short count = (short)referers.count();
 
 	for (int i=0; i<count; i++)
 	{

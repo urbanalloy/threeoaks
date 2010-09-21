@@ -50,7 +50,7 @@ LRESULT ScrollerOverlayDialog::alpha(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
 
 	if (iRet)
 	{
-		((CScrollerOverlay*)overlay)->put_Alpha(i);
+		((CScrollerOverlay*)overlay)->put_Alpha((BYTE)i);
 		notifyObserver();
 	}
 

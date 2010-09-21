@@ -7,7 +7,8 @@
 #include <sys/stat.h>
 #include <comdef.h>
 
-#include <GdiplusH.h>
+#include <Gdiplus.h>
+using namespace Gdiplus;
 #include "SysStatsUtils.h"
 #include "COMOverlays.h"
 #include "AnimatorOverlay.h"
@@ -214,9 +215,9 @@ STDMETHODIMP CAnimatorOverlay::Render(LONG _hdc)
 
 		// Need this version of DrawImage otherwise the image is mysteriously scaled.
 		gMask.DrawImage(
-		   mask, 
+		   mask,
 		   Rect(0, 0, maskWidth, maskHeight),	// Destination rectangle
-		   0,						// Source rectangle X 
+		   0,						// Source rectangle X
 		   0,						// Source rectangle Y
 		   maskWidth,		// Source rectangle width
 		   maskHeight,		// Source rectangle height
@@ -230,9 +231,9 @@ STDMETHODIMP CAnimatorOverlay::Render(LONG _hdc)
 		g.SetInterpolationMode(InterpolationModeHighQuality);
 		g.SetSmoothingMode(SmoothingModeAntiAlias);
 		g.DrawImage(
-		   &hdc.GetImage(), 
+		   &hdc.GetImage(),
 		   Rect(0, 0, width, height),	// Destination rectangle
-		   0,						// Source rectangle X 
+		   0,						// Source rectangle X
 		   0,						// Source rectangle Y
 		   width,		// Source rectangle width
 		   height,		// Source rectangle height
@@ -314,7 +315,7 @@ STDMETHODIMP CAnimatorOverlay::CumulativeTransform(/*[out, retval]*/ float *elem
 
 Bitmap *CAnimatorOverlay::LoadMask()
 {
-	if (bmp)		
+	if (bmp)
 		delete bmp;
 
 	bmp = SysStatsUtils::LoadImage(path);

@@ -38,7 +38,7 @@ template <class B>
 STDMETHODIMP MessageSenderImpl<B>::HandleMessage(/*[in]*/ UINT wParam, /*[in]*/ UINT lParam, /*[in]*/ short x, /*[in]*/ short y, /*[out, retval]*/ VARIANT_BOOL *handled)
 {
 	*handled = !passThrough;
-	model->PostMessage(sendMessage, useWParam? (WPARAM)this->wParam : wParam, useLParam ? (LPARAM)this->lParam : lParam);
+	model->PostMessage(sendMessage, useWParam? (WPARAM)this->wParam : (WPARAM)wParam, useLParam ? (LPARAM)this->lParam : (LPARAM)lParam);
 
 	// Provide implementation.
 	return S_OK;

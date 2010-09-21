@@ -2,7 +2,8 @@
 
 #include <windows.h>
 #include <commdlg.h>
-#include <GdiplusH.h>
+#include <Gdiplus.h>
+using namespace Gdiplus;
 
 #include "ArrayPtr.h"
 #include "Overlay.h"

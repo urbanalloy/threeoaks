@@ -87,8 +87,7 @@ LRESULT TextOverlayDialog::format(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
 {
 	char text[64];
 	*text = 0;
-	GetDlgItemText(wID, text, sizeof(text));
-	CTextOverlay *pOverlay = (CTextOverlay*)overlay;
+	GetDlgItemText(wID, text, sizeof(text));	
 	((CTextOverlay*)overlay)->put_Format(_bstr_t(text));
 	notifyObserver();
 
@@ -193,7 +192,7 @@ LRESULT TextOverlayDialog::alpha(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
 
 	if (iRet)
 	{
-		((CTextOverlay*)overlay)->put_Alpha(i);
+		((CTextOverlay*)overlay)->put_Alpha((BYTE)i);
 		notifyObserver();
 	}
 
@@ -235,7 +234,7 @@ LRESULT TextOverlayDialog::antialias(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
 {
 	long val = 0;
 	antiAliasList.getData(&val, 0 /* default value */);
-	((CTextOverlay*)overlay)->put_TextRenderingHint(val);
+	((CTextOverlay*)overlay)->put_TextRenderingHint((short)val);
 	notifyObserver();
 
 	return 1;

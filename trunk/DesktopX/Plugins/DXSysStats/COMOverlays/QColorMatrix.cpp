@@ -100,7 +100,7 @@ Status QColorMatrix::Multiply(const ColorMatrix * matrix, MatrixOrder order /* =
             temp[y][x] = t;
         }
 
-	for (y = 0; y < 5; y++)
+	for (int y = 0; y < 5; y++)
         for (int x = 0; x < 4; x++)
             m[y][x] = temp[y][x];
 
@@ -119,7 +119,7 @@ Status QColorMatrix::TransformVector(REAL * v) const
 		temp[x] = m[4][x];
 		for (int y = 0; y < 4; y++) temp[x] += v[y] * m[y][x];
 	}
-	for (x = 0; x < 4; x++) v[x] = temp[x];
+	for (int x = 0; x < 4; x++) v[x] = temp[x];
 	return Ok;
 }
 

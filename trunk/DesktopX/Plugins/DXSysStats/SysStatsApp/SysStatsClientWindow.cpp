@@ -1,17 +1,17 @@
 /*
  * SysStats Widget Framework
  * Copyright (C) 2002-2006 Paul Andrews
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -30,7 +30,8 @@
 //#include "QueueTimerService.h"
 #include "WindowTimerService.h"
 
-#include <gdiplusH.h>
+#include <Gdiplus.h>
+using namespace Gdiplus;
 
 const char *SysStatsClientWindow::MENU_RESOURCE_NAME = "MainMenu";				// Name of menu resource
 const char *SysStatsClientWindow::WINDOW_CLASS_NAME  = "SysStatsClientWindow";	// Name of window class
@@ -183,7 +184,7 @@ int SysStatsClientWindow::draw(HDC hdc)
 	POINT ptSrc;
 	ptSrc.x = 0;
 	ptSrc.y = 0;
- 
+
 	BOOL ret = FALSE;
 
     if (!(ret = UpdateLayeredWindow(
@@ -209,7 +210,7 @@ Menu *SysStatsClientWindow::getContextMenu(HWND owner)
 	if (contextMenu == NULL)
 	{
 		contextMenu = new Menu(getName(), owner);
-		
+
 		contextMenu->addAction(new SysStatsClientModelConfigure("Configure contents...", model, this, m_hWnd));
 		contextMenu->addAction(new MenuActionT<SysStatsClientWindow>("Configure window...", this, &SysStatsClientWindow::configure));
 		contextMenu->addAction(new MenuActionT<SysStatsClientWindow>("Save", this, &SysStatsClientWindow::saveModel));
@@ -278,7 +279,7 @@ LRESULT SysStatsClientWindow::windowCreated(UINT uMsg,	// message identifier
 	RECT rect;
 	GetWindowRect(&rect);
 	HDCImage hdc(0, rect.right-rect.left,rect.bottom-rect.top);
-	HICON hIcon = (HICON)LoadImage(      
+	HICON hIcon = (HICON)LoadImage(
 		_Module.m_hInst,
 		MAKEINTRESOURCE(IDI_ICON1),
 		IMAGE_ICON,
@@ -403,8 +404,8 @@ CWndClassInfo& SysStatsClientWindow::GetWndClassInfo()
 	{
 		{
 			sizeof(WNDCLASSEX),
-			CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW | CS_OWNDC, 
-//			CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_SAVEBITS, 
+			CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW | CS_OWNDC,
+//			CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_SAVEBITS,
 			StartWindowProc,	// Window proc
 			0,					// Extra class memory
 			0,					// Extra window memory

@@ -1,17 +1,17 @@
 /*
  * SysStats Widget Framework
  * Copyright (C) 2002-2006 Paul Andrews
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -22,7 +22,8 @@
 #include "MeterImpl.cpp"
 #pragma comment(lib, "SysStatsCommon.lib")
 #pragma comment(lib, "SysStatsCOM.lib")
-#include <GdiplusH.h>
+#include <Gdiplus.h>
+using namespace Gdiplus;
 #include "SysStatsUtils.h"
 #include "COMOverlays.h"
 #include "CompositeOverlayImpl.cpp"
@@ -40,7 +41,7 @@ STDMETHODIMP CScrollerOverlay::InterfaceSupportsErrorInfo(REFIID riid)
 	};
 	for (int i=0; i < sizeof(arr) / sizeof(arr[0]); i++)
 	{
-		if (::ATL::InlineIsEqualGUID(*arr[i],riid))
+		if (InlineIsEqualGUID(*arr[i],riid))
 			return S_OK;
 	}
 	return S_FALSE;
@@ -156,12 +157,12 @@ STDMETHODIMP CScrollerOverlay::Configure(IObserver * observer, IMeterHome * mete
 
 void CScrollerOverlay::controlMeter(IMeter *iMeter, BSTR selector, BSTR value)
 {
-	LPOLESTR name = L"PutValue";   
+	LPOLESTR name = L"PutValue";
 	DISPID id;
-	HRESULT hr = iMeter->GetIDsOfNames(IID_NULL, 
-                           &name, 
-                           1, 
-                           LOCALE_USER_DEFAULT, 
+	HRESULT hr = iMeter->GetIDsOfNames(IID_NULL,
+                           &name,
+                           1,
+                           LOCALE_USER_DEFAULT,
                            &id);
 
 	if (SUCCEEDED(hr))
@@ -314,7 +315,7 @@ STDMETHODIMP CScrollerOverlay::Render(LONG _hdc)
 					gss.DrawImage(
 					   oldImage,
 					   Rect(drawX, drawY, width, height),			// Destination rectangle
-					   0,				// Source rectangle X 
+					   0,				// Source rectangle X
 					   0,				// Source rectangle Y
 					   width,			// Source rectangle width
 					   height,			// Source rectangle height
@@ -336,9 +337,9 @@ STDMETHODIMP CScrollerOverlay::Render(LONG _hdc)
 		g.SetSmoothingMode(SmoothingModeAntiAlias);
 		g.SetPixelOffsetMode(PixelOffsetModeHalf);
 		g.DrawImage(
-		   &hdc.GetImage(), 
+		   &hdc.GetImage(),
 		   Rect(0, 0, width, height),	// Destination rectangle
-		   0,						// Source rectangle X 
+		   0,						// Source rectangle X
 		   0,						// Source rectangle Y
 		   width,		// Source rectangle width
 		   height,		// Source rectangle height
@@ -474,7 +475,7 @@ STDMETHODIMP CScrollerOverlay::get_SmoothScrollMeterIndex(long *pVal)
 	pMeters->GetIndex((IMeter*)iUnknown, &index);
 	*pVal = index;
 	pMeters->Release();
-		
+
 	return S_OK;
 }
 

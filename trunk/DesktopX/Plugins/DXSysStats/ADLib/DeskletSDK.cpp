@@ -1,4 +1,8 @@
-#include <windows.h>
+//	This file and its contents is copyright © 2005 Andreas Verhoeven and
+//	may only be distributed as part of the AveDesk SDK. 
+//  This file and its contents may only be used for creating desklets or plug-ins
+//  for AveDesk.
+
 #include "DeskletSDK.h"
 
 #include <shellapi.h>
@@ -72,8 +76,26 @@ void GetDLLPath(HMODULE h,char* path, DWORD nSize)
 		}
 	}
 }
+
+void GetDLLPathW(HMODULE h,WCHAR* path, DWORD nSize)
+{
+	// pre:  h is not 0 and path is not 0, nSize determines the maximum number of
+	//		 characters path can hold
+	// post: the path (without the filename) where module h is located is stored
+	//		  in path
+
+	GetModuleFileNameW(h,path,MAX_PATH);
+
+	for(int i=wcslen(path)-1;i>0;--i)
+	{
+		if(path[i]=='\\' || path[i]=='/')
+		{
+			path[i+1] = '\0';
+			break;
+		}
+	}
+}
 //--------------------------------------------------------------------------------------------
-#ifdef NO_DOCKLET_LIB
 int WritePrivateProfileInt(LPCTSTR lpAppName, LPCTSTR lpKeyName, int iValue, LPCTSTR lpFileName)
 {
 	char szNumber[100];
@@ -81,13 +103,12 @@ int WritePrivateProfileInt(LPCTSTR lpAppName, LPCTSTR lpKeyName, int iValue, LPC
 	itoa(iValue, szNumber, 10);
 	return WritePrivateProfileString(lpAppName, lpKeyName, szNumber, lpFileName);
 }
-#endif
 //--------------------------------------------------------------------------------------------
-int ShowContextMenu(HWND owner, HMENU menu, POINT* p, char* filename)
+int ShowContextMenu(HWND owner, HMENU menu, POINT* p, const char* filename)
 {
 	if(!filename)return 0;
 
-	char file[MAX_PATH];
+	char file[MAX_PATH] = {0};
 	strcpy(file,filename);
 	if(file[strlen(file)-1] == '\\')
 	{
@@ -120,31 +141,38 @@ int ShowContextMenu(HWND owner, HMENU menu, POINT* p, char* filename)
 		strcpy(file,"");
 	}
 
-	LPSHELLFOLDER DesktopFolder;
+	LPSHELLFOLDER DesktopFolder = {0};
 	SHGetDesktopFolder(&DesktopFolder);
 	if(!DesktopFolder)
 	{
 		return 0;
 	}
-	wchar_t Path[MAX_PATH];
-	LPITEMIDLIST ParentPidl;
-	DWORD dummy;
+	wchar_t Path[MAX_PATH] = {0};
+	LPITEMIDLIST ParentPidl = {0};
+	DWORD dummy = {0};
 	MultiByteToWideChar(CP_ACP,0,filepath,-1,Path,MAX_PATH);
 	DesktopFolder->ParseDisplayName(owner, 0, Path, &dummy, &ParentPidl, 0);
 	LPSHELLFOLDER ParentFolder;
 	DesktopFolder->BindToObject(ParentPidl, 0, IID_IShellFolder, (void**)&ParentFolder);
 	if(!ParentFolder)
 	{
+		IMalloc * imalloc = {0};
+		if ( SUCCEEDED( SHGetMalloc ( &imalloc )) )
+		{
+			imalloc->Free ( ParentPidl );
+			imalloc->Release ( );
+		}
+
 		DesktopFolder->Release();
 		return 0;
 	}
 
-	LPITEMIDLIST Pidl;
+	LPITEMIDLIST Pidl = {0};
 	MultiByteToWideChar(CP_ACP,0,file,-1,Path,MAX_PATH);
 	ParentFolder->ParseDisplayName(owner, 0, Path, &dummy, &Pidl, 0);
 
 
-	LPCONTEXTMENU CM;
+	LPCONTEXTMENU CM = {0};
 	if(strcmp(file,"")==0)
 	{
 		DesktopFolder->Release();
@@ -163,6 +191,13 @@ int ShowContextMenu(HWND owner, HMENU menu, POINT* p, char* filename)
 		ParentFolder->GetUIObjectOf(owner, 1, (LPCITEMIDLIST*)&Pidl,IID_IContextMenu, 0, (void**)&CM);
 	if(!CM)
 	{
+		IMalloc * imalloc = {0};
+		if ( SUCCEEDED( SHGetMalloc ( &imalloc )) )
+		{
+			imalloc->Free ( ParentPidl );
+			imalloc->Free ( Pidl );
+			imalloc->Release ( );
+		}
 		DesktopFolder->Release();
 		ParentFolder->Release();
 		return 0;
@@ -196,7 +231,7 @@ int ShowContextMenu(HWND owner, HMENU menu, POINT* p, char* filename)
 
 	if (Cmd!=0 && Cmd < 10000)
 	{
-		CMINVOKECOMMANDINFO CI;
+		CMINVOKECOMMANDINFO CI ={0};
 
 		ZeroMemory(&CI, sizeof(CI));
 		CI.cbSize = sizeof(CMINVOKECOMMANDINFO);
@@ -207,23 +242,55 @@ int ShowContextMenu(HWND owner, HMENU menu, POINT* p, char* filename)
 		CI.nShow = SW_SHOWNORMAL;
 		CM->InvokeCommand(&CI);
 
-		CM->Release();
+		IMalloc * imalloc = {0};
+		if ( SUCCEEDED( SHGetMalloc ( &imalloc )) )
+		{
+			imalloc->Free ( ParentPidl );
+			imalloc->Free ( Pidl );
+			imalloc->Release ( );
+		}
+
+		try
+		{
+			CM->Release();
+		}
+		catch(...)
+		{
+
+		}
 		ParentFolder->Release();
 		DesktopFolder->Release();
+
+		OleUninitialize();
 
 		return 0;
 		
 	}
 	else
 	{
-		CM->Release();
+		IMalloc * imalloc = {0};
+		if ( SUCCEEDED( SHGetMalloc ( &imalloc )) )
+		{
+			imalloc->Free ( ParentPidl );
+			imalloc->Free ( Pidl );
+			imalloc->Release ( );
+		}
+
+		try
+		{
+			CM->Release();
+		}
+		catch(...)
+		{
+
+		}
 		ParentFolder->Release();
 		DesktopFolder->Release();
 
+		OleUninitialize();
+
 		return Cmd;
 	}
-
-	OleUninitialize();
 }
 //--------------------------------------------------------------------------------------------
 typedef BOOL (CALLBACK *HDeskletIsVisibleDUMMY)(HWND);
@@ -258,20 +325,20 @@ int CALLBACK DeskletGetLabel(HWND hwndDesklet,char* szLabel)
 	return HDeskletGetLabel(hwndDesklet,szLabel);
 }
 //--------------------------------------------------------------------------------------------
-typedef BOOL (CALLBACK *HDeskletSetLabelDUMMY)(HWND,char*);
+typedef BOOL (CALLBACK *HDeskletSetLabelDUMMY)(HWND,const char*);
 HDeskletSetLabelDUMMY HDeskletSetLabel = (HDeskletSetLabelDUMMY)GetProcAddress(GetModuleHandle(0),"DeskletSetLabel");
 
-int CALLBACK DeskletSetLabel(HWND hwndDesklet, char* szLabel)
+int CALLBACK DeskletSetLabel(HWND hwndDesklet, const char* szLabel)
 {
 	if(!HDeskletSetLabel)return FALSE;
 
 	return HDeskletSetLabel(hwndDesklet,szLabel);
 }
 //--------------------------------------------------------------------------------------------
-typedef Bitmap* (CALLBACK *HDeskletLoadGDIPlusImageDUMMY)(char*);
+typedef Bitmap* (CALLBACK *HDeskletLoadGDIPlusImageDUMMY)(const char*);
 HDeskletLoadGDIPlusImageDUMMY HDeskletLoadGDIPlusImage = (HDeskletLoadGDIPlusImageDUMMY)GetProcAddress(GetModuleHandle(0),"DeskletLoadGDIPlusImage");
 
-Bitmap* CALLBACK DeskletLoadGDIPlusImage(char *szImage)
+Bitmap* CALLBACK DeskletLoadGDIPlusImage(const char *szImage)
 {
 
 	if(!HDeskletLoadGDIPlusImage)return 0;
@@ -290,10 +357,10 @@ void CALLBACK DeskletSetImage(HWND hwndDesklet, Image *lpImageNew,BOOL bAutomati
 	HDeskletSetImage(hwndDesklet,lpImageNew,bAutomaticallyDeleteImage);
 }
 //--------------------------------------------------------------------------------------------
-typedef void (CALLBACK *HDeskletSetImageFileDUMMY)(HWND hwndDesklet,char *szImage);
+typedef void (CALLBACK *HDeskletSetImageFileDUMMY)(HWND hwndDesklet,const char *szImage);
 HDeskletSetImageFileDUMMY HDeskletSetImageFile = (HDeskletSetImageFileDUMMY)GetProcAddress(GetModuleHandle(0),"DeskletSetImageFile");
 
-void CALLBACK DeskletSetImageFile(HWND hwndDesklet,char *szImage)
+void CALLBACK DeskletSetImageFile(HWND hwndDesklet,const char *szImage)
 {
 
 	if(!HDeskletSetImageFile)return;
@@ -311,10 +378,10 @@ void CALLBACK DeskletSetImageOverlay(HWND hwndDesklet, Image *lpImageOverlayNew,
 	HDeskletSetImageOverlay(hwndDesklet,lpImageOverlayNew,bAutomaticallyDeleteImageOverlay);
 }
 //--------------------------------------------------------------------------------------------
-typedef void (CALLBACK *HDeskletSetImageOverlayFileDUMMY)(HWND hwndDesklet,char *szImageOverlay);
+typedef void (CALLBACK *HDeskletSetImageOverlayFileDUMMY)(HWND hwndDesklet,const char *szImageOverlay);
 HDeskletSetImageOverlayFileDUMMY HDeskletSetImageOverlayFile = (HDeskletSetImageOverlayFileDUMMY)GetProcAddress(GetModuleHandle(0),"DeskletSetImageOverlayFile");
 
-void CALLBACK DeskletSetImageOverlayFile(HWND hwndDesklet,char *szImageOverlay)
+void CALLBACK DeskletSetImageOverlayFile(HWND hwndDesklet,const char *szImageOverlay)
 {
 	if(!HDeskletSetImageOverlayFile)return;
 
@@ -352,6 +419,16 @@ void CALLBACK DeskletGetRelativeFolder(HWND hwndDesklet, char *szFolder)
 	HDeskletGetRelativeFolder(hwndDesklet,szFolder);
 }
 //--------------------------------------------------------------------------------------------
+typedef void (CALLBACK *HDeskletGetRelativeFolderDUMMYW)(HWND,WCHAR*);
+HDeskletGetRelativeFolderDUMMYW HDeskletGetRelativeFolderW = (HDeskletGetRelativeFolderDUMMYW)GetProcAddress(GetModuleHandle(0),"DeskletGetRelativeFolderW");
+
+void CALLBACK DeskletGetRelativeFolderW(HWND hwndDesklet, WCHAR *szFolder)
+{
+	if(!HDeskletGetRelativeFolderW)return;
+
+	HDeskletGetRelativeFolderW(hwndDesklet,szFolder);
+}
+//--------------------------------------------------------------------------------------------
 typedef void (CALLBACK *HDeskletGetRootFolderDUMMY)(HWND,char*);
 HDeskletGetRootFolderDUMMY HDeskletGetRootFolder = (HDeskletGetRootFolderDUMMY)GetProcAddress(GetModuleHandle(0),"DeskletGetRootFolder");
 
@@ -360,6 +437,16 @@ void CALLBACK DeskletGetRootFolder(HWND hwndDesklet,char *szFolder)
 	if(!HDeskletGetRootFolder)return;
 
 	HDeskletGetRootFolder(hwndDesklet,szFolder);
+}
+//--------------------------------------------------------------------------------------------
+typedef void (CALLBACK *HDeskletGetRootFolderDUMMYW)(HWND,WCHAR*);
+HDeskletGetRootFolderDUMMYW HDeskletGetRootFolderW = (HDeskletGetRootFolderDUMMYW)GetProcAddress(GetModuleHandle(0),"DeskletGetRootFolderW");
+
+void CALLBACK DeskletGetRootFolderW(HWND hwndDesklet,WCHAR *szFolder)
+{
+	if(!HDeskletGetRootFolderW)return;
+
+	HDeskletGetRootFolderW(hwndDesklet,szFolder);
 }
 //--------------------------------------------------------------------------------------------
 typedef void (CALLBACK *HDeskletDefaultConfigDialogDUMMY)(HWND,PropertyDialogStruct*);
@@ -492,10 +579,10 @@ INT CALLBACK DeskletGetRotation(HWND hwndDesklet)
 	return HDeskletGetRotation(hwndDesklet);
 }
 //--------------------------------------------------------------------------------------------
-typedef HWND (CALLBACK *HDeskletLoadDUMMY)(char*,char*,char*,void**,BOOL);
+typedef HWND (CALLBACK *HDeskletLoadDUMMY)(const char*,const char*,const char*,void**,BOOL);
 HDeskletLoadDUMMY HDeskletLoad = (HDeskletLoadDUMMY) GetProcAddress(GetModuleHandle(0),"DeskletLoad");
 
-HWND CALLBACK DeskletLoad(char* filename,char* ini, char* iniGroup,void** p,BOOL makeVisible)
+HWND CALLBACK DeskletLoad(const char* filename,const char* ini, const char* iniGroup,void** p,BOOL makeVisible)
 {
 	
 	if(!HDeskletLoad)return 0;
@@ -566,10 +653,10 @@ void CALLBACK DeskletLayerSetPlacement(HWND hwndDesklet, unsigned int id,BOOL re
 	HDeskletLayerSetPlacement(hwndDesklet,id,redraw,usePlacement,s,xScale,yScale);
 }
 //--------------------------------------------------------------------------------------------
-typedef unsigned int (CALLBACK *HDeskletLayerGetLayerDUMMY)(HWND,char*, BOOL*);
+typedef unsigned int (CALLBACK *HDeskletLayerGetLayerDUMMY)(HWND,const char*, BOOL*);
 HDeskletLayerGetLayerDUMMY HDeskletLayerGetLayer = (HDeskletLayerGetLayerDUMMY) GetProcAddress(GetModuleHandle(0),"DeskletLayerGetLayer");
 
-unsigned int CALLBACK DeskletLayerGetLayer(HWND hwndDesklet, char* name, BOOL* success)
+unsigned int CALLBACK DeskletLayerGetLayer(HWND hwndDesklet, const char* name, BOOL* success)
 {
 	if(!HDeskletLayerGetLayer)return 0;
 
@@ -586,10 +673,10 @@ unsigned int CALLBACK DeskletLayerCount(HWND hwndDesklet)
 	return HDeskletLayerCount(hwndDesklet);
 }
 //--------------------------------------------------------------------------------------------
-typedef unsigned int (CALLBACK *HDeskletLayerAddDUMMY)(HWND,char*);
+typedef unsigned int (CALLBACK *HDeskletLayerAddDUMMY)(HWND,const char*);
 HDeskletLayerAddDUMMY HDeskletLayerAdd = (HDeskletLayerAddDUMMY) GetProcAddress(GetModuleHandle(0),"DeskletLayerAdd");
 
-unsigned int CALLBACK DeskletLayerAdd(HWND hwndDesklet, char* name)
+unsigned int CALLBACK DeskletLayerAdd(HWND hwndDesklet, const char* name)
 {
 	if(!HDeskletLayerAdd)return 0;
 
@@ -721,10 +808,10 @@ void  CALLBACK DeskletLayerSetImage(HWND hwndDesklet, unsigned int id, BOOL redr
 	HDeskletLayerSetImage(hwndDesklet,id,redraw,img,AutoDel);
 }
 //--------------------------------------------------------------------------------------------
-typedef void (CALLBACK *HDeskletLayerSetImageFileDUMMY)(HWND,unsigned int, BOOL, char*);
+typedef void (CALLBACK *HDeskletLayerSetImageFileDUMMY)(HWND,unsigned int, BOOL, const char*);
 HDeskletLayerSetImageFileDUMMY HDeskletLayerSetImageFile = (HDeskletLayerSetImageFileDUMMY) GetProcAddress(GetModuleHandle(0),"DeskletLayerSetImageFile");
 
-void  CALLBACK DeskletLayerSetImageFile(HWND hwndDesklet, unsigned int id, BOOL redraw, char* filename)
+void  CALLBACK DeskletLayerSetImageFile(HWND hwndDesklet, unsigned int id, BOOL redraw, const char* filename)
 {
 
 	if(!HDeskletLayerSetImageFile)return;
@@ -822,24 +909,304 @@ int CALLBACK DeskletAddPropertySheet(HWND hwndDesklet, HPROPSHEETPAGE hpg)
 	return HDeskletAddPropertySheet(hwndDesklet,hpg);
 }
 //--------------------------------------------------------------------------------------------
-typedef void (CALLBACK *HDeskletSetSubLabelDUMMY)(HWND,char*);
+typedef void (CALLBACK *HDeskletSetSubLabelDUMMY)(HWND,const char*);
 HDeskletSetSubLabelDUMMY HDeskletSetSubLabel = (HDeskletSetSubLabelDUMMY) GetProcAddress(GetModuleHandle(0),"DeskletSetSubLabel");
-void CALLBACK DeskletSetSubLabel(HWND hwndDesklet, char* subLabel)
+void CALLBACK DeskletSetSubLabel(HWND hwndDesklet, const char* subLabel)
 {
 	if(!HDeskletSetSubLabel)return;
 
 	HDeskletSetSubLabel(hwndDesklet,subLabel);
 }
 //--------------------------------------------------------------------------------------------
-// prototype for DeskletSetSkinInfoW, which will set the skin associated
-// with the particular desklet that is identified by hwndDesklet.
-// this function WILL ALWAYS needed to be called when the skin is set/changed, even when
-// its set thru OnCreateFromSkinW or OnSetSkinW.
-typedef BOOL (CALLBACK *HDeskletSetSkinInfoWDUMMY)(HWND,const SkinInfo* info);
+typedef void (CALLBACK *HDeskletMoveDUMMY)(HWND,RECT*,BOOL);
+HDeskletMoveDUMMY HDeskletMove = (HDeskletMoveDUMMY) GetProcAddress(GetModuleHandle(0),"DeskletMove");
+void CALLBACK DeskletMove(HWND hwndDesklet,RECT* r, BOOL redraw)
+{
+	if(!HDeskletMove)return;
+
+	HDeskletMove(hwndDesklet,r,redraw);
+}
+//--------------------------------------------------------------------------------------------
+typedef void (CALLBACK *HDeskletFadeInDUMMY) (HWND, BOOL, DWORD);
+HDeskletFadeInDUMMY HDeskletFadeIn = (HDeskletFadeInDUMMY) GetProcAddress(GetModuleHandle(0),"DeskletFadeIn");
+void CALLBACK DeskletFadeIn(HWND hwndDesklet,BOOL async, DWORD durationInMs)
+{
+	if(!HDeskletFadeIn)return;
+
+	HDeskletFadeIn(hwndDesklet, async, durationInMs);
+}
+//--------------------------------------------------------------------------------------------
+typedef void (CALLBACK *HDeskletFadeOutDUMMY) (HWND, BOOL, DWORD durationInMs);
+HDeskletFadeOutDUMMY HDeskletFadeOut = (HDeskletFadeOutDUMMY) GetProcAddress(GetModuleHandle(0),"DeskletFadeOut");
+void CALLBACK DeskletFadeOut(HWND hwndDesklet, BOOL async, DWORD durationInMs)
+{
+	if(!HDeskletFadeOut)return;
+
+	HDeskletFadeOut(hwndDesklet, async, durationInMs);
+}
+//--------------------------------------------------------------------------------------------
+typedef BOOL (CALLBACK *HDeskletSaveWDUMMY) (HWND,const WCHAR*);
+HDeskletSaveWDUMMY HDeskletSaveW = (HDeskletSaveWDUMMY) GetProcAddress(GetModuleHandle(0),"DeskletSaveW");
+BOOL CALLBACK DeskletSaveW(HWND hwndDesklet, const WCHAR* fileName)
+{
+	if(!HDeskletSaveW)
+		return FALSE;
+
+	return HDeskletSaveW(hwndDesklet,fileName);
+}
+//--------------------------------------------------------------------------------------------
+typedef HWND (CALLBACK *HDeskletLoadFromDLLWDUMMY) (const WCHAR*, const WCHAR*, void**,BOOL);
+HDeskletLoadFromDLLWDUMMY HDeskletLoadFromDLLW = (HDeskletLoadFromDLLWDUMMY) GetProcAddress(GetModuleHandle(0),"DeskletLoadFromDLLW");
+HWND CALLBACK DeskletLoadFromDLLW(const WCHAR* dllFileName, const WCHAR* configFileName, void** pointer,BOOL makeVisible)
+{
+	if(!HDeskletLoadFromDLLW)
+		return NULL;
+
+	return HDeskletLoadFromDLLW(dllFileName,configFileName,pointer,makeVisible);
+}
+//--------------------------------------------------------------------------------------------
+typedef HWND (CALLBACK *HDeskletLoadFromConfigWDUMMY)  (const WCHAR*, void**, BOOL);
+HDeskletLoadFromConfigWDUMMY HDeskletLoadFromConfigW = (HDeskletLoadFromConfigWDUMMY) GetProcAddress(GetModuleHandle(0),"DeskletLoadFromConfigW");
+HWND CALLBACK DeskletLoadFromConfigW(const WCHAR* fileName, void** pointer, BOOL makeVisible)
+{
+	if(!HDeskletLoadFromConfigW)
+		return NULL;
+
+	return HDeskletLoadFromConfigW(fileName,pointer,makeVisible);
+}
+//--------------------------------------------------------------------------------------------
+typedef BOOL (CALLBACK *HDeskletEnumRunningDeskletsDUMMY) (DESKLETENUMPROC,LPARAM);
+HDeskletEnumRunningDeskletsDUMMY HDeskletEnumRunningDesklets = (HDeskletEnumRunningDeskletsDUMMY) GetProcAddress(GetModuleHandle(0),"DeskletEnumRunningDesklets");
+BOOL CALLBACK DeskletEnumRunningDesklets(DESKLETENUMPROC enumProc, LPARAM lParam)
+{
+	if(!HDeskletEnumRunningDesklets)
+		return FALSE;
+
+	return HDeskletEnumRunningDesklets(enumProc,lParam);
+}
+//--------------------------------------------------------------------------------------------
+typedef BOOL (CALLBACK *HDeskletAsyncSetPointerDUMMY) (HWND, void*);
+HDeskletAsyncSetPointerDUMMY HDeskletAsyncSetPointer = (HDeskletAsyncSetPointerDUMMY) GetProcAddress(GetModuleHandle(0),"DeskletAsyncSetPointer");
+BOOL CALLBACK DeskletAsyncSetPointer(HWND hwndDesklet, void* pointer)
+{
+	if(!HDeskletAsyncSetPointer)
+		return FALSE;
+
+	return HDeskletAsyncSetPointer(hwndDesklet,pointer);
+}
+//--------------------------------------------------------------------------------------------
+typedef BOOL (CALLBACK *HDeskletSetSkinInfoWDUMMY) (HWND,const SkinInfo*);
 HDeskletSetSkinInfoWDUMMY HDeskletSetSkinInfoW = (HDeskletSetSkinInfoWDUMMY) GetProcAddress(GetModuleHandle(0),"DeskletSetSkinInfoW");
 BOOL CALLBACK DeskletSetSkinInfoW(HWND hwndDesklet, const SkinInfo* info)
 {
-	if(!HDeskletSetSkinInfoW) return false;
+	if(!HDeskletSetSkinInfoW)
+		return FALSE;
 
 	return HDeskletSetSkinInfoW(hwndDesklet,info);
 }
+//--------------------------------------------------------------------------------------------
+typedef BOOL (CALLBACK *HDeskletGetDirectoryWDUMMY) (DWORD,WCHAR*,UINT*);
+HDeskletGetDirectoryWDUMMY HDeskletGetDirectoryW = (HDeskletGetDirectoryWDUMMY) GetProcAddress(GetModuleHandle(0),"DeskletGetDirectoryW");
+
+BOOL CALLBACK DeskletGetDirectoryW(DWORD directory, WCHAR* wBuf, UINT* maxBufSize)
+{
+	if(!HDeskletGetDirectoryW)
+		return FALSE;
+
+	return HDeskletGetDirectoryW(directory,wBuf,maxBufSize);
+}
+//--------------------------------------------------------------------------------------------
+typedef BOOL (CALLBACK *HDeskletSetImageSetStatusDUMMY) (HWND, BOOL);
+HDeskletSetImageSetStatusDUMMY HDeskletSetImageSetStatus = (HDeskletSetImageSetStatusDUMMY) GetProcAddress(GetModuleHandle(0),"DeskletSetImageSetStatus");
+BOOL CALLBACK DeskletSetImageSetStatus(HWND hwndDesklet, BOOL imageCanBeSet)
+{
+	if(!HDeskletSetImageSetStatus)
+		return FALSE;
+
+	return HDeskletSetImageSetStatus(hwndDesklet, imageCanBeSet);
+}
+//--------------------------------------------------------------------------------------------
+typedef BOOL (CALLBACK *HDeskletFlipDUMMY)(HWND, const FlipParams*);
+HDeskletFlipDUMMY HDeskletFlip = (HDeskletFlipDUMMY) GetProcAddress(GetModuleHandle(0), "DeskletFlip");
+BOOL CALLBACK DeskletFlip(HWND hwndDesklet, const FlipParams* params)
+{
+	if(!HDeskletFlip)
+		return FALSE;
+
+	return HDeskletFlip(hwndDesklet, params);
+}
+//--------------------------------------------------------------------------------------------
+typedef BOOL (CALLBACK *HDeskletSetClosePointDUMMY)(HWND, const POINT*, int, int);
+HDeskletSetClosePointDUMMY HDeskletSetClosePoint = (HDeskletSetClosePointDUMMY) GetProcAddress(GetModuleHandle(0), "DeskletSetClosePoint");
+BOOL CALLBACK DeskletSetClosePoint(HWND hwndDesklet, const POINT* closePoint, int xScale, int yScale)
+{
+	if(!HDeskletSetClosePoint)
+		return FALSE;
+
+	return HDeskletSetClosePoint(hwndDesklet, closePoint, xScale, yScale);
+}
+//--------------------------------------------------------------------------------------------
+typedef void (CALLBACK *HDeskletLayerSetIsNotMovableDUMMY)(HWND, unsigned int, BOOL);
+HDeskletLayerSetIsNotMovableDUMMY HDeskletLayerSetIsNotMovable = (HDeskletLayerSetIsNotMovableDUMMY) GetProcAddress(GetModuleHandle(0), "DeskletLayerSetIsNotMovable");
+void CALLBACK DeskletLayerSetIsNotMovable(HWND hwndDesklet, unsigned int id, BOOL isNotMovable)
+{
+	if(!HDeskletLayerSetIsNotMovable)
+		return;
+
+	HDeskletLayerSetIsNotMovable(hwndDesklet, id, isNotMovable);
+}
+//--------------------------------------------------------------------------------------------
+typedef void (CALLBACK *HDeskletLayerSetIsClickThroughDUMMY)(HWND, unsigned int, BOOL);
+HDeskletLayerSetIsClickThroughDUMMY HDeskletLayerSetIsClickThrough = (HDeskletLayerSetIsClickThroughDUMMY) GetProcAddress(GetModuleHandle(0), "DeskletLayerSetIsClickThrough");
+void CALLBACK DeskletLayerSetIsClickThrough(HWND hwndDesklet, unsigned int id, BOOL isClickThrough)
+{
+	if(!HDeskletLayerSetIsClickThrough)
+		return;
+	HDeskletLayerSetIsClickThrough(hwndDesklet, id, isClickThrough);
+}
+//--------------------------------------------------------------------------------------------
+typedef void (CALLBACK *HDeskletLayerSetNoAlphaBlendedHitTestingDUMMY)(HWND, unsigned int, BOOL);
+HDeskletLayerSetNoAlphaBlendedHitTestingDUMMY HDeskletLayerSetNoAlphaBlendedHitTesting = (HDeskletLayerSetNoAlphaBlendedHitTestingDUMMY) GetProcAddress(GetModuleHandle(0), "DeskletLayerSetNoAlphaBlendedHitTesting");
+void CALLBACK DeskletLayerSetNoAlphaBlendedHitTesting(HWND hwndDesklet, unsigned int id, BOOL noAlphaBlendedHitTesting)
+{
+	if(!HDeskletLayerSetNoAlphaBlendedHitTesting)
+		return;
+
+	HDeskletLayerSetNoAlphaBlendedHitTesting(hwndDesklet, id, noAlphaBlendedHitTesting);
+}
+//--------------------------------------------------------------------------------------------
+typedef unsigned int (CALLBACK *HDeskletHitTestDUMMY)(HWND, const POINT*, const SIZE*, BOOL);
+HDeskletHitTestDUMMY HDeskletHitTest = (HDeskletHitTestDUMMY) GetProcAddress(GetModuleHandle(0), "DeskletHitTest");
+unsigned int CALLBACK DeskletHitTest(HWND hwndDesklet, const POINT* pt, const SIZE* s, BOOL onlyTestVisibleLayers)
+{
+	if(!HDeskletHitTest)
+		return (unsigned int) -1;
+
+	return HDeskletHitTest(hwndDesklet, pt, s, onlyTestVisibleLayers);
+}
+//--------------------------------------------------------------------------------------------
+typedef BOOL (CALLBACK *HDeskletLayerHitTestDUMMY)(HWND, unsigned int, const POINT*, const SIZE*);
+HDeskletLayerHitTestDUMMY HDeskletLayerHitTest = (HDeskletLayerHitTestDUMMY) GetProcAddress(GetModuleHandle(0), "DeskletLayerHitTest");
+BOOL CALLBACK DeskletLayerHitTest(HWND hwndDesklet, unsigned int id, const POINT* pt, const SIZE* s)
+{
+	if(!HDeskletLayerHitTest)
+		return FALSE;
+
+	return HDeskletLayerHitTest(hwndDesklet, id, pt, s);
+}
+//--------------------------------------------------------------------------------------------
+typedef void (CALLBACK *HDeskletRedrawDUMMY)(HWND);
+HDeskletRedrawDUMMY HDeskletRedraw = (HDeskletRedrawDUMMY) GetProcAddress(GetModuleHandle(0), "DeskletRedraw");
+void CALLBACK DeskletRedraw(HWND hwndDesklet)
+{
+	if(!HDeskletRedraw)
+		return;
+
+	HDeskletRedraw(hwndDesklet);
+}
+//--------------------------------------------------------------------------------------------
+typedef UINT (CALLBACK *HDeskletLayerSetCaptureDUMMY)(HWND, unsigned int);
+HDeskletLayerSetCaptureDUMMY HDeskletLayerSetCapture = (HDeskletLayerSetCaptureDUMMY) GetProcAddress(GetModuleHandle(0), "DeskletLayerSetCapture");
+UINT CALLBACK DeskletLayerSetCapture(HWND hwndDesklet, unsigned int id)
+{
+	if(!HDeskletLayerSetCapture)
+		return (UINT)-1;
+
+	return HDeskletLayerSetCapture(hwndDesklet, id);
+}
+//--------------------------------------------------------------------------------------------
+typedef UINT (CALLBACK *HDeskletLayerReleaseCaptureDUMMY)(HWND);
+HDeskletLayerReleaseCaptureDUMMY HDeskletLayerReleaseCapture = (HDeskletLayerReleaseCaptureDUMMY) GetProcAddress(GetModuleHandle(0), "DeskletLayerReleaseCapture");
+UINT CALLBACK DeskletLayerReleaseCapture(HWND hwndDesklet)
+{
+	if(!HDeskletLayerReleaseCapture)
+		return (UINT)-1;
+
+	return HDeskletLayerReleaseCapture(hwndDesklet);
+}
+//--------------------------------------------------------------------------------------------
+typedef UINT (CALLBACK *HDeskletLayerGetCaptureDUMMY)(HWND);
+HDeskletLayerGetCaptureDUMMY HDeskletLayerGetCapture = (HDeskletLayerGetCaptureDUMMY) GetProcAddress(GetModuleHandle(0), "DeskletLayerGetCapture");
+UINT CALLBACK DeskletLayerGetCapture(HWND hwndDesklet)
+{
+	if(!HDeskletLayerGetCapture)
+		return (UINT)-1;
+
+	return HDeskletLayerGetCapture(hwndDesklet);
+}
+//--------------------------------------------------------------------------------------------
+typedef BOOL (CALLBACK *HDeskletLayerSetImageClipRectDUMMY)(HWND, unsigned int, BOOL, BOOL, RECT*, int, int);
+HDeskletLayerSetImageClipRectDUMMY HDeskletLayerSetImageClipRect = (HDeskletLayerSetImageClipRectDUMMY) GetProcAddress(GetModuleHandle(0), "DeskletLayerSetImageClipRect");
+BOOL CALLBACK DeskletLayerSetImageClipRect(HWND hwndDesklet, unsigned int id, BOOL redraw, BOOL useBounds, RECT* bounds, int xScale, int yScale)
+{
+	if(!HDeskletLayerSetImageClipRect)
+		return FALSE;
+
+	return HDeskletLayerSetImageClipRect(hwndDesklet, id, redraw, useBounds, bounds, xScale, yScale);
+}
+//--------------------------------------------------------------------------------------------
+typedef INT (CALLBACK *HDeskletLockInvalidatingDUMMY)(HWND);
+HDeskletLockInvalidatingDUMMY HDeskletLockInvalidating = (HDeskletLockInvalidatingDUMMY) GetProcAddress(GetModuleHandle(0), "DeskletLockInvalidating");
+INT CALLBACK DeskletLockInvalidating(HWND hwndDesklet)
+{
+	if(!HDeskletLockInvalidating)
+		return 0;
+
+	return HDeskletLockInvalidating(hwndDesklet);
+}
+//--------------------------------------------------------------------------------------------
+typedef INT (CALLBACK *HDeskletUnlockInvalidatingDUMMY)(HWND,BOOL);
+HDeskletUnlockInvalidatingDUMMY HDeskletUnlockInvalidating = (HDeskletUnlockInvalidatingDUMMY) GetProcAddress(GetModuleHandle(0), "DeskletUnlockInvalidating");
+INT CALLBACK DeskletUnlockInvalidating(HWND hwndDesklet, BOOL redraw)
+{
+	if(!HDeskletUnlockInvalidating)
+		return 0;
+
+	return HDeskletUnlockInvalidating(hwndDesklet, redraw);
+}
+//--------------------------------------------------------------------------------------------
+typedef BOOL (CALLBACK *HDeskletInvalidateRectDUMMY)(HWND, RECT*, SIZE*, BOOL);
+HDeskletInvalidateRectDUMMY HDeskletInvalidateRect = (HDeskletInvalidateRectDUMMY) GetProcAddress(GetModuleHandle(0), "DeskletInvalidateRect");
+BOOL DeskletInvalidateRect(HWND hwndDesklet, RECT* rect, SIZE* scale, BOOL redraw)
+{
+	if(!HDeskletInvalidateRect)
+		return FALSE;
+
+	return HDeskletInvalidateRect(hwndDesklet, rect, scale, redraw);
+}
+//--------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------
+typedef void (CALLBACK *HDeskletLayerSetImageFileWDUMMY)(HWND,unsigned int, BOOL, const WCHAR*);
+HDeskletLayerSetImageFileWDUMMY HDeskletLayerSetImageFileW = (HDeskletLayerSetImageFileWDUMMY) GetProcAddress(GetModuleHandle(0),"DeskletLayerSetImageFileW");
+
+void  CALLBACK DeskletLayerSetImageFileW(HWND hwndDesklet, unsigned int id, BOOL redraw, const WCHAR* filename)
+{
+
+	if(!HDeskletLayerSetImageFileW)
+		return;
+
+	HDeskletLayerSetImageFileW(hwndDesklet,id,redraw,filename);
+}
+//--------------------------------------------------------------------------------------------
+typedef Bitmap* (CALLBACK *HDeskletLoadGDIPlusImageWDUMMY)(const WCHAR*);
+HDeskletLoadGDIPlusImageWDUMMY HDeskletLoadGDIPlusImageW = (HDeskletLoadGDIPlusImageWDUMMY)GetProcAddress(GetModuleHandle(0),"DeskletLoadGDIPlusImageW");
+
+Bitmap* CALLBACK DeskletLoadGDIPlusImageW(const WCHAR *szImage)
+{
+
+	if(!HDeskletLoadGDIPlusImageW)
+		return 0;
+
+	return HDeskletLoadGDIPlusImageW(szImage);
+}
+//-----------------------------------------------------------------------------
+typedef HCURSOR (CALLBACK *HDeskletSetCursorDUMMY)(HWND, HCURSOR);
+HDeskletSetCursorDUMMY HDeskletSetCursor = (HDeskletSetCursorDUMMY) GetProcAddress(GetModuleHandle(0), "DeskletSetCursor");
+HCURSOR CALLBACK DeskletSetCursor(HWND hwndDesklet, HCURSOR hCursor)
+{
+	if(!HDeskletSetCursor)
+		return NULL;
+
+	return HDeskletSetCursor(hwndDesklet, hCursor);
+}
+//-----------------------------------------------------------------------------

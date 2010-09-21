@@ -1,17 +1,17 @@
 /*
  * SysStats Widget Framework
  * Copyright (C) 2002-2006 Paul Andrews
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -31,14 +31,15 @@
 #include "SysStatsApp.h"
 #include "WindowTimerService.h"
 
-#include <gdiplusH.h>
+#include <Gdiplus.h>
+using namespace Gdiplus;
 
 typedef HRESULT (*DLLFunc)();
 
 // This is supposed to happen automatically if we use an ATL project.
 CComModule _Module;
 
-int __stdcall WinMain(      
+int __stdcall WinMain(
     HINSTANCE hInstance,
     HINSTANCE hPrevInstance,
     LPSTR lpCmdLine,
@@ -48,7 +49,7 @@ int __stdcall WinMain(
 #ifdef MEM_CHECKS
 #ifdef _DEBUG
 		// Check for memory leaks in debug version
-		long lBreakPos = 0; // change this to hunt down a numbered leak 
+		long lBreakPos = 0; // change this to hunt down a numbered leak
 		if( lBreakPos )		// in a debug build
 			_CrtSetBreakAlloc(lBreakPos);
 		_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
@@ -105,12 +106,12 @@ int __stdcall WinMain(
 		app.load();
 
 		BOOL bRet;
-		
+
 		while( (bRet = ::GetMessage( &msg, NULL, 0, 0 )) != 0)
-		{ 
+		{
 			AtlTrace("Msg=0x%0.4x\n", msg.message);
-			::TranslateMessage(&msg); 
-			::DispatchMessage(&msg); 
+			::TranslateMessage(&msg);
+			::DispatchMessage(&msg);
 		}
 
 		app.save();
@@ -122,5 +123,5 @@ int __stdcall WinMain(
 //	CoUninitialize();
 	_Module.Term();
 
-    return msg.wParam; 
+    return msg.wParam;
 }

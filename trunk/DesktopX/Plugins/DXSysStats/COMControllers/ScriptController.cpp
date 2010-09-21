@@ -37,7 +37,7 @@ STDMETHODIMP CScriptController::InterfaceSupportsErrorInfo(REFIID riid)
 	};
 	for (int i=0; i < sizeof(arr) / sizeof(arr[0]); i++)
 	{
-		if (::ATL::InlineIsEqualGUID(*arr[i],riid))
+		if (InlineIsEqualGUID(*arr[i],riid))
 			return S_OK;
 	}
 	return S_FALSE;
@@ -48,7 +48,7 @@ STDMETHODIMP CScriptController::InterfaceSupportsErrorInfo(REFIID riid)
  */
 CScriptController::CScriptController() : pImpl(0)
 {
-	HRESULT hr = ::CoCreateInstance(CLSID_ScriptControllerImpl, NULL, CLSCTX_INPROC_SERVER, IID_IScriptControllerImpl, (void**)&pImpl);	
+	/*HRESULT hr = */::CoCreateInstance(CLSID_ScriptControllerImpl, NULL, CLSCTX_INPROC_SERVER, IID_IScriptControllerImpl, (void**)&pImpl);	
 }
 
 CScriptController::~CScriptController()

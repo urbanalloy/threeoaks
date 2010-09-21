@@ -1,17 +1,17 @@
 /*
  * SysStats Widget Framework
  * Copyright (C) 2002-2006 Paul Andrews
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -19,7 +19,8 @@
 
 #pragma once
 
-#include <GdiplusH.h>
+#include <Gdiplus.h>
+using namespace Gdiplus;
 
 // QColorMatrix
 //
@@ -45,7 +46,7 @@ public:
 	QColorMatrix& operator=(const QColorMatrix& m)
 								{ if (this != &m) Copy(m); return * this; }
 
-	// Create a new QColorMatrix that is a copy.	
+	// Create a new QColorMatrix that is a copy.
 	QColorMatrix * Clone()		{ return new QColorMatrix(* this); }
 
 	// All functions: return Ok if no error, other valus of the Status enumeration if error.
@@ -79,7 +80,7 @@ public:
 	Status ScaleOpacity(REAL scaleOpacity, MatrixOrder order = MatrixOrderPrepend)
 								{ return Scale(1.0f, 1.0f, 1.0f, scaleOpacity, order); }
 
-	// Update this matrix with the product of itself and a translation vector.	
+	// Update this matrix with the product of itself and a translation vector.
 	Status Translate(REAL offsetRed, REAL offsetGreen, REAL offsetBlue,
 				REAL offsetOpacity, MatrixOrder order = MatrixOrderPrepend);
 
@@ -109,7 +110,7 @@ public:
 								{ return ShearColor(1, 0, red, 2, blue, order); }
 	Status ShearBlue(REAL red, REAL green, MatrixOrder order = MatrixOrderPrepend)
 								{ return ShearColor(2, 0, red, 1, green, order); }
-	
+
 	// Set the saturation of the matrix. Saturation of 0.0f yields B&W, 1.0f is neutral.
 	Status SetSaturation(REAL saturation, MatrixOrder order = MatrixOrderPrepend);
 

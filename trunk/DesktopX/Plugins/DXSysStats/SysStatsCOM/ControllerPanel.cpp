@@ -112,9 +112,9 @@ LRESULT CControllerPanel::setMessage(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
 		LRESULT res = SendDlgItemMessage(wID,CB_GETCURSEL,0,0);
 		if (res != CB_ERR)
 		{
-			pController->put_MessageType(value);
+			pController->put_MessageType((short)value);
 			if (oldValue < WM_USER && value >= WM_USER)
-				pController->put_Key(-1);
+				pController->put_Key((UINT)-1);
 
 			enable(mList);
 		}
@@ -124,10 +124,10 @@ LRESULT CControllerPanel::setMessage(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
 			value = (UINT)GetDlgItemInt(wID, &succeeded);
 			if (succeeded)
 			{
-				pController->put_MessageType(value);
+				pController->put_MessageType((short)value);
 
 				if (oldValue < WM_USER && value >= WM_USER)
-					pController->put_Key(-1);
+					pController->put_Key((UINT)-1);
 			}
 		}
 
@@ -192,7 +192,7 @@ LRESULT CControllerPanel::setKeyKey(WORD wNotifyCode, WORD wID, HWND hWndCtl, BO
 			}
 			else
 			{
-				pController->put_Key(-1);
+				pController->put_Key((UINT)-1);
 			}
 		}
 		else
@@ -383,7 +383,7 @@ void CControllerPanel::enable(int item)
 		SendDlgItemMessage(IDC_CONTROLLER_TYPE,CB_SELECTSTRING,0,(LPARAM)((char*)_bstr_t(type, false)));
 
 		// Select the correct message type in the dialog
-		bool set = false;
+		/*bool set = false;*/
 		short message = 0;
 		controller->get_MessageType(&message);
 		messageList.select(message);
@@ -409,7 +409,7 @@ void CControllerPanel::enable(int item)
 		{
 			::ShowWindow(GetDlgItem(IDC_EDIT_KEY), TRUE);
 			::EnableWindow(GetDlgItem(IDC_EDIT_KEY), TRUE);
-			char buf[2]; buf[0] = key; buf[1] = 0;
+			char buf[2]; buf[0] = (char)key; buf[1] = 0;
 			SetDlgItemText(IDC_EDIT_KEY, buf);
 		}
 		else if (message >= WM_USER)
@@ -458,7 +458,7 @@ void CControllerPanel::enable(int item)
 
 void CControllerPanel::disable()
 {
-	SendDlgItemMessage(IDC_COMBO_MESSAGE,CB_SETCURSEL,-1,0);
+	SendDlgItemMessage(IDC_COMBO_MESSAGE,CB_SETCURSEL,(WPARAM)-1,0);
 	::EnableWindow(GetDlgItem(IDC_COMBO_KEY), FALSE);
 	::EnableWindow(GetDlgItem(IDC_EDIT_KEY), FALSE);
 	::EnableWindow(GetDlgItem(IDC_COMBO_COMMAND), FALSE);

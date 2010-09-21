@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName />
+    <SccLocalPath />
+    <Keyword>AtlProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfAtl>Static</UseOfAtl>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfAtl>Static</UseOfAtl>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)Builds\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Builds\$(Configuration)\Intermediate\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <TargetExt>.spl</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)Builds\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Builds\$(Configuration)\Intermediate\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <TargetExt>.spl</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level4</WarningLevel>
+      <AdditionalIncludeDirectories>..\SysStatsCommon;..\SysStatsCOM;..\..\..\..\Libs\wtl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>
+      </PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(OutDir)</ProgramDataBaseFileName>
+      <DisableSpecificWarnings>4100;4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>..\SysStatsCOM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TypeLibraryName>.\Release\COMMeters.tlb</TypeLibraryName>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(IntDir)\COMMeters.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <LinkDLL>true</LinkDLL>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)\$(ProjectName).spl</OutputFile>
+      <ImportLibrary>$(OutDir)\COMMeters.lib</ImportLibrary>
+      <AdditionalDependencies>SysStatsCOM.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>.\COMMeters.def</ModuleDefinitionFile>
+    </Link>
+    <CustomBuildStep>
+      <Command>@echo off 
+echo regsvr32 /s /c "$(TargetPath)"
+echo regsvr32 exec. time &gt; "$(OutDir)\regsvr32.trg" </Command>
+      <Message>Performing registration</Message>
+      <Outputs>$(OutDir)\regsvr32.trg;%(Outputs)</Outputs>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level4</WarningLevel>
+      <MinimalRebuild>true</MinimalRebuild>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\SysStatsCommon;..\SysStatsCOM;..\..\..\..\Libs\wtl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;_WIN32_WINNT=0x0500;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>
+      </PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(OutDir)</ProgramDataBaseFileName>
+      <DisableSpecificWarnings>4100;4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>..\SysStatsCOM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TypeLibraryName>.\Debug\COMMeters.tlb</TypeLibraryName>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>$(IntDir)\COMMeters.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <LinkDLL>true</LinkDLL>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)\$(ProjectName).spl</OutputFile>
+      <ImportLibrary>$(OutDir)\COMMeters.lib</ImportLibrary>
+      <AdditionalDependencies>SysStatsCOM.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>.\COMMeters.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
+    </Link>
+    <CustomBuildStep>
+      <Command>@echo off 
+echo regsvr32 /s /c "$(TargetPath)"
+echo regsvr32 exec. time &gt; "$(OutDir)\regsvr32.trg" </Command>
+      <Message>Performing registration</Message>
+      <Outputs>$(OutDir)\regsvr32.trg;%(Outputs)</Outputs>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationDialog.cpp" />
+    <ClCompile Include="ASyncScriptMeter.cpp" />
+    <ClCompile Include="COMMeters.cpp" />
+    <ClCompile Include="CPdh.cpp" />
+    <ClCompile Include="DiskDialog.cpp" />
+    <ClCompile Include="DiskMeter.cpp" />
+    <ClCompile Include="dlldatax.c" />
+    <ClCompile Include="FixedDialog.cpp" />
+    <ClCompile Include="FixedMeter.cpp" />
+    <ClCompile Include="HiddenWindow.cpp" />
+    <ClCompile Include="IMailCheck.cpp" />
+    <ClCompile Include="MailMeter.cpp" />
+    <ClCompile Include="MailMeterDialog.cpp" />
+    <ClCompile Include="MAPIMailCheck.cpp" />
+    <ClCompile Include="MBMDialog.cpp" />
+    <ClCompile Include="MBMMeter.cpp" />
+    <ClCompile Include="MemoryDialog.cpp" />
+    <ClCompile Include="MemoryMeter.cpp" />
+    <ClCompile Include="PDHDialog.cpp" />
+    <ClCompile Include="PDHMeter.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerDialog.cpp" />
+    <ClCompile Include="ScriptDialog.cpp" />
+    <ClCompile Include="ScriptMeter.cpp" />
+    <ClCompile Include="ScriptMeterImpl.cpp" />
+    <ClCompile Include="ScriptThread.cpp" />
+    <ClCompile Include="SpeedFanMeter.cpp" />
+    <ClCompile Include="SpeedFanMeterDialog.cpp" />
+    <ClCompile Include="StdAfx.cpp" />
+    <ClCompile Include="TimeDialog.cpp" />
+    <ClCompile Include="TimeMeter.cpp" />
+    <ClCompile Include="UpdateThread.cpp" />
+    <ClCompile Include="XMLDialog.cpp" />
+    <ClCompile Include="XMLMeter.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="COMMeters.def" />
+    <CustomBuild Include="Animation.rgs" />
+    <CustomBuild Include="ASyncScriptMeter.rgs" />
+    <CustomBuild Include="DiskMeter.rgs" />
+    <CustomBuild Include="FixedMeter.rgs" />
+    <CustomBuild Include="MailMeter.rgs" />
+    <CustomBuild Include="MBMMeter.rgs" />
+    <CustomBuild Include="MemoryMeter.rgs" />
+    <CustomBuild Include="PDHMeter.rgs" />
+    <CustomBuild Include="Player.rgs" />
+    <CustomBuild Include="ScriptMeter.rgs" />
+    <CustomBuild Include="ScriptMeterImpl.rgs" />
+    <CustomBuild Include="SpeedFanMeter.rgs" />
+    <CustomBuild Include="TimeMeter.rgs" />
+    <CustomBuild Include="XMLMeter.rgs" />
+    <CustomBuild Include="AnimationMetaData.xml" />
+    <CustomBuild Include="MailMeterMetaData.xml" />
+    <CustomBuild Include="PlayerMetaData.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="COMMeters.idl">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\SysStatsCOM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TypeLibraryName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\COMMeters.tlb</TypeLibraryName>
+      <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">COMMeters.h</HeaderFileName>
+      <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">COMMeters_i.c</InterfaceIdentifierFileName>
+      <GenerateStublessProxies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateStublessProxies>
+      <TargetEnvironment Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Win32</TargetEnvironment>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\SysStatsCOM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TypeLibraryName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\COMMeters.tlb</TypeLibraryName>
+      <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">COMMeters.h</HeaderFileName>
+      <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">COMMeters_i.c</InterfaceIdentifierFileName>
+      <GenerateStublessProxies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateStublessProxies>
+      <TargetEnvironment Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Win32</TargetEnvironment>
+    </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="COMMeters.rc">
+      <Culture Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">0x0409</Culture>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OUTDIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">0x0409</Culture>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OUTDIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationDialog.h" />
+    <ClInclude Include="ASyncScriptMeter.h" />
+    <ClInclude Include="COMMeters.h" />
+    <ClInclude Include="COMMetersCP.h" />
+    <ClInclude Include="CPdh.h" />
+    <ClInclude Include="DiskDialog.h" />
+    <ClInclude Include="DiskMeter.h" />
+    <ClInclude Include="dlldatax.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="FixedDialog.h" />
+    <ClInclude Include="FixedMeter.h" />
+    <ClInclude Include="HiddenWindow.h" />
+    <ClInclude Include="IMailCheck.h" />
+    <ClInclude Include="MailMeter.h" />
+    <ClInclude Include="MailMeterDialog.h" />
+    <ClInclude Include="MAPIMailCheck.h" />
+    <ClInclude Include="mbm.hpp" />
+    <ClInclude Include="MBMDialog.h" />
+    <ClInclude Include="MBMMeter.h" />
+    <ClInclude Include="MemoryDialog.h" />
+    <ClInclude Include="MemoryMeter.h" />
+    <ClInclude Include="PDHDialog.h" />
+    <ClInclude Include="PDHMeter.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerDialog.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="ScriptDialog.h" />
+    <ClInclude Include="ScriptMeter.h" />
+    <ClInclude Include="ScriptMeterImpl.h" />
+    <ClInclude Include="ScriptThread.h" />
+    <ClInclude Include="speedfan.hpp" />
+    <ClInclude Include="SpeedFanMeter.h" />
+    <ClInclude Include="SpeedFanMeterDialog.h" />
+    <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="TimeDialog.h" />
+    <ClInclude Include="TimeMeter.h" />
+    <ClInclude Include="UpdateThread.h" />
+    <ClInclude Include="XMLDialog.h" />
+    <ClInclude Include="XMLMeter.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

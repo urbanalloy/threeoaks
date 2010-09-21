@@ -183,7 +183,7 @@ STDMETHODIMP CPDHMeter::put_Counters(LPSAFEARRAY newVal)
 
 	pdh.SetCounters(paths, ub-lb+1);
 
-	for (i=0; i<=ub-lb; i++)
+	for (int i=0; i<=ub-lb; i++)
 	{
 		free(paths[i]);
 	}

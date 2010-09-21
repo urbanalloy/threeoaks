@@ -29,7 +29,7 @@
 #endif // _MSC_VER > 1000
 
 #include <Windows.h>
-#include <GdiplusH.h>
+#include <Gdiplus.h>
 
 class CHDC  
 {

@@ -1,17 +1,17 @@
 /*
  * SysStats Widget Framework
  * Copyright (C) 2002-2006 Paul Andrews
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -28,7 +28,8 @@
 #include "COverlayFactory.h"
 #include "CControllerFactory.h"
 #include "DictionaryPtr.cpp"
-#include <GdiplusH.h>
+#include <Gdiplus.h>
+using namespace Gdiplus;
 
 static BSTR IMAGE_ROOT = L"docklets\\sysstats";
 static _bstr_t _path_t = "Path";
@@ -176,13 +177,13 @@ int CIINIPersister::count = 0;
 
 STDMETHODIMP CIINIPersister::InterfaceSupportsErrorInfo(REFIID riid)
 {
-	static const IID* arr[] = 
+	static const IID* arr[] =
 	{
 		&IID_IIINIPersister
 	};
 	for (int i=0; i < sizeof(arr) / sizeof(arr[0]); i++)
 	{
-		if (::ATL::InlineIsEqualGUID(*arr[i],riid))
+		if (InlineIsEqualGUID(*arr[i],riid))
 			return S_OK;
 	}
 	return S_FALSE;
@@ -239,7 +240,7 @@ STDMETHODIMP CIINIPersister::Load(IDispatch *pVal)
 {
 	if (pVal == NULL)
 		return E_POINTER;
-		
+
 //	AtlTrace(L"Reading from %s[%s]\n", (BSTR)fileName, (BSTR)groupName);
 	return Iterate(pVal, INVOKE_PROPERTYPUT, &CIINIPersister::LoadValue);
 }
@@ -379,7 +380,7 @@ HRESULT CIINIPersister::SaveValue(IDispatch *pVal, ITypeInfo *pTypeInfo, FUNCDES
 	} catch (...) {
 		AtlTrace(L"Problem retrieving property\n");
 	}
-		
+
 
 	return hr;
 }
@@ -463,7 +464,7 @@ HRESULT CIINIPersister::LoadValue(IDispatch *pVal, ITypeInfo *pTypeInfo, FUNCDES
 						// We've got an object to create
 						::SysFreeString(tmpStr);
 						_bstr_t newGroupName = groupName + "-" + ordinal;
-						configFile->GetString(newGroupName, L"Type", NO_SUCH_VALUE, &tmpStr);						
+						configFile->GetString(newGroupName, L"Type", NO_SUCH_VALUE, &tmpStr);
 //						::GetPrivateProfileString(newGroupName, "Type", NO_SUCH_VALUE, buf, sizeof(buf), fileName);
 
 						// Could be an old style file look for 'MeterType'  in '[meter<n>]'
@@ -474,7 +475,7 @@ HRESULT CIINIPersister::LoadValue(IDispatch *pVal, ITypeInfo *pTypeInfo, FUNCDES
 							{
 								::SysFreeString(tmpStr);
 								newGroupName = _bstr_t("meter") + ordinal;
-								configFile->GetString(newGroupName, L"MeterType", NO_SUCH_VALUE, &tmpStr);						
+								configFile->GetString(newGroupName, L"MeterType", NO_SUCH_VALUE, &tmpStr);
 //								::GetPrivateProfileString(newGroupName, "MeterType", NO_SUCH_VALUE, buf, sizeof(buf), fileName);
 								if (wcscmp(tmpStr, NO_SUCH_VALUE) != 0)
 								{
@@ -496,7 +497,7 @@ HRESULT CIINIPersister::LoadValue(IDispatch *pVal, ITypeInfo *pTypeInfo, FUNCDES
 						{
 							::SysFreeString(tmpStr);
 							newGroupName = groupName + "-" + ordinal;
-							configFile->GetString(newGroupName, L"OverlayType", NO_SUCH_VALUE, &tmpStr);						
+							configFile->GetString(newGroupName, L"OverlayType", NO_SUCH_VALUE, &tmpStr);
 //							::GetPrivateProfileString(newGroupName, "OverlayType", NO_SUCH_VALUE, buf, sizeof(buf), fileName);
 							if (wcscmp(tmpStr, NO_SUCH_VALUE) != 0)
 							{
@@ -534,7 +535,7 @@ HRESULT CIINIPersister::LoadValue(IDispatch *pVal, ITypeInfo *pTypeInfo, FUNCDES
 						// We've got an array of primitives
 
 						::SysFreeString(tmpStr);
-						configFile->GetString(groupName, prefix+names[0] + L"-" + ordinal, NO_SUCH_VALUE, &tmpStr);						
+						configFile->GetString(groupName, prefix+names[0] + L"-" + ordinal, NO_SUCH_VALUE, &tmpStr);
 //						::GetPrivateProfileString(groupName, prefix+names[0] + "-" + ordinal, NO_SUCH_VALUE, buf, sizeof(buf), fileName);
 
 						// Maybe we've got an old file. Only array of scalars
@@ -542,7 +543,7 @@ HRESULT CIINIPersister::LoadValue(IDispatch *pVal, ITypeInfo *pTypeInfo, FUNCDES
 						if (wcscmp(tmpStr, NO_SUCH_VALUE) == 0)
 						{
 							::SysFreeString(tmpStr);
-							configFile->GetString(groupName, _bstr_t("Counter") + ordinal, NO_SUCH_VALUE, &tmpStr);						
+							configFile->GetString(groupName, _bstr_t("Counter") + ordinal, NO_SUCH_VALUE, &tmpStr);
 //							::GetPrivateProfileString(groupName, _bstr_t("Counter") + ordinal, NO_SUCH_VALUE, buf, sizeof(buf), fileName);
 						}
 
@@ -594,7 +595,7 @@ HRESULT CIINIPersister::LoadValue(IDispatch *pVal, ITypeInfo *pTypeInfo, FUNCDES
 			// We got us a scalar
 			_bstr_t _name0 = names[0];
 
-			configFile->GetString(groupName, prefix+_name0, NO_SUCH_VALUE, &tmpStr);						
+			configFile->GetString(groupName, prefix+_name0, NO_SUCH_VALUE, &tmpStr);
 //			::GetPrivateProfileString(groupName, prefix+_name0, NO_SUCH_VALUE, buf, sizeof(buf), fileName);
 
 			// Couldn't find this property. Look through the alternatives.
@@ -624,7 +625,7 @@ HRESULT CIINIPersister::LoadValue(IDispatch *pVal, ITypeInfo *pTypeInfo, FUNCDES
 							{
 								AtlTrace("Got alternative name %s for property %s of interface %s\n", altName, (char*)_name0, (char*)_bstr_t(name));
 								::SysFreeString(tmpStr);
-								configFile->GetString(groupName, prefix+altName, NO_SUCH_VALUE, &tmpStr);						
+								configFile->GetString(groupName, prefix+altName, NO_SUCH_VALUE, &tmpStr);
 //								::GetPrivateProfileString(groupName, prefix+altName, NO_SUCH_VALUE, buf, sizeof(buf), fileName);
 							}
 							::SysFreeString(name);

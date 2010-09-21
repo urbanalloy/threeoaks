@@ -1,17 +1,17 @@
 /*
  * SysStats Widget Framework
  * Copyright (C) 2002-2006 Paul Andrews
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -26,7 +26,9 @@
 #include <sys/stat.h>
 #include <comdef.h>
 
-#include <GdiplusH.h>
+#include <Gdiplus.h>
+using namespace Gdiplus;
+
 #include "SysStatsUtils.h"
 #include "COMOverlays.h"
 #include "AnimatorOverlay.h"
@@ -44,7 +46,7 @@ STDMETHODIMP CAnimatorOverlay::InterfaceSupportsErrorInfo(REFIID riid)
 	};
 	for (int i=0; i < sizeof(arr) / sizeof(arr[0]); i++)
 	{
-		if (::ATL::InlineIsEqualGUID(*arr[i],riid))
+		if (InlineIsEqualGUID(*arr[i],riid))
 			return S_OK;
 	}
 	return S_FALSE;
@@ -188,9 +190,9 @@ STDMETHODIMP CAnimatorOverlay::Render(LONG _hdc)
 		imageAtt.SetColorMatrix(&colorMatrix, ColorMatrixFlagsDefault, ColorAdjustTypeBitmap);
 
 		g.DrawImage(
-		   &hdc.GetImage(), 
+		   &hdc.GetImage(),
 		   Rect(0, 0, width, height),	// Destination rectangle
-		   0,						// Source rectangle X 
+		   0,						// Source rectangle X
 		   0,						// Source rectangle Y
 		   width,		// Source rectangle width
 		   height,		// Source rectangle height
@@ -210,7 +212,7 @@ const Matrix& CAnimatorOverlay::getCurTransform()
 	matrixCur.Rotate((float)rotation + (rotationEnd-rotation)*delta);
 	float hs = (float)hScale + (hScaleEnd-hScale)*delta;
 	if (hs == 0)
-		hs = 1e-10;
+		hs = (float)1e-10;
 	float vs = (float)vScale + (vScaleEnd-vScale)*delta;
 	if (vs == 0)
 		vs = 1e-10;
