@@ -4,7 +4,7 @@
 <comment>
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //
-// 
+//
 //
 // Copyright (c) 2010, [AUTHOR]
 // All rights reserved.
@@ -14,16 +14,16 @@
 // * $LastChangedDate$
 // * $LastChangedBy$
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification, are
 // permitted provided that the following conditions are met:
 //	1. Redistributions of source code must retain the above copyright notice, this list of
-//		 conditions and the following disclaimer. 
+//		 conditions and the following disclaimer.
 //	2. Redistributions in binary form must reproduce the above copyright notice, this list
 //		 of conditions and the following disclaimer in the documentation and/or other materials
-//		 provided with the distribution. 
+//		 provided with the distribution.
 //	3. The name of the author may not be used to endorse or promote products derived from this
-//		 software without specific prior written permission. 
+//		 software without specific prior written permission.
 //
 //	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
 //	OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -40,37 +40,37 @@
 
 <component>
 	<comment>
-		
+
 	</comment>
 	<registration description="[DESCRIPTION]"
       			  progid="DXWeatherProvider.[NAME]"
       			  version="1"
-      	    	  classid="[CLASSID]"/>        	    	  
-      	    
-	<object id="m_locations" 	progid="Scripting.Dictionary" />  
-    <object id="m_weather" 		progid="Scripting.Dictionary" />   
-    <object id="m_forecast" 	progid="Scripting.Dictionary" />  
-    <object id="m_alerts" 		progid="Scripting.Dictionary" />      
-    <object id="m_cameras" 		progid="Scripting.Dictionary" />    
-    
-    <object id="m_request" 		progid="Microsoft.XmlDom" /> 
-	    
+      	    	  classid="[CLASSID]"/>
+
+	<object id="m_locations" 	progid="Scripting.Dictionary" />
+    <object id="m_weather" 		progid="Scripting.Dictionary" />
+    <object id="m_forecast" 	progid="Scripting.Dictionary" />
+    <object id="m_alerts" 		progid="Scripting.Dictionary" />
+    <object id="m_cameras" 		progid="Scripting.Dictionary" />
+
+    <object id="m_request" 		progid="Microsoft.XmlDom" />
+
 	<public>
 		<property name="ID">
 			<get />
 		</property>
-	
+
 		<property name="Name">
 			<get />
 		</property>
-		
+
 		<property name="UseMetricSystem" internalName="m_useMetricSystem" />
-		
+
 		<method name="SetLicense">
 			<parameter name="id" />
 			<parameter name="key" />
 		</method>
-		
+
 		<method name="RegisterCallbacks">
 			<parameter name="locationCallback" />
 			<parameter name="weatherCallback" />
@@ -79,12 +79,12 @@
 			<parameter name="camerasCallback" />
 			<parameter name="errorCallback" />
 		</method>
-		
+
 		<method name="Abort" />
-		
+
 		<comment>
 			Query can be one of the following:
-				- 
+				-
 		</comment>
 		<method name="GetLocations">
 			<parameter name="locationQuery" />
@@ -92,7 +92,7 @@
 
 		<comment>
 			Query can be one of the following:
-				- 
+				-
 		</comment>
 		<method name="GetWeather">
 			<parameter name="locationQuery" />
@@ -113,17 +113,17 @@
 		<method name="GetForecast">
 			<parameter name="locationQuery" />
 		</method>
-		
+
 		<comment>
 			Query can be one of the following:
 				-
 		</comment>
 		<method name="GetCameras">
 			<parameter name="locationQuery" />
-		</method>			
-	
+		</method>
+
 	</public>
-	
+
 	<resource id="provider_id"></resource>
 	<resource id="provider_name"></resource>
 	<resource id="url_locations"></resource>
@@ -131,14 +131,14 @@
 	<resource id="url_station"></resource>
 	<resource id="url_alerts"></resource>
 	<resource id="url_forecast"></resource>
-	
+
 	<script language="JScript">
 	<![CDATA[
-	
+
 	//**Start Encode**
-	
+
 	var Constants 			= getComponent("WeatherConstants");
-	
+
 	// Helper
 	var m_helper			= getComponent("WeatherHelper");
 	var m_dateHelper		= getComponent("DateEx");
@@ -150,16 +150,16 @@
 	var m_forecastCallback  = null;
 	var m_camerasCallback   = null;
 	var m_errorCallback 	= null;
-	
+
 	var m_useMetricSystem = true;
-	
+
 	///////////////////////////////
 	// Utilities
 	///////////////////////////////
-	function getComponent(id) {		
+	function getComponent(id) {
 		//#ifdef DEBUG
 		var LIB_FOLDER = "D:/Sources/Company/src/trunk/src/DesktopX/DXScriptLibrary";
-		
+
 		if (id == "DateEx")
 			return GetObject("script:" + LIB_FOLDER + "/I18N/DateEx.wsc");
 		else
@@ -168,31 +168,31 @@
 		//return createComponent(id);
 		//#endif
 	}
-	
+
 	function getQueryString(query) {
 		return "";
 	}
-	
+
 	///////////////////////////////
 	// Properties
 	///////////////////////////////
 	function get_ID() {
 		return getResource("provider_id");
 	}
-	
+
 	function get_Name() {
 		return getResource("provider_name");
 	}
-	
+
 	///////////////////////////////
 	// Public functions
 	///////////////////////////////
-	
+
 	// Setup license
-	function SetLicense(id, key) {			
+	function SetLicense(id, key) {
 		return Constants.E_INVALIDLICENSE;
 	}
-	
+
 	// Set callbacks
 	function RegisterCallbacks(locationsCallback, weatherCallback, alertsCallback, forecastCallback, camerasCallback, errorCallback) {
 		m_locationsCallback = locationsCallback;
@@ -202,12 +202,12 @@
 		m_camerasCallback   = camerasCallback;
 		m_errorCallback 	= errorCallback;
 	}
-	
+
 	// Abort current request
 	function Abort() {
 		m_request.abort();
 	}
-	
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Get a list of locations
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -215,140 +215,140 @@
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
 			return Constants.E_NOTAVAILABLE;
-		
+
 		// Reset DOM
 		m_request.abort();
-		
+
 		m_request.onreadystatechange = OnLocationsResponse;
 		m_request.async = true;
 		m_request.load(getResource("url_locations") + getQueryString(locationQuery));
-		
-		return Constants.E_OK;		
+
+		return Constants.E_OK;
 	}
-	
+
 	function OnLocationsResponse() {
-		if (m_request.readyState != 4) 
+		if (m_request.readyState != 4)
 			return;
-			
+
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 
 		// Clear any previous results
 		m_locations.RemoveAll();
-		
+
 		// TODO: Implementation
-		
+
 		m_locationsCallback(m_locations);
 	}
-	
-	/////////////////////////////////////////////////////////////////////////////////////////////////////	
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Get the current weather
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	function GetWeather(locationQuery) {
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
 			return Constants.E_NOTAVAILABLE;
-					
+
 		// Reset DOM
 		m_request.abort();
-		
+
 		m_request.onreadystatechange = OnWeatherResponse;
 		m_request.async = true;
 		m_request.load(getResource("url_weather") + getQueryString(locationQuery));
-		
-		return Constants.E_OK;		
+
+		return Constants.E_OK;
 	}
-	
+
 	function OnWeatherResponse() {
-		if (m_request.readyState != 4) 
+		if (m_request.readyState != 4)
 			return;
-			
+
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 
 		// Reset weather object
 		m_weather = null;
 		m_weather = getComponent("WeatherInfo");
-			
+
 		// TODO: Implementation
-	    	
-		m_weatherCallback(m_weather);	
+
+		m_weatherCallback(m_weather);
 	}
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////		
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Get a list of alerts
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	function GetAlerts(locationQuery) {
-		
+
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
 			return Constants.E_NOTAVAILABLE;
-		
+
 		// Reset DOM
 		m_request.abort();
-		
+
 		m_request.onreadystatechange = OnAlertsResponse;
 		m_request.async = true;
 		m_request.load(getResource("url_alerts") + getQueryString(locationQuery));
-		
-		return Constants.E_OK;		
+
+		return Constants.E_OK;
 	}
 
 	function OnAlertsResponse() {
-		if (m_request.readyState != 4) 
+		if (m_request.readyState != 4)
 			return;
-			
+
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 
 		// Clear any previous results
 		m_alerts.RemoveAll();
-		
+
 		// TODO: Implementation
 
-		m_alertsCallback(m_alerts);		
+		m_alertsCallback(m_alerts);
 	}
-	
-	/////////////////////////////////////////////////////////////////////////////////////////////////////	
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Get the forecast
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	function GetForecast(locationQuery) {		
+	function GetForecast(locationQuery) {
 		// Check query for validity
 		if (getQueryString(locationQuery) == "")
 			return Constants.E_NOTAVAILABLE;
-		
+
 		// Reset DOM
 		m_request.abort();
-		
+
 		m_request.onreadystatechange = OnForecastResponse;
 		m_request.async = true;
 		m_request.load(getResource("url_forecast") + getQueryString(locationQuery));
-		
-		return Constants.E_OK;	
+
+		return Constants.E_OK;
 	}
-	
+
 	function OnForecastResponse() {
-		if (m_request.readyState != 4) 
+		if (m_request.readyState != 4)
 			return;
-			
+
 		if (!m_helper.CheckParserError(m_request, m_errorCallback, Constants))
 			return;
 
 		// Clear any previous results
 		m_forecast.RemoveAll();
-		
+
 		// TODO: Implementation
-		
-		m_forecastCallback(m_forecast);		
+
+		m_forecastCallback(m_forecast);
 	}
-	
-	/////////////////////////////////////////////////////////////////////////////////////////////////////	
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Get a list of cameras
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	function GetCameras(locationQuery) {		
+	function GetCameras(locationQuery) {
 		return Constants.E_NOTIMPLEMENTED;
-	}	
-		
+	}
+
 	]]>
 	</script>
 
