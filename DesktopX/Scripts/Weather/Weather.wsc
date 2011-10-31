@@ -10,30 +10,26 @@
 // All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
-// * $LastChangedRevision$
-// * $LastChangedDate$
-// * $LastChangedBy$
-///////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Redistribution and use in source and binary forms, with or without modification, are
 // permitted provided that the following conditions are met:
-//	1. Redistributions of source code must retain the above copyright notice, this list of
-//		 conditions and the following disclaimer.
-//	2. Redistributions in binary form must reproduce the above copyright notice, this list
-//		 of conditions and the following disclaimer in the documentation and/or other materials
-//		 provided with the distribution.
-//	3. The name of the author may not be used to endorse or promote products derived from this
-//		 software without specific prior written permission.
+// 1. Redistributions of source code must retain the above copyright notice, this list of
+//    conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright notice, this list
+//    of conditions and the following disclaimer in the documentation and/or other materials
+//    provided with the distribution.
+// 3. The name of the author may not be used to endorse or promote products derived from this
+//    software without specific prior written permission.
 //
-//	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//	OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-//	MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-//	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-//	EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
-//	GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-//	ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-//	OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-//	POSSIBILITY OF SUCH DAMAGE.
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+// OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+// COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+// GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+// OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+// POSSIBILITY OF SUCH DAMAGE.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 </comment>
@@ -43,9 +39,9 @@
 	Main weather controller
 	</comment>
 	<registration description="Weather Controller"
-      			  progid="DXWeather.Controller"
-      			  version="1"
-      	    	  classid="{2DB557E8-FA03-40ce-B559-D0BCCFCB48CC}"/>
+				  progid="DXWeather.Controller"
+				  version="1"
+				  classid="{2DB557E8-FA03-40ce-B559-D0BCCFCB48CC}"/>
 
 	<object id="m_providers" 	progid="Scripting.Dictionary" />
 	<object id="m_providerList" progid="Scripting.Dictionary" />
@@ -93,7 +89,7 @@
 			  - id: provider id (key) as retrieved bu GetProviders
 
 			returns: E_OK if the provider was set correctly
-				     E_ERROR if the id is not a valid provider id (the current provider will be reset to Nothing)
+					 E_ERROR if the id is not a valid provider id (the current provider will be reset to Nothing)
 		</comment>
 		<method name="SetProvider">
 			<parameter name="id" />
@@ -102,22 +98,22 @@
 		<comment>
 			Register callbacks for weather controller calls
 			  - locationCallback(WeatherLocation[] locations)
-			  		called when new location results are available
+					called when new location results are available
 
 			  - weatherCallback(WeatherInfo weather)
-			  		called when new weather information is available
+					called when new weather information is available
 
 			  - alertsCallback(WeatherAlert[] alerts)
-			  		called when new alert information is available
+					called when new alert information is available
 
 			  - forecastCallback(WeatherInfo[] forecast)
-			  		called when new forecast information is available
+					called when new forecast information is available
 
 			  - camerasCallback(WeatherCamera[] cameras)
-			  		called when new camera results are available
+					called when new camera results are available
 
 			  - errorCallback(int errorCode, string errorMessage)
-			  		called when an error is raised during an operation
+					called when an error is raised during an operation
 		</comment>
 		<method name="RegisterCallbacks">
 			<parameter name="locationCallback" />
@@ -149,7 +145,7 @@
 		<comment>
 			Get the current weather
 			  - locationQuery: a WeatherLocation object with the proper fields set
-			 			 		 (this can be a WeatherLocation object returned by GetLocations)
+								 (this can be a WeatherLocation object returned by GetLocations)
 
 			returns: E_OK if the request was send
 					 E_NOTIMPLEMENTED if this function is not implemented for the current provider
@@ -164,7 +160,7 @@
 		<comment>
 			Get a list of alerts
 			  - locationQuery: a WeatherLocation object with the proper fields set
-			  					 (this can be a WeatherLocation object returned by GetLocations)
+								 (this can be a WeatherLocation object returned by GetLocations)
 
 			returns: E_OK if the request was send
 					 E_NOTIMPLEMENTED if this function is not implemented for the current provider
@@ -179,7 +175,7 @@
 		<comment>
 			Get the forecast
 			  - locationQuery: a WeatherLocation object with the proper fields set
-							    (this can be a WeatherLocation object returned by GetLocations)
+								(this can be a WeatherLocation object returned by GetLocations)
 
 			returns: E_OK if the request was send
 					 E_NOTIMPLEMENTED if this function is not implemented for the current provider
@@ -194,7 +190,7 @@
 		<comment>
 			Get a list of cameras.
 			  - locationQuery: a WeatherLocation object with the proper fields set
-			  					 (this can be a WeatherLocation object returned by GetLocations)
+								 (this can be a WeatherLocation object returned by GetLocations)
 
 			returns: E_OK if the request was send
 					 E_NOTIMPLEMENTED if this function is not implemented for the current provider
@@ -222,7 +218,7 @@
 			This is targeted to developers, allowing them to develop a new weather provider without having to modify this file
 
 			returns: E_OK if the provider was added correctly
-				     E_ERROR if the id already exists
+					 E_ERROR if the id already exists
 		</comment>
 		<method name="AddProvider">
 			<parameter name="provider" />
@@ -461,9 +457,9 @@
 	Weather constants (error codes, icons code, etc.)
 	</comment>
 	<registration description="Weather Constants"
-      			  progid="DXWeather.Constants"
-      			  version="1"
-      	    	  classid="{20AAB6F5-77DB-414e-8469-5D57441BFD19}"/>
+				  progid="DXWeather.Constants"
+				  version="1"
+				  classid="{20AAB6F5-77DB-414e-8469-5D57441BFD19}"/>
 
 	<public>
 		<property name="E_OK">
@@ -1267,9 +1263,9 @@
 	Weather information
 	</comment>
 	<registration description="Weather Information"
-      			  progid="DXWeather.Info"
-      			  version="1"
-      	    	  classid="{30EC2AE5-702A-4b2d-94BB-6CE09B399931}"/>
+				  progid="DXWeather.Info"
+				  version="1"
+				  classid="{30EC2AE5-702A-4b2d-94BB-6CE09B399931}"/>
 
 	<public>
 		<comment>
@@ -1535,9 +1531,9 @@
 	Weather alert container
 	</comment>
 	<registration description="Weather alert"
-      			  progid="DXWeather.Alert"
-      			  version="1"
-      	    	  classid="{D4F984BF-A90A-45da-A695-ACBD974B9924}"/>
+				  progid="DXWeather.Alert"
+				  version="1"
+				  classid="{D4F984BF-A90A-45da-A695-ACBD974B9924}"/>
 
 	<public>
 		<property name="Status" 		internalName="m_status" />
@@ -1618,9 +1614,9 @@
 	Weather camera container
 	</comment>
 	<registration description="Weather camera"
-      			  progid="DXWeather.Camera"
-      			  version="1"
-      	    	  classid="{4B4C0F6A-0888-4963-B432-B8F4DF38D8CB}"/>
+				  progid="DXWeather.Camera"
+				  version="1"
+				  classid="{4B4C0F6A-0888-4963-B432-B8F4DF38D8CB}"/>
 
 	<public>
 		<property name="Handle" 		internalName="m_handle" />
@@ -1663,7 +1659,7 @@
 	var m_lastUpdateTime = null;
 
 	function ToString() {
-        var txt = "";
+		var txt = "";
 
 		txt += append("Handle", 		m_handle);
 		txt += append("ID",	 			m_ID);
@@ -1702,9 +1698,9 @@
 	Weather location/query container
 	</comment>
 	<registration description="Weather Location"
-      			  progid="DXWeather.Location"
-      			  version="1"
-      	    	  classid="{BC017AA1-3732-4d88-89EC-68823C27ECD3}"/>
+				  progid="DXWeather.Location"
+				  version="1"
+				  classid="{BC017AA1-3732-4d88-89EC-68823C27ECD3}"/>
 
 	<public>
 		<property name="ID" 					internalName="m_ID" />
@@ -1851,11 +1847,11 @@
 		- misc.
 	</comment>
 	<registration description="Weather Links"
-      			  progid="DXWeather.Links"
-      			  version="1"
-      	    	  classid="{ABD6A877-1597-4b60-AF0E-DD1D1CEA7683}"/>
+				  progid="DXWeather.Links"
+				  version="1"
+				  classid="{ABD6A877-1597-4b60-AF0E-DD1D1CEA7683}"/>
 
-    <object id="m_promo" 	progid="Scripting.Dictionary" />
+	<object id="m_promo" 	progid="Scripting.Dictionary" />
 
 	<public>
 		<property name="Current" 		internalName="m_current" />
@@ -1921,9 +1917,9 @@
 	Weather Helper functions
 	</comment>
 	<registration description="Weather Helper"
-      			  progid="DXWeather.Helper"
-      			  version="1"
-      	    	  classid="{4FBA62F1-7479-42e2-84F1-8DE0927C0DAE}"/>
+				  progid="DXWeather.Helper"
+				  version="1"
+				  classid="{4FBA62F1-7479-42e2-84F1-8DE0927C0DAE}"/>
 
 	<public>
 
@@ -2139,7 +2135,7 @@
 		 var node = entry.selectNodes(nodeName);
 
 		 if (node.length == 0)
-		 	return "";
+			return "";
 
 		 return node[0].nodeValue;
 	}
