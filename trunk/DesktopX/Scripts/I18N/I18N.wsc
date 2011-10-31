@@ -6,46 +6,42 @@
 //
 // I18N Script Component for DesktopX
 //
-// Copyright (c) 2007-2010, Three Oaks Crossing
+// Copyright (c) 2007-2010, Julien Templier
 // All rights reserved.
 //
-///////////////////////////////////////////////////////////////////////////////////////////////
-// * $LastChangedRevision$
-// * $LastChangedDate$
-// * $LastChangedBy$
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Redistribution and use in source and binary forms, with or without modification, are
 // permitted provided that the following conditions are met:
-//	1. Redistributions of source code must retain the above copyright notice, this list of
-//		 conditions and the following disclaimer.
-//	2. Redistributions in binary form must reproduce the above copyright notice, this list
-//		 of conditions and the following disclaimer in the documentation and/or other materials
-//		 provided with the distribution.
-//	3. The name of the author may not be used to endorse or promote products derived from this
-//		 software without specific prior written permission.
+// 1. Redistributions of source code must retain the above copyright notice, this list of
+//    conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright notice, this list
+//    of conditions and the following disclaimer in the documentation and/or other materials
+//    provided with the distribution.
+// 3. The name of the author may not be used to endorse or promote products derived from this
+//    software without specific prior written permission.
 //
-//	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//	OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-//	MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-//	COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-//	EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
-//	GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-//	ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-//	OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-//	POSSIBILITY OF SUCH DAMAGE.
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+// OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+// COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+// GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+// OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+// POSSIBILITY OF SUCH DAMAGE.
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
 </comment>
 
 <component id="I18N" >
 	<registration description="I18N Component"
-      			  progid="DXScriptLibrary.I18N"
-      			  version="1"
-      	    	  classid="{E2050DC0-3CED-4020-A2DE-31C2BB8A5EBB}" />
+				  progid="DXScriptLibrary.I18N"
+				  version="1"
+				  classid="{E2050DC0-3CED-4020-A2DE-31C2BB8A5EBB}" />
 
-    <object id="m_data" progid="Scripting.Dictionary" />
-    <object id="fso" progid="Scripting.FileSystemObject"/>
+	<object id="m_data" progid="Scripting.Dictionary" />
+	<object id="fso" progid="Scripting.FileSystemObject"/>
 	<object id="shell" progid="WScript.Shell"/>
 
 	<public>
@@ -186,7 +182,7 @@
 		End If
 
 		Set iniReader = CreateObject("DXScriptLibrary.IniFileReader")
-  		Set fsoDir = fso.GetFolder(folder)
+		Set fsoDir = fso.GetFolder(folder)
 
 		For Each file In fsoDir.Files
 			If (LCase(Right(file.name, Len(resType))) = resType) Then
@@ -246,7 +242,7 @@
 		If (IsLocalePresent(m_currentLocale)) Then
 			m_loaded = True
 			Exit Sub
-	 	End If
+		End If
 
 		'Fallback to <lang>
 		lang = Split(m_currentLocale, "-")(0)
@@ -255,15 +251,15 @@
 			m_currentLocale = lang
 			m_loaded = True
 			Exit Sub
-	 	End If
+		End If
 
-	 	'Fallback to 'en'
-	 	If IsLocalePresent("en") Then
-	 		m_currentLocale = "en"
-	 		m_loaded = True
-	 	Else
-	 		m_loaded = False
-	 	End If
+		'Fallback to 'en'
+		If IsLocalePresent("en") Then
+			m_currentLocale = "en"
+			m_loaded = True
+		Else
+			m_loaded = False
+		End If
 
 
 	End Sub
@@ -344,13 +340,13 @@
 
 		Dim i, txt
 
-	    txt = GetKeyValue(key)
+		txt = GetKeyValue(key)
 
-	    For i = LBound(args) To UBound(args)
-        	txt = Replace(txt, "%"&CStr(i+1)&"%", args(i))
-	    Next
+		For i = LBound(args) To UBound(args)
+			txt = Replace(txt, "%"&CStr(i+1)&"%", args(i))
+		Next
 
-	    getTextFormat = GetTextInternal(txt)
+		getTextFormat = GetTextInternal(txt)
 
 	End Function
 
@@ -358,7 +354,7 @@
 		Dim txt
 
 		txt = Replace(text, "\n", vbCrLf)
-	    txt = Replace(txt, "\t", vbTab)
+		txt = Replace(txt, "\t", vbTab)
 
 		GetTextInternal = txt
 	End Function
@@ -405,11 +401,11 @@
 		Provides information about a given locale file
 	</comment>
 	<registration description="I18N Locale info"
-      			  progid="DXScriptLibrary.I18NLocale"
-      			  version="1"
-      	    	  classid="{0212AE1F-5961-4467-A705-4F23BE00798E}"/>
+				  progid="DXScriptLibrary.I18NLocale"
+				  version="1"
+				  classid="{0212AE1F-5961-4467-A705-4F23BE00798E}"/>
 
-    <object id="m_data" progid="Scripting.Dictionary" />
+	<object id="m_data" progid="Scripting.Dictionary" />
 
 	<public>
 		<property name="Name" internalName="m_name"/>
